@@ -278,7 +278,10 @@ if ($debug_js === 'bottom') {
     left: 0px;
     line-height: 1.2;
     font-size: 90%;
-    z-index: 999999;}';
+    z-index: 999999;
+	background-image: none !important;
+	background: none !important;
+	}';
 }
 
 if ($fullscreen_button !== 'false') {

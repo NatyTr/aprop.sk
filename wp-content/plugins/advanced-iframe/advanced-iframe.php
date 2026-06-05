@@ -2,7 +2,9 @@
 /*
 Plugin Name: Advanced iFrame
 Plugin URI: https://wordpress.org/plugins/advanced-iframe/
-Version: 2025.6
+Version: 2026.2
+Requires at least: 5.5
+Requires PHP: 7.4
 Text Domain: advanced-iframe
 Domain Path: /languages
 Author: Michael Dempfle
@@ -33,7 +35,7 @@ if (!defined('_VALID_AI')) {
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
-$aiVersion = '2025.6';
+$aiVersion = '2026.2';
 // check $aiJsSize
 
 $cons_advancediFrame = null;
@@ -82,7 +84,7 @@ if (function_exists('ai_fs')) {
 
     function ai_fs_custom_connect_message_on_update($message, $user_first_name,
                                                     $product_title, $user_login, $site_link, $freemius_link) {
-      return sprintf(__('We have introduced this OPT-IN so you never miss an important update and help us make the plugin more compatible with your site and better at doing what you need it to.<br><br>OPT-IN to get email notifications for security & feature updates, educational content, and occasional offers, and to share some basic WordPress environment info.<br><br>If you OPT-IN you will additionally get: <ul style="list-style: outside;font-size: 15px;padding-left: 30px;"><li>Automatic removal of the small notice which is shown on the iframe.</li><li>Additional sections on the help tab</li><li>Exclusive coupons</li></ul>', 'advanced-iframe'), '<b>' . $product_title . '</b>');
+      return sprintf(__('We have introduced this OPT-IN so you never miss an important update and help us make the plugin more compatible with your site and better at doing what you need it to.<br><br>OPT-IN to get email notifications for security & feature updates and occasional offers.<br><br>If you OPT-IN you will additionally get: <ul style="list-style: outside;font-size: 15px;padding-left: 30px;"><li>Automatic removal of the small notice which is shown on the iframe</li><li>Boxes in the administration remembers their state</li><li>Additional sections on the help tab</li><li>Exclusive coupons</li></ul>', 'advanced-iframe'), '<b>' . $product_title . '</b>');
     }
 
     ai_fs()->add_filter('connect_message_on_update', 'ai_fs_custom_connect_message_on_update', 10, 6);
@@ -132,11 +134,10 @@ if (function_exists('ai_fs')) {
 
       function aiUpdate($upgrader_object, $options) {
         global $aiVersion;
-        $current_plugin_path_name = plugin_basename(__FILE__);
-
-        if ($options['action'] === 'update' && $options['type'] === 'plugin' && is_array($options['plugins'])) {
-          foreach ($options['plugins'] as $each_plugin) {
-            if ($each_plugin == $current_plugin_path_name) {
+       
+        if ($options['action'] === 'update' && $options['type'] === 'plugin' && isset($options['plugins'])) {
+          foreach ($options['plugins'] as $plugin) {
+            if ($plugin == plugin_basename(__FILE__)) {
               $this->saveExternalJsFile(false);
             }
           }
@@ -718,8 +719,9 @@ if (function_exists('ai_fs')) {
        */
       function formatCalcString($value) {
         $value = preg_replace('/\s+/', '', $value);
-        $value = str_replace("-", " - ", $value);
-        $value = str_replace("+", " + ", $value);
+        $searchArray = array("-", "+");
+        $replaceArray = array(" - ", " + ");
+        $value = str_replace($searchArray, $replaceArray, $value);
         $elements_px = array_map(array($this, 'addPx'), explode(' ', $value));
         return implode(' ', $elements_px);
       }
@@ -857,57 +859,62 @@ if (function_exists('ai_fs')) {
         $plugins_url = preg_replace("(^https?:)", "", plugins_url());
 
         $content = file_get_contents($template_name);
-        $newContent = str_replace('PLUGIN_URL', $plugins_url . '/' . $aiSlug, $content);
-        $newContent = str_replace('PARAM_ID', $devOptions['id'], $newContent);
-        $newContent = str_replace('PARAM_IFRAME_HIDE_ELEMENTS', $devOptions['iframe_hide_elements'], $newContent);
-        $newContent = str_replace('PARAM_ONLOAD_SHOW_ELEMENT_ONLY', $devOptions['onload_show_element_only'], $newContent);
-        $newContent = str_replace('PARAM_IFRAME_CONTENT_ID', $devOptions['iframe_content_id'], $newContent);
-        $newContent = str_replace('PARAM_IFRAME_CONTENT_STYLES', $devOptions['iframe_content_styles'], $newContent);
-        $newContent = str_replace('PARAM_CHANGE_IFRAME_LINKS_TARGET', $devOptions['change_iframe_links_target'], $newContent);
-        $newContent = str_replace('PARAM_CHANGE_IFRAME_LINKS_HREF', $devOptions['change_iframe_links_href'], $newContent);
-        $newContent = str_replace('PARAM_CHANGE_IFRAME_LINKS', AdvancedIframeHelper::replace_brackets($devOptions['change_iframe_links']), $newContent);
 
+      // prepare values
         $delay = empty($devOptions['external_height_workaround_delay']) ? '0' : $devOptions['external_height_workaround_delay'];
-        $newContent = str_replace('PARAM_ENABLE_EXTERNAL_HEIGHT_WORKAROUND_DELAY', $delay, $newContent);
 
         // external and true = true, false = false
         $isExternal = ($devOptions['enable_external_height_workaround'] === 'false') ? 'false' : 'true';
-        $newContent = str_replace('PARAM_ENABLE_EXTERNAL_HEIGHT_WORKAROUND', $isExternal, $newContent);
-        $newContent = str_replace('PARAM_KEEP_OVERFLOW_HIDDEN', $devOptions['keep_overflow_hidden'], $newContent);
-        $newContent = str_replace('PARAM_HIDE_PAGE_UNTIL_LOADED_EXTERNAL', $devOptions['hide_page_until_loaded_external'], $newContent);
-        $newContent = str_replace('PARAM_IFRAME_REDIRECT_URL', $devOptions['iframe_redirect_url'], $newContent);
-        $newContent = str_replace('PARAM_ENABLE_RESPONSIVE_IFRAME', $devOptions['enable_responsive_iframe'], $newContent);
-        $newContent = str_replace('PARAM_WRITE_CSS_DIRECTLY', $devOptions['write_css_directly'], $newContent);
-        $newContent = str_replace('PARAM_RESIZE_ON_ELEMENT_RESIZE_DELAY', $devOptions['resize_on_element_resize_delay'], $newContent);
-        $newContent = str_replace('PARAM_RESIZE_ON_ELEMENT_RESIZE', $devOptions['resize_on_element_resize'], $newContent);
-        $newContent = str_replace('PARAM_URL_ID', $devOptions['pass_id_by_url'], $newContent);
+      $asParts = parse_url(site_url()); // PHP function
+      $home_url = (AdvancedIframeHelper::isSecure() ? 'https' : 'http') . '://' . $asParts['host'];
+      $post_domain = ($devOptions['multi_domain_enabled'] === 'true') ? '*' : $home_url;
+      $replacements = array(
+        'PLUGIN_URL'=> $plugins_url . '/' . $aiSlug,
+        'PARAM_ID'=> $devOptions['id'],
+        'PARAM_IFRAME_HIDE_ELEMENTS'=> $devOptions['iframe_hide_elements'],
+        'PARAM_ONLOAD_SHOW_ELEMENT_ONLY'=> $devOptions['onload_show_element_only'],
+        'PARAM_IFRAME_CONTENT_ID'=> $devOptions['iframe_content_id'],
+        'PARAM_IFRAME_CONTENT_STYLES'=> $devOptions['iframe_content_styles'],
+        'PARAM_CHANGE_IFRAME_LINKS_TARGET'=> $devOptions['change_iframe_links_target'],
+        'PARAM_CHANGE_IFRAME_LINKS_HREF'=> $devOptions['change_iframe_links_href'],
+        'PARAM_CHANGE_IFRAME_LINKS'=> AdvancedIframeHelper::replace_brackets($devOptions['change_iframe_links']),
+        'PARAM_ENABLE_EXTERNAL_HEIGHT_WORKAROUND_DELAY'=> $delay,
+        'PARAM_ENABLE_EXTERNAL_HEIGHT_WORKAROUND'=> $isExternal,
+        'PARAM_KEEP_OVERFLOW_HIDDEN'=> $devOptions['keep_overflow_hidden'],
+        'PARAM_HIDE_PAGE_UNTIL_LOADED_EXTERNAL'=> $devOptions['hide_page_until_loaded_external'],
+        'PARAM_IFRAME_REDIRECT_URL'=> $devOptions['iframe_redirect_url'],
+        'PARAM_ENABLE_RESPONSIVE_IFRAME'=> $devOptions['enable_responsive_iframe'],
+        'PARAM_WRITE_CSS_DIRECTLY'=> $devOptions['write_css_directly'],
+        'PARAM_RESIZE_ON_ELEMENT_RESIZE_DELAY'=> $devOptions['resize_on_element_resize_delay'],
+        'PARAM_RESIZE_ON_ELEMENT_RESIZE'=> $devOptions['resize_on_element_resize'],
+        'PARAM_URL_ID'=> $devOptions['pass_id_by_url'],
 
-        $newContent = str_replace('PARAM_JQUERY_PATH', $jquery_path, $newContent);
-        $newContent = str_replace('PARAM_ADD_IFRAME_URL_AS_PARAM', $devOptions['add_iframe_url_as_param'], $newContent);
-        $newContent = str_replace('PARAM_USE_IFRAME_TITLE_FOR_PARENT', $devOptions['use_iframe_title_for_parent'], $newContent);
-        $newContent = str_replace('PARAM_ADDITIONAL_CSS_FILE_IFRAME', $devOptions['additional_css_file_iframe'], $newContent);
-        $newContent = str_replace('PARAM_ADDITIONAL_JS_FILE_IFRAME', $devOptions['additional_js_file_iframe'], $newContent);
-        $newContent = str_replace('PARAM_ADD_CSS_CLASS_IFRAME', $devOptions['add_css_class_iframe'], $newContent);
-        $newContent = str_replace('PARAM_TIMESTAMP', date("Y-m-d H:i:s"), $newContent);
+        'PARAM_JQUERY_PATH'=> $jquery_path,
+        'PARAM_ADD_IFRAME_URL_AS_PARAM'=> $devOptions['add_iframe_url_as_param'],
+        'PARAM_USE_IFRAME_TITLE_FOR_PARENT'=> $devOptions['use_iframe_title_for_parent'],
+        'PARAM_ADDITIONAL_CSS_FILE_IFRAME'=> $devOptions['additional_css_file_iframe'],
+        'PARAM_ADDITIONAL_JS_FILE_IFRAME'=> $devOptions['additional_js_file_iframe'],
+        'PARAM_ADD_CSS_CLASS_IFRAME'=> $devOptions['add_css_class_iframe'],
+        'PARAM_TIMESTAMP'=> date("Y-m-d H:i:s"),
 
-        $newContent = str_replace('MULTI_DOMAIN_ENABLED', $devOptions['multi_domain_enabled'], $newContent);
-        $newContent = str_replace('USE_POST_MESSAGE', ($devOptions['use_post_message'] != 'false') ? 'true' : 'false', $newContent);
-        $newContent = str_replace('DEBUG_POST_MESSAGE', ($devOptions['use_post_message'] === 'debug') ? 'true' : 'false', $newContent);
-        $newContent = str_replace('DATA_POST_MESSAGE', $devOptions['data_post_message'], $newContent);
+        'MULTI_DOMAIN_ENABLED'=> $devOptions['multi_domain_enabled'],
+        'USE_POST_MESSAGE'=> ($devOptions['use_post_message'] != 'false') ? 'true' : 'false',
+        'DEBUG_POST_MESSAGE'=> ($devOptions['use_post_message'] === 'debug') ? 'true' : 'false',
+        'DATA_POST_MESSAGE'=> $devOptions['data_post_message'],
 
-        $newContent = str_replace('PARAM_SEND_CONSOLE_LOG', ($devOptions['debug_js'] === 'bottom') ? 'true' : 'false', $newContent);
+        'PARAM_SEND_CONSOLE_LOG'=> ($devOptions['debug_js'] === 'bottom') ? 'true' : 'false',
 
-        $asParts = parse_url(site_url()); // PHP function
-        $home_url = (AdvancedIframeHelper::isSecure() ? 'https' : 'http') . '://' . $asParts['host'];
-        $post_domain = ($devOptions['multi_domain_enabled'] === 'true') ? '*' : $home_url;
-        $newContent = str_replace('POST_MESSAGE_DOMAIN', $post_domain, $newContent);
+        'POST_MESSAGE_DOMAIN'=> $post_domain,
 
-        $newContent = str_replace('PARAM_ELEMENT_TO_MEASURE_OFFSET', $devOptions['element_to_measure_offset'], $newContent);
-        $newContent = str_replace('PARAM_MODIFY_IFRAME_IF_COOKIE', $devOptions['modify_iframe_if_cookie'], $newContent);
-        $newContent = str_replace('PARAM_ELEMENT_TO_MEASURE', $devOptions['element_to_measure'], $newContent);
-        $newContent = str_replace('PARAM_SCROLL_TO_TOP', $devOptions['external_scroll_top'], $newContent);
-        $newContent = str_replace('PARAM_SRC_HIDE', $devOptions['src_hide'], $newContent);
-        $newContent = str_replace('PARAM_VERSION', $aiVersion, $newContent);
+        'PARAM_ELEMENT_TO_MEASURE_OFFSET'=> $devOptions['element_to_measure_offset'],
+        'PARAM_MODIFY_IFRAME_IF_COOKIE'=> $devOptions['modify_iframe_if_cookie'],
+        'PARAM_ELEMENT_TO_MEASURE'=> $devOptions['element_to_measure'],
+        'PARAM_SCROLL_TO_TOP'=> $devOptions['external_scroll_top'],
+        'PARAM_SRC_HIDE'=> $devOptions['src_hide'],
+        'PARAM_VERSION'=> $aiVersion
+      );
+      // Perform all replacements in one go
+      $newContent = str_replace(array_keys($replacements), array_values($replacements), $content);
 
         // include a inline JS
         $inlineConfigFile = $devOptions['inline_config_file'];
@@ -965,7 +972,7 @@ if (function_exists('ai_fs')) {
 
       function createMinimizedAiJs($backend) {
         global $aiVersion;
-        $aiJsSize = 87420;
+        $aiJsSize = 88293;
         $newContent = file_get_contents(dirname(__FILE__) . '/js/ai.js');
         $oldFileName = dirname(__FILE__) . '/js/ai.min.js';
         if ((strlen($newContent) == $aiJsSize) && file_exists($oldFileName)) {
@@ -1198,19 +1205,21 @@ if (function_exists('ai_fs')) {
         $this->ai_getlatestVersion();
         $devOptions = get_option($this->adminOptionsName);
 
+        $screen = get_current_screen();
+
         $hasDiscount = get_transient('aip_discount') === "true";
-        $showDiscountMessage = $hasDiscount && !(isset($devOptions['closed_messages']) && isset($devOptions['closed_messages']['show-discount-message']));
+		$notHidden = !(isset($devOptions['closed_messages']) && isset($devOptions['closed_messages']['show-discount-message']));
+        $notAiPage = !strstr($screen->id, $this->page);   
+	    $showDiscountMessage = $hasDiscount && $notHidden && $notAiPage; 
 
         if ($showDiscountMessage) {
           echo '<script>jQuery(document).on( "click touchstart", "#show-discount-message.is-permanent-closable button", function() { closeInfoPermanent("show-discount-message"); });</script>';
           echo '<div id="show-discount-message" class="notice notice-success is-dismissible is-permanent-closable"><p><strong>';
           echo get_transient('aip_discount_message');
           echo '</strong></p></div>';
-        }
+        }     
 
-        $screen = get_current_screen();
-
-        if ((file_exists(dirname(__FILE__) . "/includes/class-cw-envato-api.php")) && empty($devOptions['purchase_code']) && !strstr($screen->id, $this->page) && !$isFreemius) {
+        if ((file_exists(dirname(__FILE__) . "/includes/class-cw-envato-api.php")) && empty($devOptions['purchase_code']) && $notAiPage && !$isFreemius) {
           printf(
             '<div class="%s"><p>%s <a href="%s">%s</a>%s</p>',
             'notice notice-error',
@@ -1232,14 +1241,14 @@ if (function_exists('ai_fs')) {
           return $aip_version;
         } else {
           $version_info = 0;
-          $devOptions = get_option($this->adminOptionsName);
+	      $devOptions = $this->getAiAdminOptions();
           $purchaseCode = (isset($devOptions['purchase_code']) && strlen($devOptions['purchase_code']) === 36) ? $devOptions['purchase_code'] : 'NOT_SET';
           $pro = $ai_fs->can_use_premium_code__premium_only() ? "1" : "2";
-          $default_key = "put your unique phrase here";
+	      $default_key = "put your unique phrase here";
           $auth_key = defined('AUTH_KEY') ? ((AUTH_KEY == $default_key) ? get_site_url() : substr(AUTH_KEY, -2)) : get_site_url();
           $urls = 'https://www.advanced-iframe.com/updatecheck/getAipVersion.php';
           $rand = substr(md5(microtime()), rand(0, 26), 2);
-          $data = http_build_query(array('url' => get_site_url(), 'codehash' => $rand . base64_encode($purchaseCode), 'sitehash' => hash('sha256', $auth_key), 'type' => $pro, 'version' => $aiVersion, 'isFreemius' => $isFreemius ? 'true' : 'false'), '', '&');
+          $data = http_build_query(array('url' => get_site_url(), 'codehash' => $rand . base64_encode($purchaseCode), 'sitehash' => hash('sha256', $auth_key), 'type' => $pro, 'version' => $aiVersion, 'isFreemius' => $isFreemius ? 'true' : 'false', 'isRegistered' => $ai_fs->is_registered() ? "true": "false", 'isShowMessage' => $devOptions['show_support_message']), '', '&');
           // use key 'http' even if you send the request to https://...
           $options = array(
             'ssl' => array(
@@ -1261,9 +1270,10 @@ if (function_exists('ai_fs')) {
           }
 
           if ($version_info === 0) {
-            $version_info_array = json_decode(utf8_encode($result), true);
+            $version_info_array = json_decode($result, true);
             $version_info = $version_info_array['version'];
-            if ($version_info_array['discount'] === "true") {
+	        $discountActive = AdvancedIframeHelper::isCurrentDateBetween($version_info_array['discountStartDate'], $version_info_array['discountEndDate']);
+            if ($version_info_array['discount'] === "true" || $discountActive) {
               set_transient('aip_discount', 'true', 60 * 60 * 12);
               set_transient('aip_discount_message', $version_info_array['discountMessage'], 60 * 60 * 12);
             } else {
@@ -1381,20 +1391,37 @@ if (function_exists('ai_fs')) {
         return $content;
       }
 
-      // The function that handles the AJAX request
+	 /**
+	  * Public AJAX endpoint intentionally exposed to unauthenticated users.
+	  * Used exclusively for creating a temporary FIFO cache.
+	  * No user data or privileged operations performed.
+	  * Cache is only active if the feature "Add iframe URL as param" with hash/hashrewrite is enabled.
+	  * The cache size is reported in the administration so the owner can check, if it is full.
+	  */
       function aip_map_url_callback() {
         check_ajax_referer('aip-parameter-nonce', 'security');
-        $url = urldecode($_POST['url']);
+		
+		// check if feature is active
+         $options = get_option($this->adminOptionsName);
+         $hashShortCodeActive = $options['add_iframe_url_as_param_prefix'] == "hash" || 
+		   $options['add_iframe_url_as_param_prefix'] == "hashrewrite";
+		
+		if (!$hashShortCodeActive) {
+	       echo "Request_not_valid";
+           die();		   
+		}
+		
+		$url = urldecode($_POST['url']);
 		if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
-	      echo "URL_NOT_VALID";
+	      echo "Request_not_valid";
 		  die();
 		}
 		// we use a default wp table as the data is normally quite small.
 		$paramData = get_option("advancediFrameParameterData");
 		if (!empty($paramData)) {
 		  if(count($paramData) > 1000) {
-			echo "TOO_MANY_CACHE_ENTRIES";
-			die();
+			// Remove first cache element so we have a FIFO cache with a max size of 1000
+			array_shift($paramData);
 		  }
 		  $nextid = 1;
           foreach ($paramData as $entry) {
@@ -1504,13 +1531,13 @@ if (function_exists('ai_fs')) {
             // check if the user has the capability unfiltered_html and is therefore allowed to use the custom and onload shortcode attribute.
             if (!current_user_can('unfiltered_html')) {
               while ($content != $filteredContent) {
-			    $filteredContent = $content;
-			    $content = $this->filterAttribute('onload', $hit, $content);
-			    $content = $this->filterAttribute('custom', $hit, $content);
-			    $content = $this->filterAttribute('include_html', $hit, $content);
-			    $content = $this->filterAttribute('additional_js', $hit, $content);
-			    $content = $this->filterAttribute('additional_js_file_iframe', $hit, $content);
-			  }
+                $filteredContent = $content;
+                $content = $this->filterAttribute('onload', $hit, $content);
+                $content = $this->filterAttribute('custom', $hit, $content);
+                $content = $this->filterAttribute('include_html', $hit, $content);
+                $content = $this->filterAttribute('additional_js', $hit, $content);
+                $content = $this->filterAttribute('additional_js_file_iframe', $hit, $content);
+              }
               $attsArray = shortcode_parse_atts($hit);
               $content = $this->filterXSSAttributes($attsArray, $content);
             }
@@ -1800,7 +1827,7 @@ if (function_exists('ai_fs')) {
 
   function advanced_iframe_plugin_meta_pro($links, $file) {
     global $isFreemiusMigration;
-    if (strpos($file, '/advanced-iframe') !== false) {
+    if (strpos($file, '/advanced-iframe-pro') !== false) {
       $links = array();
 
       if ($isFreemiusMigration) {
@@ -1837,7 +1864,15 @@ if (function_exists('ai_fs')) {
     } else {
       $new_attributes = $attributes;
     }
-
+	
+    // we remove in the gutenberg block all attributes for the right unfiltered_html because of security reasons. If a user needs this, short code block can be used.   
+    $invalidAttributes = array("onload", "custom", "include_html", "additional_js_file_iframe","additional_js");
+    foreach ($new_attributes as $key => $value) {
+      if (in_array($key, $invalidAttributes)) {
+        unset($new_attributes[$key]);
+      } 	  
+    }
+	 
     $new_attributes['add_surrounding_p'] = (isset($attributes['add_surrounding_p_boolean'])) ? 'true' : 'false';
 
     unset($new_attributes['additional']);

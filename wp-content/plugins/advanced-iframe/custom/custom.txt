@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Advanced iFrame custom folder
-Plugin URI: https://1.envato.market/VDRDJ
+Plugin URI: https://www.advanced-iframe.com
 Version: 1.0
 Author: Michael Dempfle
 Author URI: https://www.advanced-iframe.com

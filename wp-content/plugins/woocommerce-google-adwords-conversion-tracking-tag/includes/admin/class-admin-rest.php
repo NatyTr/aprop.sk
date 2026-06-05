@@ -35,6 +35,8 @@ class Admin_REST {
 
 	public function register_routes() {
 
+		$this->register_settings_save_route();
+
 		register_rest_route(self::$rest_namespace, '/notifications/', [
 			'methods'             => 'POST',
 			'callback'            => function ( $request ) {
@@ -46,8 +48,17 @@ class Admin_REST {
 				}
 
 				if ('generic-notification' === $data['type']) {
-					$pmw_notifications              = get_option(PMW_DB_NOTIFICATIONS_NAME);
-					$pmw_notifications[$data['id']] = time();
+					$pmw_notifications = get_option(PMW_DB_NOTIFICATIONS_NAME);
+
+					if (empty($pmw_notifications) || !is_array($pmw_notifications)) {
+						$pmw_notifications = [];
+					}
+
+					if (!isset($pmw_notifications[$data['id']]) || !is_array($pmw_notifications[$data['id']])) {
+						$pmw_notifications[$data['id']] = [];
+					}
+
+					$pmw_notifications[$data['id']]['dismissed'] = time();
 
 					update_option(PMW_DB_NOTIFICATIONS_NAME, $pmw_notifications);
 					wp_send_json_success();
@@ -314,5 +325,232 @@ class Admin_REST {
 				],
 			],
 		]);
+
+		// ─── Mantine Admin UI: Granular option update ───────────
+		$this->register_mantine_routes();
+	}
+
+	/**
+	 * Register REST routes for the Mantine admin UI.
+	 *
+	 * @since 1.59.0
+	 */
+	private function register_mantine_routes() {
+
+		// PATCH /options — update a single option by dot-notation path
+		register_rest_route(self::$rest_namespace, '/options', [
+			'methods'             => 'PATCH',
+			'callback'            => [ $this, 'handle_option_patch' ],
+			'permission_callback' => [ $this, 'can_current_user_edit_options' ],
+		]);
+
+		// GET /options — return the full options tree
+		register_rest_route(self::$rest_namespace, '/options', [
+			'methods'             => 'GET',
+			'callback'            => function () {
+				return new \WP_REST_Response(Options::get_options(), 200);
+			},
+			'permission_callback' => [ $this, 'can_current_user_edit_options' ],
+		]);
+	}
+
+	/**
+	 * Handle PATCH /pmw/v1/options — update a single nested option value.
+	 *
+	 * Expects JSON body: { "path": "facebook.pixel_id", "value": "123456" }
+	 *
+	 * @param \WP_REST_Request $request Request object.
+	 *
+	 * @return \WP_REST_Response
+	 *
+	 * @since 1.59.0
+	 */
+	public function handle_option_patch( $request ) {
+
+		$data = $request->get_json_params();
+
+		if (empty($data['path']) || !is_string($data['path'])) {
+			return new \WP_REST_Response([
+				'success' => false,
+				'message' => 'Missing or invalid "path" parameter.',
+			], 400);
+		}
+
+		if (!array_key_exists('value', $data)) {
+			return new \WP_REST_Response([
+				'success' => false,
+				'message' => 'Missing "value" parameter.',
+			], 400);
+		}
+
+		$path  = sanitize_text_field($data['path']);
+		$value = Helpers::generic_sanitization($data['value']);
+
+		// Run field-specific validation (trim, preprocess, regex)
+		$validation = Validations::validate_single_option($path, $value);
+
+		if (!$validation['valid']) {
+			return new \WP_REST_Response([
+				'success' => false,
+				'message' => $validation['message'],
+			], 400);
+		}
+
+		// Use the preprocessed value (trimmed, prefix-stripped, etc.)
+		$value = $validation['value'];
+
+		$options = Options::get_options();
+		$options = self::set_nested_value($options, $path, $value);
+
+		Options::save_options_with_timestamp($options);
+
+		return new \WP_REST_Response([
+			'success' => true,
+			'value'   => $value,
+		], 200);
+	}
+
+	/**
+	 * Set a nested value in an associative array using dot-notation path.
+	 *
+	 * @param array  $array Array to modify.
+	 * @param string $path  Dot-notation path (e.g. "facebook.pixel_id").
+	 * @param mixed  $value Value to set.
+	 *
+	 * @return array Modified array.
+	 *
+	 * @since 1.59.0
+	 */
+	private static function set_nested_value( $array, $path, $value ) {
+		$keys    = explode('.', $path);
+		$current = &$array;
+
+		foreach ($keys as $i => $key) {
+			if ( count($keys) - 1 === $i ) {
+				$current[$key] = $value;
+			} else {
+				if (!isset($current[$key]) || !is_array($current[$key])) {
+					$current[$key] = [];
+				}
+				$current = &$current[$key];
+			}
+		}
+
+		return $array;
+	}
+
+	/**
+	 * Register the REST route for saving all settings (PMW + add-ons) via AJAX.
+	 *
+	 * Replaces the WordPress Settings API form POST to options.php with a REST
+	 * endpoint so that both PMW core and add-on settings can be saved in a single
+	 * request, each to their own wp_options row.
+	 *
+	 * @since 1.57.0
+	 */
+	private function register_settings_save_route() {
+		register_rest_route(self::$rest_namespace, '/options/save', [
+			'methods'             => 'POST',
+			'callback'            => [ $this, 'handle_settings_save' ],
+			'permission_callback' => [ $this, 'can_current_user_edit_options' ],
+		]);
+	}
+
+	/**
+	 * Handle the settings save REST request.
+	 *
+	 * 1. Extracts PMW core options from POST data, runs them through the existing
+	 *    Validations::options_validate() pipeline (sanitize, validate, merge defaults,
+	 *    create backup), and saves to the PMW options record.
+	 * 2. Fires the 'pmw_addon_save_settings' filter so add-on plugins can extract
+	 *    their own prefixed data, validate, and save to their own wp_options rows.
+	 * 3. Returns a JSON response with success/error status and validation messages.
+	 *
+	 * @param \WP_REST_Request $request The REST request containing form-serialized POST data.
+	 *
+	 * @return \WP_REST_Response
+	 *
+	 * @since 1.57.0
+	 */
+	public function handle_settings_save( $request ) {
+
+		// Ensure settings error functions are available (not loaded during REST requests)
+		if (!function_exists('get_settings_errors')) {
+			require_once ABSPATH . 'wp-admin/includes/template.php';
+		}
+
+		$body = $request->get_body_params();
+
+		$pmw_errors   = [];
+		$addon_errors = [];
+
+		// --- Save PMW core options ---
+		if (isset($body['wgact_plugin_options']) && is_array($body['wgact_plugin_options'])) {
+
+			$input = $body['wgact_plugin_options'];
+
+			// Run through the existing validation pipeline.
+			// This sanitizes, validates per-field, merges non_form_keys,
+			// sets timestamp, fills defaults, and creates an automatic backup.
+			$validated = Validations::options_validate($input);
+
+			// Collect any settings errors that the validation pipeline added
+			// (they use add_settings_error() which stores to a global).
+			$settings_errors = get_settings_errors('wgact_plugin_options');
+
+			if (!empty($settings_errors)) {
+				foreach ($settings_errors as $error) {
+					$pmw_errors[] = $error['message'];
+				}
+			}
+
+			// Save the validated options
+			update_option(PMW_DB_OPTIONS_NAME, $validated);
+			Options::invalidate_cache();
+		}
+
+		// --- Let add-ons save their settings ---
+		/**
+		 * Filter for add-on plugins to process and save their own settings.
+		 *
+		 * Add-ons should:
+		 * 1. Extract their data from $body using their unique key (e.g. $body['pmw_addon_myaddon'])
+		 * 2. Validate and sanitize the data
+		 * 3. Call update_option() with their own option name
+		 * 4. Append any error messages to $addon_results
+		 *
+		 * @param array $addon_results Array of add-on save result arrays, each with 'slug', 'success', 'errors' keys.
+		 * @param array $body          The full POST body params.
+		 *
+		 * @return array Modified addon_results array.
+		 *
+		 * @since 1.57.0
+		 */
+		$addon_results = apply_filters('pmw_addon_save_settings', [], $body);
+
+		// Collect add-on errors
+		foreach ($addon_results as $result) {
+			if (!empty($result['errors'])) {
+				$addon_errors = array_merge($addon_errors, $result['errors']);
+			}
+		}
+
+		$all_errors = array_merge($pmw_errors, $addon_errors);
+
+		if (!empty($all_errors)) {
+			return new \WP_REST_Response([
+				'success'       => false,
+				'message'       => esc_html__('Settings saved with errors.', 'woocommerce-google-adwords-conversion-tracking-tag'),
+				'errors'        => $all_errors,
+				'addon_results' => $addon_results,
+			], 200);
+		}
+
+		return new \WP_REST_Response([
+			'success'       => true,
+			'message'       => esc_html__('Settings saved.', 'woocommerce-google-adwords-conversion-tracking-tag'),
+			'errors'        => [],
+			'addon_results' => $addon_results,
+		], 200);
 	}
 }

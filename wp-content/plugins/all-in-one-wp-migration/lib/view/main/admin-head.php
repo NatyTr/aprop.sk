@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2025 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Attribution: This code is part of the All-in-One WP Migration plugin, developed by
  *
  * ███████╗███████╗██████╗ ██╗   ██╗███╗   ███╗ █████╗ ███████╗██╗  ██╗
  * ██╔════╝██╔════╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔════╝██║ ██╔╝
@@ -33,11 +31,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 <style type="text/css" media="all">
 	@font-face {
 		font-family: 'servmask';
-		src: url('<?php echo esc_url( wp_make_link_relative( AI1WM_URL ) . '/lib/view/assets/font/servmask.eot?v=' . AI1WM_VERSION ); ?>');
-		src: url('<?php echo esc_url( wp_make_link_relative( AI1WM_URL ) . '/lib/view/assets/font/servmask.eot?v=' . AI1WM_VERSION ); ?>#iefix') format('embedded-opentype'),
-		url('<?php echo esc_url( wp_make_link_relative( AI1WM_URL ) . '/lib/view/assets/font/servmask.woff?v=' . AI1WM_VERSION ); ?>') format('woff'),
-		url('<?php echo esc_url( wp_make_link_relative( AI1WM_URL ) . '/lib/view/assets/font/servmask.ttf?v=' . AI1WM_VERSION ); ?>') format('truetype'),
-		url('<?php echo esc_url( wp_make_link_relative( AI1WM_URL ) . '/lib/view/assets/font/servmask.svg?v=' . AI1WM_VERSION ); ?>#servmask') format('svg');
+		src: url('<?php echo wp_make_link_relative( AI1WM_URL ); ?>/lib/view/assets/font/servmask.eot?v=<?php echo AI1WM_VERSION; ?>');
+		src: url('<?php echo wp_make_link_relative( AI1WM_URL ); ?>/lib/view/assets/font/servmask.eot?v=<?php echo AI1WM_VERSION; ?>#iefix') format('embedded-opentype'),
+		url('<?php echo wp_make_link_relative( AI1WM_URL ); ?>/lib/view/assets/font/servmask.woff?v=<?php echo AI1WM_VERSION; ?>') format('woff'),
+		url('<?php echo wp_make_link_relative( AI1WM_URL ); ?>/lib/view/assets/font/servmask.ttf?v=<?php echo AI1WM_VERSION; ?>') format('truetype'),
+		url('<?php echo wp_make_link_relative( AI1WM_URL ); ?>/lib/view/assets/font/servmask.svg?v=<?php echo AI1WM_VERSION; ?>#servmask') format('svg');
 		font-weight: normal;
 		font-style: normal;
 	}
@@ -101,23 +99,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		z-index: 26;
 	}
 
-	.ai1wm-menu-premium {
-		display: inline-block;
-		vertical-align: top;
-		box-sizing: border-box;
-		margin: 0;
-		padding: 0;
-		min-width: 18px;
-		height: 18px;
-		color: #ffd600;
-		font-size:  11px;
-		line-height: 1.6;
-		text-align: center;
-		z-index: 26;
-		float: right;
-		font-weight: normal;
-	}
-
 	.ai1wm-menu-count.ai1wm-menu-hide {
 		display: none;
 	}
@@ -130,7 +111,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	.toplevel_page_ai1wm_export > div.wp-menu-image:before {
 		line-height: 27px !important;
 		content: '';
-		background: url('<?php echo esc_url( wp_make_link_relative( AI1WM_URL ) . '/lib/view/assets/img/logo-20x20.png' ); ?>') no-repeat center center;
+		background: url('<?php echo wp_make_link_relative( AI1WM_URL ); ?>/lib/view/assets/img/logo-20x20.png') no-repeat center center;
 		speak: none !important;
 		font-style: normal !important;
 		font-weight: normal !important;
@@ -147,7 +128,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		position: relative;
 		display: inline-block;
 		content: '';
-		background: url('<?php echo esc_url( wp_make_link_relative( AI1WM_URL ) . '/lib/view/assets/img/logo-20x20.png' ); ?>') no-repeat center center;
+		background: url('<?php echo wp_make_link_relative( AI1WM_URL ); ?>/lib/view/assets/img/logo-20x20.png') no-repeat center center;
 		speak: none !important;
 		font-style: normal !important;
 		font-weight: normal !important;

@@ -71,7 +71,7 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
       $ovars = get_object_vars($current_user->data);
       foreach ($ovars as $key => $value) {
         if (!is_object($value) && !is_array($value)) {
-          $userinfo_html .= $key . " => " . $value . "<br>";
+          $userinfo_html .= esc_html($key) . " => " . esc_html($value) . "<br>";
         }
       }
       $userinfo_html .= '</span>' . $extraUserInfo;
@@ -82,7 +82,7 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
       $usermeta_html .= '<span id="meta-help">';
       foreach ($all_meta_for_user as $key => $value) {
         if (!is_object($value) && !is_array($value)) {
-          $usermeta_html .= $key . " => " . $value . "<br>";
+          $usermeta_html .= esc_html($key) . " => " . esc_html($value) . "<br>";
         }
       }
       $usermeta_html .= '</span>' . $extraUserInfo;
@@ -119,7 +119,7 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
     printTrueFalse(false, $devOptions, __('Add surrounding p', 'advanced-iframe'), 'add_surrounding_p', __('Some themes like "Twenty Twenty-Two" require an additional p around the elements so that the content is displayed properly. By selecting "Yes" this p is rendered around the iframe element. The p element has the class="ai-surrounding-p" if you need to style it. If the p element is not needed you should not used it. Very often p in many themes have additional margins or paddings you might not want. Shortcode attribute: add_surrounding_p="true" or add_surrounding_p="false" ', 'advanced-iframe'));
     printNumberInput(false, $devOptions, __('Margin width', 'advanced-iframe'), 'marginwidth', __('The margin width of the iframe. You can specify the value in px. If you don\'t specify a unit px is assumed.  Shortcode attribute: marginwidth=""', 'advanced-iframe'));
     printNumberInput(false, $devOptions, __('Margin height', 'advanced-iframe'), 'marginheight', __('The margin height of the iframe. You can specify the value in px. If you don\'t specify a unit px is assumed.  Shortcode attribute: marginheight=""', 'advanced-iframe'));
-    printNumberInput(false, $devOptions, __('Frame border', 'advanced-iframe'), 'frameborder', __('The frame border of the iframe. You can specify the value in px. If you don\'t specify a unit px is assumed.  Shortcode attribute: frameborder=""', 'advanced-iframe'));
+    printNumberInput(false, $devOptions, __('Frame border', 'advanced-iframe'), 'frameborder', __('The frame border of the iframe. You can specify the value in px. If you don\'t specify a unit px is used. To define a custom border, leave this field empty and define the border in the "Style" setting below. This setting sets the style border:none if the setting is 0 and sets border-witdh to the given value. Shortcode attribute: frameborder=""', 'advanced-iframe'));
     printTrueFalse(false, $devOptions, __('Transparency', 'advanced-iframe'), 'transparency', __('If you like that the iframe is transparent and your background is shown you should set this to \'Yes\'. If this value is not set then the iframe is transparent in IE but not transparent in e.g. Firefox. So by default you should leave this to \'Yes\'. Shortcode attribute: transparency="true" or transparency="false" ', 'advanced-iframe'));
     printTextInput(false, $devOptions, __('Class', 'advanced-iframe'), 'class', __('You can define a class for the iframe if you like. Shortcode attribute: class=""', 'advanced-iframe'));
 
@@ -129,7 +129,7 @@ defined('_VALID_AI') or die('Direct Access to this location is not allowed.');
       $style_fs = '';
     }
     printTextInput(false, $devOptions, __('Style', 'advanced-iframe'), 'style', __('You can define styles for the iframe if you like. The recommended way is to put the styles in a css file and use the class option. With the button below the width, height, content_id, content_styles, hide_content_until_iframe_color and the needed styles above for a fullscreen iframe are set. Also check the settings at the height where you can do calculations to add fixed headers/footers. Shortcode attribute: style=""' . $style_fs, 'advanced-iframe'));
-    printTextInput(false, $devOptions, __('Id', 'advanced-iframe'), 'id', __('Enter the \'id\' attribute of the iframe. Allowed values are only a-zA-Z0-9_. Ids cannot start with a number!!! Do NOT use any other characters because the id is also used to generate unique javascript functions! Other characters will be removed when you save! If a src directly in a shortcode is set and no id than an id is generated automatically if several iframes are on one page to avoid configuration problems. Shortcode attribute: id=""', 'advanced-iframe'));
+    printTextInput(false, $devOptions, __('Id', 'advanced-iframe'), 'id', __('Enter the \'id\' attribute of the iframe. Allowed values are only a-zA-Z0-9_. Ids cannot start with a number!!! This settings is mandatory. If the sanitized value is invalid the old value is used. Do NOT use any other characters because the id is also used to generate unique javascript functions! Other characters will be removed when you save! If a src directly in a shortcode is set and no id than an id is generated automatically if several iframes are on one page to avoid configuration problems. Shortcode attribute: id=""', 'advanced-iframe'));
     printTextInput(false, $devOptions, __('Name', 'advanced-iframe'), 'name', __('Enter the \'name\' attribute of the iframe. Shortcode attribute: name=""', 'advanced-iframe'));
     printTrueFalse(false, $devOptions, __('Allow full screen', 'advanced-iframe'), 'allowfullscreen', __('allowfullscreen is an HTML attribute that enables videos to be displayed in fullscreen mode. Currently this is a new html attribute not supported by all browsers. So please check  all of the browsers you want to support. Shortcode attribute: allowfullscreen="true" or allowfullscreen="false"', 'advanced-iframe'));
 

@@ -30,39 +30,39 @@ if ($debug_js === 'bottom' && !isset($_REQUEST['debugRendered'])) {
      console.defaultLog = console.log.bind(console);
      console.logs = [];
      console.log = function(){
-		 console.defaultLog.apply(console, arguments);
-		 console.logs.push(Array.from(arguments));
-		 var consoleData = [].map.call(arguments, JSON.stringify);
-		 consoleData += "";
-		 consoleData = consoleData.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		 consoleData = consoleData.replace(\'\"\', \'"\').replace(/\\\\/g,"");
-		 var content = "<" + "p class=\'ai-debug-local\'> l: LOG: " + consoleData + "<" + "/" + "p>";
+         console.defaultLog.apply(console, arguments);
+         console.logs.push(Array.from(arguments));
+         var consoleData = [].map.call(arguments, JSON.stringify);
+         consoleData += "";
+         consoleData = consoleData.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+         consoleData = consoleData.replace(\'\"\', \'"\').replace(/\\\\/g,"");
+         var content = "<" + "p class=\'ai-debug-local\'> l: LOG: " + consoleData + "<" + "/" + "p>";
          jQuery("#aiDebugDiv").append(content);
-	 }
-	console.defaultWarn = console.warn.bind(console);
-	console.warns = [];
-	console.warn = function(){
-		console.defaultWarn.apply(console, arguments);
-		console.warns.push(Array.from(arguments));
+     }
+    console.defaultWarn = console.warn.bind(console);
+    console.warns = [];
+    console.warn = function(){
+        console.defaultWarn.apply(console, arguments);
+        console.warns.push(Array.from(arguments));
         var consoleData = [].map.call(arguments, JSON.stringify);
-		consoleData += "";
-		consoleData = consoleData.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		consoleData = consoleData.replace(\'\"\', \'"\').replace(/\\\\/g,"");
-		var content = "<" + "p class=\'ai-debug-local\'> l: WARN: " + consoleData + "<" + "/" + "p>";
+        consoleData += "";
+        consoleData = consoleData.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        consoleData = consoleData.replace(\'\"\', \'"\').replace(/\\\\/g,"");
+        var content = "<" + "p class=\'ai-debug-local\'> l: WARN: " + consoleData + "<" + "/" + "p>";
         jQuery("#aiDebugDiv").append(content);
-	}
-	console.defaultError = console.error.bind(console);
-	console.errors = [];
-	console.error = function(){
-		console.defaultError.apply(console, arguments);
-		console.errors.push(Array.from(arguments));
-		var consoleData = [].map.call(arguments, JSON.stringify);
-		consoleData += "";
-		consoleData = consoleData.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		consoleData = consoleData.replace(\'\"\', \'"\').replace(/\\\\/g,"");
-		var content = "<" + "p class=\'ai-debug-error\'> l: ERROR: " + consoleData + "<" + "/" + "p>";
+    }
+    console.defaultError = console.error.bind(console);
+    console.errors = [];
+    console.error = function(){
+        console.defaultError.apply(console, arguments);
+        console.errors.push(Array.from(arguments));
+        var consoleData = [].map.call(arguments, JSON.stringify);
+        consoleData += "";
+        consoleData = consoleData.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        consoleData = consoleData.replace(\'\"\', \'"\').replace(/\\\\/g,"");
+        var content = "<" + "p class=\'ai-debug-error\'> l: ERROR: " + consoleData + "<" + "/" + "p>";
         jQuery("#aiDebugDiv").append(content);
-	}
+    }
     window.onerror = function (msg, url, lineNo, columnNo, error) {
       var content = "<" + "p class=\'ai-debug-error\'> ERROR: " + msg + " - " + lineNo + ":" + columnNo  + "<" + "/" + "p>";
       jQuery("#aiDebugDiv").append(content);
@@ -122,9 +122,8 @@ if (!empty($hide_part_of_iframe)) {
 
   for ($hi = 0; $hi < count($rectangles); ++$hi) {
     $values = explode(',', $rectangles[$hi]);
-
-    $num_values = count($values);
-    if ($num_values === 6 || $num_values === 7 || $num_values === 8) {
+    $num_values = count($values);  
+  if ($num_values === 6 || $num_values === 7 || $num_values === 8) {
       // add px or %
       $r_x = $this->addPx($values[0]);
       $r_y = $this->addPx($values[1]);
@@ -132,9 +131,9 @@ if (!empty($hide_part_of_iframe)) {
       $r_height = $this->addPx($values[3]);
       $display_type = 'div';
       $hide_href = '';
-      if ($num_values === 7 || $num_values === 8) {
+	  if ($num_values === 7 || $num_values === 8) {
         $display_type = 'a';
-        $hrefValue = esc_html(trim($values[6]));
+        $hrefValue = esc_url(trim($values[6]));
         if ($hrefValue === 'changeViewport') {
           $hide_href = ' href="javascript:setNewViewPort' . $id . '(0); "';
         } else {
@@ -144,7 +143,6 @@ if (!empty($hide_part_of_iframe)) {
       if ($num_values === 8) {
         $hide_href .= ' target="' . esc_html(trim($values[7])) . '"';
       }
-
       // bottom and right are extracted
       $x_style = 'left';
       $y_style = 'top';
@@ -184,35 +182,38 @@ if (!empty($hide_part_of_iframe)) {
           if (file_exists($filename)) {
             $div_content = trim(file_get_contents($filename));
             // evaluate shortcodes
-            $div_content = do_shortcode($div_content);
-            $div_content = str_replace('{plugin_url}', AIP_URL , $div_content);
-            $div_content = str_replace('{x_style}', $x_style, $div_content);
-            $div_content = str_replace('{x_distance}', $r_x, $div_content);
-            $div_content = str_replace('{y_style}', $y_style, $div_content);
-            $div_content = str_replace('{y_distance}', $r_y, $div_content);
-            $div_content = str_replace('{width}', $r_width, $div_content);
-            $div_content = str_replace('{height}', $r_height, $div_content);
-            $div_content = str_replace('{id}', $id, $div_content);
-			 if ($fullscreen_button_style !== 'black') {
-              switch ($fullscreen_button_style) {
-                case 'black2':
-                  $button_open = "fullscreen2_open.png";
-                  $button_close = "fullscreen2_close.png";
-                  break;
-                case 'white':
-                  $button_open = "fullscreen_open-white.png";
-                  $button_close = "fullscreen_close-white.png";
-                  break;
-                case 'custom':
-                  $button_open = "../../advanced-iframe-custom/fullscreen_open.png";
-                  $button_close = "../../advanced-iframe-custom/fullscreen_close.png";
-                  break;
-                default:
-                  // we keep the existing settings
-              }
-              $div_content = str_replace('fullscreen_open.png', $button_open, $div_content);
-              $div_content = str_replace('fullscreen_close.png', $button_close, $div_content);
-            }
+		    switch ($fullscreen_button_style) {
+			  case 'black2':
+			    $button_open = "fullscreen2_open.png";
+			    $button_close = "fullscreen2_close.png";
+			    break;
+			  case 'white':
+			    $button_open = "fullscreen_open-white.png";
+			    $button_close = "fullscreen_close-white.png";
+			    break;
+			  case 'custom':
+			    $button_open = "../../advanced-iframe-custom/fullscreen_open.png";
+			    $button_close = "../../advanced-iframe-custom/fullscreen_close.png";
+			    break;
+			  default:
+			    // we keep the existing settings
+			    $button_open = "fullscreen_open.png";
+			    $button_close = "fullscreen_close.png";
+			  }
+			$div_content = do_shortcode($div_content);
+			$replacementsHide = array(
+			  'fullscreen_open.png'=> $button_open,
+			  'fullscreen_close.png'=> $button_close,
+			  '{plugin_url}'=> AIP_URL,
+			  '{x_style}'=> $x_style,
+			  '{x_distance}'=> $r_x,
+			  '{y_style}'=> $y_style,
+			  '{y_distance}'=> $r_y,
+			  '{width}'=> $r_width,
+			  '{height}'=> $r_height,
+			  '{id}'=> $id
+            );
+			$div_content = str_replace(array_keys($replacementsHide), array_values($replacementsHide), $div_content);
           } else {
             $content = 'The file "' . $filename . '" cannot be found.';
           }
@@ -263,12 +264,10 @@ if (!empty($hide_part_of_iframe)) {
       $html .= '<' . $display_type . $hide_href . ' id="wrapper-div-element-' . $id . '-' . $hi . '">' . $div_content . '</' . $display_type . '>';
       $html .= $html_hide;
     } else {
-      if ($hide_part_of_iframe === 'false') {
-        // The plugin ignores false now. Too many users do not understand the error message and it only creates effortto explain every time. 
-      } else {
+      if ($hide_part_of_iframe !== 'false') {
         $html = $error_css . '<div class="errordiv">' . __('ERROR: hide part of iframe does not have the required parameters', 'advanced-iframe') . '</div>';
-      }
-      return $html;
+        return $html;     
+	  }
     }
   }
 }
@@ -314,7 +313,6 @@ if ($show_iframe_as_layer_div) {
     if ($show_iframe_as_layer_div_header) {
       $html .= '<div class="header-div-scroll" style="' . $layer_div_header_style . '" >';
     }
-
   }
 }
 
@@ -333,7 +331,6 @@ if ($debug_js === 'bottom') {
   $sep = (strpos($src, '?') === false) ? '?' : "&amp;";
   $src .= $sep . 'send_console_log=false';
 }
-
 if ($src_hide != '') {
   if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
     $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -372,7 +369,7 @@ if ($height != 'not set' && $height != '') {
   $html .= ' height="' . esc_html(trim($height)) . '" ';
   // html5 style to support vw and vh and we only add it if not present.
   if (strpos($style, 'height:') === false) {
-    $style .= 'height:' . esc_html(trim($this->addPx($height))) . ';';
+    $style .= ';height:' . esc_html(trim($this->addPx($height))) . ';';
   }
 }
 
@@ -390,7 +387,10 @@ if ($frameborder != '') {
   $html .= ' frameborder="' . esc_html(trim($frameborder)) . '" ';
   if ($frameborder === "0") {
     $html .= ' border="0" ';
+    $style = ";border: none;" . $style;  
   }
+  $style = ";border-width: " . $this->addPx($frameborder) . ';' . $style;  
+  
 }
 if (!empty ($transparency)) {
   $html .= ' allowtransparency="' . esc_html(trim($transparency)) . '" ';

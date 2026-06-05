@@ -8,6 +8,7 @@
 
 namespace SweetCode\Pixel_Manager;
 
+use SweetCode\Pixel_Manager\Admin\Environment;
 use WC_Order;
 use WC_Product;
 
@@ -113,25 +114,39 @@ class Profit_Margin {
 	}
 
 	/**
-	 * Retrieves the cost of goods (COG) from an order item by evaluating multiple item meta key options in order.
+	 * Retrieves the per-unit cost of goods (COG) from an order item.
 	 *
-	 * The method loops through a number of predefined meta keys. It checks if these meta keys have values set for
-	 * the provided order item. If a value is found, it returns the value as a float data type.
-	 * If no value is found for any meta keys, it returns null.
+	 * IMPORTANT - COGS storage format varies by source:
+	 *
+	 * - WooCommerce native COGS (_cogs_value): stores the LINE TOTAL (per-unit cost x quantity).
+	 *   See WC_Order_Item_Product::calculate_cogs_value_core() which returns $cogs_per_unit * $quantity.
+	 * - SkyVerge (_wc_cog_item_cost): stores the PER-UNIT cost.
+	 * - WPFactory (_alg_wc_cog_item_cost): stores the PER-UNIT cost.
+	 *
+	 * This method normalizes all values to PER-UNIT cost, because get_order_item_profit_margin()
+	 * multiplies the returned value by quantity. When adding a new COGS source, verify whether
+	 * it stores per-unit or line-total values and handle accordingly.
 	 *
 	 * @param mixed $order_item The order item object from which the COG is to be retrieved.
 	 *
-	 * @return float|null The value of the item cost of goods if found, else null.
+	 * @return float|null The per-unit cost of goods if found, else null.
 	 *
 	 * @since 1.35.1
 	 */
 	private static function get_cog_from_order_item( $order_item ) {
 
-		$meta_keys = [
-			self::get_custom_cog_product_meta_key(),
-			'_wc_cog_item_cost',
-			'_alg_wc_cog_item_cost',
-		];
+		// WooCommerce native COGS stores the LINE TOTAL (unit cost x quantity), not the per-unit cost.
+		// We must divide by quantity to normalize to per-unit cost before returning.
+		if (Environment::is_woocommerce_native_cogs_active()) {
+			$item_cog = $order_item->get_meta('_cogs_value');
+			if ($item_cog) {
+				$quantity = $order_item->get_quantity();
+				return ( $quantity > 0 ) ? floatval($item_cog) / $quantity : 0.0;
+			}
+		}
+
+		// All other COGS plugins store PER-UNIT cost on order items. No normalization needed.
+		$meta_keys = self::get_active_order_item_cog_meta_keys_per_unit();
 
 		foreach ($meta_keys as $meta_key) {
 			$item_cog = $order_item->get_meta($meta_key);
@@ -141,6 +156,41 @@ class Profit_Margin {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Build the list of order item meta keys that store PER-UNIT COGS values.
+	 *
+	 * IMPORTANT: Only add meta keys here that store per-unit cost on order items.
+	 * WooCommerce native COGS (_cogs_value) is NOT included here because it stores
+	 * the line total (unit cost x quantity) and requires division by quantity to
+	 * normalize. It is handled separately in get_cog_from_order_item().
+	 *
+	 * @return array List of active order item meta keys that store per-unit COGS.
+	 *
+	 * @since 1.58.1
+	 */
+	private static function get_active_order_item_cog_meta_keys_per_unit() {
+
+		$meta_keys = [];
+
+		// Custom COG meta key (always checked if the filter is set)
+		$custom_key = self::get_custom_cog_product_meta_key();
+		if ($custom_key) {
+			$meta_keys[] = $custom_key;
+		}
+
+		// WooCommerce Cost of Goods (SkyVerge) - stores PER-UNIT cost
+		if (Environment::is_woocommerce_cog_active()) {
+			$meta_keys[] = '_wc_cog_item_cost';
+		}
+
+		// Cost of Goods for WooCommerce (WPFactory) - stores PER-UNIT cost
+		if (Environment::is_cog_for_woocommerce_active()) {
+			$meta_keys[] = '_alg_wc_cog_item_cost';
+		}
+
+		return $meta_keys;
 	}
 
 	/**
@@ -157,28 +207,32 @@ class Profit_Margin {
 	private static function get_cog_from_product( $product ) {
 
 		/**
-		 * Try to get COG from one of the COG plugins
+		 * Try to get COG from one of the active COG sources (API methods first)
 		 */
 
+		// WooCommerce native COGS (since WooCommerce 9.5)
+		if (Environment::is_woocommerce_native_cogs_active() && method_exists($product, 'get_cogs_value')) {
+			$cogs_value = $product->get_cogs_value();
+			if (!is_null($cogs_value)) {
+				return floatval($cogs_value);
+			}
+		}
+
 		// WooCommerce Cost of Goods (SkyVerge)
-		if (class_exists('WC_COG_Product') && method_exists('WC_COG_Product', 'get_cost')) {
+		if (Environment::is_woocommerce_cog_active() && self::is_skyverge_cog_method_get_cost_available()) {
 			return floatval(\WC_COG_Product::get_cost($product));
 		}
 
 		// Cost of Goods for WooCommerce (WPFactory)
-		if (class_exists('Alg_WC_Cost_of_Goods_Products') && method_exists('Alg_WC_Cost_of_Goods_Products', 'get_product_cost')) {
+		if (Environment::is_cog_for_woocommerce_active() && self::is_wpfactory_cog_method_get_product_cost_available()) {
 			return floatval(( new \Alg_WC_Cost_of_Goods_Products() )->get_product_cost($product->get_id()));
 		}
 
 		/**
-		 * Fallback to retrieving directly from postmeta if the COG plugin gets deactivated for some reason
+		 * Fallback to retrieving directly from postmeta for active sources
 		 */
 
-		$meta_keys = [
-			self::get_custom_cog_product_meta_key(),    // Custom COG meta key
-			'_wc_cog_cost',                     // WooCommerce Cost of Goods (SkyVerge)
-			'_alg_wc_cog_cost',                 // Cost of Goods for WooCommerce (WPFactory)
-		];
+		$meta_keys = self::get_active_product_cog_meta_keys();
 
 		foreach ($meta_keys as $meta_key) {
 			$product_cog = self::get_cog_for_product_from_meta($product, $meta_key);
@@ -188,6 +242,44 @@ class Profit_Margin {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Build the list of product meta keys to check for COGS, based on which sources are currently active.
+	 *
+	 * Only includes meta keys for active COGS sources to prevent stale data from deactivated plugins
+	 * being used in calculations.
+	 *
+	 * @return array List of active product meta keys to check.
+	 *
+	 * @since 1.58.1
+	 */
+	private static function get_active_product_cog_meta_keys() {
+
+		$meta_keys = [];
+
+		// Custom COG meta key (always checked if the filter is set)
+		$custom_key = self::get_custom_cog_product_meta_key();
+		if ($custom_key) {
+			$meta_keys[] = $custom_key;
+		}
+
+		// WooCommerce native COGS
+		if (Environment::is_woocommerce_native_cogs_active()) {
+			$meta_keys[] = '_cogs_value';
+		}
+
+		// WooCommerce Cost of Goods (SkyVerge)
+		if (Environment::is_woocommerce_cog_active()) {
+			$meta_keys[] = '_wc_cog_cost';
+		}
+
+		// Cost of Goods for WooCommerce (WPFactory)
+		if (Environment::is_cog_for_woocommerce_active()) {
+			$meta_keys[] = '_alg_wc_cog_cost';
+		}
+
+		return $meta_keys;
 	}
 
 	/**
@@ -234,6 +326,11 @@ class Profit_Margin {
 
 		$meta_key = apply_filters_deprecated('pmw_custom_cogs_meta_key', [ $meta_key ], '1.43.5', 'pmw_custom_cogs_product_meta_key');
 
+		/**
+		 * Filters Custom cogs product meta key.
+		 *
+		 * @since 1.43.5
+		 */
 		return apply_filters('pmw_custom_cogs_product_meta_key', $meta_key);
 	}
 

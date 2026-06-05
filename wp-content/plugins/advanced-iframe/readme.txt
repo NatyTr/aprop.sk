@@ -1,10 +1,10 @@
 === Advanced iFrame ===
 Contributors: mdempfle
 Tags: iframe, embed, resize, shortcode, modify css
-Requires at least: 3.3
-Tested up to: 6.8.2
-Stable tag: 2025.6
-Requires PHP: 5.4
+Stable tag: 2026.2
+Tested up to: 7.0
+Requires at least: 5.5
+Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0
 
@@ -166,6 +166,59 @@ Use the Wordpress installer to update or simply overwrite all files from your pr
 If you have some radio elements empty after the update simply select the one you like and save again.
 
 == Changelog ==
+= 2026.2 =
+- Security fix: additional_js could be used as contributor still in the Gutenberg block. Now also there "Stored Cross-Site Scripting via Gutenberg Block 'additional' Attribute" is closed. See: https://www.cve.org/CVERecord?id=CVE-2026-6742 
+- New: Testend and optimized for WordPress 7.0
+
+= 2026.1 =
+- New: Tested with WordPress 6.9.4
+- New: Updated Freemius to v2.13.1
+
+= 2026.0 =
+- Breaking change: Due to the security fix for "Add iframe URL as param" and "Prefix/id/urlrewrite for iframe URL," the hash/hashrewrite needs to be set in both the administration AND the shortcode.
+- Breaking change: The postMessage send from the iframe is only processed if the feature is enabled. This was added for: "Add iframe URL as param", "Use the iframe title for the parent", "Include content directly from the iframe". Please read the updated documentation. Most users will not have to do anything, because the default way to configure this features by the administration, has not changed. If is only different if you configured them directly in the ai_external.js 
+- Security fix: The feature "Include content directly from the iframe" was accepting any postMessage in the correct structure and adding it to the parent page. Now the feature needs to be enabled and also the input is sanitized by removing all script tags. If you enable this feature only the configured keys are accepted. Make sure that you trust the page you include as you extract content from there! 
+- Security fix: Cross-Site Scripting (XSS) was reported by Patch Stack. The setting additional_height has now XSS detection. The same sanitation was also applied to iframe_zoom and onload_scroll_top. See https://www.wordfence.com/threat-intel/vulnerabilities/id/dcdcb29e-48d0-4e22-8e11-0c76b4355268 and https://patchstack.com/database/Wordpress/Plugin/advanced-iframe/vulnerability/wordpress-advanced-iframe-plugin-2025-10-cross-site-scripting-xss-vulnerability?_s_id=cve
+- Security fix: Broken Access Control reported by the patch stack has been fixed.  There is no official CVE number yet. The URL cache is now a first-in, first-out (FIFO) cache and cannot be fully filled anymore. The cache is now only active if "Add iframe URL as param" with hash/hashrewrite is enabled. The cache size is now shown in the administration, and additional documentation has been added. 
+- Security fix: At hide_part_of_iframe the URL was escaped with esc_html and not esc_url. Now settings like javascript:alert%28document.domain%29 are removed.
+- New: Tested with WordPress 6.9.1
+- New: Tested with PHP 8.5. The entire code was also analyzed with ChatGPT 5.2, which reported no breaking changes.
+- New: The minimum PHP version has been increased to 7.4. While the plugin itself still works with lower versions, such PHP versions are insecure and should no longer be used!   
+- New: The minimum WordPress version was increased to 5.5. The plugin works with older versions of WordPress, but they are insecure and should not be used.   
+- Fix: user meta and user info data output is using esc_html to avoid that invalid data can cause any issues.
+- Fix: The debug console has now removed any global background image from its div to always be displayed properly.
+- Fix: id could be set to empty which leads to issues in the Javascript. Not it is mandatory and checked in the administration and in the external workaround.
+- Fix: Changed the demo link from "Use the iframe title for the parent" from the general demo page to the sub demo where it is used. 
+- Fix: The style shortcode attribute is now always concatenated with a ; 
+
+= 2025.10 =
+- New: Tested with WordPress 6.9
+- New: Updated Freemius to v2.13.0
+
+= 2025.9 =
+- New: Tested with WordPress 6.8.3
+- New: Updated jQuery to v3.7.1 
+- New: Updated Freemius to v2.12.2
+- New: Performance and memory optimizations. 
+- Fix: Deprecated utf8_encode was removed from the code.
+- Fix: hide_part_of_iframe with setting false was not displaying anything. Now setting this to false is treated like an empty input.
+- Fix: Version of the custom folder was overwritten by the main plugin settings. Now it is version 1.0 like it should again. 
+- Fix: Fixed the link in the area selector to point to advanced-iframe.com and not to tinywebgallery.com/blog
+- Fix: Changed the Plugin URI in the custom folder plugin from codecanyon to advanced-iframe.com
+- Fix: The OPT-IN link in the remind to OPT_IN box was not working in all cases.   
+- Fix: The 'Undefined array key "plugins"' which was shown for some users once a day was fixed.
+- Fix: Support message is removed on localhost as no optin is possible there. 
+
+= 2025.8 =
+- Fix: 2025.7 was overwriting the style attribute instead appending the border. This broke a couple of features which now work fine again. 
+
+= 2025.7 =
+- Security fix: https://www.cve.org/CVERecord?id=CVE-2025-8089 was fixed. Unfortunately the Gutenberg block has to be restricted as only the time of the rendering the attributes can be filtered in a secure way. So if you use the Gutenberg block you cannot use onload, custom, include_html, additional_js and additional_js_file_iframe anymore. You can use the shortcode block or anything were you can enter shortcodes directly. 
+- New: iframe border is now applied also in css
+- Deprecated: The external workaround of the free version with a hidden iframe will not be maintained anymore and removed in one of the next versions. Please upgrade to the Pro version which uses postMessage if you need this feature.
+- Fix: use_shortcode_only in the free version was showing a notice about a missing show_support_message attribute. The attribute is now properly extracted and no notice is shown anymore.
+- Fix: replace_iframe_tags was not saved properly to the db
+
 = 2025.6 =
 - Security fix: Vulnerability Title: Advanced iFrame <= 2025.5 - Authenticated (Contributor+) Stored Cross-Site Scripting CVE ID: CVE-2025-6987 was fixed.
 - New: Tested with WordPress 6.8.2

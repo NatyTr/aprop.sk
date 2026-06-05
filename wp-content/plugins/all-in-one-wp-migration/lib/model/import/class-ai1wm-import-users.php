@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2025 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Attribution: This code is part of the All-in-One WP Migration plugin, developed by
  *
  * ███████╗███████╗██████╗ ██╗   ██╗███╗   ███╗ █████╗ ███████╗██╗  ██╗
  * ██╔════╝██╔════╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔════╝██║ ██╔╝
@@ -37,7 +35,7 @@ class Ai1wm_Import_Users {
 		if ( is_file( ai1wm_multisite_path( $params ) ) ) {
 
 			// Set progress
-			Ai1wm_Status::info( __( 'Preparing WordPress users...', 'all-in-one-wp-migration' ) );
+			Ai1wm_Status::info( __( 'Preparing users...', AI1WM_PLUGIN_NAME ) );
 
 			// Read multisite.json file
 			$handle = ai1wm_open( ai1wm_multisite_path( $params ), 'r' );
@@ -48,8 +46,6 @@ class Ai1wm_Import_Users {
 
 			// Close handle
 			ai1wm_close( $handle );
-
-			ai1wm_populate_roles();
 
 			// Set WordPress super admins
 			if ( isset( $multisite['Admins'] ) && ( $admins = $multisite['Admins'] ) ) {
@@ -63,7 +59,7 @@ class Ai1wm_Import_Users {
 			}
 
 			// Set progress
-			Ai1wm_Status::info( __( 'WordPress users prepared.', 'all-in-one-wp-migration' ) );
+			Ai1wm_Status::info( __( 'Done preparing users.', AI1WM_PLUGIN_NAME ) );
 		}
 
 		return $params;

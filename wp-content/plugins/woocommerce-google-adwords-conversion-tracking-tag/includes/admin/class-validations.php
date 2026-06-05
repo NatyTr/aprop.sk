@@ -13,8 +13,8 @@ class Validations {
 
 	public static function validate_imported_options( $options ) {
 
-//		error_log('Validating imported options...');
-//		error_log(print_r($options, true));
+//      error_log('Validating imported options...');
+//      error_log(print_r($options, true));
 
 		$options_to_check = [
 			'google'     => [
@@ -70,7 +70,7 @@ class Validations {
 
 		$input = Helpers::generic_sanitization($input);
 
-//		// validate Adroll advertiser ID
+//      // validate Adroll advertiser ID
 		if (isset($input['pixels']['adroll']['advertiser_id'])) {
 
 			// Trim space, newlines and quotes
@@ -85,7 +85,7 @@ class Validations {
 			}
 		}
 
-//		// validate Adroll pixel ID
+//      // validate Adroll pixel ID
 		if (isset($input['pixels']['adroll']['pixel_id'])) {
 
 			// Trim space, newlines and quotes
@@ -200,6 +200,21 @@ class Validations {
 					? Options::get_google_ads_phone_conversion_label()
 					: '';
 				add_settings_error('wgact_plugin_options', 'invalid-conversion-label', esc_html__('You have entered an invalid Google Ads conversion label.', 'woocommerce-google-adwords-conversion-tracking-tag'));
+			}
+		}
+
+		// validate ['google']['ads']['phone_conversion_number']
+		if (isset($input['google']['ads']['phone_conversion_number'])) {
+
+			// Trim space, newlines and quotes
+			$input['google']['ads']['phone_conversion_number'] = Helpers::trim_string($input['google']['ads']['phone_conversion_number']);
+
+			if (!self::is_phone_number($input['google']['ads']['phone_conversion_number'])) {
+				$input['google']['ads']['phone_conversion_number']
+					= Options::get_google_ads_phone_conversion_number()
+					? Options::get_google_ads_phone_conversion_number()
+					: '';
+				add_settings_error('wgact_plugin_options', 'invalid-phone-conversion-number', esc_html__('You have entered an invalid phone number for Google Ads phone conversion tracking.', 'woocommerce-google-adwords-conversion-tracking-tag'));
 			}
 		}
 
@@ -343,9 +358,9 @@ class Validations {
 			}
 		}
 
-		// Validate LinkedIn conversion IDs add_to_cart
+		// Validate LinkedIn conversion IDs
+		$input = self::validate_linkedin_conversion_id($input, 'view_content');
 		$input = self::validate_linkedin_conversion_id($input, 'add_to_cart');
-		$input = self::validate_linkedin_conversion_id($input, 'start_checkout');
 		$input = self::validate_linkedin_conversion_id($input, 'purchase');
 
 		// validate Outbrain advertiser ID
@@ -408,13 +423,13 @@ class Validations {
 			}
 		}
 
-		// Validate Twitter event add_to_cart
+		// Validate Twitter event IDs
 		$input = self::validate_twitter_event($input, 'add_to_cart');
 		$input = self::validate_twitter_event($input, 'add_to_wishlist');
 		$input = self::validate_twitter_event($input, 'view_content');
 		$input = self::validate_twitter_event($input, 'search');
 		$input = self::validate_twitter_event($input, 'initiate_checkout');
-//		$input = self::validate_twitter_event($input, 'add_payment_info);
+		$input = self::validate_twitter_event($input, 'add_payment_info');
 		$input = self::validate_twitter_event($input, 'purchase');
 
 		// validate Pinterest pixel ID
@@ -537,6 +552,30 @@ class Validations {
 			}
 		}
 
+		// Validate CrazyEgg account number
+		if (isset($input['crazyegg']['account_number'])) {
+
+			// Trim space, newlines and quotes
+			$input['crazyegg']['account_number'] = Helpers::trim_string($input['crazyegg']['account_number']);
+
+			// Extract account number from full script tag if pasted
+			// Pattern: //script.crazyegg.com/pages/scripts/0131/9772.js -> 01319772
+			if (preg_match('/script\.crazyegg\.com\/pages\/scripts\/(\d+)\/(\d+)\.js/', $input['crazyegg']['account_number'], $matches)) {
+				$input['crazyegg']['account_number'] = $matches[1] . $matches[2];
+			} else {
+				// Strip all non-digits (handles formats like 0131/9772 or 0131-9772)
+				$input['crazyegg']['account_number'] = preg_replace('/\D/', '', $input['crazyegg']['account_number']);
+			}
+
+			if (!self::is_crazyegg_account_number($input['crazyegg']['account_number'])) {
+				$input['crazyegg']['account_number']
+					= Options::get_crazyegg_account_number()
+					? Options::get_crazyegg_account_number()
+					: '';
+				add_settings_error('wgact_plugin_options', 'invalid-crazyegg-account-number', esc_html__('You have entered an invalid CrazyEgg account number. It must be exactly 8 digits.', 'woocommerce-google-adwords-conversion-tracking-tag'));
+			}
+		}
+
 		// Validate Reddit advertiser ID
 		if (isset($input['pixels']['reddit']['advertiser_id'])) {
 
@@ -549,6 +588,36 @@ class Validations {
 					? Options::get_reddit_advertiser_id()
 					: '';
 				add_settings_error('wgact_plugin_options', 'invalid-reddit-advertiser-id', esc_html__('You have entered an invalid Reddit pixel ID.', 'woocommerce-google-adwords-conversion-tracking-tag'));
+			}
+		}
+
+		// Validate Reddit CAPI token
+		if (isset($input['pixels']['reddit']['capi']['token'])) {
+
+			// Trim space, newlines and quotes
+			$input['pixels']['reddit']['capi']['token'] = Helpers::trim_string($input['pixels']['reddit']['capi']['token']);
+
+			if (!self::is_reddit_capi_token($input['pixels']['reddit']['capi']['token'])) {
+				$input['pixels']['reddit']['capi']['token']
+					= Options::get_reddit_capi_token()
+					? Options::get_reddit_capi_token()
+					: '';
+				add_settings_error('wgact_plugin_options', 'invalid-reddit-capi-token', esc_html__('You have entered an invalid Reddit CAPI token.', 'woocommerce-google-adwords-conversion-tracking-tag'));
+			}
+		}
+
+		// Validate Reddit CAPI test event code
+		if (isset($input['pixels']['reddit']['capi']['test_event_code'])) {
+
+			// Trim space, newlines and quotes
+			$input['pixels']['reddit']['capi']['test_event_code'] = Helpers::trim_string($input['pixels']['reddit']['capi']['test_event_code']);
+
+			if (!self::is_reddit_capi_test_event_code($input['pixels']['reddit']['capi']['test_event_code'])) {
+				$input['pixels']['reddit']['capi']['test_event_code']
+					= Options::get_reddit_capi_test_event_code()
+					? Options::get_reddit_capi_test_event_code()
+					: '';
+				add_settings_error('wgact_plugin_options', 'invalid-reddit-capi-test-event-code', esc_html__('You have entered an invalid Reddit CAPI test event code.', 'woocommerce-google-adwords-conversion-tracking-tag'));
 			}
 		}
 
@@ -594,6 +663,21 @@ class Validations {
 					? Options::get_ab_tasty_account_id()
 					: '';
 				add_settings_error('wgact_plugin_options', 'invalid-vwo-account-id', esc_html__('You have entered an invalid AB Tasty account ID.', 'woocommerce-google-adwords-conversion-tracking-tag'));
+			}
+		}
+
+		// Validate the Contentsquare tag ID
+		if (isset($input['pixels']['contentsquare']['tag_id'])) {
+
+			// Trim space, newlines and quotes
+			$input['pixels']['contentsquare']['tag_id'] = Helpers::trim_string($input['pixels']['contentsquare']['tag_id']);
+
+			if (!self::is_contentsquare_tag_id($input['pixels']['contentsquare']['tag_id'])) {
+				$input['pixels']['contentsquare']['tag_id']
+					= Options::get_contentsquare_tag_id()
+					? Options::get_contentsquare_tag_id()
+					: '';
+				add_settings_error('wgact_plugin_options', 'invalid-contentsquare-tag-id', esc_html__('You have entered an invalid Contentsquare tag ID.', 'woocommerce-google-adwords-conversion-tracking-tag'));
 			}
 		}
 
@@ -799,7 +883,11 @@ class Validations {
 			return;
 		}
 
-		// set delay to 3 hours
+		/**
+		 * Set delay to 3 hours.
+		 *
+		 * @since 1.58.5
+		 */
 		$delay = apply_filters('pmw_http_request_log_auto_off_delay', 12 * HOUR_IN_SECONDS);
 
 		// schedule pmw_deactivate_log_http_requests action
@@ -827,6 +915,7 @@ class Validations {
 					],
 				],
 			],
+			'ssp'        => isset(Options::get_options()['ssp']) ? Options::get_options()['ssp'] : [],
 		];
 
 		// in case the form field input is missing
@@ -937,9 +1026,32 @@ class Validations {
 		return self::validate_with_regex($re, $string);
 	}
 
+	public static function is_crazyegg_account_number( $string ) {
+
+		$re = '/^\d{8}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
 	public static function is_reddit_advertiser_id( $string ) {
 
 		$re = '/^(a2_|t2_)[a-z0-9]{4,12}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
+	public static function is_reddit_capi_token( $string ) {
+
+		// Reddit CAPI token is a JWT token with three Base64URL-encoded parts separated by dots
+		$re = '/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
+	public static function is_reddit_capi_test_event_code( $string ) {
+
+		// Reddit test event code format: t2_ followed by alphanumeric characters
+		$re = '/^t2_[a-z0-9]{4,12}$/m';
 
 		return self::validate_with_regex($re, $string);
 	}
@@ -961,6 +1073,14 @@ class Validations {
 	public static function is_ab_tasty_account_id( $string ) {
 
 		$re = '/^[\da-z]{26,38}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
+	public static function is_contentsquare_tag_id( $string ) {
+
+		// Contentsquare tag ID format: alphanumeric string like b457e22cc0c6e
+		$re = '/^[a-z0-9]{10,20}$/m';
 
 		return self::validate_with_regex($re, $string);
 	}
@@ -1022,6 +1142,17 @@ class Validations {
 		return self::validate_with_regex($re, $string);
 	}
 
+	public static function is_phone_number( $string ) {
+
+		// Accepts various phone number formats:
+		// +1-555-555-5555, +1 555 555 5555, +1.555.555.5555, +15555555555
+		// (555) 555-5555, 555-555-5555, 555.555.5555, 5555555555
+		// International formats with country codes
+		$re = '/^[\+]?[\d\s\-\.\(\)]{7,20}$/m';
+
+		return self::validate_with_regex($re, $string);
+	}
+
 	public static function is_google_optimize_measurement_id( $string ) {
 
 		$re = '/^(GTM|OPT)-[A-Z0-9]{6,8}$/m';
@@ -1031,7 +1162,7 @@ class Validations {
 
 	public static function is_google_analytics_4_measurement_id( $string ) {
 
-		$re = '/^G-[A-Z0-9]{10,12}$/m';
+		$re = '/^(G|GT|AW)-[A-Z0-9]{8,12}$/m';
 
 		return self::validate_with_regex($re, $string);
 	}
@@ -1222,5 +1353,210 @@ class Validations {
 		}
 
 		return true;
+	}
+
+	// ─── Single-field validation for REST PATCH ───────────
+
+	/**
+	 * Validate and preprocess a single option value by dot-notation path.
+	 *
+	 * Used by the Mantine admin REST PATCH endpoint to apply the same
+	 * trim / preprocessing / regex validation that options_validate() does
+	 * for the classic form POST.
+	 *
+	 * @param string $path  Dot-notation path (e.g. "facebook.pixel_id").
+	 * @param mixed  $value The value to validate.
+	 *
+	 * @return array { valid: bool, value: mixed, message?: string }
+	 *
+	 * @since 1.58.7
+	 */
+	public static function validate_single_option( $path, $value ) {
+
+		// Only validate string values — booleans, integers, arrays pass through
+		if (!is_string($value)) {
+			return [ 'valid' => true, 'value' => $value ];
+		}
+
+		// Trim whitespace, quotes, etc.
+		$value = Helpers::trim_string($value);
+
+		// Apply path-specific preprocessing (strip prefixes, extract IDs, etc.)
+		$value = self::preprocess_value_for_path($path, $value);
+
+		// Look up the validator for this path
+		$validators = self::get_field_validators();
+
+		if (!isset($validators[$path])) {
+			return [ 'valid' => true, 'value' => $value ];
+		}
+
+		$method = $validators[$path][0];
+		$error  = $validators[$path][1];
+
+		if (!call_user_func([ self::class, $method ], $value)) {
+			return [
+				'valid'   => false,
+				'value'   => $value,
+				'message' => $error,
+			];
+		}
+
+		return [ 'valid' => true, 'value' => $value ];
+	}
+
+	/**
+	 * Apply path-specific preprocessing to a value before regex validation.
+	 *
+	 * Mirrors the inline preprocessing in options_validate().
+	 *
+	 * @param string $path  Dot-notation path.
+	 * @param string $value Trimmed string value.
+	 *
+	 * @return string Preprocessed value.
+	 *
+	 * @since 1.58.7
+	 */
+	private static function preprocess_value_for_path( $path, $value ) {
+
+		if ('' === $value) {
+			return $value;
+		}
+
+		switch ($path) {
+			case 'google.ads.conversion_id':
+				// Strip "AW-" prefix and everything after a slash
+				$value = preg_replace('/^AW-/', '', $value);
+				$value = preg_replace('/\/.*$/', '', $value);
+				break;
+
+			case 'google.ads.conversion_label':
+				// If pasted as full tag, extract label after the slash
+				$value = preg_replace('/^.*\//', '', $value);
+				break;
+
+			case 'facebook.domain_verification_id':
+				// Extract content value from meta tag if pasted
+				$value = preg_replace('/^.*content\s*=\s*["\']?([^"\']+?)["\']?\s*\/?\s*>?$/', '$1', $value);
+				break;
+
+			case 'crazyegg.account_number':
+				// Extract from script URL or strip non-digits
+				if (preg_match('/script\.crazyegg\.com\/pages\/scripts\/(\d+)\/(\d+)\.js/', $value, $matches)) {
+					$value = $matches[1] . $matches[2];
+				} else {
+					$value = preg_replace('/\D/', '', $value);
+				}
+				break;
+
+			case 'google.tag_gateway.measurement_path':
+				// Prefix a slash if missing
+				if ('/' !== substr($value, 0, 1)) {
+					$value = '/' . $value;
+				}
+				break;
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Map of dot-notation paths to their [validator_method, error_message] pairs.
+	 *
+	 * @return array<string, array{0: string, 1: string}>
+	 *
+	 * @since 1.58.7
+	 */
+	private static function get_field_validators() {
+
+		return [
+			// Google Ads
+			'google.ads.conversion_id'                          => [ 'is_gads_conversion_id', __('Invalid conversion ID. It should contain 8 to 11 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.ads.conversion_label'                       => [ 'is_gads_conversion_label', __('Invalid Google Ads conversion label.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.ads.aw_merchant_id'                         => [ 'is_gads_aw_merchant_id', __('Invalid Merchant Center ID. It should contain 6 to 12 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.ads.phone_conversion_label'                 => [ 'is_gads_conversion_label', __('Invalid Google Ads conversion label.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.ads.phone_conversion_number'                => [ 'is_phone_number', __('Invalid phone number.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.ads.conversion_adjustments.conversion_name' => [ 'is_valid_conversion_adjustments_conversion_name', __('Invalid conversion name. Special characters and quotes are not allowed.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Google Analytics 4
+			'google.analytics.ga4.measurement_id'               => [ 'is_google_analytics_4_measurement_id', __('Invalid Google Analytics 4 measurement ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.analytics.ga4.api_secret'                   => [ 'is_google_analytics_4_api_secret', __('Invalid Google Analytics 4 API key.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'google.analytics.ga4.data_api.property_id'         => [ 'is_ga4_property_id', __('Invalid GA4 property ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Google Tag Gateway
+			'google.tag_gateway.measurement_path'               => [ 'is_google_tag_gateway_measurement_path', __('Invalid measurement path. It should start with / and contain only letters and numbers.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Meta (Facebook)
+			'facebook.pixel_id'                                 => [ 'is_facebook_pixel_id', __('Invalid Meta (Facebook) pixel ID. It should contain 12 to 22 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'facebook.capi.token'                               => [ 'is_facebook_capi_token', __('Invalid Meta (Facebook) CAPI token.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'facebook.capi.test_event_code'                     => [ 'is_facebook_capi_test_event_code', __('Invalid Meta (Facebook) CAPI test event code.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'facebook.domain_verification_id'                   => [ 'is_facebook_domain_verification_id', __('Invalid Meta (Facebook) domain verification ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// TikTok
+			'tiktok.pixel_id'                                   => [ 'is_tiktok_pixel_id', __('Invalid TikTok pixel ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'tiktok.eapi.token'                                 => [ 'is_tiktok_eapi_access_token', __('Invalid TikTok Events API access token.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'tiktok.eapi.test_event_code'                       => [ 'is_tiktok_eapi_test_event_code', __('Invalid TikTok EAPI test event code.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Microsoft Advertising
+			'bing.uet_tag_id'                                   => [ 'is_bing_uet_tag_id', __('Invalid Microsoft Advertising UET tag ID. It should contain 7 to 9 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// LinkedIn
+			'pixels.linkedin.partner_id'                        => [ 'is_linkedin_partner_id', __('Invalid LinkedIn partner ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'pixels.linkedin.conversion_ids.view_content'       => [ 'is_linkedin_conversion_id', __('Invalid LinkedIn conversion ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'pixels.linkedin.conversion_ids.add_to_cart'        => [ 'is_linkedin_conversion_id', __('Invalid LinkedIn conversion ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'pixels.linkedin.conversion_ids.purchase'           => [ 'is_linkedin_conversion_id', __('Invalid LinkedIn conversion ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Pinterest
+			'pinterest.pixel_id'                                => [ 'is_pinterest_pixel_id', __('Invalid Pinterest pixel ID. It should contain 13 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'pinterest.ad_account_id'                           => [ 'is_pinterest_ad_account_id', __('Invalid Pinterest ad account ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'pinterest.apic.token'                              => [ 'is_pinterest_apic_token', __('Invalid Pinterest API token.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Snapchat
+			'snapchat.pixel_id'                                 => [ 'is_snapchat_pixel_id', __('Invalid Snapchat pixel ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'snapchat.capi.token'                               => [ 'is_snapchat_capi_token', __('Invalid Snapchat CAPI token.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// X (Twitter)
+			'twitter.pixel_id'                                  => [ 'is_twitter_pixel_id', __('Invalid X (Twitter) pixel ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'twitter.event_ids.add_to_cart'                     => [ 'is_twitter_event_id', __('Invalid X (Twitter) event ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'twitter.event_ids.add_to_wishlist'                 => [ 'is_twitter_event_id', __('Invalid X (Twitter) event ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'twitter.event_ids.view_content'                    => [ 'is_twitter_event_id', __('Invalid X (Twitter) event ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'twitter.event_ids.search'                          => [ 'is_twitter_event_id', __('Invalid X (Twitter) event ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'twitter.event_ids.initiate_checkout'               => [ 'is_twitter_event_id', __('Invalid X (Twitter) event ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'twitter.event_ids.add_payment_info'                => [ 'is_twitter_event_id', __('Invalid X (Twitter) event ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'twitter.event_ids.purchase'                        => [ 'is_twitter_event_id', __('Invalid X (Twitter) event ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Reddit
+			'pixels.reddit.advertiser_id'                       => [ 'is_reddit_advertiser_id', __('Invalid Reddit advertiser ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'pixels.reddit.capi.token'                          => [ 'is_reddit_capi_token', __('Invalid Reddit CAPI token.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'pixels.reddit.capi.test_event_code'                => [ 'is_reddit_capi_test_event_code', __('Invalid Reddit CAPI test event code.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Hotjar
+			'hotjar.site_id'                                    => [ 'is_hotjar_site_id', __('Invalid Hotjar site ID. It should contain 6 to 9 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// CrazyEgg
+			'crazyegg.account_number'                           => [ 'is_crazyegg_account_number', __('Invalid CrazyEgg account number. It must be exactly 8 digits.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// AdRoll
+			'pixels.adroll.advertiser_id'                       => [ 'is_adroll_advertiser_id', __('Invalid AdRoll advertiser ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+			'pixels.adroll.pixel_id'                            => [ 'is_adroll_pixel_id', __('Invalid AdRoll pixel ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Outbrain
+			'pixels.outbrain.advertiser_id'                     => [ 'is_outbrain_account_id', __('Invalid Outbrain advertiser ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Taboola
+			'pixels.taboola.account_id'                         => [ 'is_taboola_account_id', __('Invalid Taboola account ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// AB Tasty
+			'pixels.ab_tasty.account_id'                        => [ 'is_ab_tasty_account_id', __('Invalid AB Tasty account ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Optimizely
+			'pixels.optimizely.project_id'                      => [ 'is_optimizely_project_id', __('Invalid Optimizely project ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// VWO
+			'pixels.vwo.account_id'                             => [ 'is_vwo_account_id', __('Invalid VWO account ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+
+			// Contentsquare
+			'pixels.contentsquare.tag_id'                       => [ 'is_contentsquare_tag_id', __('Invalid Contentsquare tag ID.', 'woocommerce-google-adwords-conversion-tracking-tag') ],
+		];
 	}
 }

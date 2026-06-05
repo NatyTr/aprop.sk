@@ -45,7 +45,11 @@ class Options {
 			update_option(PMW_DB_OPTIONS_NAME, self::$options);
 		}
 
-		// Allow other plugins to modify the options before they are used
+		/**
+		 * Allow other plugins to modify the options before they are used.
+		 *
+		 * @since 1.58.5
+		 */
 		self::$options = apply_filters('pmw_options', self::$options);
 
 		self::$options_obj = self::encode_options_object(self::$options);
@@ -103,7 +107,6 @@ class Options {
 					'token'             => '',
 					'test_event_code'   => '',
 					'user_transparency' => [
-						'process_anonymous_hits'             => false,
 						'send_additional_client_identifiers' => false,
 					],
 				],
@@ -126,7 +129,7 @@ class Options {
 				],
 				'analytics'    => [
 					'universal'        => [                // TODO remove
-														   'property_id' => '',
+															'property_id' => '',
 					],
 					'ga4'              => [
 						'measurement_id'          => '',
@@ -157,14 +160,16 @@ class Options {
 			'hotjar'     => [
 				'site_id' => '',
 			],
+			'crazyegg'   => [
+				'account_number' => '',
+			],
 			'pinterest'  => [
 				'pixel_id'          => '',
 				'ad_account_id'     => '',
 				'enhanced_match'    => false,
 				'advanced_matching' => false,
 				'apic'              => [
-					'token'                  => '',
-					'process_anonymous_hits' => false,
+					'token' => '',
 				],
 			],
 			'snapchat'   => [
@@ -178,9 +183,8 @@ class Options {
 				'pixel_id'          => '',
 				'advanced_matching' => false,
 				'eapi'              => [
-					'token'                  => '',
-					'test_event_code'        => '',
-					'process_anonymous_hits' => false,
+					'token'           => '',
+					'test_event_code' => '',
 				],
 			],
 			'twitter'    => [
@@ -206,12 +210,9 @@ class Options {
 				'linkedin'   => [
 					'partner_id'     => '',
 					'conversion_ids' => [
-						'search'         => '',
-						'view_content'   => '',
-						'add_to_list'    => '',
-						'add_to_cart'    => '',
-						'start_checkout' => '',
-						'purchase'       => '',
+						'view_content' => '',
+						'add_to_cart'  => '',
+						'purchase'     => '',
 					],
 				],
 				'optimizely' => [
@@ -223,12 +224,19 @@ class Options {
 				'reddit'     => [
 					'advertiser_id'     => '',
 					'advanced_matching' => false,
+					'capi'              => [
+						'token'           => '',
+						'test_event_code' => '',
+					],
 				],
 				'taboola'    => [
 					'account_id' => '',
 				],
 				'vwo'        => [
 					'account_id' => '',
+				],
+				'contentsquare' => [
+					'tag_id' => '',
 				],
 			],
 			'shop'       => [
@@ -255,7 +263,6 @@ class Options {
 			],
 			'general'    => [
 				'variations_output'          => true,  // TODO maybe should be in the shop section
-				'maximum_compatibility_mode' => false,
 				'pro_version_demo'           => false,
 				'scroll_tracker_thresholds'  => [],
 				'lazy_load_pmw'              => false,
@@ -265,6 +272,32 @@ class Options {
 					'log_http_requests' => false,
 				],
 				'pageview_events_s2s'        => false,
+				'always_send_s2s'            => false,
+				'modules'                    => [
+					'load_deprecated_functions' => true,
+				],
+			],
+			'ssp'        => [
+				'sync_token'              => '',
+				'enabled'                 => false,
+				'proxy_hostname'          => '',
+				'domain_id'               => '',
+				'routing_status'          => '',
+				'config_status'           => '',
+				'last_sync_at'            => 0,
+				'last_sync_error'         => '',
+				'resync_callback_token'   => '',
+				'domain_token'            => '',
+				'verification_key'        => '', // Deprecated: use domain_token
+				'proxy_failure_behavior'  => 'fallback_to_wc', // 'fallback_to_wc' | 'drop_events'
+				'plan_name'               => '',
+				'subscription_status'     => '',
+				'usage_percent'           => 0,
+				'monthly_request_limit'   => 0,
+				'billable_this_period'    => 0,
+				'quota_exceeded'          => false,
+				'activation_retry_start'  => 0,
+				'additional_domain_keys'  => [], // Keyed by proxy_hostname, stores domain_token + resync_callback_token
 			],
 			'db_version' => PMW_DB_VERSION,
 			'timestamp'  => null, // This will be set when the options are saved
@@ -313,7 +346,7 @@ class Options {
 
 	public static function update_with_defaults( $target_array, $default_array ) {
 
-//		error_log(print_r($target_array, true));
+//      error_log(print_r($target_array, true));
 
 		// Walk through every key in the default array
 		foreach ($default_array as $default_key => $default_value) {
@@ -334,7 +367,7 @@ class Options {
 			}
 		}
 
-//		error_log(print_r($target_array, true));
+//      error_log(print_r($target_array, true));
 		return $target_array;
 	}
 
@@ -380,10 +413,6 @@ class Options {
 
 	public static function get_facebook_capi_test_event_code() {
 		return self::get_options_obj()->facebook->capi->test_event_code;
-	}
-
-	public static function is_facebook_capi_user_transparency_process_anonymous_hits_active() {
-		return (bool) self::get_options_obj()->facebook->capi->user_transparency->process_anonymous_hits;
 	}
 
 	public static function is_facebook_capi_advanced_matching_enabled() {
@@ -434,10 +463,6 @@ class Options {
 		return (bool) self::get_options_obj()->tiktok->advanced_matching;
 	}
 
-	public static function is_tiktok_eapi_process_anonymous_hits_active() {
-		return (bool) self::get_options_obj()->tiktok->eapi->process_anonymous_hits;
-	}
-
 	/**
 	 * Hotjar
 	 */
@@ -448,6 +473,18 @@ class Options {
 
 	public static function is_hotjar_enabled() {
 		return (bool) self::get_hotjar_site_id();
+	}
+
+	/**
+	 * CrazyEgg
+	 */
+
+	public static function get_crazyegg_account_number() {
+		return self::get_options_obj()->crazyegg->account_number;
+	}
+
+	public static function is_crazyegg_enabled() {
+		return (bool) self::get_crazyegg_account_number();
 	}
 
 	/**
@@ -525,10 +562,6 @@ class Options {
 
 	public static function is_pinterest_advanced_matching_active() {
 		return (bool) self::get_options_obj()->pinterest->advanced_matching;
-	}
-
-	public static function is_pinterest_apic_process_anonymous_hits_active() {
-		return (bool) self::get_options_obj()->pinterest->apic->process_anonymous_hits;
 	}
 
 	/**
@@ -633,8 +666,7 @@ class Options {
 	}
 
 	public static function is_ga4_data_api_active() {
-		return
-			self::get_ga4_data_api_property_id()
+		return self::get_ga4_data_api_property_id()
 			&& !empty(self::get_ga4_data_api_credentials());
 	}
 
@@ -758,6 +790,22 @@ class Options {
 		return (bool) self::get_options_obj()->pixels->reddit->advanced_matching;
 	}
 
+	public static function get_reddit_capi_token() {
+		return self::get_options_obj()->pixels->reddit->capi->token;
+	}
+
+	public static function get_reddit_capi_test_event_code() {
+		return self::get_options_obj()->pixels->reddit->capi->test_event_code;
+	}
+
+	public static function is_reddit_capi_active() {
+		return self::is_reddit_active() && (bool) self::get_reddit_capi_token();
+	}
+
+	public static function is_reddit_capi_test_event_code_set() {
+		return (bool) self::get_reddit_capi_test_event_code();
+	}
+
 	/**
 	 * Taboola
 	 */
@@ -804,6 +852,18 @@ class Options {
 
 	public static function is_ab_tasty_active() {
 		return (bool) self::get_ab_tasty_account_id();
+	}
+
+	/**
+	 * Contentsquare
+	 */
+
+	public static function get_contentsquare_tag_id() {
+		return self::get_options_obj()->pixels->contentsquare->tag_id;
+	}
+
+	public static function is_contentsquare_active() {
+		return (bool) self::get_contentsquare_tag_id();
 	}
 
 	/**
@@ -863,12 +923,16 @@ class Options {
 	}
 
 	public static function consent_management_is_explicit_consent_active_override() {
+		/**
+		 * Filters Consent management is explicit consent active.
+		 *
+		 * @since 1.58.5
+		 */
 		return (bool) apply_filters('pmw_consent_management_is_explicit_consent_active', false);
 	}
 
 	public static function is_consent_management_explicit_consent_active() {
-		return
-			self::get_options_obj()->shop->cookie_consent_mgmt->explicit_consent
+		return self::get_options_obj()->shop->cookie_consent_mgmt->explicit_consent
 			|| self::consent_management_is_explicit_consent_active_override();
 	}
 
@@ -918,15 +982,67 @@ class Options {
 	}
 
 	public static function is_pageview_events_s2s_active() {
-		return (bool) self::get_options_obj()->general->pageview_events_s2s;
+		return (bool) self::get_options_obj()->general->pageview_events_s2s
+			|| self::is_pageview_events_s2s_active_override();
 	}
 
-	public static function is_maximum_compatiblity_mode_active() {
-		return (bool) self::get_options_obj()->general->maximum_compatibility_mode;
+	/**
+	 * Check if pageview S2S is force-enabled by an external condition.
+	 *
+	 * Returns true when the SweetCode Server-Side Proxy is active,
+	 * because pageview events can be offloaded to the proxy without
+	 * adding load to the WooCommerce server.
+	 *
+	 * @return bool
+	 * @since 1.57.1
+	 */
+	public static function is_pageview_events_s2s_active_override() {
+		return self::is_ssp_active();
+	}
+
+	/**
+	 * Check if server-side events should always be sent, even when browser-side pixels haven't loaded.
+	 *
+	 * When enabled, S2S events are sent to ad platforms independently of browser pixel state.
+	 * Browser-side tracking remains unaffected — only server-side events are sent independently.
+	 *
+	 * @return bool
+	 * @since 1.57.0
+	 */
+	public static function is_always_send_s2s_active() {
+		return (bool) self::get_options_obj()->general->always_send_s2s;
 	}
 
 	public static function is_lazy_load_pmw_active() {
 		return (bool) self::get_options_obj()->general->lazy_load_pmw;
+	}
+
+	/**
+	 * Check if a specific module should be loaded.
+	 *
+	 * @param string $module_name The name of the module to check.
+	 * @return bool True if the module should be loaded, false otherwise.
+	 * @since 1.51.0
+	 */
+	public static function should_load_module( $module_name ) {
+		$options = self::get_options_obj();
+
+		if (isset($options->general->modules->$module_name)) {
+			return (bool) $options->general->modules->$module_name;
+		}
+
+		// Default to true for backward compatibility
+		return true;
+	}
+
+	/**
+	 * Check if deprecated functions module should be loaded.
+	 *
+	 * @return bool True if deprecated functions should be loaded.
+	 * @since 1.51.0
+	 */
+	public static function should_load_deprecated_functions() {
+		return self::should_load_module('load_deprecated_functions');
 	}
 
 	/**
@@ -939,40 +1055,65 @@ class Options {
 
 		// If Google Optimize is active we need to make sure that the Google Optimize anti flicker snippet is active too
 
-//		if (self::is_google_optimize_active() && !self::is_google_optimize_anti_flicker_active()) {
-//			return false;
-//		}
+//      if (self::is_google_optimize_active() && !self::is_google_optimize_anti_flicker_active()) {
+//          return false;
+//      }
 
 		return true;
 	}
 
+	/**
+	 * Check if any statistics pixels are active
+	 *
+	 * Uses the Pixel_Registry to automatically detect all active statistics pixels.
+	 * No manual updates needed when adding new statistics pixels - just ensure they
+	 * implement Pixel_Descriptor with get_category() returning 'statistics'.
+	 *
+	 * @return bool True if at least one statistics pixel is active
+	 * @since 1.52.0 Refactored to use pixel registry for automatic detection
+	 */
 	public static function is_at_least_one_statistics_pixel_active() {
-		return self::is_ga4_enabled()
-			|| self::is_hotjar_enabled()
-			|| self::is_vwo_active();
+		return \SweetCode\Pixel_Manager\Pixels\Core\Pixel_Registry::has_active_statistics_pixels();
 	}
 
+	/**
+	 * Check if any marketing pixels are active
+	 *
+	 * Uses the Pixel_Registry to automatically detect all active marketing pixels.
+	 * No manual updates needed when adding new marketing pixels - just ensure they
+	 * implement Pixel_Descriptor with get_category() returning 'marketing'.
+	 *
+	 * @return bool True if at least one marketing pixel is active
+	 * @since 1.52.0 Refactored to use pixel registry for automatic detection
+	 */
 	public static function is_at_least_one_marketing_pixel_active() {
-		return self::is_adroll_active()
-			|| self::is_bing_active()
-			|| self::is_facebook_active()
-			|| self::is_google_ads_active()
-			|| self::is_linkedin_active()
-			|| self::is_outbrain_active()
-			|| self::is_pinterest_active()
-			|| self::is_reddit_active()
-			|| self::is_snapchat_active()
-			|| self::is_taboola_active()
-			|| self::is_tiktok_active()
-			|| self::is_twitter_active();
+		return \SweetCode\Pixel_Manager\Pixels\Core\Pixel_Registry::has_active_marketing_pixels();
 	}
 
+	/**
+	 * Check if any server-to-server (S2S) integrations are enabled
+	 *
+	 * This method uses the Pixel_Registry to automatically detect all available S2S integrations.
+	 *
+	 * When adding a new S2S pixel:
+	 * 1. Create the adapter class extending Abstract_Pixel_Adapter (e.g., MyPixel_Adapter)
+	 * 2. Implement is_available() to check if your pixel is configured
+	 * 3. Add `new MyPixel_Adapter();` at the bottom of your adapter file (auto-registers)
+	 * 4. Load the adapter class in Pixel_Manager::__construct() with class_exists()
+	 *
+	 * That's it! The registry will automatically detect it - no updates needed here.
+	 *
+	 * @return bool True if at least one S2S integration is active
+	 * @since 1.52.0 Refactored to use adapter registry for automatic detection
+	 */
 	public static function server_2_server_enabled() {
-		return
-			self::is_facebook_capi_active()
-			|| self::is_tiktok_eapi_active()
-			|| self::is_pinterest_apic_active()
-			|| self::is_snapchat_capi_active();
+		// Use the pixel registry for dynamic detection
+		if (class_exists('\SweetCode\Pixel_Manager\Pixels\Core\Pixel_Registry')) {
+			return \SweetCode\Pixel_Manager\Pixels\Core\Pixel_Registry::has_available_adapters();
+		}
+
+		// Fallback for edge cases where registry isn't loaded (shouldn't happen in normal flow)
+		return false;
 	}
 
 	/**
@@ -995,6 +1136,45 @@ class Options {
 
 		if (self::is_snapchat_active()) {
 			$pixels[] = 'snapchat';
+		}
+
+		if (self::is_reddit_active()) {
+			$pixels[] = 'reddit';
+		}
+
+		return $pixels;
+	}
+
+	/**
+	 * Returns the list of pixels that have active server-to-server (S2S/CAPI) tracking.
+	 *
+	 * Checks Facebook CAPI, TikTok Events API, Pinterest API for Conversions,
+	 * Snapchat CAPI, and Reddit CAPI.
+	 *
+	 * @return string[] Array of pixel slugs with active S2S.
+	 * @since 1.57.1
+	 */
+	public static function pixels_with_active_s2s() {
+		$pixels = [];
+
+		if (self::is_facebook_capi_active()) {
+			$pixels[] = 'facebook';
+		}
+
+		if (self::is_tiktok_eapi_active()) {
+			$pixels[] = 'tiktok';
+		}
+
+		if (self::is_pinterest_apic_active()) {
+			$pixels[] = 'pinterest';
+		}
+
+		if (self::is_snapchat_capi_active()) {
+			$pixels[] = 'snapchat';
+		}
+
+		if (self::is_reddit_capi_active()) {
+			$pixels[] = 'reddit';
 		}
 
 		return $pixels;
@@ -1160,7 +1340,7 @@ class Options {
 		foreach ($backup_timestamps as $timestamp) {
 			if ($recent_count < $settings['recent_count']) {
 				$retained_backups[$timestamp] = $backups[$timestamp];
-				$recent_count++;
+				++$recent_count;
 			} else {
 				break;
 			}
@@ -1290,6 +1470,310 @@ class Options {
 	}
 
 	/**
+	 * Check if purchase events should be routed through the SSP.
+	 *
+	 * Currently returns is_ssp_active() — when SSP is active, purchases go through it.
+	 * Add a toggle here in the future if we want to let users control this separately.
+	 *
+	 * @return bool
+	 * @since 1.57.0
+	 */
+	public static function should_process_purchases_via_ssp() {
+		return self::is_ssp_active();
+	}
+
+	/**
+	 * Get the SSP purchase events URL.
+	 *
+	 * Uses the SSP API base (supports PMW_SSP_API_BASE override for local dev)
+	 * with the /v1/sync/purchase-events path.
+	 *
+	 * @return string Full URL for the SSP purchase events endpoint.
+	 * @since 1.57.0
+	 */
+	public static function get_ssp_purchase_events_url() {
+
+		$api_base = defined( 'PMW_SSP_API_BASE' ) ? PMW_SSP_API_BASE : 'https://ssp.sweetcode.cloud';
+
+		return $api_base . '/v1/sync/purchase-events';
+	}
+
+	/**
+	 * Check if the SSP (Server Side Proxy) is fully active and operational.
+	 *
+	 * Returns true only when all conditions are met:
+	 * - SSP is enabled
+	 * - A sync token is set
+	 * - The proxy domain routing is active
+	 * - Config has been successfully synced
+	 *
+	 * @return bool
+	 * @since 1.57.0
+	 */
+	public static function is_ssp_active() {
+		$options = self::get_options();
+
+		return !empty($options['ssp']['enabled'])
+			&& !empty($options['ssp']['sync_token'])
+			&& 'active' === ( isset($options['ssp']['routing_status']) ? $options['ssp']['routing_status'] : '' )
+			&& 'synced' === ( isset($options['ssp']['config_status']) ? $options['ssp']['config_status'] : '' );
+	}
+
+	/**
+	 * Check if the SSP is configured (enabled with a sync token) but not
+	 * necessarily fully operational.
+	 *
+	 * Unlike is_ssp_active(), this does NOT require routing_status or
+	 * config_status to have reached their final states. Used by the daily
+	 * sync scheduler so that background syncs can still run while DNS is
+	 * propagating or config is pending — allowing those statuses to
+	 * self-heal.
+	 *
+	 * @return bool
+	 * @since 1.57.1
+	 */
+	public static function is_ssp_configured() {
+		$options = self::get_options();
+
+		return !empty($options['ssp']['enabled'])
+			&& !empty($options['ssp']['sync_token']);
+	}
+
+	/**
+	 * Get the SSP proxy hostname.
+	 *
+	 * @return string The proxy hostname (e.g. "ssp.myshop.com")
+	 * @since 1.57.0
+	 */
+	public static function get_ssp_proxy_hostname() {
+		$options = self::get_options();
+		return isset($options['ssp']['proxy_hostname']) ? $options['ssp']['proxy_hostname'] : '';
+	}
+
+	/**
+	 * Get the SSP events URL for the proxy.
+	 *
+	 * @return string Full URL for the SSP events endpoint (e.g. "https://ssp.myshop.com/v1/pmw-events")
+	 * @since 1.57.0
+	 */
+	public static function get_ssp_events_url() {
+
+		// Allow overriding for local development:
+		// define( 'PMW_SSP_EVENTS_URL', 'http://localhost:8787/v1/pmw-events' );
+		if ( defined( 'PMW_SSP_EVENTS_URL' ) ) {
+			return PMW_SSP_EVENTS_URL;
+		}
+
+		$hostname = self::get_ssp_proxy_hostname();
+
+		if (empty($hostname)) {
+			return '';
+		}
+
+		return 'https://' . $hostname . '/v1/pmw-events';
+	}
+
+	/**
+	 * Get the SSP sync token.
+	 *
+	 * @return string
+	 * @since 1.57.0
+	 */
+	public static function get_ssp_sync_token() {
+		$options = self::get_options();
+		return isset($options['ssp']['sync_token']) ? $options['ssp']['sync_token'] : '';
+	}
+
+	/**
+	 * Get the SSP resync callback token.
+	 *
+	 * @return string
+	 * @since 1.57.0
+	 */
+	public static function get_ssp_resync_callback_token() {
+		$options = self::get_options();
+		return isset($options['ssp']['resync_callback_token']) ? $options['ssp']['resync_callback_token'] : '';
+	}
+
+	/**
+	 * Get the SSP domain token.
+	 *
+	 * This token is provisioned by the SSP during domain-config sync
+	 * and used to authenticate proxy requests via X-SSP-Token header.
+	 *
+	 * @return string The 64-char hex domain token, or empty string.
+	 * @since 1.58.5
+	 */
+	public static function get_ssp_domain_token() {
+		$options = self::get_options();
+		return isset( $options['ssp']['domain_token'] ) ? $options['ssp']['domain_token'] : '';
+	}
+
+	/**
+	 * Get the SSP verification key.
+	 *
+	 * @deprecated Use get_ssp_domain_token() instead.
+	 * @return string
+	 */
+	public static function get_ssp_verification_key() {
+		return self::get_ssp_domain_token();
+	}
+
+	/**
+	 * Get the SSP proxy failure behavior setting.
+	 *
+	 * Determines what happens when the SSP proxy is unreachable:
+	 * - 'fallback_to_wc': Fall back to PMW's internal WooCommerce event router (default)
+	 * - 'drop_events': Drop server-side events entirely
+	 *
+	 * @return string 'fallback_to_wc' or 'drop_events'
+	 * @since 1.57.0
+	 */
+	public static function get_ssp_proxy_failure_behavior() {
+		$options  = self::get_options();
+		$behavior = isset($options['ssp']['proxy_failure_behavior']) ? $options['ssp']['proxy_failure_behavior'] : 'fallback_to_wc';
+
+		// Validate against allowed values
+		if ( ! in_array( $behavior, [ 'fallback_to_wc', 'drop_events' ], true ) ) {
+			return 'fallback_to_wc';
+		}
+
+		return $behavior;
+	}
+
+	/**
+	 * Check if the SSP monthly quota has been exceeded.
+	 *
+	 * When true, PMW should stop sending events to the SSP proxy
+	 * and fall back to WC REST API or drop events per the
+	 * proxy_failure_behavior setting.
+	 *
+	 * @return bool
+	 * @since 1.57.0
+	 */
+	public static function is_ssp_quota_exceeded() {
+		return ! empty( self::get_options()['ssp']['quota_exceeded'] );
+	}
+
+	/**
+	 * Get or create the SSP session ID for the current visitor.
+	 *
+	 * Uses the WooCommerce session to persist a UUID across page loads.
+	 * The session ID is used for Tier 2 cookie verification.
+	 *
+	 * @return string UUID session ID or empty string if no WC session.
+	 * @since 1.57.0
+	 */
+	public static function get_ssp_session_id() {
+
+		if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+			return '';
+		}
+
+		$session_id = WC()->session->get( 'pmw_ssp_session_id' );
+
+		if ( empty( $session_id ) ) {
+			$session_id = wp_generate_uuid4();
+			WC()->session->set( 'pmw_ssp_session_id', $session_id );
+		}
+
+		return $session_id;
+	}
+
+	/**
+	 * Get additional SSP domain configurations from filter.
+	 *
+	 * Allows a single WordPress instance serving multiple domains to connect
+	 * each domain to its own SSP proxy. The primary domain uses the standard
+	 * SSP options; additional domains are registered via this filter.
+	 *
+	 * Each entry must contain:
+	 * - 'sync_token'     (string) The domain sync token from the SSP portal.
+	 * - 'proxy_hostname' (string) The SSP proxy hostname (e.g. 'ssp.otherdomain.com').
+	 * - 'shop_origin'    (string) The full origin URL (e.g. 'https://otherdomain.com').
+	 *
+	 * @return array[] Validated array of additional domain configs.
+	 * @since 1.57.1
+	 */
+	public static function get_ssp_additional_domains() {
+
+		/**
+		 * Filter to register additional SSP domains for multi-domain WordPress installs.
+		 *
+		 * @param array[] $domains Array of domain config arrays.
+		  * @since 1.58.5
+		 */
+		$domains = apply_filters( 'pmw_ssp_additional_domains', [] );
+
+		if ( empty( $domains ) || ! is_array( $domains ) ) {
+			return [];
+		}
+
+		// Validate each entry
+		$validated = [];
+		foreach ( $domains as $domain ) {
+			if (
+				! empty( $domain['sync_token'] )
+				&& ! empty( $domain['proxy_hostname'] )
+				&& ! empty( $domain['shop_origin'] )
+			) {
+				$validated[] = $domain;
+			}
+		}
+
+		return $validated;
+	}
+
+	/**
+	 * Find an additional SSP domain config matching the current request host.
+	 *
+	 * @return array|null The matching domain config, or null if no match.
+	 * @since 1.57.1
+	 */
+	public static function get_matching_ssp_additional_domain() {
+
+		$additional_domains = self::get_ssp_additional_domains();
+
+		if ( empty( $additional_domains ) ) {
+			return null;
+		}
+
+		$current_host = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+
+		foreach ( $additional_domains as $domain ) {
+			$origin_host = wp_parse_url( $domain['shop_origin'], PHP_URL_HOST );
+			if ( $origin_host && strcasecmp( $current_host, $origin_host ) === 0 ) {
+				return $domain;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get the stored verification key for an additional SSP domain.
+	 *
+	 * @param string $proxy_hostname The proxy hostname to look up.
+	 *
+	 * @return string The domain token, or empty string.
+	 * @since 1.57.1
+	 */
+	public static function get_ssp_additional_domain_domain_token( $proxy_hostname ) {
+		$options = self::get_options();
+		$keys    = isset( $options['ssp']['additional_domain_keys'][ $proxy_hostname ] ) ? $options['ssp']['additional_domain_keys'][ $proxy_hostname ] : [];
+		return isset( $keys['domain_token'] ) ? $keys['domain_token'] : '';
+	}
+
+	/**
+	 * Get the SSP additional domain verification key.
+	 *
+	 * @deprecated Use get_ssp_additional_domain_domain_token() instead.
+	 */
+	public static function get_ssp_additional_domain_verification_key( $proxy_hostname ) {
+		return self::get_ssp_additional_domain_domain_token( $proxy_hostname );
+	}
+
+	/**
 	 * Get backup retention policy settings.
 	 * This method can be overridden or filtered to customize retention behavior.
 	 *
@@ -1309,6 +1793,7 @@ class Options {
 		 * Filter backup retention policy settings.
 		 *
 		 * @param array $settings Default retention settings
+		  * @since 1.58.5
 		 */
 		return apply_filters('pmw_backup_retention_settings', $default_settings);
 	}

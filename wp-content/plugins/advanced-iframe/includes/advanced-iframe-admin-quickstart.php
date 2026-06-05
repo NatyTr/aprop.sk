@@ -294,7 +294,11 @@ function printDonation($devOptions, $evanto, $closedArray) {
            <ul class="pro"><li>';
 	_e('Automatic removal of the powered by message', 'advanced-iframe');
     echo '</li><li>';
-    _e('Additional sections on the help tab.', 'advanced-iframe');
+    _e('Boxes in the administration remembers their state.', 'advanced-iframe');
+     echo '</li><li>';
+	_e('Additional sections on the help tab.', 'advanced-iframe');
+     echo '</li><li>';
+	 _e('No OPT-IN message in the administration', 'advanced-iframe');
      echo '</li><li>';
     _e('Exclusive coupons', 'advanced-iframe');
 	echo '</li><li>';
@@ -358,7 +362,7 @@ function printDonation($devOptions, $evanto, $closedArray) {
     }
 	printTrueFalse(false, $devOptions, __('Enable expert mode', 'advanced-iframe'), 'expert_mode', __('If you enable the expert mode the description is only shown if you click on the label of the setting. You see more settings at once but only one description at once. Also the padding between the table rows are reduced a lot. So you see a lot of more settings on one screen. Use this if you are common with the settings.', 'advanced-iframe'));
     printTextInput(false, $devOptions, __('Editor button', 'advanced-iframe'), 'editorbutton', __('With this setting you can add an "advanced iframe" button to the text editor of Wordpress. The button does add the shortcode with the current security code if set + the settings you define. You can use any setting from the administration. By default src,width,height is used. The security key is additionally rendered if you specify one. If you leave this setting empty the button is not shown.', 'advanced-iframe'));
-    printTrueFalse(false, $devOptions, __('Show support message', 'advanced-iframe'), 'show_support_message', __('Show the powered by text to support advanced iframe in the free version. It is automatically hidden when you OPT-IN or register.', 'advanced-iframe'));
+    printTrueFalse(false, $devOptions, __('Show support message', 'advanced-iframe'), 'show_support_message', __('Show the powered by text to support advanced iframe in the free version. It is automatically hidden when you OPT-IN, register or are on localhost (because OPT-IN is not possible).', 'advanced-iframe'));
 	echo '</table>';
     aiPostboxClose();
 

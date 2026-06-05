@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2025 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Attribution: This code is part of the All-in-One WP Migration plugin, developed by
  *
  * ███████╗███████╗██████╗ ██╗   ██╗███╗   ███╗ █████╗ ███████╗██╗  ██╗
  * ██╔════╝██╔════╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔════╝██║ ██╔╝
@@ -38,11 +36,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div id="ai1wm-import-init">
 				<p>
 					<i class="ai1wm-icon-cloud-upload"></i><br />
-					<?php esc_html_e( 'Drag & Drop a backup to import it', 'all-in-one-wp-migration' ); ?>
+					<?php _e( 'Drag & Drop a backup to import it', AI1WM_PLUGIN_NAME ); ?>
 				</p>
 				<div class="ai1wm-button-group ai1wm-button-import ai1wm-expandable">
 					<div class="ai1wm-button-main">
-						<span role="list" aria-label="<?php esc_attr_e( 'Import From', 'all-in-one-wp-migration' ); ?>"><?php esc_html_e( 'Import From', 'all-in-one-wp-migration' ); ?></span>
+						<span role="list" aria-label="<?php _e( 'Import From', AI1WM_PLUGIN_NAME ); ?>"><?php _e( 'Import From', AI1WM_PLUGIN_NAME ); ?></span>
 						<span class="ai1mw-lines">
 							<span class="ai1wm-line ai1wm-line-first"></span>
 							<span class="ai1wm-line ai1wm-line-second"></span>
@@ -52,7 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<ul class="ai1wm-dropdown-menu ai1wm-import-providers">
 						<?php foreach ( apply_filters( 'ai1wm_import_buttons', array() ) as $button ) : ?>
 							<li>
-								<?php echo wp_kses( $button, ai1wm_allowed_html_tags() ); ?>
+								<?php echo $button; ?>
 							</li>
 						<?php endforeach; ?>
 					</ul>
@@ -62,4 +60,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 </div>
 
-<p style="margin: 0;"><?php echo wp_kses( apply_filters( 'ai1wm_pro', '' ), ai1wm_allowed_html_tags() ); ?></p>
+<p style="margin: 0;"><?php echo apply_filters( 'ai1wm_pro', '' ); ?></p>

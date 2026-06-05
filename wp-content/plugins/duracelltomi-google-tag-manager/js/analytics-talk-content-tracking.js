@@ -19,26 +19,26 @@ if ( "undefined" == typeof console ) {
 	};
 }
 
-(function(  ) {
+jQuery( function( $ ) {
 	// Debug flag
-	const debugMode      = gtm4wp_scrollerscript_debugmode;
+	var debugMode      = gtm4wp_scrollerscript_debugmode;
 
 	// Default time delay before checking location
-	const callBackTime   = gtm4wp_scrollerscript_callbacktime;
+	var callBackTime   = gtm4wp_scrollerscript_callbacktime;
 
 	// # px before tracking a reader
-	const readerLocation = gtm4wp_scrollerscript_readerlocation;
+	var readerLocation = gtm4wp_scrollerscript_readerlocation;
 
 	// Set some flags for tracking & execution
-	let timer       = 0;
-	let scroller    = false;
-	let endContent  = false;
-	let didComplete = false;
+	var timer       = 0;
+	var scroller    = false;
+	var endContent  = false;
+	var didComplete = false;
 
 	// Set some time variables to calculate reading time
-	const startTime = new Date();
-	const beginning = startTime.getTime();
-	let totalTime = 0;
+	var startTime = new Date();
+	var beginning = startTime.getTime();
+	var totalTime = 0;
 
 	// Track the aticle load
 	if ( !debugMode ) {
@@ -51,17 +51,14 @@ if ( "undefined" == typeof console ) {
 
 	// Check the location and track user
 	function trackLocation() {
-		//const bottom = $( window ).height() + $( window ).scrollTop();
-		const bottom = window.innerHeight + window.scrollY;
-		//const height = $( document ).height();
-		const height = document.body.offsetHeight
-		let scrollStart = 0;
+		bottom = $( window ).height() + $( window ).scrollTop();
+		height = $( document ).height();
 
 		// If user starts to scroll send an event
 		if ( bottom > readerLocation && !scroller ) {
-			const currentTime = new Date();
+			currentTime = new Date();
 			scrollStart = currentTime.getTime();
-			const timeToScroll = Math.round( ( scrollStart - beginning ) / 1000 );
+			timeToScroll = Math.round( ( scrollStart - beginning ) / 1000 );
 
 			if ( !debugMode ) {
 				window[ gtm4wp_datalayer_name ].push({
@@ -75,14 +72,10 @@ if ( "undefined" == typeof console ) {
 		}
 
 		// If user has hit the bottom of the content send an event
-		//if ( bottom >= $( '#' + gtm4wp_scrollerscript_contentelementid ).scrollTop() + $( '#' + gtm4wp_scrollerscript_contentelementid ).innerHeight() && !endContent ) {
-		const scroll_top = document.querySelector('#' + gtm4wp_scrollerscript_contentelementid)?.scrollTop || 0;
-		const client_height = document.querySelector('#' + gtm4wp_scrollerscript_contentelementid )?.clientHeight || 0;
-		if ( bottom >= scroll_top + client_height && !endContent ) {
-			
-			const currentTime = new Date();
-			const contentScrollEnd = currentTime.getTime();
-			const timeToContentEnd = Math.round( ( contentScrollEnd - scrollStart ) / 1000 );
+		if ( bottom >= $( '#' + gtm4wp_scrollerscript_contentelementid ).scrollTop() + $( '#' + gtm4wp_scrollerscript_contentelementid ).innerHeight() && !endContent ) {
+			currentTime = new Date();
+			contentScrollEnd = currentTime.getTime();
+			timeToContentEnd = Math.round( ( contentScrollEnd - scrollStart ) / 1000 );
 
 			if ( !debugMode ) {
 				window[ gtm4wp_datalayer_name ].push({
@@ -98,8 +91,8 @@ if ( "undefined" == typeof console ) {
 
 		// If user has hit the bottom of page send an event
 		if ( bottom >= height && !didComplete ) {
-			const currentTime = new Date();
-			const end = currentTime.getTime();
+			currentTime = new Date();
+			end = currentTime.getTime();
 			totalTime = Math.round( ( end - scrollStart ) / 1000 );
 
 			if ( !debugMode ) {
@@ -132,10 +125,9 @@ if ( "undefined" == typeof console ) {
 			didComplete = true;
 		}
 	}
-	
+
 	// Track the scrolling and track location
-	//$( window ).scroll(function() {
-	document.addEventListener("scroll", function(event){
+	$( window ).scroll(function() {
 		if ( timer ) {
 			clearTimeout( timer );
 		}
@@ -143,4 +135,4 @@ if ( "undefined" == typeof console ) {
 		// Use a buffer so we don't call trackLocation too often.
 		timer = setTimeout( trackLocation, callBackTime );
 	});
-})(window, document);
+});

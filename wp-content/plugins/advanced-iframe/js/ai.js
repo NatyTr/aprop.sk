@@ -1,5 +1,5 @@
 /**
- *  Advanced iframe functions v2025.6
+ *  Advanced iframe functions v2026.2
  */
 /* jslint devel: true, unused: false */
 /* globals ai_show_id_only:false, aiChangeUrl: false, aiResizeIframeHeightId: false, aiShowIframeId: false, findAndReplaceDOMText: false, aiShowDebug: false */
@@ -2059,7 +2059,8 @@ function aiDisableCheckIframes() {
   jQuery('#checkIframes').prop('disabled', 'disabled');
 }
 
-function aiProcessMessage(event, id, debug) {
+
+function aiProcessMessage(event, id, debug, dataPostMessage, addIframeUrlAsParam, useIframeTitleForParent) {
   var jsObject;
   try {
     jsObject = JSON.parse(event.data);
@@ -2088,13 +2089,15 @@ function aiProcessMessage(event, id, debug) {
         } else {
           // check if the data is of the expected
           if (type === 'height') {
-            aiProcessHeight(jsObject);
+            aiProcessHeight(jsObject, addIframeUrlAsParam, useIframeTitleForParent);
           } else if (type === 'show') {
             aiProcessShow(jsObject);
           }
+		  
+		  //only configured keys! 
           for (var key in jsObject.data) {
-            if (jsObject.data.hasOwnProperty(key)) {
-              jQuery(key).html(jsObject.data[key]);
+            if (jsObject.data.hasOwnProperty(key) && aiIsValidKey(key, dataPostMessage)) {
+              jQuery(key).html(aiRemoveScriptTags(jsObject.data[key]));
             }
           }
         }
@@ -2106,6 +2109,30 @@ function aiProcessMessage(event, id, debug) {
       console.log(e);
     }
   }
+}
+
+/**
+ * Checks if the key we get from the post message is in dataPostMessage saved
+ */
+function aiIsValidKey(key, dataPostMessage) {
+  if (!dataPostMessage) return false;
+
+  var parts = dataPostMessage.split(',');
+
+  for (var i = 0; i < parts.length; i++) {
+    var validKey = parts[i].split('|')[0].trim();
+    if (validKey === key) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function aiRemoveScriptTags(htmlString) {
+  const temp = jQuery('<div>').html(htmlString);
+  temp.find('script').remove();
+  return temp.html();
 }
 
 function aiProcessDebug(jsObject) {
@@ -2132,7 +2159,7 @@ function aiProcessAnchor(jsObject) {
   }, 100);
 }
 
-function aiProcessHeight(jsObject) {
+function aiProcessHeight(jsObject, addIframeUrlAsParam, useIframeTitleForParent) {
   var nHeight = jsObject.height;
   var nWidth = jsObject.width;
   var iAnchor = parseInt(jsObject.anchor, 10);
@@ -2140,16 +2167,20 @@ function aiProcessHeight(jsObject) {
 
   if (nHeight != null) {
     try {
-      var loc = jsObject.loc;
-      if (loc != null && !loc.includes("send_console_log")) {
-        if (typeof aiChangeUrl === "function") {
-          aiChangeUrl(loc);
-        }
-      }
-      var title = jsObject.title;
-      if (title != null && title !== "undefined" && title !== "") {
-        document.title = decodeURIComponent(title);
-      }
+	  if (addIframeUrlAsParam == "remote") {
+		  var loc = jsObject.loc;
+		  if (loc != null && !loc.includes("send_console_log")) {
+			if (typeof aiChangeUrl === "function") {
+			  aiChangeUrl(loc);
+			}
+		  }
+	  }
+	  if (useIframeTitleForParent == "remote") {
+		  var title = jsObject.title;
+		  if (title != null && title !== "undefined" && title !== "") {
+			document.title = decodeURIComponent(title);
+		  }
+	  }
       if (id != null) {
         var iHeight = parseInt(nHeight, 10);
         var iWidth = parseInt(nWidth, 10);

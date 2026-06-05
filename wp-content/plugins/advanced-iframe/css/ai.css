@@ -710,6 +710,7 @@ ul#browser-list {
 
 #ai .postbox {
     margin-bottom: 10px;
+	border-radius: 8px;
 }
 
 #ai .postbox.closed {
@@ -789,3 +790,20 @@ ul#browser-list {
     pointer-events: none;
 	padding: 20px; 
 }
+
+#ai .optin-message {
+      height: 40px;
+      animation: shrinkHeight 0.5s ease forwards;
+      animation-delay: 3s;
+	  align-content: center;
+    }
+
+    @keyframes shrinkHeight {
+      from {
+        height: 40px;
+      }
+      to {
+        height: 40px;
+      }
+    }
+

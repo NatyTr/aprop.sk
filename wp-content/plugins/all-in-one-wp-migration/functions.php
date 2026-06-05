@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2025 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Attribution: This code is part of the All-in-One WP Migration plugin, developed by
  *
  * ███████╗███████╗██████╗ ██╗   ██╗███╗   ███╗ █████╗ ███████╗██╗  ██╗
  * ██╔════╝██╔════╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔════╝██║ ██╔╝
@@ -37,28 +35,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function ai1wm_storage_path( $params ) {
 	if ( empty( $params['storage'] ) ) {
-		throw new Ai1wm_Storage_Exception(
-			wp_kses(
-				__( 'Could not locate the storage path. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-storage-path/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ),
-				ai1wm_allowed_html_tags()
-			)
-		);
+		throw new Ai1wm_Storage_Exception( __( 'Unable to locate storage path. <a href="https://help.servmask.com/knowledgebase/invalid-storage-path/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ) );
 	}
 
 	// Validate storage path
 	if ( ai1wm_validate_file( $params['storage'] ) !== 0 ) {
-		throw new Ai1wm_Storage_Exception(
-			wp_kses(
-				__( 'Your storage directory name contains invalid characters: < > : " | ? * \0. It must not include these characters. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-storage-name/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ),
-				ai1wm_allowed_html_tags()
-			)
-		);
+		throw new Ai1wm_Storage_Exception( __( 'Your storage directory name contains invalid characters. It cannot contain: < > : " | ? * \0. <a href="https://help.servmask.com/knowledgebase/invalid-storage-name/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ) );
 	}
 
 	// Get storage path
 	$storage = AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR . basename( $params['storage'] );
 	if ( ! is_dir( $storage ) ) {
-		mkdir( $storage, 0777, true );
+		mkdir( $storage );
 	}
 
 	return $storage;
@@ -72,32 +60,12 @@ function ai1wm_storage_path( $params ) {
  */
 function ai1wm_backup_path( $params ) {
 	if ( empty( $params['archive'] ) ) {
-		throw new Ai1wm_Archive_Exception(
-			wp_kses(
-				__( 'Could not locate the archive path. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-archive-path/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ),
-				ai1wm_allowed_html_tags()
-			)
-		);
+		throw new Ai1wm_Archive_Exception( __( 'Unable to locate archive path. <a href="https://help.servmask.com/knowledgebase/invalid-archive-path/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ) );
 	}
 
 	// Validate archive path
 	if ( ai1wm_validate_file( $params['archive'] ) !== 0 ) {
-		throw new Ai1wm_Archive_Exception(
-			wp_kses(
-				__( 'Your archive file name contains invalid characters: < > : " | ? * \0. It must not include these characters. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-archive-name/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ),
-				ai1wm_allowed_html_tags()
-			)
-		);
-	}
-
-	// Validate file extension
-	if ( ! ai1wm_is_filename_supported( $params['archive'] ) ) {
-		throw new Ai1wm_Archive_Exception(
-			wp_kses(
-				__( 'Invalid archive file type. Only .wpress files are allowed. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-file-type/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ),
-				ai1wm_allowed_html_tags()
-			)
-		);
+		throw new Ai1wm_Archive_Exception( __( 'Your archive file name contains invalid characters. It cannot contain: < > : " | ? * \0. <a href="https://help.servmask.com/knowledgebase/invalid-archive-name/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ) );
 	}
 
 	return AI1WM_BACKUPS_PATH . DIRECTORY_SEPARATOR . $params['archive'];
@@ -134,32 +102,12 @@ function ai1wm_validate_file( $file, $allowed_files = array() ) {
  */
 function ai1wm_archive_path( $params ) {
 	if ( empty( $params['archive'] ) ) {
-		throw new Ai1wm_Archive_Exception(
-			wp_kses(
-				__( 'Could not locate the archive path. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-archive-path/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ),
-				ai1wm_allowed_html_tags()
-			)
-		);
+		throw new Ai1wm_Archive_Exception( __( 'Unable to locate archive path. <a href="https://help.servmask.com/knowledgebase/invalid-archive-path/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ) );
 	}
 
 	// Validate archive path
 	if ( ai1wm_validate_file( $params['archive'] ) !== 0 ) {
-		throw new Ai1wm_Archive_Exception(
-			wp_kses(
-				__( 'Your archive file name contains invalid characters: < > : " | ? * \0. It must not include these characters. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-archive-name/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ),
-				ai1wm_allowed_html_tags()
-			)
-		);
-	}
-
-	// Validate file extension
-	if ( ! ai1wm_is_filename_supported( $params['archive'] ) ) {
-		throw new Ai1wm_Archive_Exception(
-			wp_kses(
-				__( 'Invalid archive file type. Only .wpress files are allowed. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-file-type/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ),
-				ai1wm_allowed_html_tags()
-			)
-		);
+		throw new Ai1wm_Archive_Exception( __( 'Your archive file name contains invalid characters. It cannot contain: < > : " | ? * \0. <a href="https://help.servmask.com/knowledgebase/invalid-archive-name/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ) );
 	}
 
 	// Get archive path
@@ -343,11 +291,10 @@ function ai1wm_cookies_path( $params ) {
 /**
  * Get error log absolute path
  *
- * @param  string $nonce Log nonce
  * @return string
  */
-function ai1wm_error_path( $nonce ) {
-	return AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR . sprintf( AI1WM_ERROR_NAME, $nonce );
+function ai1wm_error_path() {
+	return AI1WM_STORAGE_PATH . DIRECTORY_SEPARATOR . AI1WM_ERROR_NAME;
 }
 
 /**
@@ -525,33 +472,25 @@ function ai1wm_archive_file( $blog_id = null ) {
 	$name = array();
 
 	// Add domain
-	if ( defined( 'AI1WM_KEEP_DOMAIN_NAME' ) ) {
-		$name[] = parse_url( get_site_url( $blog_id ), PHP_URL_HOST );
-	} elseif ( ( $domain = explode( '.', parse_url( get_site_url( $blog_id ), PHP_URL_HOST ) ) ) ) {
-		foreach ( $domain as $subdomain ) {
-			if ( ( $subdomain = strtolower( $subdomain ) ) ) {
-				$name[] = $subdomain;
-			}
-		}
-	}
+	$name[] = parse_url( get_site_url( $blog_id ), PHP_URL_HOST );
 
 	// Add path
 	if ( ( $path = parse_url( get_site_url( $blog_id ), PHP_URL_PATH ) ) ) {
 		foreach ( explode( '/', $path ) as $directory ) {
-			if ( ( $directory = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $directory ) ) ) ) {
+			if ( $directory ) {
 				$name[] = $directory;
 			}
 		}
 	}
 
 	// Add year, month and day
-	$name[] = current_time( 'Ymd' );
+	$name[] = date_i18n( 'Ymd' );
 
 	// Add hours, minutes and seconds
-	$name[] = current_time( 'His' );
+	$name[] = date_i18n( 'His' );
 
 	// Add unique identifier
-	$name[] = ai1wm_generate_random_string( 12, false );
+	$name[] = ai1wm_generate_random_string( 6, false );
 
 	return sprintf( '%s.wpress', strtolower( implode( '-', $name ) ) );
 }
@@ -566,20 +505,12 @@ function ai1wm_archive_folder( $blog_id = null ) {
 	$name = array();
 
 	// Add domain
-	if ( defined( 'AI1WM_KEEP_DOMAIN_NAME' ) ) {
-		$name[] = parse_url( get_site_url( $blog_id ), PHP_URL_HOST );
-	} elseif ( ( $domain = explode( '.', parse_url( get_site_url( $blog_id ), PHP_URL_HOST ) ) ) ) {
-		foreach ( $domain as $subdomain ) {
-			if ( ( $subdomain = strtolower( $subdomain ) ) ) {
-				$name[] = $subdomain;
-			}
-		}
-	}
+	$name[] = parse_url( get_site_url( $blog_id ), PHP_URL_HOST );
 
 	// Add path
 	if ( ( $path = parse_url( get_site_url( $blog_id ), PHP_URL_PATH ) ) ) {
 		foreach ( explode( '/', $path ) as $directory ) {
-			if ( ( $directory = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $directory ) ) ) ) {
+			if ( $directory ) {
 				$name[] = $directory;
 			}
 		}
@@ -600,7 +531,7 @@ function ai1wm_archive_bucket( $blog_id = null ) {
 	// Add domain
 	if ( ( $domain = explode( '.', parse_url( get_site_url( $blog_id ), PHP_URL_HOST ) ) ) ) {
 		foreach ( $domain as $subdomain ) {
-			if ( ( $subdomain = strtolower( $subdomain ) ) ) {
+			if ( $subdomain = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $subdomain ) ) ) {
 				$name[] = $subdomain;
 			}
 		}
@@ -630,7 +561,7 @@ function ai1wm_archive_vault( $blog_id = null ) {
 	// Add domain
 	if ( ( $domain = explode( '.', parse_url( get_site_url( $blog_id ), PHP_URL_HOST ) ) ) ) {
 		foreach ( $domain as $subdomain ) {
-			if ( ( $subdomain = strtolower( $subdomain ) ) ) {
+			if ( $subdomain = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $subdomain ) ) ) {
 				$name[] = $subdomain;
 			}
 		}
@@ -660,7 +591,7 @@ function ai1wm_archive_project( $blog_id = null ) {
 	// Add domain
 	if ( ( $domain = explode( '.', parse_url( get_site_url( $blog_id ), PHP_URL_HOST ) ) ) ) {
 		foreach ( $domain as $subdomain ) {
-			if ( ( $subdomain = strtolower( $subdomain ) ) ) {
+			if ( $subdomain ) {
 				$name[] = $subdomain;
 			}
 		}
@@ -669,7 +600,7 @@ function ai1wm_archive_project( $blog_id = null ) {
 	// Add path
 	if ( ( $path = parse_url( get_site_url( $blog_id ), PHP_URL_PATH ) ) ) {
 		foreach ( explode( '/', $path ) as $directory ) {
-			if ( ( $directory = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $directory ) ) ) ) {
+			if ( $directory ) {
 				$name[] = $directory;
 			}
 		}
@@ -690,7 +621,7 @@ function ai1wm_archive_share( $blog_id = null ) {
 	// Add domain
 	if ( ( $domain = explode( '.', parse_url( get_site_url( $blog_id ), PHP_URL_HOST ) ) ) ) {
 		foreach ( $domain as $subdomain ) {
-			if ( ( $subdomain = strtolower( $subdomain ) ) ) {
+			if ( $subdomain = strtolower( preg_replace( '/[^A-Za-z0-9\-]/', '', $subdomain ) ) ) {
 				$name[] = $subdomain;
 			}
 		}
@@ -944,7 +875,6 @@ function ai1wm_content_filters( $filters = array() ) {
 			AI1WM_PACKAGE_NAME,
 			AI1WM_MULTISITE_NAME,
 			AI1WM_DATABASE_NAME,
-			AI1WM_W3TC_CONFIG_FILE,
 		)
 	);
 }
@@ -1000,6 +930,8 @@ function ai1wm_plugin_filters( $filters = array() ) {
 			AI1WMWE_PLUGIN_BASEDIR,
 		)
 	);
+
+	return $filters;
 }
 
 /**
@@ -1479,11 +1411,7 @@ function ai1wm_cache_flush() {
  */
 function ai1wm_elementor_cache_flush() {
 	delete_post_meta_by_key( '_elementor_css' );
-	delete_post_meta_by_key( '_elementor_element_cache' );
-	delete_post_meta_by_key( '_elementor_page_assets' );
-
 	delete_option( '_elementor_global_css' );
-	delete_option( '_elementor_assets_data' );
 	delete_option( 'elementor-custom-breakpoints-files' );
 }
 
@@ -1529,13 +1457,7 @@ function ai1wm_url_scheme( $url, $scheme = '' ) {
 function ai1wm_open( $file, $mode ) {
 	$file_handle = @fopen( $file, $mode );
 	if ( false === $file_handle ) {
-		throw new Ai1wm_Not_Accessible_Exception(
-			wp_kses(
-				/* translators: 1: File path, 2: mode */
-				sprintf( __( 'Could not open %1$s with mode %2$s. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-file-permissions/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ), $file, $mode ),
-				ai1wm_allowed_html_tags()
-			)
-		);
+		throw new Ai1wm_Not_Accessible_Exception( sprintf( __( 'Unable to open %s with mode %s. <a href="https://help.servmask.com/knowledgebase/invalid-file-permissions/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ), $file, $mode ) );
 	}
 
 	return $file_handle;
@@ -1554,25 +1476,13 @@ function ai1wm_write( $handle, $content ) {
 	$write_result = @fwrite( $handle, $content );
 	if ( false === $write_result ) {
 		if ( ( $meta = stream_get_meta_data( $handle ) ) ) {
-			throw new Ai1wm_Not_Writable_Exception(
-				wp_kses(
-					/* translators: 1: Meta data stream URI. */
-					sprintf( __( 'Could not write to: %s. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-file-permissions/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ), $meta['uri'] ),
-					ai1wm_allowed_html_tags()
-				)
-			);
+			throw new Ai1wm_Not_Writable_Exception( sprintf( __( 'Unable to write to: %s. <a href="https://help.servmask.com/knowledgebase/invalid-file-permissions/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ), $meta['uri'] ) );
 		}
 	} elseif ( null === $write_result ) {
 		return strlen( $content );
 	} elseif ( strlen( $content ) !== $write_result ) {
 		if ( ( $meta = stream_get_meta_data( $handle ) ) ) {
-			throw new Ai1wm_Quota_Exceeded_Exception(
-				wp_kses(
-					/* translators: 1: Meta data stream URI. */
-					sprintf( __( 'Out of disk space. Could not write to: %s. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/out-of-disk-space/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ), $meta['uri'] ),
-					ai1wm_allowed_html_tags()
-				)
-			);
+			throw new Ai1wm_Quota_Exceeded_Exception( sprintf( __( 'Out of disk space. Unable to write to: %s. <a href="https://help.servmask.com/knowledgebase/out-of-disk-space/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ), $meta['uri'] ) );
 		}
 	}
 
@@ -1592,13 +1502,7 @@ function ai1wm_read( $handle, $length ) {
 		$read_result = @fread( $handle, $length );
 		if ( false === $read_result ) {
 			if ( ( $meta = stream_get_meta_data( $handle ) ) ) {
-				throw new Ai1wm_Not_Readable_Exception(
-					wp_kses(
-						/* translators: 1: Meta data stream URI. */
-						sprintf( __( 'Could not read file: %s. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-file-permissions/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ), $meta['uri'] ),
-						ai1wm_allowed_html_tags()
-					)
-				);
+				throw new Ai1wm_Not_Readable_Exception( sprintf( __( 'Unable to read file: %s. <a href="https://help.servmask.com/knowledgebase/invalid-file-permissions/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ), $meta['uri'] ) );
 			}
 		}
 
@@ -1620,13 +1524,7 @@ function ai1wm_seek( $handle, $offset, $mode = SEEK_SET ) {
 	$seek_result = @fseek( $handle, $offset, $mode );
 	if ( -1 === $seek_result ) {
 		if ( ( $meta = stream_get_meta_data( $handle ) ) ) {
-			throw new Ai1wm_Not_Seekable_Exception(
-				wp_kses(
-					/* translators: 1: File offset, 2: Meta data stream URI. */
-					sprintf( __( 'Could not seek to offset %1$d on %2$s. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/php-32bit/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ), $offset, $meta['uri'] ),
-					ai1wm_allowed_html_tags()
-				)
-			);
+			throw new Ai1wm_Not_Seekable_Exception( sprintf( __( 'Unable to seek to offset %d on %s. <a href="https://help.servmask.com/knowledgebase/php-32bit/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ), $offset, $meta['uri'] ) );
 		}
 	}
 
@@ -1643,13 +1541,7 @@ function ai1wm_tell( $handle ) {
 	$tell_result = @ftell( $handle );
 	if ( false === $tell_result ) {
 		if ( ( $meta = stream_get_meta_data( $handle ) ) ) {
-			throw new Ai1wm_Not_Tellable_Exception(
-				wp_kses(
-					/* translators: 1: Meta data stream URI. */
-					sprintf( __( 'Could not get current pointer position of %s. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/php-32bit/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ), $meta['uri'] ),
-					ai1wm_allowed_html_tags()
-				)
-			);
+			throw new Ai1wm_Not_Tellable_Exception( sprintf( __( 'Unable to get current pointer position of %s. <a href="https://help.servmask.com/knowledgebase/php-32bit/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ), $meta['uri'] ) );
 		}
 	}
 
@@ -1659,50 +1551,20 @@ function ai1wm_tell( $handle ) {
 /**
  * Write fields to a file
  *
- * @param resource  $handle File handle to write to
- * @param array     $fields Fields to write to the file
- * @param string    $separator
- * @param string    $enclosure
- * @param string    $escape
- *
+ * @param  resource $handle File handle to write to
+ * @param  array    $fields Fields to write to the file
  * @return integer
  * @throws Ai1wm_Not_Writable_Exception
  */
-function ai1wm_putcsv( $handle, $fields, $separator = ',', $enclosure = '"', $escape = '\\' ) {
-	if ( PHP_MAJOR_VERSION >= 7 ) {
-		$write_result = @fputcsv( $handle, $fields, $separator, $enclosure, $escape );
-	} else {
-		$write_result = @fputcsv( $handle, $fields, $separator, $enclosure );
-	}
-
+function ai1wm_putcsv( $handle, $fields ) {
+	$write_result = @fputcsv( $handle, $fields );
 	if ( false === $write_result ) {
 		if ( ( $meta = stream_get_meta_data( $handle ) ) ) {
-			throw new Ai1wm_Not_Writable_Exception(
-				wp_kses(
-					/* translators: 1: Meta data stream URI. */
-					sprintf( __( 'Could not write to: %s. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-file-permissions/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ), $meta['uri'] ),
-					ai1wm_allowed_html_tags()
-				)
-			);
+			throw new Ai1wm_Not_Writable_Exception( sprintf( __( 'Unable to write to: %s. <a href="https://help.servmask.com/knowledgebase/invalid-file-permissions/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ), $meta['uri'] ) );
 		}
 	}
 
 	return $write_result;
-}
-
-/**
- * Read fields from a file
- *
- * @param resource  $handle File handle to read from
- * @param int       $length
- * @param string    $separator
- * @param string    $enclosure
- * @param string    $escape
- *
- * @return array|false|null
- */
-function ai1wm_getcsv( $handle, $length = null, $separator = ',', $enclosure = '"', $escape = '\\' ) {
-	return fgetcsv( $handle, $length, $separator, $enclosure, $escape );
 }
 
 /**
@@ -1813,12 +1675,7 @@ function ai1wm_is_filename_supported( $file, $extensions = array( 'wpress' ) ) {
  */
 function ai1wm_verify_secret_key( $secret_key ) {
 	if ( $secret_key !== get_option( AI1WM_SECRET_KEY ) ) {
-		throw new Ai1wm_Not_Valid_Secret_Key_Exception(
-			wp_kses(
-				__( 'Could not authenticate the secret key. The process cannot continue. <a href="https://help.servmask.com/knowledgebase/invalid-secret-key/" target="_blank">Technical details</a>', 'all-in-one-wp-migration' ),
-				ai1wm_allowed_html_tags()
-			)
-		);
+		throw new Ai1wm_Not_Valid_Secret_Key_Exception( __( 'Unable to authenticate the secret key. <a href="https://help.servmask.com/knowledgebase/invalid-secret-key/" target="_blank">Technical details</a>', AI1WM_PLUGIN_NAME ) );
 	}
 
 	return true;
@@ -1876,15 +1733,11 @@ function ai1wm_setup_environment() {
 	if ( @ob_get_length() ) {
 		@ob_end_clean();
 	}
-}
 
-/**
- * PHP register error handlers
- *
- * @return void
- */
-function ai1wm_setup_errors() {
+	// Set error handler
 	@set_error_handler( 'Ai1wm_Handler::error' );
+
+	// Set shutdown handler
 	@register_shutdown_function( 'Ai1wm_Handler::shutdown' );
 }
 
@@ -2201,12 +2054,12 @@ function ai1wm_encrypt_string( $string, $key ) {
 
 	$iv = openssl_random_pseudo_bytes( $iv_length );
 	if ( $iv === false ) {
-		throw new Ai1wm_Not_Encryptable_Exception( esc_html__( 'Could not generate random bytes. The process cannot continue.', 'all-in-one-wp-migration' ) );
+		throw new Ai1wm_Not_Encryptable_Exception( __( 'Unable to generate random bytes.', AI1WM_PLUGIN_NAME ) );
 	}
 
 	$encrypted_string = openssl_encrypt( $string, AI1WM_CIPHER_NAME, $key, OPENSSL_RAW_DATA, $iv );
 	if ( $encrypted_string === false ) {
-		throw new Ai1wm_Not_Encryptable_Exception( esc_html__( 'Could not encrypt data. The process cannot continue.', 'all-in-one-wp-migration' ) );
+		throw new Ai1wm_Not_Encryptable_Exception( __( 'Unable to encrypt data.', AI1WM_PLUGIN_NAME ) );
 	}
 
 	return sprintf( '%s%s', $iv, $encrypted_string );
@@ -2221,7 +2074,7 @@ function ai1wm_encrypt_string( $string, $key ) {
 function ai1wm_crypt_iv_length() {
 	$iv_length = openssl_cipher_iv_length( AI1WM_CIPHER_NAME );
 	if ( $iv_length === false ) {
-		throw new Ai1wm_Not_Encryptable_Exception( esc_html__( 'Could not obtain cipher length. The process cannot continue.', 'all-in-one-wp-migration' ) );
+		throw new Ai1wm_Not_Encryptable_Exception( __( 'Unable to obtain cipher length.', AI1WM_PLUGIN_NAME ) );
 	}
 
 	return $iv_length;
@@ -2243,7 +2096,7 @@ function ai1wm_decrypt_string( $encrypted_string, $key ) {
 
 	$decrypted_string = openssl_decrypt( substr( $encrypted_string, $iv_length ), AI1WM_CIPHER_NAME, $key, OPENSSL_RAW_DATA, $iv );
 	if ( $decrypted_string === false ) {
-		throw new Ai1wm_Not_Decryptable_Exception( esc_html__( 'Could not decrypt data. The process cannot continue.', 'all-in-one-wp-migration' ) );
+		throw new Ai1wm_Not_Decryptable_Exception( __( 'Unable to decrypt data.', AI1WM_PLUGIN_NAME ) );
 	}
 
 	return $decrypted_string;
@@ -2264,154 +2117,4 @@ function ai1wm_is_decryption_password_valid( $encrypted_signature, $password ) {
 	} catch ( Ai1wm_Not_Decryptable_Exception $exception ) {
 		return false;
 	}
-}
-
-function ai1wm_populate_roles() {
-	if ( ! function_exists( 'populate_roles' ) && ! function_exists( 'populate_options' ) && ! function_exists( 'populate_network' ) ) {
-		require_once( ABSPATH . 'wp-admin/includes/schema.php' );
-	}
-
-	if ( function_exists( 'populate_roles' ) ) {
-		populate_roles();
-	}
-}
-
-/**
- * Set basic auth header to request
- *
- * @param array $headers
- *
- * @return array
- */
-function ai1wm_auth_headers( $headers = array() ) {
-	if ( $hash = get_option( AI1WM_AUTH_HEADER ) ) {
-		$headers['Authorization'] = sprintf( 'Basic %s', $hash );
-	}
-
-	if ( ( $user = get_option( AI1WM_AUTH_USER ) ) && ( $password = get_option( AI1WM_AUTH_PASSWORD ) ) ) {
-		if ( ! isset( $headers['Authorization'] ) && ( $hash = base64_encode( sprintf( '%s:%s', $user, $password ) ) ) ) {
-			update_option( AI1WM_AUTH_HEADER, $hash );
-			$headers['Authorization'] = sprintf( 'Basic %s', $hash );
-		}
-		delete_option( AI1WM_AUTH_USER );
-		delete_option( AI1WM_AUTH_PASSWORD );
-	}
-
-	return $headers;
-}
-
-/**
- * Check if direct download of backup supported
- *
- * @return bool
- */
-function ai1wm_direct_download_supported() {
-	return ! ( $_SERVER['SERVER_NAME'] === 'playground.wordpress.net' || $_SERVER['SERVER_SOFTWARE'] === 'PHP.wasm' );
-}
-
-/**
- * Get allowed HTML tags when output with `wp_kses()`
- *
- * @return array
- */
-function ai1wm_allowed_html_tags() {
-	return array(
-		'a'      => array(
-			'href'       => array(),
-			'title'      => array(),
-			'target'     => array(),
-			'id'         => array(),
-			'name'       => array(),
-			'aria-label' => array(),
-			'class'      => array(),
-			'style'      => array(),
-			'disabled'   => array(),
-			'download'   => array(),
-		),
-		'p'      => array(
-			'class' => array(),
-			'style' => array(),
-		),
-		'br'     => array(),
-		'em'     => array(),
-		'strong' => array(),
-		'input'  => array(
-			'type'       => array(),
-			'name'       => array(),
-			'aria-label' => array(),
-			'style'      => array(),
-			'id'         => array(),
-			'value'      => array(),
-			'class'      => array(),
-			'disabled'   => array(),
-		),
-	);
-}
-
-/**
- * Wrapper for wp_register_style function
- *
- * @param string $handle Name of the stylesheet
- * @param string $src    Path of the stylesheet
- * @param array  $deps   An array of registered stylesheet handles this stylesheet depends on
- * @param mixed  $ver    String specifying stylesheet version number
- * @param string $media  The media for which this stylesheet has been defined
- *
- * @return bool
- */
-function ai1wm_register_style( $handle, $src, $deps = array(), $ver = false, $media = 'all' ) {
-	if ( is_rtl() ) {
-		$src = str_replace( '.min.css', '.min.rtl.css', $src );
-	}
-
-	return wp_register_style( $handle, $src, $deps, $ver, $media );
-}
-
-/**
- * Wrapper for wp_enqueue_style function
- *
- * @param string $handle Name of the stylesheet
- * @param string $src    Path of the stylesheet
- * @param array  $deps   An array of registered stylesheet handles this stylesheet depends on
- * @param mixed  $ver    String specifying stylesheet version number
- * @param string $media  The media for which this stylesheet has been defined
- *
- * @return void
- */
-function ai1wm_enqueue_style( $handle, $src = '', $deps = array(), $ver = false, $media = 'all' ) {
-	if ( is_rtl() ) {
-		$src = str_replace( '.min.css', '.min.rtl.css', $src );
-	}
-
-	wp_enqueue_style( $handle, $src, $deps, $ver, $media );
-}
-
-/**
- * Wrapper for wp_register_script function
- *
- * @param string $handle Name of the script
- * @param string $src    Path of the script
- * @param array  $deps   An array of registered script handles this script depends on
- * @param mixed  $ver    String specifying script version number
- * @param mixed  $args   An array of additional script loading strategies
- *
- * @return bool
- */
-function ai1wm_register_script( $handle, $src, $deps = array(), $ver = false, $args = array() ) {
-	return wp_register_script( $handle, $src, $deps, $ver, $args );
-}
-
-/**
- * Wrapper for wp_enqueue_script function
- *
- * @param string $handle Name of the script
- * @param string $src    Path of the script
- * @param array  $deps   An array of registered script handles this script depends on
- * @param mixed  $ver    String specifying script version number
- * @param mixed  $args   An array of additional script loading strategies
- *
- * @return void
- */
-function ai1wm_enqueue_script( $handle, $src = '', $deps = array(), $ver = false, $args = array() ) {
-	wp_enqueue_script( $handle, $src, $deps, $ver, $args );
 }

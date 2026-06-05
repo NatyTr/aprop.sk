@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2025 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Attribution: This code is part of the All-in-One WP Migration plugin, developed by
  *
  * ███████╗███████╗██████╗ ██╗   ██╗███╗   ███╗ █████╗ ███████╗██╗  ██╗
  * ██╔════╝██╔════╝██╔══██╗██║   ██║████╗ ████║██╔══██╗██╔════╝██║ ██╔╝
@@ -38,6 +36,8 @@ class Ai1wm_Backups_Controller {
 				'backups'      => Ai1wm_Backups::get_files(),
 				'labels'       => Ai1wm_Backups::get_labels(),
 				'downloadable' => Ai1wm_Backups::are_downloadable(),
+				'username'     => get_option( AI1WM_AUTH_USER ),
+				'password'     => get_option( AI1WM_AUTH_PASSWORD ),
 			)
 		);
 	}
@@ -184,7 +184,7 @@ class Ai1wm_Backups_Controller {
 		} catch ( Exception $e ) {
 			ai1wm_json_response(
 				array(
-					'error' => __( 'Could not list the backup content. Please ensure the backup file is accessible and not corrupted.', 'all-in-one-wp-migration' ),
+					'error' => __( 'Unable to list backup content', AI1WM_PLUGIN_NAME ),
 				)
 			);
 		}
@@ -214,27 +214,18 @@ class Ai1wm_Backups_Controller {
 		}
 
 		$chunk_size = 1024 * 1024;
-		$file_bytes = 0;
+		$read       = 0;
 
 		try {
-			if ( $handle  = ai1wm_open( ai1wm_backup_path( $params ), 'rb' ) ) {
-				if ( ! isset( $params['file_size'] ) ) {
-					$params['file_size'] = filesize( ai1wm_backup_path( $params ) );
-				}
-
-				if ( ! isset( $params['offset'] ) ) {
-					$params['offset'] = 0;
-				}
-
+			if ( $handle  = ai1wm_open( ai1wm_backup_path( $params ), 'r' ) ) {
 				ai1wm_seek( $handle, $params['offset'] );
-				while ( ! feof( $handle ) && $file_bytes < $params['file_size'] ) {
-					$buffer = ai1wm_read( $handle, min( $chunk_size, $params['file_size'] - $file_bytes ) );
+				while ( ! feof( $handle ) && $read < $params['file_size'] ) {
+					$buffer = ai1wm_read( $handle, min( $chunk_size, $params['file_size'] - $read ) );
 					echo $buffer;
 					ob_flush();
 					flush();
-					$file_bytes += strlen( $buffer );
+					$read += strlen( $buffer );
 				}
-
 				ai1wm_close( $handle );
 			}
 		} catch ( Exception $exception ) {

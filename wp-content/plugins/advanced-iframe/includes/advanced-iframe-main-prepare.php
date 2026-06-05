@@ -17,7 +17,8 @@ if (!class_exists('AdvancediFramePrepareJs')) {
       return $html_js;
     }
 
-    static function aiPreparePostMessageJs($html_js, $id, $use_post_message, $src, $multi_domain_enabled) {
+    static function aiPreparePostMessageJs($html_js, $id, $use_post_message, $src, $multi_domain_enabled,
+	 $data_post_message,$add_iframe_url_as_param,$use_iframe_title_for_parent) {
       if ($use_post_message != 'false') {
         $iframe_origin_full = $src;
 
@@ -66,7 +67,9 @@ if (!class_exists('AdvancediFramePrepareJs')) {
           $html_js .= trim(file_get_contents($post_js_filename_old));
           $html_js .= 'event = aiConvertPostMessage(event);';
         }
-        $html_js .= '  aiProcessMessage(event,"' . $id . '", "' . $use_post_message . '");';
+		
+		
+        $html_js .= '  aiProcessMessage(event,"' . $id . '", "' . $use_post_message . '","' .$data_post_message .'","' .$add_iframe_url_as_param .'","' .$use_iframe_title_for_parent .'");';
         $html_js .= '}';
         $html_js .= 'if (window.addEventListener) {';
         $html_js .= '  window.addEventListener("message", aiReceiveMessage' . $id . ');';
@@ -91,7 +94,7 @@ if (!class_exists('AdvancediFramePrepareJs')) {
         $html_js .= 'var aiOnloadScrollTop="true";';
       }
 
-      if ($additional_height != 0) {
+      if (!empty($additional_height)) {
         $html_js .= 'var aiExtraSpace=' . esc_html($additional_height) . ';';
       }
 
@@ -530,7 +533,8 @@ if ($include_scripts_in_content === 'true') {
   $html .= '<script type="text/javascript" src="' . plugins_url() . $aiPath . '/js/ai.min.js" ></script>';
 }
 $html_js = AdvancediFramePrepareJs::aiPrepareGlobalJsVariables($id, $include_scripts_in_content, $aiPath, $add_document_domain, $document_domain);
-$html_js = AdvancediFramePrepareJs::aiPreparePostMessageJs($html_js, $id, $use_post_message, $src, $multi_domain_enabled);
+$html_js = AdvancediFramePrepareJs::aiPreparePostMessageJs($html_js, $id, $use_post_message, $src, $multi_domain_enabled, 
+    $data_post_message, $add_iframe_url_as_param, $use_iframe_title_for_parent);
 $html_js = AdvancediFramePrepareJs::aiPrepareAiJsVariables($html_js, $iframe_zoom, $show_part_of_iframe_zoom,
   $store_height_in_cookie, $id, $onload_scroll_top, $additional_height, $debug_js, $fullscreen_button_full);
 $html_js = AdvancediFramePrepareJs::aiPrepareAiShowIframeIdJs($html_js, $hide_part_of_iframe);

@@ -75,7 +75,7 @@ class Helpers {
     }
 
     public static function is_allowed_notification_page( $page ) {
-        $allowed_pages = ['page_wpm', 'index.php', 'dashboard'];
+        $allowed_pages = ['page_pmw', 'index.php', 'dashboard'];
         foreach ( $allowed_pages as $allowed_page ) {
             if ( strpos( $page, $allowed_page ) !== false ) {
                 return true;
@@ -288,10 +288,30 @@ class Helpers {
      */
     public static function get_facebook_fbevents_js_url() {
         $fbevents_standard_url = 'https://connect.facebook.net/en_US/fbevents.js';
+        /**
+         * Filters Facebook fbevents script version.
+         *
+         * @since 1.58.5
+         */
         if ( apply_filters( 'pmw_facebook_fbevents_script_version', '' ) ) {
+            /**
+             * Filters Facebook fbevents script version.
+             *
+             * @since 1.58.5
+             */
             return $fbevents_standard_url . '?v=' . apply_filters( 'pmw_facebook_fbevents_script_version', '' );
         }
+        /**
+         * Filters Facebook fbevents script url.
+         *
+         * @since 1.58.5
+         */
         if ( apply_filters( 'pmw_facebook_fbevents_script_url', '' ) ) {
+            /**
+             * Filters Facebook fbevents script url.
+             *
+             * @since 1.58.5
+             */
             return apply_filters( 'pmw_facebook_fbevents_script_url', '' );
         }
         return $fbevents_standard_url;
@@ -309,13 +329,34 @@ class Helpers {
         return wp_date( 'U', strtotime( $datetime_string . ' ' . wp_timezone_string() ) );
     }
 
+    /**
+     * Get the next future occurrence of a daily time string.
+     *
+     * Returns today's timestamp if the time hasn't passed yet,
+     * otherwise returns tomorrow's. This prevents Action Scheduler
+     * from treating a newly created recurring action as overdue
+     * and running it immediately on every heartbeat.
+     *
+     * @param string $time_string A time string like '4:25am' or '3:15am'.
+     * @return int|false Unix timestamp for the next occurrence.
+     *
+     * @since 1.58.5
+     */
+    public static function get_next_future_daily_timestamp( $time_string ) {
+        $today = self::datetime_string_to_unix_timestamp_in_local_timezone( 'today ' . $time_string );
+        if ( $today > time() ) {
+            return $today;
+        }
+        return self::datetime_string_to_unix_timestamp_in_local_timezone( 'tomorrow ' . $time_string );
+    }
+
     public static function is_admin_page( $page_ids = [] ) {
         // If no page IDs are given, check if the current page is an admin page
         if ( empty( $page_ids ) ) {
             return false;
         }
         // Check if the current page is an admin page and if it is one of the given page IDs
-        //		return is_admin() && in_array(get_current_screen()->id, $page_ids);
+        //      return is_admin() && in_array(get_current_screen()->id, $page_ids);
         $_get = self::get_input_vars( INPUT_GET );
         if ( !isset( $_get['page'] ) || !in_array( $_get['page'], $page_ids ) ) {
             return false;
@@ -379,7 +420,7 @@ class Helpers {
         $raw_user_data = self::get_raw_user_data( $order, $current_user );
         // Add the details to the data array and return it
         // Only add the data if it exists
-        //		$data = $email ? self::get_user_object_email($email) : $data;
+        //      $data = $email ? self::get_user_object_email($email) : $data;
         // If $email is not empty,
         // get the data from self::get_user_object_email($email) and add it to $data['email']
         if ( !empty( $raw_user_data['email'] ) ) {
@@ -461,7 +502,7 @@ class Helpers {
     private static function get_user_object_email( $email ) {
         $email = self::trim_string( $email );
         $email = strtolower( $email );
-        //		$email = self::normalize_google_email_address($email);
+        //      $email = self::normalize_google_email_address($email);
         return [
             'raw'       => $email,
             'sha256'    => self::hash_string( $email ),
@@ -565,6 +606,11 @@ class Helpers {
      * @return bool
      */
     public static function should_all_s2s_requests_be_sent_blocking() {
+        /**
+         * Filters Send all s2s requests blocking.
+         *
+         * @since 1.58.5
+         */
         return (bool) apply_filters( 'pmw_send_all_s2s_requests_blocking', false ) || Options::is_http_request_logging_enabled();
     }
 
@@ -902,6 +948,11 @@ class Helpers {
         if ( Environment::is_elementor_active() && Environment::is_server_behind_cloudflare() ) {
             $attributes['data-cfasync'] = ['false'];
         }
+        /**
+         * Filters Opening script string attributes.
+         *
+         * @since 1.58.5
+         */
         $attributes = apply_filters( 'pmw_opening_script_string_attributes', $attributes );
         // Build the attribute string
         foreach ( $attributes as $attribute => $values ) {
@@ -1008,6 +1059,75 @@ class Helpers {
     }
 
     /**
+     * Check if this is a free distribution of the plugin.
+     * Free distributions include:
+     * - WordPress.org free version (wgact.php)
+     * - WooCommerce Marketplace free version (woocommerce-pixel-manager-free.php)
+     * - Any version where Freemius SDK indicates no premium code access
+     *
+     * Note: The first check using Freemius SDK is necessary for local testing
+     * because file names are not correct before preparing the distribution build.
+     *
+     * @return bool True if it's a free distribution, false for pro distribution
+     * @since 1.51.0
+     */
+    public static function is_free_plugin_distribution() {
+        if ( function_exists( 'wpm_fs' ) && wpm_fs()->is_premium() ) {
+            return false;
+        }
+        // Fallback: Check if it's the WordPress.org free version
+        if ( str_contains( PMW_PLUGIN_BASENAME, 'wgact.php' ) ) {
+            return true;
+        }
+        // Fallback: Check if it's the WooCommerce Marketplace free version
+        if ( str_contains( PMW_PLUGIN_BASENAME, 'woocommerce-pixel-manager-free/woocommerce-pixel-manager-free.php' ) ) {
+            return true;
+        }
+        // Otherwise it's a pro distribution
+        return false;
+    }
+
+    /**
+     * Returns the active assets tier ('free' or 'pro') for selecting which JS
+     * bundle directory to serve to the browser.
+     *
+     * Use this for any code that picks between js/public/free/ and js/public/pro/
+     * (entry script enqueue, webpack chunk base path, admin/frontend asset URLs).
+     * It guarantees the entry script and the dynamic-import chunk base path always
+     * resolve to the same directory, so chunk filenames (which embed a
+     * [contenthash] that differs between the free and pro builds) line up.
+     *
+     * Resolution order:
+     *  1. PMW_HANDLE_AS_FREE_VERSION constant (local development override)
+     *  2. PMW_HANDLE_AS_PRO_VERSION  constant (local development override)
+     *  3. Freemius runtime check: can_use_premium_code__premium_only()
+     *     This is license-aware, so when a premium license is invalidated at
+     *     runtime (renewal failure, manual disconnect, sync downgrade) the
+     *     bundle directory flips to 'free' even though the premium PHP files
+     *     are still on disk.
+     *
+     * Do not use Helpers::is_free_plugin_distribution() for asset selection:
+     * that helper answers the distribution question (which ZIP was installed)
+     * and stays 'pro' on a downgrade-in-place, which causes the entry script
+     * (license-gated) and the chunk base path to disagree.
+     *
+     * @return string 'free' or 'pro'
+     * @since 1.58.10
+     */
+    public static function get_active_assets_tier() {
+        if ( defined( 'PMW_HANDLE_AS_FREE_VERSION' ) && PMW_HANDLE_AS_FREE_VERSION ) {
+            return 'free';
+        }
+        if ( defined( 'PMW_HANDLE_AS_PRO_VERSION' ) && PMW_HANDLE_AS_PRO_VERSION ) {
+            return 'pro';
+        }
+        if ( function_exists( 'wpm_fs' ) && wpm_fs()->can_use_premium_code__premium_only() ) {
+            return 'pro';
+        }
+        return 'free';
+    }
+
+    /**
      * Gets all plugin log files based on a specific source.
      *
      * This function searches all log files in the WooCommerce logs directory,
@@ -1048,6 +1168,20 @@ class Helpers {
             }
         }
         return $log_files;
+    }
+
+    /**
+     * Check if the current page is a cart, checkout, or purchase confirmation page.
+     *
+     * @return bool True if on cart, checkout, or order-received page.
+     */
+    public static function is_cart_or_checkout_page() {
+        // WooCommerce functions may not be available yet
+        if ( !function_exists( 'is_cart' ) || !function_exists( 'is_checkout' ) ) {
+            return false;
+        }
+        // is_checkout() returns true for both checkout and order-received (thank you) page
+        return is_cart() || is_checkout();
     }
 
 }

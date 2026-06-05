@@ -54,7 +54,11 @@ if (is_user_logged_in() && is_admin()) {
       if (version_compare($latest_version, $aiVersion) === 1) {
         if (!(isset($devOptions['closed_messages']) && isset($devOptions['closed_messages']['show-version-message']))) {
           echo '<div id="show-version-message" class="notice notice-success is-dismissible is-permanent-closable"><p><strong>';
-          echo __('Version ', 'advanced-iframe') . $latest_version . __(' of Advanced iFrame Pro is available. See the <a href="//www.advanced-iframe.com/advanced-iframe/advanced-iframe-history" target="_blank">history</a> for details. Please download the latest version from your download page of codecanyon.', 'advanced-iframe');
+          if ($isFreemius) {
+		    echo __('Version ', 'advanced-iframe') . $latest_version . __(' of Advanced iFrame Pro is available. See the <a href="//www.advanced-iframe.com/advanced-iframe/advanced-iframe-history" target="_blank">history</a> for details. Update the plugin on the plugins page.', 'advanced-iframe');  
+		  } else {
+		    echo __('Version ', 'advanced-iframe') . $latest_version . __(' of Advanced iFrame Pro is available. See the <a href="//www.advanced-iframe.com/advanced-iframe/advanced-iframe-history" target="_blank">history</a> for details. Download the latest version from your download page of codecanyon.', 'advanced-iframe');
+		  }
           echo '</strong></p></div>';
         }
         $is_latest = false;
@@ -145,7 +149,8 @@ if (is_user_logged_in() && is_admin()) {
       'referrerpolicy', 'add_surrounding_p',
       'custom', 'fullscreen_button_hide_elements',
       'fullscreen_button_full', 'fullscreen_button_style',
-      'enable_ai_content_pages', 'show_support_message' 
+      'enable_ai_content_pages', 'show_support_message',
+      'replace_iframe_tags'     	  
     );
     if (!wp_verify_nonce($_POST['twg-options'], 'twg-options')) {
       die('Sorry, your nonce did not verify.');
@@ -225,11 +230,11 @@ if (is_user_logged_in() && is_admin()) {
           }
           // replace ' with "
         } elseif ($item === 'include_url' || $item === 'src') {
-          $text = str_replace('{', '__BRACKETS_OPEN__', $text);
-          $text = str_replace('}', '__BRACKETS_CLOSE__', $text);
-          $text = esc_url($text);
-          $text = str_replace('__BRACKETS_OPEN__', '{', $text);
-          $text = str_replace('__BRACKETS_CLOSE__', '}', $text);
+		  $searchBrackets = array('{', '}');
+		  $replacePlaceholders = array('__BRACKETS_OPEN__', '__BRACKETS_CLOSE__');
+		  $text = str_replace($searchBrackets, $replacePlaceholders, $text);
+		  $text = esc_url($text);
+		  $text = str_replace($replacePlaceholders, $searchBrackets, $text);
           $devOptions[$item] = stripslashes($text);
         } elseif ($item === 'include_html') {
           $text = wp_kses($text, array(
@@ -243,15 +248,17 @@ if (is_user_logged_in() && is_admin()) {
           ));
           $text = balanceTags($text, true);
           $devOptions[$item] = stripslashes($text);
+        } elseif ($item === 'id') {
+          $newtext = preg_replace("/\W/", "_", $text);
+          // remove trailing numbers
+          $newtext = preg_replace('/^\d+/', '', $newtext);
+		  if (!empty($newtext)) {
+		    $devOptions[$item] = $newtext;
+		  }
         } elseif (function_exists('sanitize_text_field')) {
           $devOptions[$item] = stripslashes(sanitize_text_field($text));
         } else {
           $devOptions[$item] = stripslashes($text);
-        }
-        if ($item === 'id') {
-          $devOptions[$item] = preg_replace("/\W/", "_", $text);
-          // remove trailing numbers
-          $devOptions[$item] = preg_replace('/^\d+/', '', $devOptions[$item]);
         }
 
         // we check if we have an invalid configuration!
@@ -289,7 +296,11 @@ if (is_user_logged_in() && is_admin()) {
 // read closed postboxes;
   $current_user = wp_get_current_user();
   $closedArray = get_user_meta($current_user->ID, 'closedpostboxes_toplevel_page_advanced-iframe', true);
-  if (empty($closedArray)) {
+  
+  $isRegistered = $isFreemiusMigration && $ai_fs->is_registered() && $ai_fs->is_tracking_allowed();
+  
+  // only OPT-IN and pro users have postboxes that remembers their state
+  if (empty($closedArray) || (!$evanto && !$isRegistered && $isFreemiusMigration)) {
     $closedArray = array();
   }
 
@@ -302,6 +313,7 @@ if (is_user_logged_in() && is_admin()) {
   if ($evanto && clearstatscache($devOptions)) {
     AdvancedIframeHelper::aiPrintError('Yo' . 'ur ver' . 'sion of Adv' . 'anced iFr' . 'ame Pro s' . 'eems to be an ill' . 'egal co' . 'py and is now wo' . 'rking in the fr' . 'eeware m' . 'ode ag' . 'ain.<br />Ple' . 'ase get the of' . 'fical v' . 'ersion from co' . 'decanyon or co' . 'ntact the au' . 'thor thr' . 'ough code' . 'canyon if you th' . 'ink this is a fa' . 'lse al' . 'arm.');
   }
+  
   if (clearstatscache($devOptions)) {
     $evanto = false;
   }
@@ -387,14 +399,27 @@ if (is_user_logged_in() && is_admin()) {
         echo '</strong></p></p></div>';
       }
       if (!$evanto && !$isRegistered && $isFreemiusMigration) {
-		echo '<div id="show-registration-message" class="notice notice-success"><p>';
-        echo __('<p>Please do not forget to OPT-IN to get additional benefits. For more details, go to the <a href="#" class="enter-pro">Options tab</a>.</p>', 'advanced-iframe');
-        echo '</p></div>';
+		$reUrl = $ai_fs->get_reconnect_url() ;
+		if ($ai_fs->is_registered()) {
+          $reUrl = get_admin_url() . "plugins.php";
+        }
+		echo '<div id="show-registration-message" class="notice notice-success optin-message">';
+        echo __('<p>Please do not forget to <a href="'.$reUrl .'">OPT-IN</a> to get all benefits. For more details, go to the <a href="#" class="enter-pro">Options tab</a>.</p>', 'advanced-iframe');
+        echo '</div>';
+	    
 	  }
 
       if ($showTrailMessage) {
         echo '<div id="show-registration-message" class="notice notice-success is-dismissible is-permanent-closable"><p><strong>';
         echo '<p>' . __('The trial version is active. All pro features are enabled.', 'advanced-iframe') . '</p>';
+        echo '</strong></p></div>';
+      }
+	  
+	  $hasDiscount = get_transient('aip_discount') === "true";
+	 
+	  if ($hasDiscount) {
+        echo '<div id="show-discount-message" class="notice notice-success"><p><strong>';
+        echo get_transient('aip_discount_message');
         echo '</strong></p></div>';
       }
 

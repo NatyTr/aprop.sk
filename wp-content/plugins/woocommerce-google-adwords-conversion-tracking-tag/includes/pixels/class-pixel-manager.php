@@ -6,16 +6,27 @@ use SweetCode\Pixel_Manager\Admin\Environment;
 use SweetCode\Pixel_Manager\Admin\LTV;
 use SweetCode\Pixel_Manager\Admin\Validations;
 use SweetCode\Pixel_Manager\Data\GA4_Data_API;
-use SweetCode\Pixel_Manager\Database;
+use SweetCode\Pixel_Manager\Pixels\ABTasty\AB_Tasty;
+use SweetCode\Pixel_Manager\Pixels\Core\Pixel_Registry;
 use SweetCode\Pixel_Manager\Pixels\Facebook\Facebook_CAPI;
 use SweetCode\Pixel_Manager\Pixels\Google\Google_MP_GA4;
 use SweetCode\Pixel_Manager\Pixels\Google\Google_Helpers;
+use SweetCode\Pixel_Manager\Pixels\Google\GTG_Proxy;
+use SweetCode\Pixel_Manager\Pixels\Google\GTG_Config;
+use SweetCode\Pixel_Manager\Pixels\Optimizely\Optimizely;
+use SweetCode\Pixel_Manager\Pixels\TikTok\TikTok_EAPI;
+use SweetCode\Pixel_Manager\Pixels\Pinterest\Pinterest_APIC;
+use SweetCode\Pixel_Manager\Pixels\Snapchat\Snapchat_CAPI;
+use SweetCode\Pixel_Manager\Pixels\Reddit\Reddit_CAPI;
+use SweetCode\Pixel_Manager\Pixels\VWO\VWO;
 use SweetCode\Pixel_Manager\Geolocation;
 use SweetCode\Pixel_Manager\Helpers;
 use SweetCode\Pixel_Manager\Logger;
 use SweetCode\Pixel_Manager\Options;
 use SweetCode\Pixel_Manager\Product;
+use SweetCode\Pixel_Manager\Server_Event_Processor;
 use SweetCode\Pixel_Manager\Shop;
+use SweetCode\Pixel_Manager\Tracking_Accuracy_DB;
 use WP_Error;
 defined( 'ABSPATH' ) || exit;
 // Exit if accessed directly
@@ -51,6 +62,18 @@ class Pixel_Manager {
             }
         }, 10 );
         /**
+         * Initialize Google Tag Gateway Proxy
+         *
+         * This enables proxying Google Tag requests through WordPress
+         * to Google's First-Party Servers (FPS).
+         * Only active when a measurement path is configured.
+         *
+         * @since 1.53.0
+         */
+        if ( Options::get_google_tag_gateway_measurement_path() ) {
+            GTG_Proxy::init();
+        }
+        /**
          * Inject PMW snippets in head
          */
         // Prepare Litespeed ESI injection
@@ -63,7 +86,7 @@ class Pixel_Manager {
             if ( wpm_fs()->can_use_premium_code__premium_only() && Options::get_facebook_domain_verification_id() ) {
                 ?>
 				<meta name="facebook-domain-verification"
-					  content="<?php 
+						content="<?php 
                 echo esc_attr( Options::get_facebook_domain_verification_id() );
                 ?>"/>
 				<?php 
@@ -81,6 +104,52 @@ class Pixel_Manager {
                 $this->inject_data_layer();
             }
         } );
+        /**
+         * Initialize all pixels
+         */
+        /**
+         * Load pixel descriptor infrastructure
+         * 
+         * This enables the unified pixel registry system that supports both
+         * server-side adapters and browser-side descriptors.
+         */
+        require_once __DIR__ . '/core/interface-pixel-descriptor.php';
+        require_once __DIR__ . '/core/abstract-pixel-descriptor.php';
+        require_once __DIR__ . '/core/class-pixel-registry.php';
+        /**
+         * Load all pixel descriptors
+         * 
+         * Each descriptor auto-registers with the Pixel_Registry on instantiation.
+         * The autoloader handles file loading - we just trigger it via class_exists().
+         * 
+         * When adding a new pixel descriptor, add its class name to the array below.
+         */
+        $descriptors = [
+            // Google pixels
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Google\\Google_Ads_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Google\\GA4_Descriptor',
+            // Marketing pixels
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Bing_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Twitter_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\LinkedIn_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\AdRoll_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Outbrain_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Taboola_Descriptor',
+            // Statistics pixels
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Hotjar_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Crazyegg_Descriptor',
+            // Optimization pixels
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\VWO_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\Optimizely_Descriptor',
+            'SweetCode\\Pixel_Manager\\Pixels\\Descriptors\\AB_Tasty_Descriptor',
+        ];
+        foreach ( $descriptors as $descriptor_class ) {
+            class_exists( $descriptor_class );
+        }
+        /**
+         * Allow third-party plugins to register custom pixel descriptors
+         */
+        Pixel_Registry::init_third_party_pixels();
         add_action( 'wp_head', function () {
             $this->inject_pmw_closing();
         } );
@@ -158,6 +227,27 @@ class Pixel_Manager {
             );
             add_action( 'woocommerce_mini_cart_contents', [$this, 'woocommerce_mini_cart_contents'] );
             add_action( 'woocommerce_new_order', [$this, 'pmw_woocommerce_new_order'] );
+            // Bucket orders_total against the *final* payment gateway, not the gateway at order creation.
+            // Some gateways (Affirm, wallets) overwrite payment_method between creation and payment, which
+            // would otherwise inflate the destination gateway's percentage above 100% and deflate the source
+            // gateway's percentage. The handler below is idempotent via order meta `_wpm_orders_total_counted`.
+            // @since 1.58.10
+            add_action( 'woocommerce_payment_complete', [__CLASS__, 'pmw_count_order_total_on_payment_finalized'] );
+            add_action( 'woocommerce_order_status_processing', [__CLASS__, 'pmw_count_order_total_on_payment_finalized'] );
+            add_action( 'woocommerce_order_status_completed', [__CLASS__, 'pmw_count_order_total_on_payment_finalized'] );
+            add_action( 'woocommerce_order_status_on-hold', [__CLASS__, 'pmw_count_order_total_on_payment_finalized'] );
+            add_action(
+                'woocommerce_order_status_processing',
+                [$this, 'maybe_increase_conversion_count_for_ratings_on_status'],
+                10,
+                1
+            );
+            add_action(
+                'woocommerce_order_status_completed',
+                [$this, 'maybe_increase_conversion_count_for_ratings_on_status'],
+                10,
+                1
+            );
         }
         /**
          * Run background processes
@@ -180,6 +270,11 @@ class Pixel_Manager {
             '1.31.2',
             'pmw_experimental_defer_scripts'
         );
+        /**
+         * Filters Experimental defer scripts.
+         *
+         * @since 1.31.2
+         */
         return apply_filters( 'pmw_experimental_defer_scripts', $defer_scripts );
     }
 
@@ -194,8 +289,8 @@ class Pixel_Manager {
 		<script<?php 
         echo wp_kses( Helpers::get_opening_script_string(), Helpers::get_script_string_allowed_html() );
         ?>>
-			(window.wpmDataLayer = window.wpmDataLayer || {}).products = window.wpmDataLayer.products || {};
-			window.wpmDataLayer.products                               = Object.assign(window.wpmDataLayer.products, <?php 
+			(window.pmwDataLayer = window.pmwDataLayer || {}).products = window.pmwDataLayer.products || {};
+			window.pmwDataLayer.products                               = Object.assign(window.pmwDataLayer.products, <?php 
         echo wp_json_encode( (object) $products );
         ?>);
 		</script>
@@ -243,46 +338,29 @@ class Pixel_Manager {
         // For production
         $server->send_header( 'Content-Type', 'text/csv' );
         // For testing
-        //		$server->send_header('Content-Type', 'text/html');
-        //		$server->send_header('Content-Type', 'text/xml');
-        //		$server->send_header('Content-Type', 'application/xml');
+        //      $server->send_header('Content-Type', 'text/html');
+        //      $server->send_header('Content-Type', 'text/xml');
+        //      $server->send_header('Content-Type', 'application/xml');
         // Echo the XML that's returned by smg_feed().
         echo esc_html( $result->get_data() );
         exit;
     }
 
-    // Extracted the code because the QIT semgrep rule was triggered
+    /**
+     * Permission callback for REST API routes that require the user to have the capability to edit options.
+     *
+     * This function checks if the current user has the 'edit_options' capability, which is typically required
+     * for managing plugin settings. It is used as a permission callback for protected REST API routes.
+     * 
+     * Extracted the code because the QIT semgrep rule was triggered
+     * 
+     * @return bool Returns true if the current user can edit options, false otherwise.
+     */
     public function can_current_user_edit_options() {
         return Environment::can_current_user_edit_options();
     }
 
     public function register_rest_routes() {
-        /**
-         * Testing endpoint which helps to verify if the REST API is working
-         */
-        // nosemgrep: audit.php.wp.security.rest-route.permission-callback.return-true
-        register_rest_route( $this->rest_namespace, '/test/', [
-            'methods'             => 'POST',
-            'callback'            => function () {
-                wp_send_json_success();
-            },
-            'permission_callback' => function () {
-                return true;
-            },
-        ] );
-        /**
-         * Testing endpoint which helps to verify if the REST API is working
-         */
-        // nosemgrep: audit.php.wp.security.rest-route.permission-callback.return-true
-        register_rest_route( $this->rest_namespace, '/test/', [
-            'methods'             => 'GET',
-            'callback'            => function () {
-                wp_send_json_success();
-            },
-            'permission_callback' => function () {
-                return true;
-            },
-        ] );
         register_rest_route( $this->rest_namespace, '/settings/', [
             'methods'             => 'POST',
             'callback'            => [$this, 'pmw_save_imported_settings'],
@@ -309,9 +387,9 @@ class Pixel_Manager {
             'callback'            => function ( $request ) {
                 $data = $request->get_json_params();
                 // TODO: Maybe remove the nonce verification. 1) Some merchants even cache parts of the purchase confirmation page, which lets the nonce fail. 2) Nonce checks in this endpoint are not really necessary as we CAN check for a valid order_key which is only known to the customer who purchased a specific order.
-                //				if (!wp_verify_nonce($request->get_header('X-WP-Nonce'), 'wp_rest')) {
-                //					wp_send_json_error('Invalid nonce');
-                //				}
+                //              if (!wp_verify_nonce($request->get_header('X-WP-Nonce'), 'wp_rest')) {
+                //                  wp_send_json_error('Invalid nonce');
+                //              }
                 $data = Helpers::generic_sanitization( $data );
                 self::process_conversion_pixel_status( $data['order_id'], $data['order_key'], $data['source'] );
             },
@@ -342,6 +420,12 @@ class Pixel_Manager {
     }
 
     private function get_products_for_datalayer( $data ) {
+        // Per-IP rate limit. Prevents an unauthenticated client from flooding
+        // the server with bogus page_id values that would each create a
+        // long-lived transient row. @since 1.58.10
+        if ( self::is_rate_limited( 'products' ) ) {
+            wp_send_json_error( 'Too many requests', 429 );
+        }
         $product_ids = Helpers::generic_sanitization( $data['product_ids'] );
         if ( !$product_ids ) {
             wp_send_json_error( 'No product IDs provided.' );
@@ -357,19 +441,45 @@ class Pixel_Manager {
         if ( !isset( $data['page_type'] ) ) {
             wp_send_json_error( 'No page type provided' );
         }
+        // Validate page_id resolves to a real WP post. The legitimate value
+        // always originates from get_the_ID() server-side, so anything that
+        // doesn't resolve is either stale or attacker-supplied. Without this
+        // an attacker could create an unbounded number of long-lived
+        // transients by POSTing random IDs. @since 1.58.10
+        $page_id = (int) $data['page_id'];
+        if ( $page_id <= 0 || !get_post( $page_id ) ) {
+            wp_send_json_error( 'Invalid page ID' );
+        }
         // Prevent server overload if too many products are requested
         $product_ids = ( count( $product_ids ) > 50 ? array_slice( $product_ids, 0, 50 ) : $product_ids );
         $products = $this->get_products_for_datalayer_by_product_ids( $product_ids );
         // Check if a data layer products transient for this page exists
         // If it does, add the products from the transient to $products
-        if ( get_transient( 'pmw_products_for_datalayer_' . $data['page_id'] ) ) {
-            $products_in_transient = get_transient( 'pmw_products_for_datalayer_' . $data['page_id'] );
+        if ( get_transient( 'pmw_products_for_datalayer_' . $page_id ) ) {
+            $products_in_transient = get_transient( 'pmw_products_for_datalayer_' . $page_id );
+            // Filter out products that no longer exist or are not published
+            $products_in_transient = array_filter( $products_in_transient, function ( $product_data ) {
+                // Skip if no product ID
+                if ( !isset( $product_data['id'] ) ) {
+                    return false;
+                }
+                $product = wc_get_product( $product_data['id'] );
+                // Remove if product doesn't exist or is not published
+                if ( Product::is_not_wc_product( $product ) || 'publish' !== $product->get_status() ) {
+                    return false;
+                }
+                return true;
+            } );
             // Merge the associative arrays with nested arrays $products and $products_in_transient preserving the keys
             $products = array_replace_recursive( $products, $products_in_transient );
         }
-        // Set transient with products for $data['page_id']
+        // Set transient with products for $page_id.
+        // TTL is one week: long enough to keep the cache useful for returning
+        // visitors hitting the same page across days, short enough to bound
+        // storage growth and pick up product updates that don't otherwise
+        // invalidate the entry. @since 1.58.10 (was MONTH_IN_SECONDS)
         if ( 'cart' !== $data['page_type'] && 'checkout' !== $data['page_type'] && 'order_received_page' !== $data['page_type'] ) {
-            set_transient( 'pmw_products_for_datalayer_' . $data['page_id'], $products, MONTH_IN_SECONDS );
+            set_transient( 'pmw_products_for_datalayer_' . $page_id, $products, WEEK_IN_SECONDS );
         }
         wp_send_json_success( $products );
     }
@@ -382,6 +492,10 @@ class Pixel_Manager {
         }
         $order_total = $order->get_total();
         $adjusted_value = $order_total - $refunded_amount;
+        // Avoid division by zero for free orders (e.g., fully discounted orders)
+        if ( 0 === (int) $order_total ) {
+            return Helpers::format_decimal( 0, 2 );
+        }
         // Calculate the new order value considering the order total logic that has been applied by the user
         $adjusted_value_percentage = $adjusted_value / $order_total;
         $adjusted_value = Shop::get_order_value_total_marketing( $order, true ) * $adjusted_value_percentage;
@@ -408,7 +522,7 @@ class Pixel_Manager {
         if ( !$this->is_order_eligible_for_acr( $order ) ) {
             wp_send_json_error( 'Order is not eligible for ACR' );
         }
-        // Return the order details for the wpmDataLayer with the provided ID
+        // Return the order details for the pmwDataLayer with the provided ID
         wp_send_json_success( $this->get_order_data( $order ) );
     }
 
@@ -437,34 +551,146 @@ class Pixel_Manager {
         return true;
     }
 
-    public static function pmw_store_ipv6_in_server_session() {
-        $_post = Helpers::get_input_vars( INPUT_POST );
-        // return error if the ipv6 field is not set
-        if ( !isset( $_post['data']['ipv6'] ) ) {
-            wp_send_json_error( 'No IPv6 address provided' );
+    /**
+     * Permission check for the Google Ads conversion adjustments CSV route.
+     *
+     * Returns true (publicly readable) unless the merchant has registered the
+     * `pmw_google_ads_conversion_adjustments_credentials` filter to require
+     * HTTP Basic Auth. This matches Google Ads' scheduled bulk-upload UI which
+     * supports a Username and Password for the source URL.
+     *
+     * The filter must return either:
+     *   - null / empty / non-array → no auth required (default)
+     *   - [ 'user' => 'foo', 'pass' => 'bar' ] → Basic Auth required
+     *
+     * Credentials are compared with hash_equals() to avoid timing leaks.
+     * Falls back to the raw `Authorization` header when PHP_AUTH_USER /
+     * PHP_AUTH_PW are not populated by the SAPI (common on PHP-FPM/FastCGI).
+     *
+     * @return true|WP_Error
+     *
+     * @since 1.58.10
+     */
+    private static function is_gads_csv_auth_ok() {
+        /**
+         * Filters the credentials required to fetch the Google Ads conversion
+         * adjustments CSV feed.
+         *
+         * Return [ 'user' => '...', 'pass' => '...' ] to enable HTTP Basic
+         * Auth on the feed URL. Return null/empty to keep the feed publicly
+         * readable (default).
+         *
+         * @since 1.58.10
+         *
+         * @param array|null $credentials Default null.
+         */
+        $credentials = apply_filters( 'pmw_google_ads_conversion_adjustments_credentials', null );
+        if ( empty( $credentials ) || !is_array( $credentials ) || empty( $credentials['user'] ) || empty( $credentials['pass'] ) ) {
+            return true;
         }
-        // return error if the ipv6 field is not a valid IPv6 address
-        if ( !Helpers::is_valid_ipv6_address( $_post['data']['ipv6'] ) ) {
-            wp_send_json_error( 'Invalid IPv6 address' );
+        // Resolve incoming credentials, with HTTP_AUTHORIZATION fallback for
+        // PHP-FPM/FastCGI environments where PHP_AUTH_USER is not populated.
+        $incoming_user = ( isset( $_SERVER['PHP_AUTH_USER'] ) ? sanitize_text_field( wp_unslash( $_SERVER['PHP_AUTH_USER'] ) ) : '' );
+        $incoming_pass = ( isset( $_SERVER['PHP_AUTH_PW'] ) ? sanitize_text_field( wp_unslash( $_SERVER['PHP_AUTH_PW'] ) ) : '' );
+        if ( ('' === $incoming_user || '' === $incoming_pass) && !empty( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
+            $header = sanitize_text_field( wp_unslash( $_SERVER['HTTP_AUTHORIZATION'] ) );
+            if ( 0 === stripos( $header, 'Basic ' ) ) {
+                $decoded = base64_decode( substr( $header, 6 ), true );
+                if ( is_string( $decoded ) && false !== strpos( $decoded, ':' ) ) {
+                    list( $incoming_user, $incoming_pass ) = explode( ':', $decoded, 2 );
+                }
+            }
         }
-        // If WooCommerce is not active, return error
-        if ( !Environment::is_woocommerce_active() ) {
-            wp_send_json_error( 'WooCommerce not active' );
+        $user_match = hash_equals( (string) $credentials['user'], $incoming_user );
+        $pass_match = hash_equals( (string) $credentials['pass'], $incoming_pass );
+        if ( $user_match && $pass_match ) {
+            return true;
         }
-        // If WC() is not available, return error
-        if ( !function_exists( 'WC' ) ) {
-            wp_send_json_error( 'WC() not available' );
+        header( 'WWW-Authenticate: Basic realm="PMW Conversion Adjustments"' );
+        return new WP_Error('rest_forbidden', esc_html__( 'Authentication required', 'woocommerce-google-adwords-conversion-tracking-tag' ), [
+            'status' => 401,
+        ]);
+    }
+
+    /**
+     * Generic per-IP rate limiter for public PMW endpoints.
+     *
+     * Caps each client IP at $max requests per minute within a named bucket
+     * (different buckets are tracked independently) to dampen abuse while
+     * protecting outbound API quota and persistent storage from runaway
+     * unauthenticated writes. Fails open when the IP cannot be resolved so
+     * legit traffic is never silently dropped.
+     *
+     * @param string $bucket Short identifier for the endpoint (e.g. 'sse', 'products').
+     * @param int    $max    Maximum allowed requests per minute per IP.
+     * @return bool True when the current request should be rejected.
+     *
+     * @since 1.58.10
+     */
+    private static function is_rate_limited( $bucket, $max = 120 ) {
+        $ip = Geolocation::get_user_ip();
+        if ( empty( $ip ) ) {
+            return false;
         }
-        // If a WooCommerce session is not available, return error
-        if ( !WC()->session ) {
-            wp_send_json_error( 'WooCommerce session not available' );
+        $key = 'pmw_rl_' . $bucket . '_' . md5( $ip );
+        $count = (int) get_transient( $key );
+        if ( $count >= $max ) {
+            return true;
         }
-        // Set the IPv6 address in the WooCommerce session
-        WC()->session->set( 'client_ipv6', $_post['data']['ipv6'] );
-        wp_send_json_success( [
-            'ipv6'    => $_post['data']['ipv6'],
-            'message' => 'IPv6 address stored in server session',
-        ] );
+        set_transient( $key, $count + 1, MINUTE_IN_SECONDS );
+        return false;
+    }
+
+    /**
+     * Reconcile client_ip_address and client_user_agent in an /sse/ payload.
+     *
+     * The client_user_agent field is always stripped because the request's own
+     * HTTP_USER_AGENT is authoritative for events fired from the same browser.
+     * Adapters re-derive it from the request.
+     *
+     * The client_ip_address field is kept only when it adds information the
+     * server cannot see, defined as: a valid public IP whose family (IPv4/IPv6)
+     * differs from the server-derived IP. This preserves the legitimate
+     * dual-stack case where the browser detected an IPv6 address that a
+     * IPv4-only proxy chain hides from the server, while preventing an
+     * attacker from impersonating arbitrary IPs in the same family they
+     * already connect from.
+     *
+     * @param array $data /sse/ payload after sanitization.
+     * @return array
+     *
+     * @since 1.58.10
+     */
+    private static function strip_client_identifiers_from_sse_payload( $data ) {
+        $server_ip = Geolocation::get_user_ip();
+        $server_is_ipv6 = $server_ip && false !== filter_var( $server_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 );
+        foreach ( $data as $pixel_name => $pixel_payload ) {
+            if ( !is_array( $pixel_payload ) || !isset( $pixel_payload['user_data'] ) || !is_array( $pixel_payload['user_data'] ) ) {
+                continue;
+            }
+            // Always strip client-supplied user agent.
+            unset($data[$pixel_name]['user_data']['client_user_agent']);
+            // Reconcile client-supplied IP.
+            if ( !isset( $pixel_payload['user_data']['client_ip_address'] ) ) {
+                continue;
+            }
+            $client_ip = $pixel_payload['user_data']['client_ip_address'];
+            // Must be a valid public IP, otherwise drop.
+            $valid_public = filter_var( $client_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE );
+            if ( false === $valid_public ) {
+                unset($data[$pixel_name]['user_data']['client_ip_address']);
+                continue;
+            }
+            // Keep only when the family differs from the server-derived IP,
+            // i.e. when the client is genuinely contributing information the
+            // server could not see (typical dual-stack v6 case behind an
+            // IPv4-only proxy).
+            $client_is_ipv6 = false !== filter_var( $client_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 );
+            if ( $server_ip && $client_is_ipv6 === $server_is_ipv6 ) {
+                unset($data[$pixel_name]['user_data']['client_ip_address']);
+            }
+        }
+        return $data;
     }
 
     /**
@@ -499,6 +725,7 @@ class Pixel_Manager {
 
     public function run_background_processes() {
         if ( wpm_fs()->can_use_premium_code__premium_only() && Environment::is_woocommerce_active() ) {
+            // @since 1.58.4 Added Reddit_CAPI
             if ( is_cart() || is_checkout() ) {
                 if ( Options::is_ga4_mp_active() ) {
                     Google_MP_GA4::set_identifiers_on_session();
@@ -514,6 +741,9 @@ class Pixel_Manager {
                 }
                 if ( Options::is_snapchat_capi_active() ) {
                     Snapchat_CAPI::set_identifiers_on_session();
+                }
+                if ( Options::is_reddit_capi_active() ) {
+                    Reddit_CAPI::set_identifiers_on_session();
                 }
             }
             // TODO: That function should probably not go into the Google_MP_GA4 class
@@ -547,9 +777,54 @@ class Pixel_Manager {
         $order->save();
     }
 
+    /**
+     * Increments orders_total exactly once per order, bucketed by the payment gateway
+     * that is set at the moment payment is finalized (or the order transitions to a
+     * post-pending status). This ensures that the gateway recorded for the denominator
+     * matches the gateway that will be recorded for the numerator (in
+     * save_conversion_pixels_fired_status), so the per-gateway percentages stay in
+     * the 0–100% range.
+     *
+     * Idempotency is enforced via the `_wpm_orders_total_counted` order meta flag.
+     *
+     * Accepts either an order ID or an order object so it can be invoked from action
+     * callbacks (which pass the ID) and from internal call sites that already have the
+     * order object loaded (e.g. save_conversion_pixels_fired_status).
+     *
+     * @param int|\WC_Order $order_or_id
+     *
+     * @return void
+     * @since 1.58.10
+     */
+    public static function pmw_count_order_total_on_payment_finalized( $order_or_id ) {
+        $order = ( is_object( $order_or_id ) ? $order_or_id : wc_get_order( $order_or_id ) );
+        if ( !$order ) {
+            return;
+        }
+        // Only count orders that PMW was responsible for tracking when they were placed.
+        if ( !$order->meta_exists( '_wpm_process_through_wpm' ) ) {
+            return;
+        }
+        // Idempotency guard: only count each order once toward orders_total.
+        if ( $order->get_meta( '_wpm_orders_total_counted' ) ) {
+            return;
+        }
+        $payment_method = $order->get_payment_method();
+        if ( empty( $payment_method ) ) {
+            return;
+        }
+        $date_created = $order->get_date_created();
+        if ( !$date_created ) {
+            return;
+        }
+        Tracking_Accuracy_DB::increment_orders_total( gmdate( 'Y-m-d', $date_created->getTimestamp() ), $payment_method );
+        $order->update_meta_data( '_wpm_orders_total_counted', true );
+        $order->save();
+    }
+
     // Thanks to: https://gist.github.com/mishterk/6b7a4d6e5a91086a5a9b05ace304b5ce#file-mark-wordpress-scripts-as-async-or-defer-php
     public function experimental_defer_scripts( $tag, $handle ) {
-        if ( 'wpm' !== $handle ) {
+        if ( 'pmw' !== $handle ) {
             return $tag;
         }
         return str_replace( ' src', ' defer src', $tag );
@@ -563,17 +838,41 @@ class Pixel_Manager {
     }
 
     public function woocommerce_after_cart_item_name( $cart_item, $cart_item_key ) {
+        /**
+         * Filter to control output of cart item data inline script.
+         *
+         * Some themes with JavaScript renderers don't properly hide script tags,
+         * causing them to be visible. Use this filter to suppress the output.
+         *
+         * @since 1.54.2
+         *
+         * @param bool   $output         Whether to output the script. Default true.
+         * @param array  $cart_item      Cart item data with product_id and variation_id.
+         * @param string $cart_item_key  Unique cart item key.
+         * @param string $action         Current action: 'woocommerce_after_cart_item_name',
+         *                               'woocommerce_after_mini_cart_item_name', or
+         *                               'woocommerce_mini_cart_contents'.
+         */
+        if ( !apply_filters(
+            'pmw_output_cart_item_data',
+            true,
+            $cart_item,
+            $cart_item_key,
+            current_action()
+        ) ) {
+            return;
+        }
         $data = [
             'product_id'   => $cart_item['product_id'],
             'variation_id' => $cart_item['variation_id'],
         ];
         $json_encode_options = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
         // add JSON_PRETTY_PRINT
-        //		$json_encode_options = $json_encode_options | JSON_PRETTY_PRINT;
+        //      $json_encode_options = $json_encode_options | JSON_PRETTY_PRINT;
         ?>
 		<script>
-			window.wpmDataLayer.cart_item_keys                                          = window.wpmDataLayer.cart_item_keys || {};
-			window.wpmDataLayer.cart_item_keys['<?php 
+			window.pmwDataLayer.cart_item_keys                                          = window.pmwDataLayer.cart_item_keys || {};
+			window.pmwDataLayer.cart_item_keys['<?php 
         echo esc_js( $cart_item_key );
         ?>'] = <?php 
         echo wp_json_encode( $data, $json_encode_options );
@@ -662,6 +961,11 @@ class Pixel_Manager {
     }
 
     public function inject_data_layer_through_litespeed_esi() {
+        /**
+         * Fires Litespeed control set nocache.
+         *
+         * @since 1.58.5
+         */
         do_action( 'litespeed_control_set_nocache', 'nocache for Pixel the Pixel Manager' );
         $this->inject_data_layer();
     }
@@ -681,11 +985,21 @@ class Pixel_Manager {
      **/
     private function inject_data_layer_litespeed_esi() {
         if ( 'wcm' === PMW_DISTRO ) {
+            /**
+             * Fires Litespeed control set nocache.
+             *
+             * @since 1.58.5
+             */
             do_action( 'litespeed_control_set_nocache', 'logged in user: disable cache' );
             $this->inject_data_layer();
             return;
         }
         // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+        /**
+         * Filters Unknown hook.
+         *
+         * @since 1.58.5
+         */
         echo apply_filters( 'litespeed_esi_url', 'pmw_data_layer', 'Inject data layer through ESI block' );
         // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
     }
@@ -700,7 +1014,7 @@ class Pixel_Manager {
     private function inject_data_layer() {
         $json_encode_options = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
         // add JSON_PRETTY_PRINT
-        //		$json_encode_options = $json_encode_options | JSON_PRETTY_PRINT;
+        //      $json_encode_options = $json_encode_options | JSON_PRETTY_PRINT;
         // We add a script string with additional attributes to the script tag.
         // Those attributes are primarily to exclude the script from being processed
         // by various script loaders and script blockers.
@@ -711,8 +1025,8 @@ class Pixel_Manager {
         echo wp_kses( Helpers::get_opening_script_string(), Helpers::get_script_string_allowed_html() );
         ?>>
 
-			window.wpmDataLayer = window.wpmDataLayer || {};
-			window.wpmDataLayer = Object.assign(window.wpmDataLayer, <?php 
+			window.pmwDataLayer = window.pmwDataLayer || {};
+			window.pmwDataLayer = Object.assign(window.pmwDataLayer, <?php 
         echo wp_json_encode( $this->get_data_for_data_layer(), $json_encode_options );
         ?>);
 
@@ -722,7 +1036,7 @@ class Pixel_Manager {
     }
 
     /**
-     * Set up the wpmDataLayer
+     * Set up the pmwDataLayer
      *
      * @return mixed|void
      */
@@ -744,7 +1058,7 @@ class Pixel_Manager {
          */
         if ( Environment::is_woocommerce_active() ) {
             $data = $this->add_order_data( $data );
-            //			$data         = array_merge($data, $this->get_order_data());
+            //          $data         = array_merge($data, $this->get_order_data());
             $data['shop'] = $this->get_shop_data();
         }
         $data['page'] = self::get_page_data();
@@ -752,16 +1066,20 @@ class Pixel_Manager {
         /**
          * Load the experiment settings
          */
-        //		$data['experiments'] = [
-        //				'ga4_server_and_browser_tracking' => apply_filters('experimental_pmw_ga4_server_and_browser_tracking', false),
-        //		];
+        //      $data['experiments'] = [
+        //              'ga4_server_and_browser_tracking' => apply_filters('experimental_pmw_ga4_server_and_browser_tracking', false),
+        //      ];
         $data = apply_filters_deprecated(
             'wpm_experimental_data_layer',
             [$data],
             '1.31.2',
             'pmw_experimental_data_layer'
         );
-        // Return and optionally modify the pmw data layer
+        /**
+         * Return and optionally modify the pmw data layer.
+         *
+         * @since 1.31.2
+         */
         return apply_filters( 'pmw_experimental_data_layer', $data );
     }
 
@@ -775,6 +1093,9 @@ class Pixel_Manager {
         }
         if ( Options::is_hotjar_enabled() ) {
             $data['hotjar'] = $this->get_hotjar_pixel_data();
+        }
+        if ( Options::is_crazyegg_enabled() ) {
+            $data['crazyegg'] = $this->get_crazyegg_pixel_data();
         }
         return $data;
     }
@@ -811,8 +1132,38 @@ class Pixel_Manager {
                 'id_type' => Google_Helpers::get_ga_id_type(),
             ];
         }
-        $data['tag_id'] = Google_Helpers::get_google_tag_id();
+        $data['tag_id'] = Google_Helpers::get_google_tag_id_information()['active'];
+        $data['tag_id_suppressed'] = Google_Helpers::get_google_tag_id_information()['suppressed'];
         $data['tag_gateway']['measurement_path'] = Options::get_google_tag_gateway_measurement_path();
+        // Pass handler hint and proxy_url to JavaScript for GTG handler selection.
+        //
+        // The browser is the source of truth for handler detection (it traverses CDN layers
+        // that server-to-server requests bypass). PHP reads the handler from a browser-set
+        // cookie. On first visit (no cookie), handler is null — JS does full async detection.
+        //
+        // Handler hint: Only sent for standalone/wordpress (never external or null).
+        // When present, JS Priority 2 trusts it and skips the standalone proxy health check,
+        // preventing 503/4xx errors on hosts that block direct PHP file access.
+        //
+        // proxy_url: Always included when the standalone proxy file exists (no HTTP cost,
+        // just file_exists()). This enables JS to discover standalone on first visit and
+        // to detect handler transitions (e.g., Cloudflare removed → standalone fallback).
+        // Safe because JS Priority 2 (server hint) short-circuits before Priority 3
+        // (proxy_url check) — so proxy_url being present does NOT cause 503s when
+        // standalone is unavailable and PHP knows it (handler = 'WordPress').
+        if ( Options::get_google_tag_gateway_measurement_path() ) {
+            $handler = GTG_Config::get_handler();
+            // Only pass handler for standalone/wordpress — never for external or null
+            if ( null !== $handler && in_array( $handler, ['standalone', 'wordpress'], true ) ) {
+                $data['tag_gateway']['handler'] = $handler;
+            }
+            // Always include proxy_url when the standalone proxy file exists
+            // Enables JS to discover standalone on first visit and handle transitions
+            $isolated_url = GTG_Proxy::get_isolated_proxy_url();
+            if ( $isolated_url ) {
+                $data['tag_gateway']['proxy_url'] = $isolated_url;
+            }
+        }
         $data['tcf_support'] = Options::is_google_tcf_support_active();
         $data['consent_mode'] = [
             'is_active'          => Options::is_google_consent_mode_active(),
@@ -839,6 +1190,11 @@ class Pixel_Manager {
             '1.31.2',
             'pmw_send_events_with_parent_ids'
         );
+        /**
+         * Filters Send events with parent ids.
+         *
+         * @since 1.31.2
+         */
         return apply_filters( 'pmw_send_events_with_parent_ids', $events_with_parent_ids );
     }
 
@@ -886,7 +1242,17 @@ class Pixel_Manager {
             'exclusion_patterns'  => apply_filters( 'pmw_facebook_tracking_exclusion_patterns', [] ),
             'fbevents_js_url'     => Helpers::get_facebook_fbevents_js_url(),
         ];
+        /**
+         * Filters Facebook mobile bridge app id.
+         *
+         * @since 1.58.5
+         */
         if ( apply_filters( 'pmw_facebook_mobile_bridge_app_id', null ) ) {
+            /**
+             * Filters Facebook mobile bridge app id.
+             *
+             * @since 1.58.5
+             */
             $data['mobile_bridge_app_id'] = apply_filters( 'pmw_facebook_mobile_bridge_app_id', null );
         }
         return $data;
@@ -895,6 +1261,18 @@ class Pixel_Manager {
     private function get_hotjar_pixel_data() {
         return [
             'site_id' => Options::get_hotjar_site_id(),
+        ];
+    }
+
+    private function get_crazyegg_pixel_data() {
+        return [
+            'account_number' => Options::get_crazyegg_account_number(),
+        ];
+    }
+
+    private static function get_contentsquare_pixel_data() {
+        return [
+            'tag_id' => Options::get_contentsquare_tag_id(),
         ];
     }
 
@@ -916,6 +1294,11 @@ class Pixel_Manager {
             'start_checkout' => 'checkout',
             'purchase'       => 'purchase',
         ];
+        /**
+         * Filters Outbrain event name mapping.
+         *
+         * @since 1.58.5
+         */
         return (array) apply_filters( 'pmw_outbrain_event_name_mapping', $mapping );
     }
 
@@ -983,6 +1366,11 @@ class Pixel_Manager {
             'start_checkout'  => 'start_checkout',
             'purchase'        => 'make_purchase',
         ];
+        /**
+         * Filters Taboola event name mapping.
+         *
+         * @since 1.58.5
+         */
         return (array) apply_filters( 'pmw_taboola_event_name_mapping', $mapping );
     }
 
@@ -1036,28 +1424,30 @@ class Pixel_Manager {
         $data = [];
         if ( $order ) {
             $data['order'] = [
-                'id'               => (int) $order->get_id(),
-                'number'           => (string) $order->get_order_number(),
-                'key'              => (string) $order->get_order_key(),
-                'affiliation'      => (string) get_bloginfo( 'name' ),
-                'currency'         => (string) Shop::get_order_currency( $order ),
-                'value'            => [
+                'id'                 => (int) $order->get_id(),
+                'number'             => (string) $order->get_order_number(),
+                'key'                => (string) $order->get_order_key(),
+                'affiliation'        => (string) get_bloginfo( 'name' ),
+                'currency'           => (string) Shop::get_order_currency( $order ),
+                'value'              => [
                     'marketing' => Shop::get_order_value_total_marketing( $order, true ),
                     'total'     => Shop::get_order_value_total_statistics( $order ),
                     'subtotal'  => Shop::get_order_value_subtotal_statistics( $order ),
                 ],
-                'discount'         => (float) $order->get_total_discount(),
-                'tax'              => (float) $order->get_total_tax(),
-                'shipping'         => (float) $order->get_shipping_total(),
-                'coupon'           => implode( ',', $order->get_coupon_codes() ),
-                'aw_merchant_id'   => ( Options::get_google_ads_merchant_id() ? Options::get_google_ads_merchant_id() : '' ),
-                'aw_feed_country'  => (string) Geolocation::get_visitor_country(),
-                'aw_feed_language' => Google_Helpers::get_gmc_language(),
-                'new_customer'     => Shop::is_new_customer( $order ),
-                'quantity'         => (int) count( Product::pmw_get_order_items( $order ) ),
-                'items'            => Product::get_front_end_order_items( $order ),
-                'customer_id'      => $order->get_customer_id(),
-                'user_id'          => $order->get_user_id(),
+                'discount'           => (float) $order->get_total_discount(),
+                'tax'                => (float) $order->get_total_tax(),
+                'shipping'           => (float) $order->get_shipping_total(),
+                'coupon'             => implode( ',', $order->get_coupon_codes() ),
+                'aw_merchant_id'     => ( Options::get_google_ads_merchant_id() ? Options::get_google_ads_merchant_id() : '' ),
+                'aw_feed_country'    => (string) Geolocation::get_visitor_country(),
+                'aw_feed_language'   => Google_Helpers::get_gmc_language(),
+                'new_customer'       => Shop::is_new_customer( $order ),
+                'quantity'           => (int) count( Product::pmw_get_order_items( $order ) ),
+                'items'              => Product::get_front_end_order_items( $order ),
+                'customer_id'        => $order->get_customer_id(),
+                'user_id'            => $order->get_user_id(),
+                'payment_type'       => (string) $order->get_payment_method(),
+                'payment_type_title' => (string) $order->get_payment_method_title(),
             ];
             // Filter to add custom order parameters
             $custom_parameters = Shop::get_custom_order_parameters( $order );
@@ -1112,6 +1502,11 @@ class Pixel_Manager {
      * @since 1.43.5
      */
     private function get_google_ads_custom_variables( $order ) {
+        /**
+         * Filters Google ads order custom variables.
+         *
+         * @since 1.58.5
+         */
         return (array) apply_filters( 'pmw_google_ads_order_custom_variables', [], $order );
     }
 
@@ -1164,16 +1559,50 @@ class Pixel_Manager {
     }
 
     private function increase_conversion_count_for_ratings( $order ) {
-        if ( Shop::can_order_confirmation_be_processed( $order ) ) {
-            $ratings = get_option( PMW_DB_RATINGS );
-            if ( !isset( $ratings['conversions_count'] ) ) {
-                $ratings['conversions_count'] = 0;
-            }
-            $ratings['conversions_count'] = $ratings['conversions_count'] + 1;
-            update_option( PMW_DB_RATINGS, $ratings );
-        } else {
-            Shop::conversion_pixels_already_fired_html();
+        $this->maybe_increase_conversion_count_for_ratings( $order, true );
+    }
+
+    public function maybe_increase_conversion_count_for_ratings_on_status( $order_id ) {
+        if ( !function_exists( 'wc_get_order' ) ) {
+            return;
         }
+        $order = wc_get_order( $order_id );
+        $this->maybe_increase_conversion_count_for_ratings( $order, false );
+    }
+
+    private function maybe_increase_conversion_count_for_ratings( $order, $show_duplicate_notice ) {
+        if ( !$order ) {
+            return false;
+        }
+        if ( $this->rating_notice_already_counted( $order ) ) {
+            return false;
+        }
+        if ( !Shop::can_order_confirmation_be_processed( $order ) ) {
+            if ( $show_duplicate_notice ) {
+                Shop::conversion_pixels_already_fired_html();
+            }
+            return false;
+        }
+        $ratings = get_option( PMW_DB_RATINGS );
+        if ( !is_array( $ratings ) ) {
+            $ratings = [];
+        }
+        if ( !isset( $ratings['conversions_count'] ) ) {
+            $ratings['conversions_count'] = 0;
+        }
+        $ratings['conversions_count'] = $ratings['conversions_count'] + 1;
+        update_option( PMW_DB_RATINGS, $ratings );
+        $this->mark_rating_notice_counted( $order );
+        return true;
+    }
+
+    private function rating_notice_already_counted( $order ) {
+        return $order->meta_exists( '_pmw_rating_notice_counted' );
+    }
+
+    private function mark_rating_notice_counted( $order ) {
+        $order->update_meta_data( '_pmw_rating_notice_counted', true );
+        $order->save();
     }
 
     public function ajax_pmw_get_cart_items() {
@@ -1241,11 +1670,15 @@ class Pixel_Manager {
         $products = [];
         foreach ( $product_ids as $key => $product_id ) {
             // validate if a valid product ID has been passed in the array
-            if ( !ctype_digit( $product_id ) ) {
+            if ( !ctype_digit( (string) $product_id ) ) {
                 continue;
             }
             $product = wc_get_product( $product_id );
             if ( Product::is_not_wc_product( $product ) ) {
+                continue;
+            }
+            // Only expose published products
+            if ( 'publish' !== $product->get_status() ) {
                 continue;
             }
             $products[$product_id] = Product::get_product_details_for_datalayer( $product );
@@ -1257,9 +1690,9 @@ class Pixel_Manager {
         $_post = Helpers::get_input_vars( INPUT_POST );
         // Don't use the nonce check from the admin class, because some plugin users have even partial purchase confirmation pages cached,
         // which means the nonce will be invalid.
-        //		if (!wp_verify_nonce($_post['nonce_ajax'], 'nonce-pmw-ajax')) {
-        //			wp_send_json_error('Invalid nonce');
-        //		}
+        //      if (!wp_verify_nonce($_post['nonce_ajax'], 'nonce-pmw-ajax')) {
+        //          wp_send_json_error('Invalid nonce');
+        //      }
         self::process_conversion_pixel_status( $_post['order_id'], $_post['order_key'], $_post['source'] );
     }
 
@@ -1279,27 +1712,75 @@ class Pixel_Manager {
     }
 
     public static function save_conversion_pixels_fired_status( $order, $source = 'thankyou_page' ) {
+        // Guard against double pixel-fire incrementing
+        $already_fired = $order->meta_exists( '_wpm_conversion_pixel_fired' );
         $order->update_meta_data( '_wpm_conversion_pixel_trigger', $source );
         $order->update_meta_data( '_wpm_conversion_pixel_fired', true );
         // Get the time between when the order was created and now and save it in _wpm_conversion_pixel_fired_delay
         $time_diff = time() - strtotime( $order->get_date_created() );
         $order->update_meta_data( '_wpm_conversion_pixel_fired_delay', $time_diff );
         $order->save();
+        if ( !$already_fired ) {
+            $payment_method = $order->get_payment_method();
+            if ( !empty( $payment_method ) ) {
+                $date_created = $order->get_date_created();
+                if ( $date_created ) {
+                    // Ensure orders_total is bucketed against the same final gateway before
+                    // recording orders_measured. Idempotent — counts at most once per order.
+                    // Covers gateways whose status-transition hook may not have fired yet
+                    // (e.g. delayed webhook/IPN), guaranteeing measured ≤ total per bucket.
+                    // @since 1.58.10
+                    self::pmw_count_order_total_on_payment_finalized( $order );
+                    Tracking_Accuracy_DB::increment_orders_measured(
+                        gmdate( 'Y-m-d', $date_created->getTimestamp() ),
+                        $payment_method,
+                        $source,
+                        $time_diff
+                    );
+                }
+            }
+        }
     }
 
     public function front_end_scripts() {
         $pmw_dependencies = ['jquery', 'wp-hooks'];
-        wp_enqueue_script(
-            'wpm',
-            PMW_PLUGIN_DIR_PATH . 'js/public/wpm-public.p1.min.js',
-            $pmw_dependencies,
-            PMW_CURRENT_VERSION,
-            $this->move_pmw_script_to_footer()
-        );
+        // Pick the entry script from the same tier directory the dynamically
+        // imported chunks are served from. Both must agree, otherwise the
+        // webpack runtime in the entry script requests chunks with hashes that
+        // don't exist in the other tier's directory and every dynamic import 404s.
+        //
+        // @since 1.58.10
+        $tier = Helpers::get_active_assets_tier();
+        if ( 'pro' === $tier ) {
+            wp_enqueue_script(
+                'pmw',
+                PMW_PLUGIN_DIR_PATH . 'js/public/pro/pmw-public__premium_only' . $this->get_preset_version() . '.min.js',
+                $pmw_dependencies,
+                PMW_CURRENT_VERSION,
+                $this->move_pmw_script_to_footer()
+            );
+            if ( Helpers::lazy_load_pmw__premium_only() ) {
+                wp_enqueue_script(
+                    'pmw-lazy',
+                    PMW_PLUGIN_DIR_PATH . 'js/public/pro/pmw-lazy__premium_only.js',
+                    ['pmw'],
+                    PMW_CURRENT_VERSION,
+                    $this->move_pmw_script_to_footer()
+                );
+            }
+        } else {
+            wp_enqueue_script(
+                'pmw',
+                PMW_PLUGIN_DIR_PATH . 'js/public/free/pmw-public.p1.min.js',
+                $pmw_dependencies,
+                PMW_CURRENT_VERSION,
+                $this->move_pmw_script_to_footer()
+            );
+        }
         wp_localize_script( 
-            'wpm',
+            'pmw',
             //            'ajax_object',
-            'wpm',
+            'pmw',
             [
                 'ajax_url'      => admin_url( 'admin-ajax.php' ),
                 'root'          => esc_url_raw( rest_url() ),
@@ -1325,7 +1806,11 @@ class Pixel_Manager {
             '1.31.2',
             'pmw_experimental_move_pmw_script_to_footer'
         );
-        // this filter moves the PMW script to the footer
+        /**
+         * This filter moves the PMW script to the footer.
+         *
+         * @since 1.31.2
+         */
         return apply_filters( 'pmw_experimental_move_pmw_script_to_footer', $move_pmw_script_to_footer_active );
     }
 
@@ -1336,6 +1821,11 @@ class Pixel_Manager {
             '1.31.2',
             'pmw_script_optimization_preset_version'
         );
+        /**
+         * Filters Script optimization preset version.
+         *
+         * @since 1.31.2
+         */
         return '.p' . apply_filters( 'pmw_script_optimization_preset_version', $version );
     }
 
@@ -1422,7 +1912,7 @@ class Pixel_Manager {
         $data['title'] = get_the_title();
         $data['type'] = get_post_type();
         $data['categories'] = get_the_category();
-        //		$data['template']   = get_page_template_slug();
+        //      $data['template']   = get_page_template_slug();
         $parent_id = wp_get_post_parent_id( $data['id'] );
         // Parent
         $data['parent'] = [
@@ -1445,22 +1935,98 @@ class Pixel_Manager {
             'page_id'                    => get_the_ID(),
             'exclude_domains'            => apply_filters( 'pmw_exclude_domains_from_tracking', [] ),
             'server_2_server'            => [
-                'active'             => Options::server_2_server_enabled(),
-                'ip_exclude_list'    => apply_filters( 'pmw_exclude_ips_from_server_2_server_events', [] ),
-                'pageview_event_s2s' => [
+                'active'                      => Options::server_2_server_enabled(),
+                'skip_empty_events'           => true,
+                'always_send_s2s'             => Options::is_always_send_s2s_active(),
+                'user_agent_exclude_patterns' => apply_filters( 'pmw_exclude_user_agents_from_server_2_server_events', [] ),
+                'ip_exclude_list'             => Geolocation::get_ip_exclusion_list(),
+                'pageview_event_s2s'          => [
                     'is_active' => Options::is_pageview_events_s2s_active() && Options::server_2_server_enabled(),
                     'pixels'    => Options::pixels_that_require_s2s_pageview_events(),
                 ],
             ],
+            'ssp'                        => self::get_ssp_data_layer_config(),
             'consent_management'         => [
                 'explicit_consent' => Options::is_consent_management_explicit_consent_active(),
             ],
             'lazy_load_pmw'              => Options::is_lazy_load_pmw_active(),
+            'chunk_base_path'            => self::get_chunk_base_path(),
+            'modules'                    => self::get_modules_config(),
         ];
         if ( Options::are_restricted_consent_regions_set() ) {
             $data['consent_management']['restricted_regions'] = Options::get_restricted_consent_regions();
         }
         return $data;
+    }
+
+    /**
+     * Build the SSP data layer config, accounting for additional domains.
+     *
+     * If the current request is served on an additional SSP domain (registered
+     * via the pmw_ssp_additional_domains filter), the events URL and domain
+     * token are swapped to that domain's values.
+     *
+     * @return array SSP config for the pmwDataLayer.
+     * @since 1.57.1
+     */
+    private static function get_ssp_data_layer_config() {
+        $config = [
+            'active'         => Options::is_ssp_active(),
+            'events_url'     => Options::get_ssp_events_url(),
+            'fallback_to_wc' => Options::get_ssp_proxy_failure_behavior() === 'fallback_to_wc',
+            'domain_token'   => Options::get_ssp_domain_token(),
+            'session_id'     => Options::get_ssp_session_id(),
+            'quota_exceeded' => Options::is_ssp_quota_exceeded(),
+        ];
+        // Check if the current request matches an additional SSP domain
+        $additional_domain = Options::get_matching_ssp_additional_domain();
+        if ( $additional_domain ) {
+            $config['events_url'] = 'https://' . $additional_domain['proxy_hostname'] . '/v1/pmw-events';
+            $config['domain_token'] = Options::get_ssp_additional_domain_domain_token( $additional_domain['proxy_hostname'] );
+        }
+        return $config;
+    }
+
+    /**
+     * Retrieves the configuration for optional JavaScript modules.
+     *
+     * This method centralizes the configuration for dynamically loaded JavaScript chunks
+     * that can be toggled on/off by the user. Each module corresponds to a webpack chunk
+     * that will only be loaded if its flag is true.
+     *
+     * When adding a new toggleable module:
+     * 1. Add a default option in Options::get_default_options() under general->modules
+     * 2. Add a helper method in Options class (e.g., should_load_module_name())
+     * 3. Add the flag here in get_modules_config()
+     * 4. Add conditional loading in main.js based on pmwDataLayer.general.modules.module_name
+     * 5. Add admin UI toggle in Admin::add_section_advanced_subsection_general()
+     *
+     * @return array Associative array of module names and their enabled/disabled status.
+     * @since 1.51.0
+     */
+    private static function get_modules_config() {
+        return [
+            'load_deprecated_functions' => Options::should_load_deprecated_functions(),
+        ];
+    }
+
+    /**
+     * Retrieves the base path for the chunk files for the active assets tier.
+     *
+     * Delegates the tier decision to Helpers::get_active_assets_tier() so the
+     * webpack chunk base path always matches the directory the entry script was
+     * enqueued from in front_end_scripts(). If these two ever drift apart, the
+     * entry script's webpack runtime requests chunks with hashes that don't
+     * exist in the other tier's directory and dynamic imports 404.
+     *
+     * @return string The base path for chunk files, either in the 'free' or 'pro' folder.
+     *
+     * @since 1.51.1
+     * @since 1.58.10 Use Helpers::get_active_assets_tier() to keep the entry
+     *                script and chunk path in sync on license downgrade.
+     */
+    private static function get_chunk_base_path() {
+        return PMW_PLUGIN_DIR_PATH . 'js/public/' . Helpers::get_active_assets_tier() . '/';
     }
 
 }

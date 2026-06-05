@@ -21,22 +21,29 @@ class Ask_For_Rating {
 
 	public function __construct() {
 
-//	    $options = get_option($this->option_name);
-//	    $options['conversions_count'] = 8;
-//	    $options['rating_threshold'] = 10;
-//	    unset($options['conversion_count']);
-//	    $options['rating_done'] = false;
-//	    update_option($this->option_name,$options);
+//      $options = get_option($this->option_name);
+//      $options['conversions_count'] = 8;
+//      $options['rating_threshold'] = 10;
+//      unset($options['conversion_count']);
+//      $options['rating_done'] = false;
+//      update_option($this->option_name,$options);
 
 		// ask for a rating in a plugin notice
 		add_action('admin_enqueue_scripts', [ $this, 'wpm_rating_script' ]);
-		add_action('wp_ajax_wpm_dismissed_notice_handler', [ $this, 'ajax_rating_notice_handler' ]);
+		add_action('wp_ajax_pmw_dismissed_notice_handler', [ $this, 'ajax_rating_notice_handler' ]);
+		add_action('admin_init', [ $this, 'handle_rating_action_from_url' ]);
 		add_action('admin_notices', [ $this, 'ask_for_rating_notice' ]);
 	}
 
 	public function wpm_rating_script() {
+
+		// Only load the script on the dashboard and the PMW settings page.
+		if (!Helpers::is_dashboard() && !Environment::is_pmw_settings_page()) {
+			return;
+		}
+
 		wp_enqueue_script(
-			'wpm-ask-for-rating',
+			'pmw-ask-for-rating',
 			PMW_PLUGIN_DIR_PATH . 'js/admin/ask-for-rating.js',
 			[ 'jquery' ],
 			PMW_CURRENT_VERSION,
@@ -44,7 +51,7 @@ class Ask_For_Rating {
 		);
 
 		wp_localize_script(
-			'wpm-ask-for-rating',
+			'pmw-ask-for-rating',
 			'ajax_var', [
 			'url'   => admin_url('admin-ajax.php'),
 			'nonce' => wp_create_nonce('ajax-nonce'),
@@ -83,19 +90,63 @@ class Ask_For_Rating {
 		wp_die(); // this is required to terminate immediately and return a proper response
 	}
 
+	/**
+	 * Server-side handler for dismiss actions via URL query parameters.
+	 * This is the no-JS fallback — processes the action and redirects back.
+	 */
+	public function handle_rating_action_from_url() {
+
+		$_get = Helpers::get_input_vars(INPUT_GET);
+
+		if (!isset($_get['pmw-rating-action'])) {
+			return;
+		}
+
+		if (!Environment::can_current_user_edit_options()) {
+			return;
+		}
+
+		if (!isset($_get['_wpnonce']) || !wp_verify_nonce($_get['_wpnonce'], 'pmw-rating-action')) {
+			return;
+		}
+
+		$action  = sanitize_key($_get['pmw-rating-action']);
+		$options = get_option($this->option_name);
+
+		if ('rating_done' === $action) {
+			$options['rating_done'] = true;
+			update_option($this->option_name, $options);
+		} elseif ('later' === $action) {
+			$options['rating_threshold'] = $this->get_next_threshold($options['conversions_count']);
+			update_option($this->option_name, $options);
+		}
+
+		wp_safe_redirect(remove_query_arg([ 'pmw-rating-action', '_wpnonce' ]));
+		exit;
+	}
+
 	private function show_admin_notifications() {
 
 		$show_admin_notifications = apply_filters_deprecated('wooptpm_show_admin_notifications', [ true ], '1.13.0', 'pmw_show_admin_notifications');
 		$show_admin_notifications = apply_filters_deprecated('wpm_show_admin_notifications', [ $show_admin_notifications ], '1.31.2', 'pmw_show_admin_notifications');
 
-		// Allow users to disable admin notifications for the plugin
+		/**
+		 * Allow users to disable admin notifications for the plugin.
+		 *
+		 * @since 1.31.2
+		 */
 		return apply_filters('pmw_show_admin_notifications', $show_admin_notifications);
 	}
 
 	public function ask_for_rating_notice() {
 
-		// Don't show if were not an admin
-		if (!Environment::get_user_edit_capability()) {
+		// Only show on the dashboard and the PMW settings page.
+		if (!Helpers::is_dashboard() && !Environment::is_pmw_settings_page()) {
+			return;
+		}
+
+		// Don't show if the user lacks the required capabilities.
+		if (!Environment::can_current_user_edit_options()) {
 			return;
 		}
 
@@ -132,7 +183,11 @@ class Ask_For_Rating {
 		}
 
 		// For testing purposes
-		if (defined('PMW_ALWAYS_AKS_FOR_RATING') && PMW_ALWAYS_AKS_FOR_RATING) {
+		$force_rating_notice =
+			( defined('PMW_ALWAYS_ASK_FOR_RATING') && PMW_ALWAYS_ASK_FOR_RATING )
+			|| ( defined('PMW_ALWAYS_AKS_FOR_RATING') && PMW_ALWAYS_AKS_FOR_RATING );
+
+		if ($force_rating_notice) {
 			$this->ask_for_rating_notices($conversions_count);
 			return;
 		}
@@ -156,7 +211,7 @@ class Ask_For_Rating {
 
 	private function get_default_settings() {
 		return [
-			'conversions_count' => 1,
+			'conversions_count' => 0,
 			'rating_threshold'  => 10,
 			'rating_done'       => false,
 		];
@@ -165,58 +220,67 @@ class Ask_For_Rating {
 	// show an admin notice to ask for a plugin rating
 	public function ask_for_rating_notices( $conversions_count ) {
 		?>
-		<div class="notice notice-success wpm-rating-success-notice" style="display: none">
-			<div style="color:#02830b; margin-top:10px">
+		<div id="pmw-rating-notice"
+			class="notice notice-success pmw pmw-rating-notice"
+			style="padding: 12px 16px; display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start; border-left-color: #46b450;">
 
-				<span>
+			<!-- Left side: Message and CTA -->
+			<div style="flex: 1;">
+				<div style="color: #1e1e1e; margin-bottom: 8px;">
+					<strong style="font-size: 14px;">
 						<?php
 						printf(
-						/* translators: %d: the amount of purchase conversions that have been measured */
-							esc_html__('Hey, I noticed that you tracked more than %d purchase conversions with the Pixel Manager for WooCommerce plugin - that\'s awesome! Could you please do me a BIG favour and give it a 5-star rating on WordPress? It will help to spread the word and boost our motivation.', 'woocommerce-google-adwords-conversion-tracking-tag'),
-							esc_html($conversions_count)
+							/* translators: %s: the amount of purchase conversions that have been measured (formatted with strong tags) */
+							esc_html__('Thank you for using the Pixel Manager! You\'ve successfully tracked %s conversions 🎉', 'woocommerce-google-adwords-conversion-tracking-tag'),
+							'<span style="color: #46b450;">' . esc_html(number_format_i18n($conversions_count)) . '</span>'
 						);
 						?>
+					</strong>
+				</div>
 
-				</span>
-				<br>
-				<div style="margin-top:5px;">
+				<div style="color: #444; margin-bottom: 10px; line-height: 1.5;">
+					<?php esc_html_e('If you have a moment, a quick review would help other WooCommerce store owners find a reliable tracking solution.', 'woocommerce-google-adwords-conversion-tracking-tag'); ?>
+				</div>
 
-					<span>- Aleksandar (Lead developer)</span>
+				<div style="color: #666; font-size: 13px; font-style: italic; margin-bottom: 12px;">
+					— Aleksandar, Lead Developer
+				</div>
+
+				<!-- Stars and CTA -->
+				<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+					<a id="pmw-rate-it"
+						href="https://wordpress.org/support/plugin/woocommerce-google-adwords-conversion-tracking-tag/reviews/#new-post"
+						target="_blank"
+						style="text-decoration: none; box-shadow: none;">
+						<div class="button button-primary" style="margin: 0;">
+							<?php esc_html_e('Leave a Review', 'woocommerce-google-adwords-conversion-tracking-tag'); ?> ⭐
+						</div>
+					</a>
+					<span style="font-size: 18px; letter-spacing: 2px;">⭐⭐⭐⭐⭐</span>
+				</div>
+
+				<div style="color: #888; font-size: 12px; margin-top: 8px;">
+					<?php esc_html_e('Takes ~30 seconds · Join hundreds of store owners who\'ve reviewed', 'woocommerce-google-adwords-conversion-tracking-tag'); ?>
 				</div>
 			</div>
-			<div style="">
 
-				<ul style="list-style-type: disc ;padding-left:20px;">
-					<li>
-						<a id="wpm-rate-it" href="#" style="font-weight: bold;">
-							<?php esc_html_e('Ok, you deserve it', 'woocommerce-google-adwords-conversion-tracking-tag'); ?>
-						</a>
-					</li>
-					<li>
-						<a id="wpm-maybe-later" href="#">
-							<?php esc_html_e('Nope, maybe later', 'woocommerce-google-adwords-conversion-tracking-tag'); ?>
-						</a>
-					</li>
-					<li>
-
-						<div style=" margin-bottom: 10px; display: flex; justify-content: space-between">
-							<div style="white-space:normal;">
-								<a id="wpm-already-did" href="#">
-									<?php esc_html_e('I already did', 'woocommerce-google-adwords-conversion-tracking-tag'); ?>
-								</a>
-							</div>
-							<div
-									style="white-space:normal; bottom:0; right: 0; margin-bottom: 0; margin-right: 5px;align-self: flex-end;">
-								<a href="<?php echo esc_url(( new Documentation() )->get_link('the_dismiss_button_doesnt_work_why')); ?>"
-								   target="_blank">
-									<?php esc_html_e('If the dismiss button is not working, here\'s why >>', 'woocommerce-google-adwords-conversion-tracking-tag'); ?>
-								</a>
-							</div>
-						</div>
-					</li>
-				</ul>
+			<!-- Right side: Secondary actions -->
+			<div style="text-align: right; display: flex; flex-direction: column; gap: 6px; margin-left: 20px;">
+				<a id="pmw-already-did"
+					class="button pmw-rating-dismiss-button"
+					style="white-space: normal; text-align: center;"
+					data-action="rating_done"
+					href="<?php echo esc_url(wp_nonce_url(add_query_arg('pmw-rating-action', 'rating_done'), 'pmw-rating-action')); ?>">
+					<?php esc_html_e('Already reviewed', 'woocommerce-google-adwords-conversion-tracking-tag'); ?>
+				</a>
+				<a id="pmw-maybe-later"
+					class="button pmw-rating-dismiss-button"
+					style="white-space: normal; text-align: center;"
+					data-action="later"
+					href="<?php echo esc_url(wp_nonce_url(add_query_arg('pmw-rating-action', 'later'), 'pmw-rating-action')); ?>">
+					<?php esc_html_e('Maybe later', 'woocommerce-google-adwords-conversion-tracking-tag'); ?>
+				</a>
 			</div>
-
 		</div>
 		<?php
 	}

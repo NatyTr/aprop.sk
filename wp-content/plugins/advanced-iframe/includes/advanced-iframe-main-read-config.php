@@ -74,17 +74,22 @@ if (isset($aip_standalone)) {
     $use_shortcode_attributes_only = $options['use_shortcode_attributes_only'];
   }
 
-// version is always read.
+  // Settings which are always read.
   $version_counter = $options['version_counter'];
   $alternative_shortcode = $options['alternative_shortcode'];
   $use_post_message = $options['use_post_message'];
   $multi_domain_enabled = $options['multi_domain_enabled'];
+  $data_post_message = $options['data_post_message'];
   $demo = $options['demo'];
+  $show_support_message = $options['show_support_message'];
+  if ($_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == '127.0.0.1') {
+	  $show_support_message = 'false';
+  }
   $purchase_code = $options['purchase_code'];
 
   $debug_js = AdvancedIframeHelper::check_debug_enabled($options['debug_js']);
   $check_shortcode = AdvancedIframeHelper::check_shortcode_enabled($options['check_shortcode']);
-
+  
 // defaults from main config
   if ($use_shortcode_attributes_only === 'false' || $options['shortcode_attributes'] === 'false') {  //
     extract(array('securitykey' => 'not set',
@@ -202,7 +207,6 @@ if (isset($aip_standalone)) {
       'referrerpolicy' => $options['referrerpolicy'],
       'add_surrounding_p' => $options['add_surrounding_p'],
       'custom' => $options['custom'],
-      'show_support_message' => $options['show_support_message'],
       $atts));
   }
 
@@ -385,7 +389,8 @@ if (isset($aip_standalone)) {
         'loading' => $options['loading'],
         'referrerpolicy' => $options['referrerpolicy'],
         'add_surrounding_p' => $options['add_surrounding_p'],
-        'custom' => $options['custom']
+        'custom' => $options['custom'],
+		'data_post_message' => $options['data_post_message']
       )
       , $atts, 'advanced_iframe'));
 
@@ -698,9 +703,12 @@ $include_height = AdvancedIframeHelper::filterXSS($include_height);
 $add_iframe_url_as_param_direct = AdvancedIframeHelper::filterXSSTrueFalse($add_iframe_url_as_param_direct);
 $add_iframe_url_as_param_prefix = AdvancedIframeHelper::filterBasicXSS($add_iframe_url_as_param_prefix);
 $map_parameter_to_url = AdvancedIframeHelper::filterBasicXSS($map_parameter_to_url);
-$show_part_of_iframe_next_viewports = AdvancedIframeHelper::filterBasicXSS($show_part_of_iframe_next_viewports);
+$show_part_of_iframe_next_viewports = AdvancedIframeHelper::filterXSSNumber($show_part_of_iframe_next_viewports);
 $enable_responsive_iframe = AdvancedIframeHelper::filterXSSTrueFalse($enable_responsive_iframe);
 $show_part_of_iframe_zoom = AdvancedIframeHelper::filterXSSTrueFalse($show_part_of_iframe_zoom);
 $remove_elements_from_height = AdvancedIframeHelper::filterBasicXSS($remove_elements_from_height);
 $resize_on_element_resize = AdvancedIframeHelper::filterBasicXSS($resize_on_element_resize);
+$additional_height = AdvancedIframeHelper::filterXSSNumber($additional_height);
+$iframe_zoom = AdvancedIframeHelper::filterXSSNumber($iframe_zoom);
+$onload_scroll_top = AdvancedIframeHelper::filterXSSTrueFalse($onload_scroll_top);
 ?>

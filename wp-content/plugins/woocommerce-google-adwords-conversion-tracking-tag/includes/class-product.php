@@ -37,8 +37,11 @@ class Product {
 		$order_items = apply_filters_deprecated('wooptpm_order_items', [ $order->get_items(), $order ], '1.13.0', 'wpm_order_items');
 		$order_items = apply_filters_deprecated('wpm_order_items', [ $order_items ], '1.31.2', 'pmw_order_items');
 
-		// Give option to filter order items
-		// then return
+		/**
+		 * Give option to filter order items then return.
+		 *
+		 * @since 1.31.2
+		 */
 		return apply_filters('pmw_order_items', $order_items, $order);
 	}
 
@@ -64,6 +67,11 @@ class Product {
 		$dyn_r_ids = apply_filters_deprecated('wooptpm_product_ids', [ $dyn_r_ids, $product ], '1.13.0', 'pmw_product_ids');
 		$dyn_r_ids = apply_filters_deprecated('wpm_product_ids', [ $dyn_r_ids, $product ], '1.31.2', 'pmw_product_ids');
 
+		/**
+		 * Filters Product ids.
+		 *
+		 * @since 1.31.2
+		 */
 		return apply_filters('pmw_product_ids', $dyn_r_ids, $product);
 	}
 
@@ -96,6 +104,11 @@ class Product {
 		$dyn_r_id_type = apply_filters_deprecated('wooptpm_product_id_type_for_' . $pixel_name, [ $dyn_r_id_type ], '1.13.0', 'pmw_product_id_type_for_');
 		$dyn_r_id_type = apply_filters_deprecated('wpm_product_id_type_for_' . $pixel_name, [ $dyn_r_id_type ], '1.31.2', 'pmw_product_id_type_for_');
 
+		/**
+		 * Filters Product id type for.
+		 *
+		 * @since 1.31.2
+		 */
 		return apply_filters('pmw_product_id_type_for_' . $pixel_name, $dyn_r_id_type);
 	}
 
@@ -193,8 +206,11 @@ class Product {
 	 */
 	public static function output_product_prices_with_tax() {
 
-		// Output the product prices with tax as default
-		// otherwise, output the prices without tax
+		/**
+		 * Output the product prices with tax as default otherwise, output the prices without tax.
+		 *
+		 * @since 1.58.5
+		 */
 		return (bool) apply_filters('pmw_output_product_prices_with_tax', true);
 	}
 
@@ -220,7 +236,11 @@ class Product {
 		$brand_taxonomy = apply_filters_deprecated('wooptpm_custom_brand_taxonomy', [ $brand_taxonomy ], '1.13.0', 'pmw_custom_brand_taxonomy');
 		$brand_taxonomy = apply_filters_deprecated('wpm_custom_brand_taxonomy', [ $brand_taxonomy ], '1.31.2', 'pmw_custom_brand_taxonomy');
 
-		// Use custom brand_taxonomy
+		/**
+		 * Use custom brand_taxonomy.
+		 *
+		 * @since 1.31.2
+		 */
 		$brand_taxonomy = apply_filters('pmw_custom_brand_taxonomy', $brand_taxonomy);
 
 		$brand = self::get_brand_by_taxonomy($product_id, $brand_taxonomy);
@@ -327,8 +347,7 @@ class Product {
 		foreach ((array) $order_items as $order_item) {
 
 			$order_item_data = $order_item->get_data();
-
-			$product = $order_item->get_product();
+			$product         = $order_item->get_product();
 
 			if (self::is_not_wc_product($product)) {
 				return [];
@@ -339,7 +358,9 @@ class Product {
 				'variation_id'        => $order_item_data['variation_id'],
 				'name'                => $order_item_data['name'],
 				'quantity'            => $order_item_data['quantity'],
-				'price'               => Google_Helpers::pmw_get_order_item_price($order_item),
+				'price'               => self::pmw_get_order_item_price($order_item),
+				'price_tax_included'  => self::pmw_get_order_item_price($order_item, true),
+				'price_tax_excluded'  => self::pmw_get_order_item_price($order_item, false),
 				'subtotal'            => (float) Helpers::format_decimal($order_item_data['subtotal'], 2),
 				'subtotal_tax'        => (float) Helpers::format_decimal($order_item_data['subtotal_tax'], 2),
 				'total'               => (float) Helpers::format_decimal($order_item_data['total'], 2),
@@ -391,7 +412,7 @@ class Product {
 
 		// If placed in <head> it must be a <meta> tag else, it can be an <input> tag
 		// Added name and content to meta in order to pass W3 validation test at https://validator.w3.org/nu/
-		$tag = $meta_tag ? "meta name='wpm-dataLayer-meta' content='" . $product->get_id() . "'" : "input type='hidden'";
+		$tag = $meta_tag ? "meta name='pmw-dataLayer-meta' content='" . $product->get_id() . "'" : "input type='hidden'";
 
 		self::get_product_data_layer_script_html_part_1($tag, $product, $data, $set_position, $meta_tag);
 	}
@@ -400,19 +421,19 @@ class Product {
 
 		if ($meta_tag) {
 			?>
-			<meta name="pm-dataLayer-meta" content="<?php echo esc_html($product->get_id()); ?>" class="wpmProductId"
-				  data-id="<?php echo esc_html($product->get_id()); ?>">
+			<meta name="pm-dataLayer-meta" content="<?php echo esc_html($product->get_id()); ?>" class="pmwProductId"
+					data-id="<?php echo esc_html($product->get_id()); ?>">
 			<?php
 		} else {
 			?>
-			<input type="hidden" class="wpmProductId" data-id="<?php echo esc_html($product->get_id()); ?>">
+			<input type="hidden" class="pmwProductId" data-id="<?php echo esc_html($product->get_id()); ?>">
 			<?php
 		}
 
 		?>
 		<script<?php echo wp_kses(Helpers::get_opening_script_string(), Helpers::get_script_string_allowed_html()); ?>>
-			(window.wpmDataLayer = window.wpmDataLayer || {}).products             = window.wpmDataLayer.products || {};
-			window.wpmDataLayer.products[<?php echo esc_html($product->get_id()); ?>] = <?php echo wp_json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
+			(window.pmwDataLayer = window.pmwDataLayer || {}).products                = window.pmwDataLayer.products || {};
+			window.pmwDataLayer.products[<?php echo esc_html($product->get_id()); ?>] = <?php echo wp_json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE); ?>;
 			<?php $set_position ? self::get_product_data_layer_script_html_part_2($product) : ''; ?>
 		</script>
 		<?php
@@ -421,7 +442,7 @@ class Product {
 	public static function get_product_data_layer_script_html_part_2( $product ) {
 		?>
 		window.pmw_product_position = window.pmw_product_position || 1;
-		window.wpmDataLayer.products[<?php echo esc_html($product->get_id()); ?>]['position'] = window.pmw_product_position++;
+		window.pmwDataLayer.products[<?php echo esc_html($product->get_id()); ?>]['position'] = window.pmw_product_position++;
 		<?php
 	}
 
@@ -445,5 +466,34 @@ class Product {
 	 */
 	public static function is_not_wc_product( $var ) {
 		return !self::is_wc_product($var);
+	}
+
+	/**
+	 * Get the price of an order item.
+	 *
+	 * @param      $order_item
+	 * @param null $include_tax
+	 * @return float
+	 */
+	public static function pmw_get_order_item_price( $order_item, $include_tax = null ) {
+
+		if (Environment::is_woo_discount_rules_active()) {
+
+			$item_value = $order_item->get_meta('_advanced_woo_discount_item_total_discount');
+
+			if (isset($item_value['discounted_price']) && 0 !== $item_value['discounted_price']) {
+				return (float) wc_format_decimal($item_value['discounted_price'], 2);
+			}
+
+			if (isset($item_value['initial_price']) && 0 !== $item_value['initial_price']) {
+				return (float) wc_format_decimal($item_value['initial_price'], 2);
+			}
+		}
+
+		if (null === $include_tax) {
+			$include_tax = self::output_product_prices_with_tax();
+		}
+
+		return (float) wc_format_decimal($order_item->get_order()->get_item_total($order_item, $include_tax), 2);
 	}
 }

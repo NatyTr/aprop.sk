@@ -11,6 +11,7 @@
  */
 defined( 'ABSPATH' ) || exit;
 // Exit if accessed directly
+use SweetCode\Pixel_Manager\Abilities;
 use SweetCode\Pixel_Manager\Admin\Admin;
 use SweetCode\Pixel_Manager\Admin\Admin_REST;
 use SweetCode\Pixel_Manager\Admin\Borlabs;
@@ -19,13 +20,17 @@ use SweetCode\Pixel_Manager\Admin\Environment;
 use SweetCode\Pixel_Manager\Admin\LTV;
 use SweetCode\Pixel_Manager\Admin\Notifications\Notifications;
 use SweetCode\Pixel_Manager\Admin\Order_Columns;
+use SweetCode\Pixel_Manager\Admin\SSP_REST;
 use SweetCode\Pixel_Manager\Deprecated_Filters;
 use SweetCode\Pixel_Manager\Helpers;
 use SweetCode\Pixel_Manager\Logger;
 use SweetCode\Pixel_Manager\Options;
 use SweetCode\Pixel_Manager\Pixels\Pixel_Manager;
 use SweetCode\Pixel_Manager\Product;
+use SweetCode\Pixel_Manager\SSP_Purchase_Proxy;
+use SweetCode\Pixel_Manager\SSP_Sync;
 use SweetCode\Pixel_Manager\Shop;
+use SweetCode\Pixel_Manager\Tracking_Accuracy_DB;
 use SweetCode\Pixel_Manager\Admin\Ask_For_Rating;
 // autoloader
 require_once 'autoload.php';
@@ -57,12 +62,16 @@ class WCPM {
         Environment::purge_cache_on_plugin_changes();
         register_activation_hook( __FILE__, [$this, 'plugin_activated'] );
         register_deactivation_hook( __FILE__, [$this, 'plugin_deactivated'] );
+        register_deactivation_hook( __FILE__, [$this, 'unschedule_all_actions'] );
         register_deactivation_hook( __FILE__, function () {
-            $timestamp = wp_next_scheduled( 'pmw_tracking_accuracy_analysis' );
-            wp_unschedule_event( $timestamp, 'pmw_tracking_accuracy_analysis' );
+            if ( class_exists( '\\SweetCode\\Pixel_Manager\\Pixels\\Google\\GTG_Proxy' ) ) {
+                \SweetCode\Pixel_Manager\Pixels\Google\GTG_Proxy::unschedule_config_refresh();
+            }
+            // Flush rewrite rules once on deactivation to clean up any stale rules
+            // that may have been registered by earlier versions of the GTG proxy code
+            flush_rewrite_rules();
         } );
         Deprecated_Filters::load_deprecated_filters();
-        Environment::third_party_plugin_tweaks_on_plugins_loaded();
         if ( Environment::is_woocommerce_active() ) {
             add_action( 'before_woocommerce_init', [__CLASS__, 'declare_woocommerce_compatibilities'] );
             add_action(
@@ -98,6 +107,9 @@ class WCPM {
         } );
         add_action( 'pmw_tracking_accuracy_analysis', function () {
             Debug_Info::run_tracking_accuracy_analysis();
+        } );
+        add_action( Tracking_Accuracy_DB::BACKFILL_HOOK, function () {
+            Tracking_Accuracy_DB::run_backfill();
         } );
         add_action( 'pmw_print_product_data_layer_script_by_product', function ( $product ) {
             Product::print_product_data_layer_script( $product );
@@ -138,7 +150,12 @@ class WCPM {
     }
 
     public function register_generic_hooks() {
-        // Nothing here yet
+        // Create table on upgrade if DB version changed
+        Tracking_Accuracy_DB::maybe_create_table();
+        // Schedule backfill if not yet complete
+        if ( Environment::is_action_scheduler_active() ) {
+            Tracking_Accuracy_DB::maybe_schedule_backfill();
+        }
     }
 
     public function run_woocommerce_reports() {
@@ -159,10 +176,11 @@ class WCPM {
         }
         // Only run if the Action Scheduler is loaded
         // and if transients are enabled
-        if ( Environment::is_action_scheduler_active() && Environment::is_transients_enabled() ) {
+        // and the event-driven DB table does not yet have data
+        if ( Environment::is_action_scheduler_active() && Environment::is_transients_enabled() && !Tracking_Accuracy_DB::has_data() ) {
             if ( !Helpers::pmw_as_has_scheduled_action( 'pmw_tracking_accuracy_analysis' ) ) {
                 as_schedule_recurring_action(
-                    Helpers::datetime_string_to_unix_timestamp_in_local_timezone( 'today 4:25am' ),
+                    Helpers::get_next_future_daily_timestamp( '4:25am' ),
                     DAY_IN_SECONDS,
                     'pmw_tracking_accuracy_analysis',
                     [],
@@ -172,9 +190,12 @@ class WCPM {
             }
             // If the tracking accuracy has not been run yet, run it immediately in the background.
             // https://github.com/woocommerce/action-scheduler/issues/839
-            if ( function_exists( 'as_enqueue_async_action' ) && !get_transient( 'pmw_tracking_accuracy_analysis' ) ) {
+            if ( function_exists( 'as_enqueue_async_action' ) && !get_transient( 'pmw_tracking_accuracy_analysis' ) && !get_transient( 'pmw_tracking_accuracy_analysis_running' ) ) {
                 as_enqueue_async_action( 'pmw_tracking_accuracy_analysis' );
             }
+        } elseif ( Environment::is_action_scheduler_active() && Tracking_Accuracy_DB::has_data() ) {
+            // DB table has data — unschedule the legacy nightly batch if it's still registered
+            as_unschedule_all_actions( 'pmw_tracking_accuracy_analysis' );
         }
     }
 
@@ -198,13 +219,13 @@ class WCPM {
     }
 
     protected function is_pmw_woocommerce_requirement_disabled() {
-        //			if (
-        //				defined('PMW_EXPERIMENTAL_DISABLE_WOOCOMMERCE_REQUIREMENT') &&
-        //				true === PMW_EXPERIMENTAL_DISABLE_WOOCOMMERCE_REQUIREMENT
-        //			) {
-        //				return true;
-        //			}
-        //			return false;
+        //          if (
+        //              defined('PMW_EXPERIMENTAL_DISABLE_WOOCOMMERCE_REQUIREMENT') &&
+        //              true === PMW_EXPERIMENTAL_DISABLE_WOOCOMMERCE_REQUIREMENT
+        //          ) {
+        //              return true;
+        //          }
+        //          return false;
         return true;
     }
 
@@ -214,7 +235,7 @@ class WCPM {
             esc_html__( 'Pixel Manager', 'woocommerce-google-adwords-conversion-tracking-tag' ),
             esc_html__( 'Pixel Manager', 'woocommerce-google-adwords-conversion-tracking-tag' ),
             Environment::get_user_edit_capability(),
-            'wpm',
+            'pmw',
             function () {
             }
         );
@@ -246,9 +267,9 @@ class WCPM {
 			</ul>
 		</div>
 		<style>
-            .fs-tab {
-                display: none !important;
-            }
+			.fs-tab {
+				display: none !important;
+			}
 		</style>
 
 		<?php 
@@ -256,10 +277,46 @@ class WCPM {
 
     public function plugin_activated() {
         Environment::purge_entire_cache();
+        // Update GTG proxy config cache on activation to ensure config exists
+        // This is needed since we no longer run update_proxy_config_cache on every init hook
+        if ( class_exists( '\\SweetCode\\Pixel_Manager\\Pixels\\Google\\GTG_Proxy' ) ) {
+            \SweetCode\Pixel_Manager\Pixels\Google\GTG_Proxy::update_proxy_config_cache();
+        }
+        Tracking_Accuracy_DB::create_table();
+        Tracking_Accuracy_DB::maybe_schedule_backfill();
     }
 
     public function plugin_deactivated() {
         Environment::purge_entire_cache();
+    }
+
+    /**
+     * Unschedule all Action Scheduler tasks on plugin deactivation.
+     *
+     * Prevents orphaned pending actions from remaining in the
+     * actionscheduler_actions table after the plugin is deactivated.
+     *
+     * @return void
+     * @since 1.58.5
+     */
+    public function unschedule_all_actions() {
+        if ( !function_exists( 'as_unschedule_all_actions' ) ) {
+            return;
+        }
+        // Tracking accuracy analysis
+        as_unschedule_all_actions( 'pmw_tracking_accuracy_analysis' );
+        // Duplication prevention re-enable timer
+        as_unschedule_all_actions( 'pmw_reactivate_duplication_prevention' );
+        // HTTP request logging auto-disable timer
+        as_unschedule_all_actions( 'pmw_deactivate_log_http_requests' );
+        // LTV (Lifetime Value) calculation tasks
+        LTV::stop_ltv_recalculation();
+        // SSP (Server Side Proxy) tasks
+        as_unschedule_all_actions( 'pmw_ssp_daily_sync' );
+        as_unschedule_all_actions( 'pmw_ssp_settings_sync' );
+        as_unschedule_all_actions( 'pmw_ssp_activation_retry' );
+        // Tracking accuracy backfill
+        as_unschedule_all_actions( Tracking_Accuracy_DB::BACKFILL_HOOK );
     }
 
     // startup all functions
@@ -270,10 +327,6 @@ class WCPM {
         // endDeleteIf(wcMarketFree)
         // Needs to be under init to avoid issues with filters called in the Options class
         Environment::third_party_plugin_tweaks_on_init();
-        // Needs to be under init to avoid issues with filters called in the Options class
-        if ( Options::is_maximum_compatiblity_mode_active() ) {
-            Environment::enable_compatibility_mode();
-        }
         Admin_REST::get_instance();
         if ( is_admin() ) {
             Borlabs::init();
@@ -292,6 +345,8 @@ class WCPM {
             add_filter( 'plugin_action_links_' . PMW_PLUGIN_BASENAME, [$this, 'pmw_settings_link'] );
         }
         Deprecated_Filters::load_deprecated_filters();
+        // Register abilities with the WordPress Abilities API (WP 6.9+)
+        Abilities::init();
         // inject pixels into front end
         $this->inject_pixels();
     }
@@ -327,64 +382,31 @@ class WCPM {
         } else {
             $admin_page = 'options-general.php';
         }
-        $links[] = '<a href="' . admin_url( $admin_page . '?page=wpm' ) . '">Settings</a>';
+        $links[] = '<a href="' . admin_url( $admin_page . '?page=pmw' ) . '">Settings</a>';
         return $links;
     }
 
     // DeleteIf(wcMarketFree)
     protected static function setup_freemius_environment() {
-        wpm_fs()->add_filter( 'show_trial', function () {
-            if ( self::is_development_install() ) {
-                return false;
-            } else {
-                return self::is_admin_trial_promo_active() && self::is_admin_notifications_active();
-            }
-        } );
-        // re-show trial message after n seconds
-        wpm_fs()->add_filter( 'reshow_trial_after_every_n_sec', function () {
-            return MONTH_IN_SECONDS * 6;
-        } );
-    }
-
-    private static function is_admin_trial_promo_active() {
-        $admin_trial_promo_active = apply_filters_deprecated(
-            'wooptpm_show_admin_trial_promo',
-            [true],
-            '1.13.0',
-            'pmw_show_admin_trial_promo'
+        // Disable Freemius trial notification - we use our own custom notification
+        wpm_fs()->add_filter( 'show_trial', '__return_false' );
+        // Also block the trial_promotion admin notice directly
+        wpm_fs()->add_filter(
+            'show_admin_notice',
+            function ( $show, $msg ) {
+                if ( 'trial_promotion' === $msg['id'] ) {
+                    return false;
+                }
+                return $show;
+            },
+            10,
+            2
         );
-        $admin_trial_promo_active = apply_filters_deprecated(
-            'wpm_show_admin_trial_promo',
-            [$admin_trial_promo_active],
-            '1.31.2',
-            'pmw_show_admin_trial_promo'
-        );
-        return apply_filters( 'pmw_show_admin_trial_promo', $admin_trial_promo_active );
-    }
-
-    private static function is_admin_notifications_active() {
-        $admin_notifications_active = apply_filters_deprecated(
-            'wooptpm_show_admin_notifications',
-            [true],
-            '1.13.0',
-            'pmw_show_admin_notifications'
-        );
-        $admin_notifications_active = apply_filters_deprecated(
-            'wpm_show_admin_notifications',
-            [$admin_notifications_active],
-            '1.31.2',
-            'pmw_show_admin_notifications'
-        );
-        return apply_filters( 'pmw_show_admin_notifications', $admin_notifications_active );
     }
 
     // endDeleteIf(wcMarketFree)
     protected static function is_development_install() {
-        if ( class_exists( 'FS_Site' ) ) {
-            return FS_Site::is_localhost_by_address( get_site_url() );
-        } else {
-            return false;
-        }
+        return Environment::is_development_install();
     }
 
     public static function declare_woocommerce_compatibilities() {
@@ -394,10 +416,51 @@ class WCPM {
         if ( !Helpers::does_the_woocommerce_declare_compatibility_function_exist() ) {
             return;
         }
-        // Declare HPOS compatibility
-        Helpers::declare_woocommerce_compatibility( 'custom_order_tables' );
-        // Declare Cart and Checkout Blocks compatibility
-        Helpers::declare_woocommerce_compatibility( 'cart_checkout_blocks' );
+        $features = ['custom_order_tables', 'cart_checkout_blocks', 'product_instance_caching'];
+        // Declare compatibility for the active plugin instance
+        foreach ( $features as $feature_id ) {
+            Helpers::declare_woocommerce_compatibility( $feature_id );
+        }
+        // Declare compatibility on behalf of any inactive PMW variants still present
+        // in the plugins directory. Without this, remnant folders are flagged as
+        // "incompatible" with HPOS because they never run their own declaration.
+        self::declare_compatibilities_for_inactive_pmw_variants( $features );
+    }
+
+    /**
+     * Declare WooCommerce feature compatibility for inactive PMW plugin variants
+     * that may still be present in the plugins directory.
+     *
+     * WooCommerce's HPOS feature treats plugins that don't explicitly declare
+     * compatibility as incompatible. If a customer has a remnant PMW folder
+     * (e.g. from a previous installation), it shows up as incompatible even
+     * though the active PMW instance has declared compatibility.
+     *
+     * @param array $features List of WooCommerce feature IDs to declare compatibility for.
+     *
+     * @since 1.58.8
+     */
+    private static function declare_compatibilities_for_inactive_pmw_variants( $features ) {
+        $known_pmw_basenames = [
+            'pixel-manager-pro-for-woocommerce/wgact.php',
+            'woocommerce-pixel-manager/woocommerce-pixel-manager.php',
+            'woocommerce-google-adwords-conversion-tracking-tag/wgact.php',
+            'woocommerce-pixel-manager-free/woocommerce-pixel-manager-free.php'
+        ];
+        $installed_plugins = array_keys( get_plugins() );
+        foreach ( $known_pmw_basenames as $basename ) {
+            // Skip the currently active instance, already declared above
+            if ( PMW_PLUGIN_BASENAME === $basename ) {
+                continue;
+            }
+            // Only declare for variants that actually exist as installed plugins
+            if ( !in_array( $basename, $installed_plugins, true ) ) {
+                continue;
+            }
+            foreach ( $features as $feature_id ) {
+                Helpers::declare_woocommerce_compatibility( $feature_id, $basename );
+            }
+        }
     }
 
 }

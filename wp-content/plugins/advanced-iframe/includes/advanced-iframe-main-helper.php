@@ -30,12 +30,13 @@ class AdvancedIframeHelper {
     $str_input = str_replace('&#8217;', '%27', $str_input);
 
     if ($enable_replace) {
-      $str_input = str_replace('{host}', $_SERVER['HTTP_HOST'], $str_input);
-      $str_input = str_replace('{port}', $_SERVER['SERVER_PORT'], $str_input);
-
-      // the random number can be used to avoid caching
-      $str_input = str_replace('{timestamp}', time(), $str_input);
-      $str_input = str_replace('{session_id}', session_id(), $str_input);
+      $replacementPlaceholder = array(
+        '{host}' => $_SERVER['HTTP_HOST'],
+        '{port}' => $_SERVER['SERVER_PORT'],
+        '{timestamp}' => time(),
+        '{session_id}' => session_id()
+      );
+      $str_input = str_replace(array_keys($replacementPlaceholder), array_values($replacementPlaceholder), $str_input);
 
       $str_input = AdvancedIframeHelper::replace_url_path_data($str_input);
       $str_input = AdvancedIframeHelper::replace_full_url_data($str_input);
@@ -43,20 +44,20 @@ class AdvancedIframeHelper {
       $str_input = AdvancedIframeHelper::replace_locale_data($str_input);
 
       if (!isset($aip_standalone)) {
-        $str_input = str_replace('{site}', site_url(), $str_input);
         $str_input = AdvancedIframeHelper::replace_user_data($str_input);
-
         $admin_email = get_option('admin_email');
-        $str_input = str_replace('{adminemail}', rawurlencode($admin_email), $str_input);
+       
+		$replacementShortcode = array(
+			'{adminemail}' => rawurlencode($admin_email),
+			'{{' => '[',   // evaluate shortcodes for the parameter
+			'}}' => ']',   // evaluate shortcodes for the parameter
+			'_|_' => '"',  // if " cannot be replaced as alternative _|_ can be used. This combination is normally not in a shortcode
+			'{site}' => site_url()
+		);
+		$str_input = str_replace(array_keys($replacementShortcode), array_values($replacementShortcode), $str_input);
 
-        // evaluate shortcodes for the parameter
-        $str_input = str_replace('{{', "[", $str_input);
-        $str_input = str_replace('}}', "]", $str_input);
-        // if " cannot be replaced as alternative _|_ can be used. This combination is normally not in a shortcode
-        $str_input = str_replace('_|_', '"', $str_input);
-        $str_input = do_shortcode($str_input);
+	    $str_input = do_shortcode($str_input);
       }
-
 
       // we replace all leftover placeholder
       $regex = '/{(.*?)}/';
@@ -493,10 +494,23 @@ class AdvancedIframeHelper {
     return ($value === 'true' || $value === 'false') ? $value : 'false';
   }
 
-  static $replaceBasicXSS = array('"', "'", ' ', '(', ')', ';', '}');
+  static function filterXSSNumber($value) {
+    return preg_match('/^\d+(?:[;,]\d+)*$/', $value) ? $value : 0;
+  }
+
+  static $replaceBasicXSS = array('"', "'", ' ', '(', ')', ';', '}', 'onerror');
 
   static function filterBasicXSS($value) {
     return empty($value) ? '' : str_replace(static::$replaceBasicXSS, '', $value);
+  }
+  
+  static function isCurrentDateBetween(string $startDate, string $endDate): bool
+  {
+    $today     = new DateTime('today');
+    $start     = new DateTime($startDate);
+    $end       = new DateTime($endDate);
+
+    return $today >= $start && $today <= $end;
   }
 
   static function aiGet2ndLvlDomainName($url) {

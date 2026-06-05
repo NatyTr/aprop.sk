@@ -14,9 +14,10 @@ defined('ABSPATH') || exit; // Exit if accessed directly
 
 class Environment {
 
-	private static $last_order_id      = null;
-	private static $last_order         = null;
-	private static $transients_enabled = null;
+	private static $last_order_id         = null;
+	private static $last_order            = null;
+	private static $transients_enabled    = null;
+	private static $external_object_cache = null;
 
 	public static function is_allowed_notification_page( $page = null ) {
 
@@ -50,7 +51,7 @@ class Environment {
 		$_get = Helpers::get_input_vars(INPUT_GET);
 		$page = isset($_get['page']) ? $_get['page'] : '';
 
-		if ('wpm' !== $page) {
+		if ('pmw' !== $page) {
 			return false;
 		}
 
@@ -61,34 +62,68 @@ class Environment {
 		return !self::is_allowed_notification_page($page);
 	}
 
-//	public static function run_incompatible_plugins_checks() {
+	/**
+	 * Check if the install is a development install.
+	 *
+	 * Checks for common development domain patterns like .local, .test, localhost, etc.
+	 *
+	 * @return bool
+	 * @since 1.55.0
+	 */
+	public static function is_development_install() {
+
+		$site_url = get_site_url();
+
+		$development_patterns = [
+			'.local',
+			'.test',
+			'.dev',
+			'.localhost',
+			'localhost',
+			'127.0.0.1',
+			'staging.',
+			'.staging',
+			'dev.',
+			'.dev.',
+		];
+
+		foreach ($development_patterns as $pattern) {
+			if (strpos($site_url, $pattern) !== false) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+//  public static function run_incompatible_plugins_checks() {
 //
-//		$saved_notifications = get_option(PMW_DB_NOTIFICATIONS_NAME);
+//      $saved_notifications = get_option(PMW_DB_NOTIFICATIONS_NAME);
 //
-//		foreach (self::get_incompatible_plugins_list() as $plugin) {
+//      foreach (self::get_incompatible_plugins_list() as $plugin) {
 //
-//			// If the plugin is not active, continue
-//			if (!is_plugin_active($plugin['file_location'])) {
-//				continue;
-//			}
+//          // If the plugin is not active, continue
+//          if (!is_plugin_active($plugin['file_location'])) {
+//              continue;
+//          }
 //
-//			// If a notification has already been saved for this plugin, continue
-//			if (
-//				is_array($saved_notifications)
-//				&& array_key_exists($plugin['slug'], $saved_notifications)
-//			) {
-//				continue;
-//			}
+//          // If a notification has already been saved for this plugin, continue
+//          if (
+//              is_array($saved_notifications)
+//              && array_key_exists($plugin['slug'], $saved_notifications)
+//          ) {
+//              continue;
+//          }
 //
-//			Notifications::plugin_is_incompatible(
-//				$plugin['name'],
-//				$plugin['version'],
-//				$plugin['slug'],
-//				$plugin['link'],
-//				$plugin['pmw_doc_link']
-//			);
-//		}
-//	}
+//          Notifications::plugin_is_incompatible(
+//              $plugin['name'],
+//              $plugin['version'],
+//              $plugin['slug'],
+//              $plugin['link'],
+//              $plugin['pmw_doc_link']
+//          );
+//      }
+//  }
 
 	public static function get_incompatible_plugins_list() {
 		return [
@@ -159,6 +194,17 @@ class Environment {
 		 * This is especially important for the first layer cache, which is usually handled by a cache plugin.
 		 */
 		self::purge_entire_cache();
+
+		/**
+		 * Update GTG proxy config cache after plugin update.
+		 * This ensures the isolated proxy has up-to-date configuration
+		 * even if the config file was deleted during the update process.
+		 *
+		 * @since 1.56.0
+		 */
+		if ( class_exists( '\SweetCode\Pixel_Manager\Pixels\Google\GTG_Proxy' ) ) {
+			\SweetCode\Pixel_Manager\Pixels\Google\GTG_Proxy::update_proxy_config_cache();
+		}
 	}
 
 	/**
@@ -261,7 +307,7 @@ class Environment {
 			self::purge_proxy_cache_purge_cache();
 		}                                                                           // TODO test
 
-		//        if (self::is_hosting_pagely()) $this->purge_pagely_cache();		// TODO test
+		//        if (self::is_hosting_pagely()) $this->purge_pagely_cache();       // TODO test
 
 		// TODO add generic varnish purge
 	}
@@ -430,6 +476,11 @@ class Environment {
 	}
 
 	public static function purge_hummingbird_cache() {
+		/**
+		 * Fires Wphb clear page cache.
+		 *
+		 * @since 1.58.5
+		 */
 		do_action('wphb_clear_page_cache');
 	}
 
@@ -442,6 +493,11 @@ class Environment {
 	}
 
 	public static function purge_litespeed_cache() {
+		/**
+		 * Fires Litespeed purge all.
+		 *
+		 * @since 1.58.5
+		 */
 		do_action('litespeed_purge_all');
 	}
 
@@ -516,6 +572,11 @@ class Environment {
 
 		if (
 			defined('LSCWP_V')
+			/**
+			 * Filters Litespeed esi status.
+			 *
+			 * @since 1.58.5
+			 */
 			&& apply_filters('litespeed_esi_status', false)
 		) {
 			return true;
@@ -602,18 +663,55 @@ class Environment {
 		return is_plugin_active('cookie-law-info/cookie-law-info.php');
 	}
 
+	/**
+	 * Check if Google Automated Discounts for WooCommerce (GADWC) is active.
+	 *
+	 * Checks constant, class, and all known plugin basenames across distributions
+	 * (Freemius free, Freemius premium, WooCommerce Marketplace).
+	 *
+	 * @return bool
+	 * @since 1.57.0
+	 */
+	public static function is_gadwc_active() {
+		return defined('SGADWC_CURRENT_VERSION')
+			|| class_exists('SGADWC')
+			|| is_plugin_active('sgadwc/sgadwc.php')
+			|| is_plugin_active('sgadwc-premium/sgadwc.php')
+			|| is_plugin_active('google-automated-discounts-pro-for-woocommerce/google-automated-discounts-pro-for-woocommerce.php');
+	}
+
+	/**
+	 * Check if Google Customer Reviews for WooCommerce (GCR) is active.
+	 *
+	 * Checks constant, class, and all known plugin basenames across distributions
+	 * (Freemius free, Freemius premium).
+	 *
+	 * @return bool
+	 * @since 1.57.0
+	 */
+	public static function is_gcr_active() {
+		return defined('GCR_CURRENT_VERSION')
+			|| class_exists('GCR')
+			|| is_plugin_active('google-customer-reviews-for-woocommerce/google-customer-reviews-for-woocommerce.php')
+			|| is_plugin_active('google-customer-reviews-for-woocommerce-premium/google-customer-reviews-for-woocommerce.php');
+	}
+
 	public static function is_real_cookie_banner_active() {
-		return
-			is_plugin_active('real-cookie-banner/index.php')
+		return is_plugin_active('real-cookie-banner/index.php')
 			|| is_plugin_active('real-cookie-banner-pro/index.php');
 	}
 
 	public static function is_termly_active() {
 		// TODO find out if there is a pro version with different folder and file name and check if uk-cookie-consent-premium is the correct slug
 
-		return
-			is_plugin_active('uk-cookie-consent/uk-cookie-consent.php')
+		return is_plugin_active('uk-cookie-consent/uk-cookie-consent.php')
 			|| is_plugin_active('uk-cookie-consent-premium/uk-cookie-consent-premium.php');
+	}
+
+	// Beautiful and Responsive Cookie Consent
+	// https://wordpress.org/plugins/beautiful-and-responsive-cookie-consent/
+	public static function is_beautiful_cookie_consent_active() {
+		return is_plugin_active('beautiful-and-responsive-cookie-consent/nsc_bar-cookie-consent.php');
 	}
 
 // WooCommerce Cost of Goods
@@ -628,13 +726,35 @@ class Environment {
 		return class_exists('Alg_WC_Cost_of_Goods') || is_plugin_active('cost-of-goods-for-woocommerce/cost-of-goods-for-woocommerce.php');
 	}
 
+	/**
+	 * Check if the WooCommerce native Cost of Goods Sold feature is enabled.
+	 *
+	 * This feature was introduced in WooCommerce 9.5 and is hidden behind a feature flag
+	 * in WooCommerce → Settings → Advanced → Features.
+	 *
+	 * @return bool True if the WooCommerce native COGS feature is enabled.
+	 *
+	 * @since 1.58.1
+	 */
+	public static function is_woocommerce_native_cogs_active() {
+		if (!class_exists('\\Automattic\\WooCommerce\\Utilities\\FeaturesUtil')) {
+			return false;
+		}
+
+		return \Automattic\WooCommerce\Utilities\FeaturesUtil::feature_is_enabled('cost_of_goods_sold');
+	}
+
 	public static function is_a_cog_plugin_active() {
-		return self::is_woocommerce_cog_active() || self::is_cog_for_woocommerce_active() || Profit_Margin::get_custom_cog_product_meta_key();
+		return self::is_woocommerce_native_cogs_active()
+			|| self::is_woocommerce_cog_active()
+			|| self::is_cog_for_woocommerce_active()
+			|| Profit_Margin::get_custom_cog_product_meta_key();
 	}
 
 	public static function is_some_cmp_active() {
 		if (
-			self::is_borlabs_cookie_active()
+			self::is_beautiful_cookie_consent_active()
+			|| self::is_borlabs_cookie_active()
 			|| self::is_complianz_active()
 			|| self::is_cookiebot_active()
 			|| self::is_cookieyes_active()
@@ -684,20 +804,17 @@ class Environment {
 	}
 
 	public static function is_woo_discount_rules_active() {
-		return
-			is_plugin_active('woo-discount-rules/woo-discount-rules.php') ||
+		return is_plugin_active('woo-discount-rules/woo-discount-rules.php') ||
 			is_plugin_active('woo-discount-rules-pro/woo-discount-rules-pro.php');
 	}
 
 	public static function is_woofunnels_active() {
-		return
-			is_plugin_active('funnel-builder/funnel-builder.php') ||
+		return is_plugin_active('funnel-builder/funnel-builder.php') ||
 			is_plugin_active('funnel-builder-pro/funnel-builder-pro.php');
 	}
 
 	public static function is_woo_product_feed_active() {
-		return
-			is_plugin_active('woo-product-feed-pro/woocommerce-sea.php') ||
+		return is_plugin_active('woo-product-feed-pro/woocommerce-sea.php') ||
 			is_plugin_active('woo-product-feed-elite/woocommerce-sea.php');
 	}
 
@@ -841,26 +958,24 @@ class Environment {
 		return $option;
 	}
 
-	public static function disable_litespeed_js_inline_after_dom( $option ) {
-		return 0;
-	}
-
 	public static function wp_optimize_minify_default_exclusions( $default_exclusions ) {
-		// $default_exclusions[] = 'something/else.js';
-		// $default_exclusions[] = 'something/else.css';
-		return array_unique(array_merge($default_exclusions, self::get_pmw_script_identifiers()));
+		return array_unique(array_merge($default_exclusions, self::get_pmw_core_script_identifiers()));
 	}
 
 // https://github.com/futtta/autoptimize/blob/37b13d4e19269bb2f50df123257de51afa37244f/classes/autoptimizeScripts.php#L387
 	public static function autoptimize_filter_js_consider_minified() {
-		$exclude_js[] = 'wpm.min.js';
-		$exclude_js[] = 'wpm.min.js';
+		$exclude_js[] = 'pmw.min.js';
+		$exclude_js[] = 'pmw.min.js';
 
-		$exclude_js[] = 'wpm-public.p1.min.js';
-		$exclude_js[] = 'wpm-public__premium_only.p1.min.js';
+		$exclude_js[] = 'pmw-public.p1.min.js';
+		$exclude_js[] = 'pmw-public__premium_only.p1.min.js';
 
-		$exclude_js[] = 'wpm-public.p2.min.js';
-		$exclude_js[] = 'wpm-public__premium_only.p2.min.js';
+		$exclude_js[] = 'pmw-public.p2.min.js';
+		$exclude_js[] = 'pmw-public__premium_only.p2.min.js';
+
+		// Include paths for free and pro folders
+		$exclude_js[] = 'js/public/free/';
+		$exclude_js[] = 'js/public/pro/';
 
 //        $exclude_js[] = 'jquery.js';
 //        $exclude_js[] = 'jquery.min.js';
@@ -869,66 +984,55 @@ class Environment {
 
 // https://github.com/futtta/autoptimize/blob/37b13d4e19269bb2f50df123257de51afa37244f/classes/autoptimizeScripts.php#L285
 	public static function autoptimize_filter_js_dontmove( $dontmove ) {
-		$dontmove[] = 'wpm.js';
-		$dontmove[] = 'wpm.min.js';
+		$dontmove[] = 'pmw.js';
+		$dontmove[] = 'pmw.min.js';
 
-		$dontmove[] = 'wpm-public.p1.min.js';
-		$dontmove[] = 'wpm-public__premium_only.p1.min.js';
+		$dontmove[] = 'pmw-public.p1.min.js';
+		$dontmove[] = 'pmw-public__premium_only.p1.min.js';
 
-		$dontmove[] = 'wpm-public.p2.min.js';
-		$dontmove[] = 'wpm-public__premium_only.p2.min.js';
+		$dontmove[] = 'pmw-public.p2.min.js';
+		$dontmove[] = 'pmw-public__premium_only.p2.min.js';
+
+		// Include paths for free and pro folders
+		$dontmove[] = 'js/public/free/';
+		$dontmove[] = 'js/public/pro/';
 
 		$dontmove[] = 'jquery.js';
 		$dontmove[] = 'jquery.min.js';
 		return $dontmove;
 	}
 
-	public static function litespeed_optm_cssjs( $excludes ) {
-		return $excludes;
-	}
-
 	public static function litespeed_optimize_js_excludes( $excludes ) {
 		if (is_array($excludes)) {
-			$excludes = array_unique(array_merge($excludes, self::get_pmw_script_identifiers()));
+			$excludes = array_unique(array_merge($excludes, self::get_pmw_core_script_identifiers()));
 		}
 
-		return $excludes;
-	}
-
-	public static function litespeed_cache_js_defer_exc( $excludes ) {
-		if (is_array($excludes)) {
-			$excludes = array_unique(array_merge($excludes, self::get_pmw_script_identifiers()));
-		}
 		return $excludes;
 	}
 
 	public static function sg_optimizer_js_exclude_combine_inline_content( $exclude_list ) {
 		if (is_array($exclude_list)) {
-			$exclude_list = array_unique(array_merge($exclude_list, self::get_pmw_script_identifiers()));
+			$exclude_list = array_unique(array_merge($exclude_list, self::get_pmw_core_script_identifiers()));
 		}
-
-//        foreach (self::get_pmw_script_identifiers() as $exclusion) {
-//            $exclude_list[] = $exclusion;
-//        }
 
 		return $exclude_list;
 	}
 
 	public static function sg_optimizer_js_minify_exclude( $exclude_list ) {
 
-		$exclude_list[] = 'wpm-front-end-scripts';
-		$exclude_list[] = 'wpm-front-end-scripts-premium-only';
-		$exclude_list[] = 'wpm';
-		$exclude_list[] = 'wpm-admin';
-		$exclude_list[] = 'wpm-premium-only';
-		$exclude_list[] = 'wpm-facebook';
-		$exclude_list[] = 'wpm-script-blocker-warning';
-		$exclude_list[] = 'wpm-admin-helpers';
-		$exclude_list[] = 'wpm-admin-tabs';
-		$exclude_list[] = 'wpm-selectWoo';
-		$exclude_list[] = 'wpm-google-ads';
-		$exclude_list[] = 'wpm-ga-ua-eec';
-		$exclude_list[] = 'wpm-ga4-eec';
+		$exclude_list[] = 'pmw-front-end-scripts';
+		$exclude_list[] = 'pmw-front-end-scripts-premium-only';
+		$exclude_list[] = 'pmw';
+		$exclude_list[] = 'pmw-admin';
+		$exclude_list[] = 'pmw-premium-only';
+		$exclude_list[] = 'pmw-facebook';
+		$exclude_list[] = 'pmw-script-blocker-warning';
+		$exclude_list[] = 'pmw-admin-helpers';
+		$exclude_list[] = 'pmw-admin-tabs';
+		$exclude_list[] = 'pmw-selectWoo';
+		$exclude_list[] = 'pmw-google-ads';
+		$exclude_list[] = 'pmw-ga-ua-eec';
+		$exclude_list[] = 'pmw-ga4-eec';
 
 		$exclude_list[] = 'jquery';
 		$exclude_list[] = 'jquery-core';
@@ -940,76 +1044,55 @@ class Environment {
 	public static function sgo_javascript_combine_exclude_move_after( $exclude_list ) {
 
 		if (is_array($exclude_list)) {
-			$exclude_list = array_unique(array_merge($exclude_list, self::get_pmw_script_identifiers()));
+			$exclude_list = array_unique(array_merge($exclude_list, self::get_pmw_core_script_identifiers()));
 		}
 
 		return $exclude_list;
 	}
 
-	public static function add_wp_rocket_exclusions( $exclusions ) {
+	/**
+	 * Add PMW's core script identifiers to WP Rocket exclusion arrays.
+	 *
+	 * Used for unconditional minification/combination exclusions.
+	 * Only includes PMW's own files, not third-party tracking scripts.
+	 *
+	 * @param array $exclusions Existing exclusion patterns.
+	 *
+	 * @return array Merged exclusion patterns.
+	 *
+	 * @since 1.58.5
+	 */
+	public static function add_wp_rocket_core_exclusions( $exclusions ) {
 		if (is_array($exclusions)) {
-			$exclusions = array_unique(array_merge($exclusions, self::get_pmw_script_identifiers()));
+			$exclusions = array_unique(array_merge($exclusions, self::get_pmw_core_script_identifiers()));
 		}
 
 		return $exclusions;
 	}
 
-
-// works for WP Rocket >= 3.9
-	public static function exclude_inline_scripts_from_wp_rocket_using_options() {
-		$options = get_option('wp_rocket_settings');
-
-		// if no options array could be retrieved.
-		if (!is_array($options)) {
-			return;
-		}
-
-		$update_options = false;
-
-		$js_to_exclude = self::get_pmw_script_identifiers();
-
-		foreach ($js_to_exclude as $string) {
-
-			// remove scripts from delay_js_scripts
-			if (array_key_exists('delay_js_scripts', $options) && is_array($options['delay_js_scripts']) && in_array($string, $options['delay_js_scripts'])) {
-
-				unset($options['delay_js_scripts'][array_search($string, $options['delay_js_scripts'])]);
-				$update_options = true;
-			}
-		}
-
-		if (true === $update_options) {
-			update_option('wp_rocket_settings', $options);
-		}
-	}
-
-	/**
-	 * Load the third party plugin tweaks during the plugins_loaded action
-	 *
-	 * @return void
-	 *
-	 * @since 1.48.0
-	 */
-	public static function third_party_plugin_tweaks_on_plugins_loaded() {
-
-		/**
-		 * Google Listing and Ads
-		 *
-		 * Disable gtag if Google Ads is active in PMW
-		 *
-		 * Must be hooked into plugins_loaded
-		 */
-		if (Options::is_google_ads_active()) {
-			add_filter('woocommerce_gla_disable_gtag_tracking', '__return_true');
-		}
-	}
-
 	/**
 	 * Third party plugin tweaks
+	 *
+	 * !!
+	 * Don't load these on plugins_loaded,
+	 * because our filter won't be applied.
 	 *
 	 * @return void
 	 */
 	public static function third_party_plugin_tweaks_on_init() {
+
+		/**
+		 * Google Listing and Ads
+		 *
+		 * Disable GLA's gtag tracking when Google Ads is active in PMW.
+		 * GLA's tracking is specifically for Google Ads (remarketing, conversions).
+		 * When PMW handles Google Ads, GLA's tracking must be disabled to prevent
+		 * duplicate event tracking. If only GA4 is active in PMW, GLA's Google Ads
+		 * tracking is left intact since PMW isn't handling Google Ads in that case.
+		 */
+		if (Options::is_google_ads_active()) {
+			add_filter('woocommerce_gla_disable_gtag_tracking', '__return_true');
+		}
 
 		/**
 		 * WP Consent API compatibility declaration
@@ -1027,7 +1110,7 @@ class Environment {
 
 			// Try to disable blocking of inline PMW configuration scripts
 			add_filter('cmplz_whitelisted_script_tags', function ( $tags ) {
-				$tags[] = 'wpmDataLayer';
+				$tags[] = 'pmwDataLayer';
 				$tags[] = 'pmwDataLayer';
 				return $tags;
 			});
@@ -1041,6 +1124,33 @@ class Environment {
 
 		if (self::is_cookiebot_active() && Options::is_google_consent_mode_active()) {
 			add_filter('option_cookiebot-gcm', '__return_false');
+		}
+
+		/**
+		 * Beautiful and Responsive Cookie Consent
+		 *
+		 * Disable the Beautiful Cookie Consent Google Consent Mode if the Google Consent Mode is active in PMW
+		 * Disable the script blocker for PMW scripts (PMW handles consent internally)
+		 */
+
+		if (self::is_beautiful_cookie_consent_active()) {
+
+			// Disable GCM if PMW handles it
+			if (Options::is_google_consent_mode_active()) {
+				add_filter('nsc_bar_output_google_consent_mode_script', '__return_false');
+			}
+
+			// Disable script blocker for PMW scripts
+			add_filter('nsc_bar_block_script', function ( $should_block, $tag, $handle ) {
+				if (
+					strpos($handle, 'pmw') !== false
+					|| strpos($handle, 'wpm') !== false
+					|| strpos($tag, 'pmwDataLayer') !== false
+				) {
+					return false;
+				}
+				return $should_block;
+			}, 10, 3);
 		}
 
 		/**
@@ -1069,14 +1179,16 @@ class Environment {
 		if (self::is_sg_optimizer_active()) {
 
 			/**
-			 * The function wpmFunctionExists needs to be excluded from combination from SGO.
-			 * Otherwise, it won't work on pages which include WPM shortcodes.
-			 * */
+			 * Exclude PMW scripts from SGO's JS combination and minification.
+			 * Combination and minification break webpack chunk loading.
+			 *
+			 * @since 1.59.0
+			 */
 
-			add_filter('sgo_javascript_combine_excluded_inline_content', function ( $excluded_scripts ) {
-				$excluded_scripts[] = 'wpmFunctionExists';
-				return $excluded_scripts;
-			});
+			add_filter('sgo_javascript_combine_excluded_inline_content', [ __CLASS__, 'sg_optimizer_js_exclude_combine_inline_content' ]);
+			add_filter('sgo_javascript_combine_exclude', [ __CLASS__, 'sgo_javascript_combine_exclude_move_after' ]);
+			add_filter('sgo_javascript_combine_exclude_move_after', [ __CLASS__, 'sgo_javascript_combine_exclude_move_after' ]);
+			add_filter('sgo_js_minify_exclude', [ __CLASS__, 'sg_optimizer_js_minify_exclude' ]);
 
 			/**
 			 * SGO's defer feature doesn't queue jQuery correctly on some pages,
@@ -1093,20 +1205,34 @@ class Environment {
 		}
 
 		/**
-		 * Litespeed
+		 * LiteSpeed Cache compatibility
+		 *
+		 * Exclude PMW scripts from LiteSpeed's JS optimization (minification/combination).
+		 * Defer and inline optimization are fine and don't need exclusion.
+		 *
+		 * @since 1.59.0
 		 */
 
 		if (self::is_litespeed_active()) {
-			add_filter('litespeed_optimize_js_excludes', function ( $excludes ) {
-				if (is_array($excludes)) {
-					$excludes[] = 'wpmFunctionExists';
-				}
+			add_filter('litespeed_optimize_js_excludes', [ __CLASS__, 'litespeed_optimize_js_excludes' ]);
 
-				return $excludes;
-			});
-
+			/**
+			 * Fires Litespeed nonce.
+			 *
+			 * @since 1.59.0
+			 */
 			do_action('litespeed_nonce', 'ajax-nonce');
+			/**
+			 * Fires Litespeed nonce.
+			 *
+			 * @since 1.59.0
+			 */
 			do_action('litespeed_nonce', 'wp_rest');
+			/**
+			 * Fires Litespeed nonce.
+			 *
+			 * @since 1.59.0
+			 */
 			do_action('litespeed_nonce', 'nonce-pmw-ajax');
 		}
 
@@ -1169,6 +1295,19 @@ class Environment {
 		}
 
 		/**
+		 * Reddit for WooCommerce
+		 */
+
+		if (Options::is_reddit_active()) {
+
+			add_filter('reddit_for_woocommerce_filter_tracking_data', function ( $data ) {
+				$data['is_pixel_enabled']      = false;
+				$data['is_conversion_enabled'] = false;
+				return $data;
+			});
+		}
+
+		/**
 		 * Disable the WooCommerce Google Analytics Integration if Google Analytics is active in PMW
 		 *
 		 * The WooCommerce Google Analytics Integration now is updated to use gtag.js for GA4. If PMW users want to use PMW for GA3 and the WooCommerce Google Analytics Integration for GA4 then we can't disable the WooCommerce Google Analytics Integration.
@@ -1181,17 +1320,79 @@ class Environment {
 		}
 
 		/**
-		 * Disable WP Rocket lazy load for the PMW lazy load script
+		 * WP Rocket compatibility
+		 *
+		 * Always exclude PMW's own scripts from WP Rocket's JS minification and combination.
+		 * These features repackage/bundle scripts and break webpack chunk loading, causing
+		 * ChunkLoadError when content hashes change between plugin updates.
+		 *
+		 * On cart, checkout, and order confirmation pages, also exclude from Delay JS.
+		 * Delay JS defers script execution until user interaction, but users often leave
+		 * the order confirmation page without interacting, causing missed purchase events.
+		 * On other pages, delaying scripts until interaction is fine for performance.
+		 *
+		 * Defer JS is fine and doesn't need exclusion — it only changes load order,
+		 * not whether scripts execute.
+		 *
+		 * @since 1.58.5
 		 */
 
-		if (self::is_wp_rocket_active() && Options::is_lazy_load_pmw_active()) {
+		if (self::is_wp_rocket_active()) {
+			self::exclude_pmw_from_wp_rocket_minify_combine();
+			self::exclude_pmw_from_wp_rocket_delay_js_on_critical_pages();
+		}
 
-			add_filter('rocket_delay_js_exclusions', [ __CLASS__, 'exclude_pmw_lazy_from_wp_rocket' ]);
-			add_filter('rocket_defer_inline_exclusions', [ __CLASS__, 'exclude_pmw_lazy_from_wp_rocket' ]);
-			add_filter('rocket_exclude_defer_js', [ __CLASS__, 'exclude_pmw_lazy_from_wp_rocket' ]);
-			add_filter('rocket_exclude_js', [ __CLASS__, 'exclude_pmw_lazy_from_wp_rocket' ]);
-			add_filter('rocket_minify_excluded_external_js', [ __CLASS__, 'exclude_pmw_lazy_from_wp_rocket' ]);
-			add_filter('rocket_excluded_inline_js_content', [ __CLASS__, 'exclude_pmw_lazy_from_wp_rocket' ]);
+		/**
+		 * Flying Press compatibility
+		 *
+		 * On cart, checkout, and order confirmation pages, remove tracking script
+		 * patterns from Flying Press's js_interaction_includes list. Flying Press
+		 * delays scripts matching those patterns until user interaction, which breaks
+		 * conversion tracking when users leave without interacting.
+		 *
+		 * @since 1.59.0
+		 */
+
+		if (self::is_flying_press_active()) {
+			self::exclude_pmw_from_flying_press_delay_js_on_critical_pages();
+		}
+
+		/**
+		 * Autoptimize compatibility
+		 *
+		 * Exclude PMW scripts from Autoptimize's JS minification and combination.
+		 * These features repackage scripts and break webpack chunk loading.
+		 *
+		 * @since 1.59.0
+		 */
+
+		if (self::is_autoptimize_active()) {
+			add_filter('autoptimize_filter_js_consider_minified', [ __CLASS__, 'autoptimize_filter_js_consider_minified' ]);
+			add_filter('autoptimize_filter_js_dontmove', [ __CLASS__, 'autoptimize_filter_js_dontmove' ]);
+		}
+
+		/**
+		 * WP-Optimize compatibility
+		 *
+		 * Exclude PMW scripts from WP-Optimize's JS minification.
+		 *
+		 * @since 1.59.0
+		 */
+
+		if (self::is_wp_optimize_active()) {
+			add_filter('wp-optimize-minify-default-exclusions', [ __CLASS__, 'wp_optimize_minify_default_exclusions' ]);
+		}
+
+		/**
+		 * Optimocha (Speed Booster Pack) compatibility
+		 *
+		 * Exclude PMW scripts from Optimocha's JS optimization.
+		 *
+		 * @since 1.59.0
+		 */
+
+		if (self::is_optimocha_active()) {
+			self::exclude_pmw_from_optimocha_js_optimization();
 		}
 
 		/**
@@ -1215,6 +1416,11 @@ class Environment {
 					'reddit-ads'      => 'reddit-pixel',
 				];
 
+				/**
+				 * Filters Real cookie banner tag names.
+				 *
+				 * @since 1.59.0
+				 */
 				$tag_names = apply_filters('pmw_real_cookie_banner_tag_names', $tag_names);
 
 				self::handle_rcb_integration($integration, Options::is_bing_active(), $tag_names['bing-ads']);
@@ -1232,17 +1438,17 @@ class Environment {
 				// Advantage: PhpStorm should be able to detect refactored function names and update them automatically
 				// Disadvantage: The the functions will be loaded dynamically (call_user_func) which is a small.
 				// Disadvantage: Static analysis like PHPStan might not be able to reliably detect the function calls.
-//				$tags_mergedList = [
-//					['slug' => 'bing-ads', 'check' => ['Options', 'is_bing_enabled']],
-//					['slug' => 'facebook-pixel', 'check' => ['Options', 'is_facebook_enabled']],
-//					// ...
-//				];
+//              $tags_mergedList = [
+//                  ['slug' => 'bing-ads', 'check' => ['Options', 'is_bing_enabled']],
+//                  ['slug' => 'facebook-pixel', 'check' => ['Options', 'is_facebook_enabled']],
+//                  // ...
+//              ];
 //
-//				foreach ($tags_mergedList as $tag) {
-//					if (is_callable($tag['check'])) {
-//						self::handle_rcb_integration($integration, call_user_func($tag['check']), $tag['slug']);
-//					}
-//				}
+//              foreach ($tags_mergedList as $tag) {
+//                  if (is_callable($tag['check'])) {
+//                      self::handle_rcb_integration($integration, call_user_func($tag['check']), $tag['slug']);
+//                  }
+//              }
 			});
 		}
 
@@ -1273,9 +1479,9 @@ class Environment {
 
 		$script_to_add = [
 			'enable' => true,
-			'name'   => 'wpmDataLayer',
+			'name'   => 'pmwDataLayer',
 			'urls'   => [
-				'wpmDataLayer',
+				'pmwDataLayer',
 			],
 		];
 
@@ -1303,17 +1509,13 @@ class Environment {
 			&& $integration->integrate(PMW_PLUGIN_FILE, $type)
 		) {
 
-//			error_log('PMW: RCB integration for ' . $type . ' was disabled.');
+//          error_log('PMW: RCB integration for ' . $type . ' was disabled.');
 			$integration->setCodeOptIn('');
 			$integration->setCodeOptOut('');
 		}
 	}
 
-	public static function exclude_pmw_lazy_from_wp_rocket( $excluded_attributes ) {
-		$excluded_attributes[] = 'pmw-lazy__premium_only';
-		$excluded_attributes[] = 'wpmDataLayer';
-		return $excluded_attributes;
-	}
+
 
 	private static function disable_woocommerce_google_ads_dynamic_remarketing() {
 		// make sure to disable the WGDR plugin in case we use dynamic remarketing in this plugin
@@ -1379,96 +1581,117 @@ class Environment {
 		}
 	}
 
-	public static function enable_compatibility_mode() {
+	/**
+	 * Filter out tracking script patterns from Flying Press's js_interaction_includes list
+	 * that would delay PMW tracking scripts until user interaction.
+	 *
+	 * Flying Press delays scripts matching patterns in js_interaction_includes until user
+	 * interaction (mouseover, keydown, touchstart, touchmove, wheel) or a 10-second timeout.
+	 *
+	 * The issue: PMW's inline pmwDataLayer script contains URLs like "fbevents_js_url":
+	 * "https://connect.facebook.net/en_US/fbevents.js". Flying Press's pattern matching
+	 * checks if ANY keyword appears ANYWHERE in the script tag (including inline content).
+	 * So "fbevents.js" in js_interaction_includes matches the pmwDataLayer JSON, causing
+	 * the ENTIRE initialization script to be delayed until user interaction.
+	 *
+	 * This breaks conversion tracking on the purchase confirmation page where users often
+	 * don't interact with the page before leaving.
+	 *
+	 * @param array $includes The current js_interaction_includes array.
+	 *
+	 * @return array Filtered array with tracking patterns removed.
+	 */
+	private static function filter_flying_press_interaction_includes( $includes ) {
 
-		self::compatibility_mode_prevent_third_party_js_optimization();
+		// Patterns to remove from js_interaction_includes
+		// These patterns would match tracking scripts that PMW loads and need to fire immediately
+		$patterns_to_remove = [
+			'googletagmanager.com',
+			'google-analytics.com',
+			'googleoptimize.com',
+			'fbevents.js',
+			'gtag',
+		];
+
+		return array_values(array_filter($includes, function ( $pattern ) use ( $patterns_to_remove ) {
+			return ! in_array($pattern, $patterns_to_remove, true);
+		}));
 	}
 
-	protected static function compatibility_mode_prevent_third_party_js_optimization() {
-
-		if (self::is_wp_rocket_active()) {
-			self::disable_wp_rocket_js_optimization();
-		}
-
-		if (self::is_flying_press_active()) {
-			self::disable_flying_press_js_optimization();
-		}
-
-		if (self::is_optimocha_active()) {
-			self::disable_optimocha_js_optimization();
-		}
-
-		if (self::is_wp_optimize_active()) {
-			self::disable_wp_optimize_js_optimization();
-		}
-
-		if (self::is_async_javascript_active()) {
-			self::disable_async_javascript_js_optimization();
-		}
-
-		if (self::is_sg_optimizer_active()) {
-			self::disable_sg_optimizer_js_optimization();
-		}
-
-		if (self::is_litespeed_active()) {
-			self::disable_litespeed_js_optimization();
-		}
-
-		if (self::is_autoptimize_active()) {
-			self::disable_autoptimze_js_optimization();
-		}
+	/**
+	 * Always exclude PMW's own scripts from WP Rocket's JS minification and combination.
+	 *
+	 * Minification and combination repackage scripts, breaking webpack's dynamic chunk
+	 * loading (ChunkLoadError).
+	 *
+	 * @since 1.58.5
+	 */
+	protected static function exclude_pmw_from_wp_rocket_minify_combine() {
+		add_filter('rocket_exclude_js', [ __CLASS__, 'add_wp_rocket_core_exclusions' ]);
+		add_filter('rocket_minify_excluded_external_js', [ __CLASS__, 'add_wp_rocket_core_exclusions' ]);
+		add_filter('rocket_excluded_inline_js_content', [ __CLASS__, 'add_wp_rocket_core_exclusions' ]);
 	}
 
-	protected static function disable_sg_optimizer_js_optimization() {
-
-		add_filter('sgo_javascript_combine_excluded_inline_content', [ __CLASS__, 'sg_optimizer_js_exclude_combine_inline_content' ]);
-		add_filter('sgo_javascript_combine_exclude', [ __CLASS__, 'sgo_javascript_combine_exclude_move_after' ]);
-		add_filter('sgo_javascript_combine_exclude_move_after', [ __CLASS__, 'sgo_javascript_combine_exclude_move_after' ]);
-		add_filter('sgo_js_minify_exclude', [ __CLASS__, 'sg_optimizer_js_minify_exclude' ]);
-		add_filter('sgo_js_async_exclude', [ __CLASS__, 'sgo_javascript_combine_exclude_move_after' ]);
-	}
-
-	protected static function disable_litespeed_js_optimization() {
-		add_filter('litespeed_optimize_js_excludes', [ __CLASS__, 'litespeed_optimize_js_excludes' ]);
-		add_filter('litespeed_optm_js_defer_exc', [ __CLASS__, 'litespeed_cache_js_defer_exc' ]);
-		add_filter('litespeed_optm_cssjs', [ __CLASS__, 'litespeed_optm_cssjs' ]);
-		add_filter('option_litespeed.conf.optm-js_inline_defer', [ __CLASS__, 'disable_litespeed_js_inline_after_dom' ]);
-	}
-
-	protected static function disable_autoptimze_js_optimization() {
-		add_filter('autoptimize_filter_js_consider_minified', [ __CLASS__, 'autoptimize_filter_js_consider_minified' ]);
-		add_filter('autoptimize_filter_js_dontmove', [ __CLASS__, 'autoptimize_filter_js_dontmove' ]);
-	}
-
-	protected static function disable_wp_optimize_js_optimization() {
-		// add_filter('wpo_minify_inline_js', '__return_false');
-		add_filter('wp-optimize-minify-default-exclusions', [ __CLASS__, 'wp_optimize_minify_default_exclusions' ]);
-	}
-
-	protected static function disable_async_javascript_js_optimization() {
-		add_filter('option_aj_plugin_exclusions', function ( $options ) {
-
-			if (!is_array($options)) {
-				$options = [];
+	/**
+	 * Exclude PMW scripts from WP Rocket's Delay JS on cart, checkout, and order pages.
+	 *
+	 * Delay JS defers script execution until user interaction. On order confirmation
+	 * pages, users often leave without interacting, so purchase events would never fire.
+	 * On other pages, delaying is fine for performance.
+	 *
+	 * @since 1.59.0
+	 */
+	protected static function exclude_pmw_from_wp_rocket_delay_js_on_critical_pages() {
+		add_filter('rocket_delay_js_exclusions', function ( $exclusions ) {
+			if (Helpers::is_cart_or_checkout_page()) {
+				if (is_array($exclusions)) {
+					$exclusions = array_unique(array_merge($exclusions, self::get_pmw_script_identifiers()));
+				}
 			}
-
-			return array_unique(array_merge($options, [
-				'woocommerce-google-adwords-conversion-tracking-tag',
-				'woopt-pixel-manager-pro',
-				'woocommerce-pixel-manager',
-				'woocommerce-pixel-manager-pro',
-			]));
+			return $exclusions;
 		});
 	}
 
-	protected static function disable_optimocha_js_optimization() {
+	/**
+	 * Exclude PMW tracking scripts from Flying Press's delay-until-interaction on critical pages.
+	 *
+	 * Flying Press delays scripts matching patterns in js_interaction_includes until user
+	 * interaction. On cart, checkout, and order confirmation pages, this breaks conversion
+	 * tracking when users leave without interacting.
+	 *
+	 * @since 1.59.0
+	 */
+	protected static function exclude_pmw_from_flying_press_delay_js_on_critical_pages() {
+
+		$filter_callback = function ( $options ) {
+			if (
+				isset($options['js_interaction_includes'])
+				&& is_array($options['js_interaction_includes'])
+				&& Helpers::is_cart_or_checkout_page()
+			) {
+				$options['js_interaction_includes'] = self::filter_flying_press_interaction_includes($options['js_interaction_includes']);
+			}
+
+			return $options;
+		};
+
+		add_filter('pre_update_option_FLYING_PRESS_CONFIG', $filter_callback);
+		add_filter('option_FLYING_PRESS_CONFIG', $filter_callback);
+	}
+
+	/**
+	 * Exclude PMW scripts from Optimocha (Speed Booster Pack) JS optimization.
+	 *
+	 * @since 1.59.0
+	 */
+	protected static function exclude_pmw_from_optimocha_js_optimization() {
 		add_filter('option_sbp_options', function ( $options ) {
 
 			if (isset($options['js_exclude'])) {
-				$options['js_exclude'] = $options['js_exclude'] . PHP_EOL . implode(PHP_EOL, self::get_pmw_script_identifiers());
+				$options['js_exclude'] = $options['js_exclude'] . PHP_EOL . implode(PHP_EOL, self::get_pmw_core_script_identifiers());
 				$js_include            = explode(PHP_EOL, $options['js_include']);
 				$js_include            = array_filter($js_include, function ( $string ) {
-					foreach (self::get_pmw_script_identifiers() as $value) {
+					foreach (self::get_pmw_core_script_identifiers() as $value) {
 						if (strpos($string, $value) !== false) {
 							return false;
 						}
@@ -1483,44 +1706,40 @@ class Environment {
 		});
 	}
 
-	protected static function disable_flying_press_js_optimization() {
-		add_filter('pre_update_option_FLYING_PRESS_CONFIG', function ( $options ) {
-
-			if (isset($options['js_defer_excludes'])) {
-				$options['js_defer_excludes'] = array_unique(array_merge($options['js_defer_excludes'], self::get_pmw_script_identifiers()));
-			}
-
-			return $options;
-		});
-
-		add_filter('option_FLYING_PRESS_CONFIG', function ( $options ) {
-
-			if (isset($options['js_defer_excludes'])) {
-				$options['js_defer_excludes'] = array_unique(array_merge($options['js_defer_excludes'], self::get_pmw_script_identifiers()));
-			}
-			return $options;
-		});
-
-		// 		Make sure to never delay JS until interaction
-//		if (self::is_flying_press_active()) {
-//			add_filter('option_FLYING_PRESS_CONFIG', function ( $options ) {
-//				if (isset($options['js_interaction'])) {
-//					$options['js_interaction'] = false;
-//				}
-//				return $options;
-//			});
-//		}
-	}
-
-	protected static function disable_wp_rocket_js_optimization() {
-		// for testing you need to clear the WP Rocket cache, only then the filters run
-		self::exclude_inline_scripts_from_wp_rocket_using_options();
-		add_filter('rocket_delay_js_exclusions', [ __CLASS__, 'add_wp_rocket_exclusions' ]);
-		add_filter('rocket_defer_inline_exclusions', [ __CLASS__, 'add_wp_rocket_exclusions' ]);
-		add_filter('rocket_exclude_defer_js', [ __CLASS__, 'add_wp_rocket_exclusions' ]);
-		add_filter('rocket_exclude_js', [ __CLASS__, 'add_wp_rocket_exclusions' ]);
-		add_filter('rocket_minify_excluded_external_js', [ __CLASS__, 'add_wp_rocket_exclusions' ]);
-		add_filter('rocket_excluded_inline_js_content', [ __CLASS__, 'add_wp_rocket_exclusions' ]);
+	/**
+	 * Get PMW's core script identifiers for unconditional exclusions.
+	 *
+	 * Only includes PMW's own files and data layer — not third-party
+	 * tracking scripts. Used for always-on minification/combination exclusions.
+	 *
+	 * @return string[]
+	 *
+	 * @since 1.58.5
+	 */
+	private static function get_pmw_core_script_identifiers() {
+		return [
+			// Plugin directory slug patterns (all historical variants)
+			'pixel-manager-pro-for-woocommerce',
+			'pixel-manager-for-woocommerce',
+			'woocommerce-google-adwords-conversion-tracking-tag',
+			'woocommerce-pixel-manager',
+			'woopt-pixel-manager',
+			// PMW data layer
+			'pmwDataLayer',
+			'window.pmwDataLayer',
+			// Legacy data layer
+			'wpmDataLayer',
+			'window.wpmDataLayer',
+			// Script handle identifiers
+			'pmw',
+			'pmw-js',
+			'wpm',
+			// Webpack chunk files
+			'.chunk.min.js',
+			// JS directory paths
+			'js/public/free/',
+			'js/public/pro/',
+		];
 	}
 
 	private static function get_pmw_script_identifiers() {
@@ -1532,16 +1751,41 @@ class Environment {
 			'jQuery.min.js',
 			'jquery.js',
 			'jquery.min.js',
+			// Plugin directory slug patterns (all historical variants)
+			'pixel-manager-pro-for-woocommerce',
+			'pixel-manager-for-woocommerce',
+			'woocommerce-google-adwords-conversion-tracking-tag',
+			'woocommerce-pixel-manager',
+			'woopt-pixel-manager',
+			// PMW identifiers (current naming)
+			'pmw',
+			'pmw-js',
+			'pmwDataLayer',
+			'window.pmwDataLayer',
+			'pmw.js',
+			'pmw.min.js',
+			'pmw__premium_only.js',
+			'pmw__premium_only.min.js',
+			'pmw-public.p1.min.js',
+			'pmw-public__premium_only.p1.min.js',
+			// Legacy WPM identifiers (backwards compatibility)
 			'wpm',
-			'wpm-js',
+			'pmw-js',
 			'wpmDataLayer',
 			'window.wpmDataLayer',
 			'wpm.js',
 			'wpm.min.js',
 			'wpm__premium_only.js',
 			'wpm__premium_only.min.js',
-			'wpm-public.p1.min.js',
-			'wpm-public__premium_only.p1.min.js',
+			'pmw-public.p1.min.js',
+			'pmw-public__premium_only.p1.min.js',
+			// Webpack chunk files
+			'.chunk.min.js',
+			// Include paths for free and pro folders
+			'js/public/free/',
+			'js/public/pro/',
+			'/free/',
+			'/pro/',
 			//            'facebook.js',
 			//            'facebook.min.js',
 			//            'facebook__premium_only.js',
@@ -1624,7 +1868,7 @@ class Environment {
 			'post_type' => 'shop_order',
 		]);
 
-//		error_log(reset($orders));
+//      error_log(reset($orders));
 
 		self::$last_order_id = reset($orders);
 
@@ -1737,6 +1981,56 @@ class Environment {
 
 		self::$transients_enabled = false;
 		return false;
+	}
+
+	/**
+	 * Get the external object cache type if enabled.
+	 *
+	 * Checks for Redis or Memcached object caching.
+	 *
+	 * @return string The cache type ('Redis', 'Memcached') or 'no' if not enabled.
+	 *
+	 * @since 1.46.0
+	 */
+	public static function get_external_object_cache() {
+
+		if ( null !== self::$external_object_cache ) {
+			return self::$external_object_cache;
+		}
+
+		// Check for Redis
+		if (class_exists('Redis')) {
+			self::$external_object_cache = 'Redis';
+			return self::$external_object_cache;
+		}
+
+		// Check for WP Redis plugin constant
+		if (defined('WP_REDIS_DISABLED') && !WP_REDIS_DISABLED) {
+			self::$external_object_cache = 'Redis';
+			return self::$external_object_cache;
+		}
+
+		// Check for Memcached
+		if (class_exists('Memcached') || class_exists('Memcache')) {
+			self::$external_object_cache = 'Memcached';
+			return self::$external_object_cache;
+		}
+
+		// Check object-cache.php drop-in for Redis or Memcached
+		if (file_exists(WP_CONTENT_DIR . '/object-cache.php')) {
+			$object_cache_content = file_get_contents(WP_CONTENT_DIR . '/object-cache.php');
+			if (stripos($object_cache_content, 'redis') !== false) {
+				self::$external_object_cache = 'Redis';
+				return self::$external_object_cache;
+			}
+			if (stripos($object_cache_content, 'memcache') !== false) {
+				self::$external_object_cache = 'Memcached';
+				return self::$external_object_cache;
+			}
+		}
+
+		self::$external_object_cache = 'no';
+		return self::$external_object_cache;
 	}
 
 	public static function is_on_playground_wordpress_net() {
