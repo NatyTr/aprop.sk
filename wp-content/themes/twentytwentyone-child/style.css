@@ -4801,6 +4801,259 @@ footer .footer-meta .footer_socials li a:hover {
   }
 }
 
+.modern-agro-tabs {
+  margin: 0px 0px 72px 0;
+  padding: 0 24px;
+}
+
+.modern-agro-slider {
+  padding: 48px 28px 36px;
+  border-radius: 32px;
+  background: #f5f5f3;
+  overflow: hidden;
+}
+
+.modern-agro-tabs__header {
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+
+.modern-agro-slider__header {
+  max-width: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.modern-agro-slider__header .modern-agro-tabs__title {
+  max-width: 620px;
+}
+
+.modern-agro-slider__all-link {
+  flex: 0 0 auto;
+}
+
+.modern-agro-tabs__title {
+  margin: 12px 0 0;
+}
+
+.modern-agro-tabs__description {
+  margin: 16px 0 0;
+  max-width: 620px;
+}
+
+.modern-agro-slider__track {
+  margin: 0 -8px;
+}
+
+.modern-agro-slider__card {
+  margin: 0 4px;
+  border-radius: 18px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.modern-agro-slider__card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.modern-agro-slider__badge {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #151515;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.modern-agro-slider__media {
+  position: relative;
+  aspect-ratio: 1/1.05;
+  background: #f6f6f3;
+}
+.modern-agro-slider__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modern-agro-slider__content {
+  padding: 18px 20px 20px;
+}
+
+.modern-agro-slider__title-price {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(21, 21, 21, 0.12);
+}
+
+.modern-agro-slider__title {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.02;
+}
+
+.modern-agro-slider__price {
+  flex: 0 0 auto;
+  font-size: 18px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.modern-agro-slider__specs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.modern-agro-slider__spec {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 68px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #f6f6f3;
+}
+
+.modern-agro-slider__spec-label {
+  color: rgba(21, 21, 21, 0.48);
+  font-size: 12px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.modern-agro-slider__spec-value {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.modern-agro-slider__footer {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.modern-agro-slider__arrows {
+  display: flex;
+  gap: 10px;
+}
+
+.modern-agro-slider__arrow {
+  position: relative;
+  border-radius: 1210px;
+  width: 44px;
+  height: 36px;
+  border: 1px solid rgba(21, 21, 21, 0.5);
+  background: #fff !important;
+  background-color: #fff !important;
+  padding: 0;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.modern-agro-slider__arrow:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 17px;
+  height: 17px;
+  background-image: url("./images/arrow-left-black.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.modern-agro-slider__arrow:hover {
+  border-color: #151515;
+  transform: translateY(-1px);
+}
+
+.modern-agro-slider__arrow--prev:before {
+  transform: translate(-50%, -50%);
+}
+
+.modern-agro-slider__arrow--next:before {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.modern-agro-slider__progress {
+  flex: 1 1 auto;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(21, 21, 21, 0.12);
+  overflow: hidden;
+}
+.modern-agro-slider__progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #151515;
+  transition: width 0.2s ease;
+}
+
+.modern-agro-tabs__empty {
+  padding: 18px 24px;
+  border: 1px dashed rgba(21, 21, 21, 0.18);
+  border-radius: 18px;
+  background: #fafafa;
+}
+
+@media (max-width: 1099px) {
+  .modern-agro-tabs {
+    margin: 0;
+  }
+  .modern-agro-slider {
+    padding: 36px 24px 28px;
+  }
+  .modern-agro-slider__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .modern-agro-slider__all-link {
+    margin-top: 8px;
+  }
+  .modern-agro-slider__title-price {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .modern-agro-slider__specs {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@media (max-width: 767px) {
+  .modern-agro-tabs {
+    padding: 0 18px;
+  }
+  .modern-agro-slider {
+    padding: 28px 24px 24px 24px;
+    border-radius: 24px;
+  }
+  .modern-agro-slider__specs {
+    grid-template-columns: 1fr;
+  }
+  .modern-agro-slider__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
 .drone-products-page {
   width: 100%;
 }
@@ -5097,6 +5350,185 @@ footer .footer-meta .footer_socials li a:hover {
   line-height: 1;
   transform: translateY(-50%);
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.drone-products-filter__tree-item {
+  --drone-tree-indent: calc(var(--drone-filter-level, 0) * 16px);
+}
+
+.drone-products-filter__tree-item + .drone-products-filter__tree-item {
+  margin-top: 6px;
+}
+
+.drone-products-filter__tree-item[style*="--drone-filter-level: 1"] .drone-products-filter__tree-row,
+.drone-products-filter__tree-item[style*="--drone-filter-level: 2"] .drone-products-filter__tree-row,
+.drone-products-filter__tree-item[style*="--drone-filter-level: 3"] .drone-products-filter__tree-row,
+.drone-products-filter__tree-item[style*="--drone-filter-level: 4"] .drone-products-filter__tree-row {
+  min-height: 34px;
+}
+
+.drone-products-filter__tree-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+  padding-left: var(--drone-tree-indent);
+}
+
+.drone-products-filter__tree-select {
+  position: relative;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+.drone-products-filter__tree-select input {
+  position: absolute !important;
+  opacity: 0;
+  pointer-events: none;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0;
+}
+
+.drone-products-filter__tree-indicator {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.5019607843);
+  border-radius: 50%;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.drone-products-filter__tree-indicator:after {
+  content: "";
+  position: absolute;
+  left: 7.5px;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #76DA43;
+  opacity: 0;
+  transform: translateY(-50%) scale(0.6);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.drone-products-filter__tree-select:has(input:checked) .drone-products-filter__tree-indicator {
+  border-color: #76DA43;
+  box-shadow: inset 0 0 0 1px #76DA43;
+}
+.drone-products-filter__tree-select:has(input:checked) .drone-products-filter__tree-indicator:after {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.drone-products-filter__tree-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 32px;
+  padding: 0 26px 0 0;
+  border: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  color: #151515 !important;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.drone-products-filter__tree-trigger:hover, .drone-products-filter__tree-trigger:focus, .drone-products-filter__tree-trigger:active {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #151515 !important;
+  outline: none;
+}
+.drone-products-filter__tree-trigger:after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-right: 1.5px solid rgba(21, 21, 21, 0.72);
+  border-bottom: 1.5px solid rgba(21, 21, 21, 0.72);
+  transform: translateY(-65%) rotate(-45deg);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.drone-products-filter__tree-trigger[aria-expanded=true]:after {
+  transform: translateY(-35%) rotate(45deg);
+}
+
+.drone-products-filter__tree-label {
+  display: block;
+  min-width: 0;
+  color: #151515;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.drone-products-filter__tree-label--static {
+  flex: 1 1 auto;
+}
+
+.drone-products-filter__tree-count {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 33px;
+  min-height: 22px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #efefef;
+  color: rgba(21, 21, 21, 0.88);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.drone-products-filter__tree-item:has(.drone-products-filter__tree-select input:checked) .drone-products-filter__tree-count {
+  background: #76DA43;
+  color: #151515;
+}
+
+.drone-products-filter__tree-children {
+  margin-top: 4px;
+}
+
+.drone-products-filter__tree-children .drone-products-filter__tree-item + .drone-products-filter__tree-item {
+  margin-top: 2px;
+}
+
+.drone-products-filter__tree-children .drone-products-filter__tree-select {
+  flex-basis: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.drone-products-filter__tree-children .drone-products-filter__tree-indicator {
+  width: 20px;
+  height: 20px;
+}
+.drone-products-filter__tree-children .drone-products-filter__tree-indicator:after {
+  left: 6px;
+  width: 8px;
+  height: 8px;
+}
+
+.drone-products-filter__tree-children .drone-products-filter__tree-label {
+  font-size: 13px;
+}
+
+.drone-products-filter__tree-children[hidden] {
+  display: none !important;
 }
 
 .drone-products-filter__group input[type=range] {
@@ -7169,6 +7601,13 @@ body {
 
 .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) img {
   outline: none !important;
+}
+
+.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) {
+  background: transparent !important;
+  color: inherit !important;
+  outline: 2px solid rgba(21, 21, 21, 0.28);
+  outline-offset: 2px;
 }
 
 @media (min-width: 1100px) {

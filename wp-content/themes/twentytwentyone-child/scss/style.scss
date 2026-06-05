@@ -18,6 +18,7 @@
 @import 'product-categories';
 @import 'didnt-find';
 @import 'product-detail';
+@import 'modern-agro-slider';
 @import 'drones';
 @import 'cart';
 @import 'checkout';
@@ -51,6 +52,13 @@ body{
 
 .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) img{
   outline: none !important;
+}
+
+.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) {
+  background: transparent !important;
+  color: inherit !important;
+  outline: 2px solid rgba(21, 21, 21, 0.28);
+  outline-offset: 2px;
 }
 
 

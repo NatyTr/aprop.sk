@@ -4,6 +4,77 @@ function aprop_drone_category_id() {
     return 211;
 }
 
+function aprop_drone_category_tree( $parent_id = null ) {
+    if ( null === $parent_id ) {
+        $parent_id = aprop_drone_category_id();
+    }
+
+    $terms = get_terms(
+        array(
+            'taxonomy'   => 'product_cat',
+            'parent'     => $parent_id,
+            'hide_empty' => false,
+            'orderby'    => 'name',
+            'order'      => 'ASC',
+        )
+    );
+
+    if ( is_wp_error( $terms ) ) {
+        return array();
+    }
+
+    $tree = array();
+
+    foreach ( $terms as $term ) {
+        $tree[] = array(
+            'term'     => $term,
+            'children' => aprop_drone_category_tree( $term->term_id ),
+        );
+    }
+
+    return $tree;
+}
+
+function aprop_drone_category_ids_from_tree( $tree ) {
+    $ids = array();
+
+    foreach ( $tree as $node ) {
+        if ( empty( $node['term'] ) || ! ( $node['term'] instanceof WP_Term ) ) {
+            continue;
+        }
+
+        $ids[] = (int) $node['term']->term_id;
+
+        if ( ! empty( $node['children'] ) ) {
+            $ids = array_merge( $ids, aprop_drone_category_ids_from_tree( $node['children'] ) );
+        }
+    }
+
+    return $ids;
+}
+
+function aprop_drone_tree_has_selected_term( $node, $selected_term_id ) {
+    if ( ! $selected_term_id || empty( $node['term'] ) || ! ( $node['term'] instanceof WP_Term ) ) {
+        return false;
+    }
+
+    if ( (int) $node['term']->term_id === (int) $selected_term_id ) {
+        return true;
+    }
+
+    if ( empty( $node['children'] ) ) {
+        return false;
+    }
+
+    foreach ( $node['children'] as $child_node ) {
+        if ( aprop_drone_tree_has_selected_term( $child_node, $selected_term_id ) ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function aprop_drone_filter_options() {
     return array(
         'display' => array(
@@ -32,6 +103,34 @@ function aprop_drone_sort_options() {
         'title_asc' => 'Názov A-Z',
         'newest' => 'Najnovšie',
     );
+}
+
+function aprop_drone_tax_query_from_filters( $filters, $exclude = '', $override = array() ) {
+    $filters = array_merge( $filters, $override );
+    $tax_query = array(
+        array(
+            'taxonomy'         => 'product_cat',
+            'field'            => 'term_id',
+            'terms'            => array( aprop_drone_category_id() ),
+            'operator'         => 'IN',
+            'include_children' => true,
+        ),
+    );
+
+    if (
+        ( 'category' !== $exclude || array_key_exists( 'category', $override ) )
+        && ! empty( $filters['category'] )
+    ) {
+        $tax_query[] = array(
+            'taxonomy'         => 'product_cat',
+            'field'            => 'term_id',
+            'terms'            => array( absint( $filters['category'] ) ),
+            'operator'         => 'IN',
+            'include_children' => true,
+        );
+    }
+
+    return $tax_query;
 }
 
 function aprop_drone_meta_query_from_filters( $filters, $exclude = '', $override = array() ) {
@@ -81,14 +180,7 @@ function aprop_drone_filter_count( $current_filters, $exclude = '', $override = 
         'posts_per_page' => 1,
         'post_status'    => 'publish',
         'fields'         => 'ids',
-        'tax_query'      => array(
-            array(
-                'taxonomy' => 'product_cat',
-                'field'    => 'term_id',
-                'terms'    => array( aprop_drone_category_id() ),
-                'operator' => 'IN',
-            ),
-        ),
+        'tax_query'      => aprop_drone_tax_query_from_filters( $current_filters, $exclude, $override ),
     );
 
     $args['meta_query'] = aprop_drone_meta_query_from_filters($current_filters, $exclude, $override);
@@ -98,10 +190,13 @@ function aprop_drone_filter_count( $current_filters, $exclude = '', $override = 
     return (int) $query->found_posts;
 }
 
-function aprop_render_drone_filter_radio( $name, $value, $label, $current, $count ) {
+function aprop_render_drone_filter_radio( $name, $value, $label, $current, $count, $classes = '', $level = 0 ) {
     ob_start();
     ?>
-    <label class="drone-products-filter__option">
+    <label
+        class="drone-products-filter__option<?php echo $classes ? ' ' . esc_attr( $classes ) : ''; ?>"
+        style="--drone-filter-level: <?php echo esc_attr( (int) $level ); ?>;"
+    >
         <input
             type="radio"
             name="<?php echo esc_attr($name); ?>"
@@ -116,8 +211,74 @@ function aprop_render_drone_filter_radio( $name, $value, $label, $current, $coun
     return ob_get_clean();
 }
 
+function aprop_render_drone_category_tree_options( $category_tree, $current_filters, $level = 0 ) {
+    ob_start();
+
+    foreach ( $category_tree as $node ) {
+        if ( empty( $node['term'] ) || ! ( $node['term'] instanceof WP_Term ) ) {
+            continue;
+        }
+
+        $term = $node['term'];
+        $has_children = ! empty( $node['children'] );
+        $selected_in_branch = aprop_drone_tree_has_selected_term( $node, $current_filters['category'] );
+        $branch_id = 'drone-category-branch-' . (int) $term->term_id;
+
+        ?><div class="drone-products-filter__tree-item<?php echo $has_children ? ' drone-products-filter__tree-item--has-children' : ''; ?>" style="--drone-filter-level: <?php echo esc_attr( (int) $level ); ?>;">
+            <div class="drone-products-filter__tree-row">
+                <label class="drone-products-filter__tree-select">
+                    <input
+                        type="radio"
+                        name="drone_category"
+                        value="<?php echo esc_attr( (string) $term->term_id ); ?>"
+                        <?php checked( $current_filters['category'], (int) $term->term_id ); ?>
+                        onchange="this.form.submit()"
+                    />
+                    <span class="drone-products-filter__tree-indicator" aria-hidden="true"></span>
+                    <span class="screen-reader-text"><?php echo esc_html( sprintf( 'Vybrať kategóriu %s', $term->name ) ); ?></span>
+                </label>
+
+                <?php if ( $has_children ) : ?>
+                    <button
+                        type="button"
+                        class="drone-products-filter__tree-trigger"
+                        aria-expanded="<?php echo $selected_in_branch ? 'true' : 'false'; ?>"
+                        aria-controls="<?php echo esc_attr( $branch_id ); ?>"
+                    >
+                        <span class="drone-products-filter__tree-label"><?php echo esc_html( $term->name ); ?></span>
+                    </button>
+                <?php else : ?>
+                    <span class="drone-products-filter__tree-label drone-products-filter__tree-label--static"><?php echo esc_html( $term->name ); ?></span>
+                <?php endif; ?>
+
+                <span class="drone-products-filter__tree-count">
+                    <?php
+                        echo esc_html(
+                            aprop_drone_filter_count(
+                                $current_filters,
+                                'category',
+                                array( 'category' => (string) $term->term_id )
+                            )
+                        );
+                    ?>
+                </span>
+            </div>
+
+            <?php if ( $has_children ) : ?>
+                <div id="<?php echo esc_attr( $branch_id ); ?>" class="drone-products-filter__tree-children"<?php echo $selected_in_branch ? '' : ' hidden'; ?>>
+                    <?php echo aprop_render_drone_category_tree_options( $node['children'], $current_filters, $level + 1 ); ?>
+                </div>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
+
+    return ob_get_clean();
+}
+
 function aprop_render_drone_filters( $current_filters ) {
     $options = aprop_drone_filter_options();
+    $category_tree = aprop_drone_category_tree();
     $reset_url = get_permalink();
 
     ob_start();
@@ -125,6 +286,32 @@ function aprop_render_drone_filters( $current_filters ) {
     <aside id="drone-products-filter" class="drone-products-filter" aria-label="Filter dronov">
         <form method="get" class="drone-products-filter__form">
             <input type="hidden" name="drone_sort" value="<?php echo esc_attr($current_filters['sort']); ?>" />
+
+            <div class="drone-products-filter__group">
+                <h2>Kategória</h2>
+                <div class="drone-products-filter__tree-item drone-products-filter__tree-item--root">
+                    <div class="drone-products-filter__tree-row">
+                        <label class="drone-products-filter__tree-select">
+                            <input
+                                type="radio"
+                                name="drone_category"
+                                value=""
+                                <?php checked( $current_filters['category'], 0 ); ?>
+                                onchange="this.form.submit()"
+                            />
+                            <span class="drone-products-filter__tree-indicator" aria-hidden="true"></span>
+                            <span class="screen-reader-text">Vybrať všetky kategórie</span>
+                        </label>
+
+                        <span class="drone-products-filter__tree-label drone-products-filter__tree-label--static">Všetky kategórie</span>
+                        <span class="drone-products-filter__tree-count">
+                            <?php echo esc_html( aprop_drone_filter_count( $current_filters, 'category', array( 'category' => '' ) ) ); ?>
+                        </span>
+                    </div>
+                </div>
+
+                <?php echo aprop_render_drone_category_tree_options( $category_tree, $current_filters ); ?>
+            </div>
 
             <div class="drone-products-filter__group">
                 <h2>Zobrazenie</h2>
@@ -210,6 +397,7 @@ function aprop_render_drone_sort( $current_filters ) {
     $current_label = $sort_options[$current_filters['sort']] ?? $sort_options['recommended'];
 
     $base_args = array(
+        'drone_category' => $current_filters['category'],
         'drone_display' => $current_filters['display'],
         'drone_capacity_max' => $current_filters['capacity_max'],
     );
@@ -275,23 +463,43 @@ function aprop_render_drone_filter_toggle_script() {
     document.addEventListener('DOMContentLoaded', function () {
         var toggle = document.querySelector('.drone-products-filter-toggle');
         var filterColumn = document.getElementById('drone-products-filter-column');
+        var treeToggles = document.querySelectorAll('.drone-products-filter__tree-trigger');
 
-        if (!toggle || !filterColumn) {
-            return;
+        if (toggle && filterColumn) {
+            toggle.addEventListener('click', function () {
+                var isHidden = filterColumn.hasAttribute('hidden');
+
+                if (isHidden) {
+                    filterColumn.removeAttribute('hidden');
+                    toggle.setAttribute('aria-expanded', 'true');
+                    toggle.textContent = 'Skryť filtre';
+                } else {
+                    filterColumn.setAttribute('hidden', '');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    toggle.textContent = 'Zobraziť filtre';
+                }
+            });
         }
 
-        toggle.addEventListener('click', function () {
-            var isHidden = filterColumn.hasAttribute('hidden');
+        treeToggles.forEach(function (treeToggle) {
+            treeToggle.addEventListener('click', function () {
+                var childId = treeToggle.getAttribute('aria-controls');
+                var childContainer = childId ? document.getElementById(childId) : null;
 
-            if (isHidden) {
-                filterColumn.removeAttribute('hidden');
-                toggle.setAttribute('aria-expanded', 'true');
-                toggle.textContent = 'Skryť filtre';
-            } else {
-                filterColumn.setAttribute('hidden', '');
-                toggle.setAttribute('aria-expanded', 'false');
-                toggle.textContent = 'Zobraziť filtre';
-            }
+                if (!childContainer) {
+                    return;
+                }
+
+                var isHidden = childContainer.hasAttribute('hidden');
+
+                if (isHidden) {
+                    childContainer.removeAttribute('hidden');
+                    treeToggle.setAttribute('aria-expanded', 'true');
+                } else {
+                    childContainer.setAttribute('hidden', '');
+                    treeToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
         });
     });
     </script>
@@ -302,13 +510,20 @@ function aprop_render_drone_filter_toggle_script() {
 function render_drone_products_shortcode() {
     $options = aprop_drone_filter_options();
     $sort_options = aprop_drone_sort_options();
+    $category_tree = aprop_drone_category_tree();
+    $valid_category_ids = aprop_drone_category_ids_from_tree( $category_tree );
     $current_filters = array(
+        'category'     => isset($_GET['drone_category']) ? absint($_GET['drone_category']) : 0,
         'display'      => isset($_GET['drone_display']) ? sanitize_key($_GET['drone_display']) : 'all',
         'purpose'      => isset($_GET['drone_purpose']) ? sanitize_key($_GET['drone_purpose']) : '',
         'availability' => isset($_GET['drone_availability']) ? sanitize_key($_GET['drone_availability']) : '',
         'capacity_max' => isset($_GET['drone_capacity_max']) ? absint($_GET['drone_capacity_max']) : 100,
         'sort'         => isset($_GET['drone_sort']) ? sanitize_key($_GET['drone_sort']) : 'recommended',
     );
+
+    if ( $current_filters['category'] && ! in_array( $current_filters['category'], $valid_category_ids, true ) ) {
+        $current_filters['category'] = 0;
+    }
 
     if ( ! array_key_exists($current_filters['display'], $options['display']) ) {
         $current_filters['display'] = 'all';
@@ -336,14 +551,7 @@ function render_drone_products_shortcode() {
         'post_status'    => 'publish',
         'orderby'        => 'menu_order title',
         'order'          => 'ASC',
-        'tax_query'      => array(
-            array(
-                'taxonomy' => 'product_cat',
-                'field'    => 'term_id',
-                'terms'    => array( aprop_drone_category_id() ),
-                'operator' => 'IN',
-            ),
-        ),
+        'tax_query'      => aprop_drone_tax_query_from_filters( $current_filters ),
         'meta_query'     => aprop_drone_meta_query_from_filters($current_filters),
     );
 

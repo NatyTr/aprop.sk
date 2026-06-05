@@ -322,6 +322,196 @@
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+.drone-products-filter__tree-item {
+  --drone-tree-indent: calc(var(--drone-filter-level, 0) * 16px);
+}
+
+.drone-products-filter__tree-item + .drone-products-filter__tree-item {
+  margin-top: 6px;
+}
+
+.drone-products-filter__tree-item[style*="--drone-filter-level: 1"],
+.drone-products-filter__tree-item[style*="--drone-filter-level: 2"],
+.drone-products-filter__tree-item[style*="--drone-filter-level: 3"],
+.drone-products-filter__tree-item[style*="--drone-filter-level: 4"] {
+  .drone-products-filter__tree-row {
+    min-height: 34px;
+  }
+}
+
+.drone-products-filter__tree-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+  padding-left: var(--drone-tree-indent);
+}
+
+.drone-products-filter__tree-select {
+  position: relative;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+
+  input {
+    position: absolute !important;
+    opacity: 0;
+    pointer-events: none;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0;
+  }
+}
+
+.drone-products-filter__tree-indicator {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #00000080;
+  border-radius: 50%;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 7.5px;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: $primary;
+    opacity: 0;
+    transform: translateY(-50%) scale(0.6);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+}
+
+.drone-products-filter__tree-select:has(input:checked) .drone-products-filter__tree-indicator {
+  border-color: $primary;
+  box-shadow: inset 0 0 0 1px $primary;
+
+  &:after {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+.drone-products-filter__tree-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 32px;
+  padding: 0 26px 0 0;
+  border: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  color: $black !important;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: $black !important;
+    outline: none;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    width: 9px;
+    height: 9px;
+    border-right: 1.5px solid rgba(21, 21, 21, 0.72);
+    border-bottom: 1.5px solid rgba(21, 21, 21, 0.72);
+    transform: translateY(-65%) rotate(-45deg);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  &[aria-expanded="true"]:after {
+    transform: translateY(-35%) rotate(45deg);
+  }
+}
+
+.drone-products-filter__tree-label {
+  display: block;
+  min-width: 0;
+  color: $black;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.drone-products-filter__tree-label--static {
+  flex: 1 1 auto;
+}
+
+.drone-products-filter__tree-count {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 33px;
+  min-height: 22px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #efefef;
+  color: rgba(21, 21, 21, 0.88);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.drone-products-filter__tree-item:has(.drone-products-filter__tree-select input:checked) .drone-products-filter__tree-count {
+  background: $primary;
+  color: $black;
+}
+
+.drone-products-filter__tree-children {
+  margin-top: 4px;
+}
+
+.drone-products-filter__tree-children .drone-products-filter__tree-item + .drone-products-filter__tree-item {
+  margin-top: 2px;
+}
+
+.drone-products-filter__tree-children .drone-products-filter__tree-select {
+  flex-basis: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.drone-products-filter__tree-children .drone-products-filter__tree-indicator {
+  width: 20px;
+  height: 20px;
+
+  &:after {
+    left: 6px;
+    width: 8px;
+    height: 8px;
+  }
+}
+
+.drone-products-filter__tree-children .drone-products-filter__tree-label {
+  font-size: 13px;
+}
+
+.drone-products-filter__tree-children[hidden] {
+  display: none !important;
+}
+
 .drone-products-filter__group input[type="range"] {
   width: 100%;
   height: 4px;

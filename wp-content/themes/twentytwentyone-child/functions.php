@@ -2,7 +2,12 @@
 function my_child_theme_enqueue_assets() {
     // Štýly
     wp_enqueue_style('parent-style', get_template_directory_uri() . '/style.css');
-    wp_enqueue_style('child-style', get_stylesheet_directory_uri() . '/style.css', array('parent-style'));
+    wp_enqueue_style(
+        'child-style',
+        get_stylesheet_directory_uri() . '/style.css',
+        array('parent-style'),
+        filemtime(get_stylesheet_directory() . '/style.css')
+    );
 
     // Slick Slider CSS
     wp_enqueue_style('slick-css', get_stylesheet_directory_uri() . '/assets/slick/slick.css');
@@ -16,8 +21,6 @@ function my_child_theme_enqueue_assets() {
 
 }
 add_action('wp_enqueue_scripts', 'my_child_theme_enqueue_assets');
-
-wp_enqueue_style( 'custom-style', get_stylesheet_uri(), [], filemtime( get_stylesheet_directory() . '/style.css' ) );
 
 
 //add_filter('show_admin_bar', '__return_false');
@@ -1255,4 +1258,211 @@ function aprop_install_homepage_secondary_hero_acf_fields() {
     }
 
     update_option( 'aprop_home_secondary_hero_fields_installed', 1, false );
+}
+
+add_action( 'acf/init', 'aprop_install_homepage_modern_agro_tabs_acf_fields', 7 );
+
+function aprop_install_homepage_modern_agro_tabs_acf_fields() {
+    static $has_run = false;
+
+    if ( $has_run ) {
+        return;
+    }
+
+    $has_run = true;
+
+    if ( ! function_exists( 'acf_get_field_group' ) || ! function_exists( 'acf_update_field' ) ) {
+        return;
+    }
+
+    if ( get_option( 'aprop_home_modern_agro_fields_installed' ) ) {
+        return;
+    }
+
+    $field_group = acf_get_field_group( 'group_6828be0395a04' );
+
+    if ( empty( $field_group['ID'] ) ) {
+        return;
+    }
+
+    $parent_id = (int) $field_group['ID'];
+
+    global $wpdb;
+
+    $existing_field_id = (int) $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT ID FROM {$wpdb->posts}
+            WHERE post_type = 'acf-field'
+              AND post_parent = %d
+              AND post_name = %s
+            ORDER BY ID DESC
+            LIMIT 1",
+            $parent_id,
+            'field_aprop_home_modern_agro_tab'
+        )
+    );
+
+    if ( $existing_field_id ) {
+        update_option( 'aprop_home_modern_agro_fields_installed', 1, false );
+        return;
+    }
+
+    $fields = array(
+        array(
+            'key' => 'field_aprop_home_modern_agro_tab',
+            'label' => 'Drony pre moderné poľnohospodárstvo',
+            'name' => '',
+            'type' => 'tab',
+            'placement' => 'top',
+            'endpoint' => 0,
+            'parent' => $parent_id,
+            'menu_order' => 200,
+        ),
+        array(
+            'key' => 'field_aprop_home_modern_agro_title',
+            'label' => 'Nadpis sekcie',
+            'name' => 'home_modern_agro_title',
+            'type' => 'text',
+            'default_value' => 'Drony pre moderné poľnohospodárstvo',
+            'parent' => $parent_id,
+            'menu_order' => 201,
+        ),
+        array(
+            'key' => 'field_aprop_home_modern_agro_button_text',
+            'label' => 'Tlačidlo - text',
+            'name' => 'home_modern_agro_button_text',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => 202,
+            'wrapper' => array( 'width' => '50' ),
+        ),
+        array(
+            'key' => 'field_aprop_home_modern_agro_button_url',
+            'label' => 'Tlačidlo - URL',
+            'name' => 'home_modern_agro_button_url',
+            'type' => 'url',
+            'parent' => $parent_id,
+            'menu_order' => 203,
+            'wrapper' => array( 'width' => '50' ),
+        ),
+        array(
+            'key' => 'field_aprop_home_modern_agro_products',
+            'label' => 'Produkty do slidera',
+            'name' => 'home_modern_agro_products',
+            'type' => 'post_object',
+            'post_type' => array( 'product' ),
+            'return_format' => 'object',
+            'multiple' => 1,
+            'ui' => 1,
+            'parent' => $parent_id,
+            'menu_order' => 204,
+        ),
+    );
+
+    foreach ( $fields as $field ) {
+        acf_update_field( $field );
+    }
+
+    update_option( 'aprop_home_modern_agro_fields_installed', 1, false );
+}
+
+add_action( 'acf/init', 'aprop_upgrade_homepage_modern_agro_slider_fields', 9 );
+
+function aprop_upgrade_homepage_modern_agro_slider_fields() {
+    if ( ! function_exists( 'acf_get_field_group' ) || ! function_exists( 'acf_update_field' ) ) {
+        return;
+    }
+
+    if ( get_option( 'aprop_home_modern_agro_slider_fields_added' ) ) {
+        return;
+    }
+
+    $field_group = acf_get_field_group( 'group_6828be0395a04' );
+
+    if ( empty( $field_group['ID'] ) ) {
+        return;
+    }
+
+    $parent_id = (int) $field_group['ID'];
+
+    $fields = array(
+        array(
+            'key' => 'field_aprop_home_modern_agro_button_text',
+            'label' => 'Tlačidlo - text',
+            'name' => 'home_modern_agro_button_text',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => 202,
+            'wrapper' => array( 'width' => '50' ),
+        ),
+        array(
+            'key' => 'field_aprop_home_modern_agro_button_url',
+            'label' => 'Tlačidlo - URL',
+            'name' => 'home_modern_agro_button_url',
+            'type' => 'url',
+            'parent' => $parent_id,
+            'menu_order' => 203,
+            'wrapper' => array( 'width' => '50' ),
+        ),
+        array(
+            'key' => 'field_aprop_home_modern_agro_products',
+            'label' => 'Produkty do slidera',
+            'name' => 'home_modern_agro_products',
+            'type' => 'post_object',
+            'post_type' => array( 'product' ),
+            'return_format' => 'object',
+            'multiple' => 1,
+            'ui' => 1,
+            'parent' => $parent_id,
+            'menu_order' => 204,
+        ),
+    );
+
+    foreach ( $fields as $field ) {
+        acf_update_field( $field );
+    }
+
+    update_option( 'aprop_home_modern_agro_slider_fields_added', 1, false );
+}
+
+add_action( 'acf/init', 'aprop_cleanup_homepage_modern_agro_unused_fields', 10 );
+
+function aprop_cleanup_homepage_modern_agro_unused_fields() {
+    if ( ! function_exists( 'acf_get_field' ) || ! function_exists( 'acf_delete_field' ) ) {
+        return;
+    }
+
+    if ( get_option( 'aprop_home_modern_agro_unused_fields_removed' ) ) {
+        return;
+    }
+
+    $field_keys = array(
+        'field_aprop_home_modern_agro_label',
+        'field_aprop_home_modern_agro_description',
+    );
+
+    foreach ( range( 1, 3 ) as $tab_number ) {
+        $prefix = 'field_aprop_home_modern_agro_item_' . $tab_number . '_message';
+        $field_keys[] = $prefix;
+
+        $base = 'field_aprop_home_modern_agro_tab_' . $tab_number . '_';
+        $field_keys[] = $base . 'label';
+        $field_keys[] = $base . 'eyebrow';
+        $field_keys[] = $base . 'title';
+        $field_keys[] = $base . 'description';
+        $field_keys[] = $base . 'products';
+        $field_keys[] = $base . 'image';
+        $field_keys[] = $base . 'button_text';
+        $field_keys[] = $base . 'button_url';
+    }
+
+    foreach ( $field_keys as $field_key ) {
+        $field = acf_get_field( $field_key );
+
+        if ( ! empty( $field ) ) {
+            acf_delete_field( $field_key );
+        }
+    }
+
+    update_option( 'aprop_home_modern_agro_unused_fields_removed', 1, false );
 }

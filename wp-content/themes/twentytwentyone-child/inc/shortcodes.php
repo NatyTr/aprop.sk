@@ -1467,3 +1467,229 @@ function shortcode_which_package($atts) {
     return $html;
 }
 add_shortcode('shortcode_which_package', 'shortcode_which_package');
+
+function aprop_get_home_modern_agro_products( $page_id, $minimum_products = 6 ) {
+    $selected_products = (array) get_field( 'home_modern_agro_products', $page_id );
+    $products = array();
+    $selected_ids = array();
+
+    foreach ( $selected_products as $selected_product ) {
+        if ( ! $selected_product instanceof WP_Post ) {
+            continue;
+        }
+
+        $products[] = $selected_product;
+        $selected_ids[] = (int) $selected_product->ID;
+    }
+
+    if ( count( $products ) >= $minimum_products || ! function_exists( 'aprop_drone_category_id' ) ) {
+        return $products;
+    }
+
+    $fallback_query = new WP_Query(
+        array(
+            'post_type'      => 'product',
+            'posts_per_page' => $minimum_products - count( $products ),
+            'post_status'    => 'publish',
+            'post__not_in'   => $selected_ids,
+            'orderby'        => array(
+                'menu_order' => 'ASC',
+                'title'      => 'ASC',
+            ),
+            'tax_query'      => array(
+                array(
+                    'taxonomy'         => 'product_cat',
+                    'field'            => 'term_id',
+                    'terms'            => array( aprop_drone_category_id() ),
+                    'operator'         => 'IN',
+                    'include_children' => true,
+                ),
+            ),
+        )
+    );
+
+    if ( $fallback_query->have_posts() ) {
+        foreach ( $fallback_query->posts as $fallback_product ) {
+            if ( $fallback_product instanceof WP_Post ) {
+                $products[] = $fallback_product;
+            }
+        }
+    }
+
+    wp_reset_postdata();
+
+    return $products;
+}
+
+function aprop_get_home_modern_agro_slider_data() {
+    $page_id = aprop_get_homepage_id();
+
+    if ( ! $page_id ) {
+        return array(
+            'title' => '',
+            'button_text' => '',
+            'button_url' => '',
+            'products' => array(),
+        );
+    }
+
+    return array(
+        'title' => get_field( 'home_modern_agro_title', $page_id ),
+        'button_text' => get_field( 'home_modern_agro_button_text', $page_id ),
+        'button_url' => get_field( 'home_modern_agro_button_url', $page_id ),
+        'products' => aprop_get_home_modern_agro_products( $page_id ),
+    );
+}
+
+function render_home_modern_agro_slider_shortcode() {
+    $section = aprop_get_home_modern_agro_slider_data();
+
+    if ( empty( $section['products'] ) ) {
+        return current_user_can( 'edit_pages' ) ? '<p class="modern-agro-tabs__empty">Vyplň ACF polia pre slider "Drony pre moderné poľnohospodárstvo".</p>' : '';
+    }
+
+    $section_id = 'modern-agro-slider-' . wp_unique_id();
+
+    ob_start();
+    ?>
+    <section id="<?php echo esc_attr( $section_id ); ?>" class="modern-agro-tabs modern-agro-slider">
+        <div class="modern-agro-tabs__header modern-agro-slider__header">
+            <?php if ( ! empty( $section['title'] ) ) : ?>
+                <h2 class="modern-agro-tabs__title"><?php echo esc_html( $section['title'] ); ?></h2>
+            <?php endif; ?>
+
+            <?php if ( ! empty( $section['button_text'] ) && ! empty( $section['button_url'] ) ) : ?>
+                <a class="modern-agro-slider__all-link btn-primary btn-black btn-icon" href="<?php echo esc_url( $section['button_url'] ); ?>">
+                    <?php echo esc_html( $section['button_text'] ); ?>
+                </a>
+            <?php endif; ?>
+        </div>
+
+        <div class="modern-agro-slider__track">
+            <?php foreach ( $section['products'] as $selected_product ) : ?>
+                <?php
+                    if ( ! $selected_product instanceof WP_Post ) {
+                        continue;
+                    }
+
+                    $product = wc_get_product( $selected_product->ID );
+
+                    if ( ! $product ) {
+                        continue;
+                    }
+
+                    $badge = get_post_meta( $selected_product->ID, 'aprop_card_badge', true );
+                ?>
+                <article class="modern-agro-slider__card">
+                    <a class="modern-agro-slider__card-link" href="<?php echo esc_url( get_permalink( $selected_product->ID ) ); ?>">
+                        <?php if ( $badge ) : ?>
+                            <span class="modern-agro-slider__badge"><?php echo esc_html( $badge ); ?></span>
+                        <?php endif; ?>
+
+                        <div class="modern-agro-slider__media">
+                            <?php echo get_the_post_thumbnail( $selected_product->ID, 'large' ); ?>
+                        </div>
+
+                        <div class="modern-agro-slider__content">
+                            <div class="modern-agro-slider__title-price">
+                                <h3 class="modern-agro-slider__title"><?php echo esc_html( get_the_title( $selected_product->ID ) ); ?></h3>
+                                <span class="modern-agro-slider__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
+                            </div>
+
+                            <div class="modern-agro-slider__specs">
+                                <?php for ( $i = 1; $i <= 3; $i++ ) : ?>
+                                    <?php
+                                        $label = get_post_meta( $selected_product->ID, 'aprop_card_spec_' . $i . '_label', true );
+                                        $value = get_post_meta( $selected_product->ID, 'aprop_card_spec_' . $i . '_value', true );
+                                    ?>
+                                    <?php if ( $label || $value ) : ?>
+                                        <div class="modern-agro-slider__spec">
+                                            <?php if ( $label ) : ?>
+                                                <span class="modern-agro-slider__spec-label"><?php echo esc_html( $label ); ?></span>
+                                            <?php endif; ?>
+                                            <?php if ( $value ) : ?>
+                                                <span class="modern-agro-slider__spec-value"><?php echo esc_html( $value ); ?></span>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endfor; ?>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="modern-agro-slider__footer">
+            <div class="modern-agro-slider__arrows">
+                <button type="button" class="modern-agro-slider__arrow modern-agro-slider__arrow--prev" aria-label="Predchádzajúci produkt"></button>
+                <button type="button" class="modern-agro-slider__arrow modern-agro-slider__arrow--next" aria-label="Nasledujúci produkt"></button>
+            </div>
+            <div class="modern-agro-slider__progress"><span></span></div>
+        </div>
+
+        <script>
+        jQuery(function ($) {
+            var section = $('#<?php echo esc_js( $section_id ); ?>');
+            var track = section.find('.modern-agro-slider__track');
+
+            if (!track.length || track.hasClass('slick-initialized') || typeof $.fn.slick !== 'function') {
+                return;
+            }
+
+            if (track.children().length <= 1) {
+                section.find('.modern-agro-slider__footer').hide();
+                return;
+            }
+
+            function updateProgress(slick, currentSlide) {
+                var slidesToShow = slick.options.slidesToShow;
+
+                if (typeof slidesToShow !== 'number') {
+                    slidesToShow = 1;
+                }
+
+                var totalSlides = slick.slideCount;
+                var current = currentSlide || 0;
+                var maxSteps = Math.max(totalSlides - Math.ceil(slidesToShow), 1);
+                var progress = totalSlides <= slidesToShow ? 100 : Math.max((current / maxSteps) * 100, 10);
+
+                section.find('.modern-agro-slider__progress span').css('width', progress + '%');
+            }
+
+            track.on('init reInit afterChange', function (event, slick, currentSlide) {
+                updateProgress(slick, currentSlide);
+            });
+
+            track.slick({
+                slidesToShow: 3.8,
+                slidesToScroll: 1,
+                infinite: false,
+                arrows: true,
+                dots: false,
+                prevArrow: section.find('.modern-agro-slider__arrow--prev'),
+                nextArrow: section.find('.modern-agro-slider__arrow--next'),
+                responsive: [
+                    {
+                        breakpoint: 1100,
+                        settings: {
+                            slidesToShow: 2.1
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 1.1
+                        }
+                    }
+                ]
+            });
+        });
+        </script>
+    </section>
+    <?php
+
+    return ob_get_clean();
+}
+add_shortcode( 'home_modern_agro_slider', 'render_home_modern_agro_slider_shortcode' );
+add_shortcode( 'home_modern_agro_tabs', 'render_home_modern_agro_slider_shortcode' );
