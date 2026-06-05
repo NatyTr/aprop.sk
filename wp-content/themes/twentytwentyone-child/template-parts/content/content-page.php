@@ -20,24 +20,15 @@
 	</header>
 
 	<div class="entry-content">
-	   <?php
-	    the_content();
+		<?php
+		the_content();
 
-	    echo do_shortcode('
-	    [products
-	        category="drony-new"
-	        limit="12"
-	        columns="4"
-	    ]');
-
-	    wp_link_pages(
-	        array(
-	            'before'   => '<nav class="page-links" aria-label="' . esc_attr__( 'Page', 'twentytwentyone' ) . '">',
-	            'after'    => '</nav>',
-	            'pagelink' => esc_html__( 'Page %', 'twentytwentyone' ),
-	        )
-	    );
-	    ?>
+		wp_link_pages( array(
+			'before'   => '<nav class="page-links" aria-label="' . esc_attr__( 'Page', 'twentytwentyone' ) . '">',
+			'after'    => '</nav>',
+			'pagelink' => esc_html__( 'Page %', 'twentytwentyone' ),
+		) );
+		?>
 	</div>
 
 	<?php if ( get_edit_post_link() ) : ?>

@@ -1256,30 +1256,3 @@ function aprop_install_homepage_secondary_hero_acf_fields() {
 
     update_option( 'aprop_home_secondary_hero_fields_installed', 1, false );
 }
-
-
-add_action('woocommerce_product_query', function($q) {
-
-    if (is_admin()) {
-        return;
-    }
-
-    $term = get_term_by('slug', 'drony-new', 'product_cat');
-
-    if (!$term) {
-        return;
-    }
-
-    $tax_query = (array) $q->get('tax_query');
-
-    $tax_query[] = [
-        'taxonomy'         => 'product_cat',
-        'field'            => 'term_id',
-        'terms'            => [$term->term_id],
-        'operator'         => 'NOT IN',
-        'include_children' => true,
-    ];
-
-    $q->set('tax_query', $tax_query);
-
-});

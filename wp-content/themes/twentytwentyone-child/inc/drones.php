@@ -1,5 +1,9 @@
 <?php
 
+function aprop_drone_category_id() {
+    return 211;
+}
+
 function aprop_drone_filter_options() {
     return array(
         'display' => array(
@@ -55,7 +59,11 @@ function aprop_drone_meta_query_from_filters( $filters, $exclude = '', $override
         );
     }
 
-    if ( ( 'capacity' !== $exclude || array_key_exists('capacity_max', $override) ) && isset($filters['capacity_max']) ) {
+    if (
+        ( 'capacity' !== $exclude || array_key_exists('capacity_max', $override) )
+        && isset($filters['capacity_max'])
+        && absint($filters['capacity_max']) < 100
+    ) {
         $meta_query[] = array(
             'key'     => 'aprop_drone_capacity',
             'value'   => absint($filters['capacity_max']),
@@ -76,8 +84,8 @@ function aprop_drone_filter_count( $current_filters, $exclude = '', $override = 
         'tax_query'      => array(
             array(
                 'taxonomy' => 'product_cat',
-                'field'    => 'slug',
-                'terms'    => array('polnohospodarske-drony'),
+                'field'    => 'term_id',
+                'terms'    => array( aprop_drone_category_id() ),
                 'operator' => 'IN',
             ),
         ),
@@ -331,8 +339,8 @@ function render_drone_products_shortcode() {
         'tax_query'      => array(
             array(
                 'taxonomy' => 'product_cat',
-                'field'    => 'slug',
-                'terms'    => array('polnohospodarske-drony'),
+                'field'    => 'term_id',
+                'terms'    => array( aprop_drone_category_id() ),
                 'operator' => 'IN',
             ),
         ),
