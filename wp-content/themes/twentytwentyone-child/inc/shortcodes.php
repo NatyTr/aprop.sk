@@ -540,19 +540,22 @@ function render_all_products_shortcode() {
     ?>
     <div class="products-grid">
         <?php while ($products->have_posts()): $products->the_post(); global $product; ?>
-            <div class="product-card">
-                <a href="<?php the_permalink(); ?>">
-                    <?php if (has_post_thumbnail()) {
-                        the_post_thumbnail('medium');
-                    } ?>
+            <article class="course-product-card">
+                <a class="course-product-card__link" href="<?php the_permalink(); ?>">
+                    <div class="course-product-card__media">
+                        <?php if (has_post_thumbnail()) {
+                            the_post_thumbnail('large', array('class' => 'course-product-card__image'));
+                        } ?>
+                    </div>
+                    <div class="course-product-card__content">
+                        <h3 class="course-product-card__title"><?php the_title(); ?></h3>
+                        <div class="course-product-card__footer">
+                            <span class="course-product-card__price"><?php echo $product->get_price_html(); ?></span>
+                            <span class="course-product-card__detail">Pozrieť detail</span>
+                        </div>
+                    </div>
                 </a>
-                <div class="product-content">
-                  <span class="price"><?php echo $product->get_price_html(); ?></span>
-                  <a href="<?php echo esc_url( $product->add_to_cart_url() ); ?>" class="btn-circle-icon-white">
-                  </a>
-                  <h4><?php the_title(); ?></h4>
-                </div>
-            </div>
+            </article>
         <?php endwhile; wp_reset_postdata(); ?>
     </div>
     <?php
@@ -635,6 +638,162 @@ function render_kurzy_blok_shortcode() {
     return ob_get_clean();
 }
 add_shortcode('kurzy_blok', 'render_kurzy_blok_shortcode');
+
+function aprop_get_home_courses_slider_products( $page_id ) {
+    $selected_products = (array) get_field( 'home_courses_slider_products', $page_id );
+    $products = array();
+
+    foreach ( $selected_products as $selected_product ) {
+        if ( $selected_product instanceof WP_Post && 'product' === $selected_product->post_type ) {
+            $products[] = $selected_product;
+        }
+    }
+
+    return $products;
+}
+
+function aprop_get_home_courses_slider_data() {
+    $page_id = aprop_get_homepage_id();
+
+    if ( ! $page_id ) {
+        return array(
+            'title' => '',
+            'button_text' => '',
+            'button_url' => '',
+            'products' => array(),
+        );
+    }
+
+    return array(
+        'title' => get_field( 'home_courses_slider_title', $page_id ),
+        'button_text' => get_field( 'home_courses_slider_button_text', $page_id ),
+        'button_url' => get_field( 'home_courses_slider_button_url', $page_id ),
+        'products' => aprop_get_home_courses_slider_products( $page_id ),
+    );
+}
+
+function render_home_courses_slider_shortcode() {
+    $section = aprop_get_home_courses_slider_data();
+
+    if ( empty( $section['products'] ) ) {
+        return '';
+    }
+
+    $section_id = 'home-courses-slider-' . wp_unique_id();
+
+    ob_start();
+    ?>
+    <section id="<?php echo esc_attr( $section_id ); ?>" class="home-courses-slider">
+        <div class="home-courses-slider__header">
+            <?php if ( ! empty( $section['title'] ) ) : ?>
+                <h2 class="home-courses-slider__title"><?php echo esc_html( $section['title'] ); ?></h2>
+            <?php endif; ?>
+
+            <?php if ( ! empty( $section['button_text'] ) && ! empty( $section['button_url'] ) ) : ?>
+                <a class="home-courses-slider__all-link btn-primary btn-black btn-icon" href="<?php echo esc_url( $section['button_url'] ); ?>">
+                    <?php echo esc_html( $section['button_text'] ); ?>
+                </a>
+            <?php endif; ?>
+        </div>
+
+        <div class="home-courses-slider__track">
+            <?php foreach ( $section['products'] as $selected_product ) : ?>
+                <?php
+                    $product = wc_get_product( $selected_product->ID );
+
+                    if ( ! $product ) {
+                        continue;
+                    }
+                ?>
+                <article class="course-product-card">
+                    <a class="course-product-card__link" href="<?php echo esc_url( get_permalink( $selected_product->ID ) ); ?>">
+                        <div class="course-product-card__media">
+                            <?php echo get_the_post_thumbnail( $selected_product->ID, 'large', array( 'class' => 'course-product-card__image' ) ); ?>
+                        </div>
+                        <div class="course-product-card__content">
+                            <h3 class="course-product-card__title"><?php echo esc_html( get_the_title( $selected_product->ID ) ); ?></h3>
+                            <div class="course-product-card__footer">
+                                <span class="course-product-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
+                                <span class="course-product-card__detail">Pozrieť detail</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="home-courses-slider__footer">
+            <div class="home-courses-slider__arrows">
+                <button type="button" class="modern-agro-slider__arrow modern-agro-slider__arrow--prev" aria-label="Predchádzajúci kurz"></button>
+                <button type="button" class="modern-agro-slider__arrow modern-agro-slider__arrow--next" aria-label="Nasledujúci kurz"></button>
+            </div>
+            <div class="home-courses-slider__progress"><span></span></div>
+        </div>
+
+        <script>
+        jQuery(function ($) {
+            var section = $('#<?php echo esc_js( $section_id ); ?>');
+            var track = section.find('.home-courses-slider__track');
+
+            if (!track.length || track.hasClass('slick-initialized') || typeof $.fn.slick !== 'function') {
+                return;
+            }
+
+            if (track.children().length <= 1) {
+                section.find('.home-courses-slider__footer').hide();
+                return;
+            }
+
+            function updateProgress(slick, currentSlide) {
+                var slidesToShow = slick.options.slidesToShow;
+
+                if (typeof slidesToShow !== 'number') {
+                    slidesToShow = 1;
+                }
+
+                var totalSlides = slick.slideCount;
+                var current = currentSlide || 0;
+                var maxSteps = Math.max(totalSlides - Math.ceil(slidesToShow), 1);
+                var progress = totalSlides <= slidesToShow ? 100 : Math.max((current / maxSteps) * 100, 10);
+
+                section.find('.home-courses-slider__progress span').css('width', progress + '%');
+            }
+
+            track.on('init reInit afterChange', function (event, slick, currentSlide) {
+                updateProgress(slick, currentSlide);
+            });
+
+            track.slick({
+                slidesToShow: 3.2,
+                slidesToScroll: 1,
+                infinite: false,
+                arrows: true,
+                dots: false,
+                prevArrow: section.find('.modern-agro-slider__arrow--prev'),
+                nextArrow: section.find('.modern-agro-slider__arrow--next'),
+                responsive: [
+                    {
+                        breakpoint: 1100,
+                        settings: {
+                            slidesToShow: 2.1
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 1.1
+                        }
+                    }
+                ]
+            });
+        });
+        </script>
+    </section>
+    <?php
+
+    return ob_get_clean();
+}
+add_shortcode( 'home_courses_slider', 'render_home_courses_slider_shortcode' );
 
   //Ako to funguje? How it works
   function render_benefity_slider_shortcode() {
