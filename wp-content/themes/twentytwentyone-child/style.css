@@ -712,7 +712,8 @@ header .container .header-container .header-tools .btn-green-icon:before {
 }
 @media (max-width: 1600px) {
   header .container .header-container .header-tools .btn-green-icon {
-    min-height: 36px;
+    min-height: unset;
+    height: fit-content;
     padding-left: 12px;
     font-size: 16px;
     line-height: 18px;

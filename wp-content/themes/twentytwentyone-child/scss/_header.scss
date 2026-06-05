@@ -232,7 +232,8 @@ header{
         }
         @media(max-width: 1600px){
           .btn-green-icon{
-            min-height: 36px;
+            min-height: unset;
+            height: fit-content;
             padding-left: 12px;
             font-size: 16px;
             line-height: 18px;
