@@ -20,7 +20,7 @@ add_action('wp_enqueue_scripts', 'my_child_theme_enqueue_assets');
 wp_enqueue_style( 'custom-style', get_stylesheet_uri(), [], filemtime( get_stylesheet_directory() . '/style.css' ) );
 
 
-add_filter('show_admin_bar', '__return_false');
+//add_filter('show_admin_bar', '__return_false');
 
 require_once get_stylesheet_directory() . '/inc/shortcodes.php';
 require_once get_stylesheet_directory() . '/inc/drones.php';
@@ -1256,3 +1256,30 @@ function aprop_install_homepage_secondary_hero_acf_fields() {
 
     update_option( 'aprop_home_secondary_hero_fields_installed', 1, false );
 }
+
+
+add_action('woocommerce_product_query', function($q) {
+
+    if (is_admin()) {
+        return;
+    }
+
+    $term = get_term_by('slug', 'drony-new', 'product_cat');
+
+    if (!$term) {
+        return;
+    }
+
+    $tax_query = (array) $q->get('tax_query');
+
+    $tax_query[] = [
+        'taxonomy'         => 'product_cat',
+        'field'            => 'term_id',
+        'terms'            => [$term->term_id],
+        'operator'         => 'NOT IN',
+        'include_children' => true,
+    ];
+
+    $q->set('tax_query', $tax_query);
+
+});

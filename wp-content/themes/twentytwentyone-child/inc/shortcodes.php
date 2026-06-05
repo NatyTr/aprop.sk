@@ -562,7 +562,6 @@ add_shortcode('all_products', 'render_all_products_shortcode');
 
 //block with products
 function render_kurzy_blok_shortcode() {
-    // Získať ACF polia zo stránky "Domov"
     $home_page = get_page_by_path('domov');
     $home_id = $home_page ? $home_page->ID : null;
 
@@ -570,27 +569,49 @@ function render_kurzy_blok_shortcode() {
     $courses_title = get_field('courses-title', $home_id);
     $courses_text  = get_field('courses-text', $home_id);
 
+    // filter pre [all_products]
+    $exclude_drony_new = function ($query) {
+        if (is_admin() || !$query->is_main_query() && empty($query->query_vars['post_type'])) {
+            // necháme pokračovať, ale neblokujeme custom query úplne
+        }
+
+        $tax_query = (array) $query->get('tax_query');
+
+        $tax_query[] = [
+            'taxonomy'         => 'product_cat',
+            'field'            => 'slug',
+            'terms'            => ['drony-new'],
+            'operator'         => 'NOT IN',
+            'include_children' => true, // vylúči aj produkty v child kategóriách
+        ];
+
+        $query->set('tax_query', $tax_query);
+    };
+
+    add_action('pre_get_posts', $exclude_drony_new);
+
     ob_start();
     ?>
     <div class="courses-block">
         <div class="courses-header">
-          <div>
-            <?php if ($courses_label): ?>
-                <span class="btn-primary label"><?php echo esc_html($courses_label); ?></span>
-            <?php endif; ?>
-            <?php if ($courses_title): ?>
-                <h2 class="courses-title"><?php echo esc_html($courses_title); ?></h2>
-            <?php endif; ?>
-            <?php if ($courses_text): ?>
-                <div class="courses-text-mobile">
-                    <?php echo wpautop(wp_kses_post($courses_text)); ?>
-                </div>
-            <?php endif; ?>
+            <div>
+                <?php if ($courses_label): ?>
+                    <span class="btn-primary label"><?php echo esc_html($courses_label); ?></span>
+                <?php endif; ?>
 
-          </div>
+                <?php if ($courses_title): ?>
+                    <h2 class="courses-title"><?php echo esc_html($courses_title); ?></h2>
+                <?php endif; ?>
+
+                <?php if ($courses_text): ?>
+                    <div class="courses-text-mobile">
+                        <?php echo wpautop(wp_kses_post($courses_text)); ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+
             <a href="/sluzby" class="btn-primary btn-black btn-icon">Pozrieť všetky</a>
         </div>
-
 
         <div class="courses-product-list">
             <?php echo do_shortcode('[all_products]'); ?>
@@ -601,17 +622,19 @@ function render_kurzy_blok_shortcode() {
                 <?php echo wpautop(wp_kses_post($courses_text)); ?>
                 <a href="/sluzby" class="btn-primary btn-black btn-icon btn-mobile">Pozrieť všetky</a>
                 <div class="slider-nav">
-                  <button id="slider-prev" class="slick-prev">‹</button>
-                  <button id="slider-next" class="slick-next">›</button>
+                    <button id="slider-prev" class="slick-prev">‹</button>
+                    <button id="slider-next" class="slick-next">›</button>
                 </div>
             </div>
         <?php endif; ?>
     </div>
     <?php
+
+    remove_action('pre_get_posts', $exclude_drony_new);
+
     return ob_get_clean();
 }
 add_shortcode('kurzy_blok', 'render_kurzy_blok_shortcode');
-
 
   //Ako to funguje? How it works
   function render_benefity_slider_shortcode() {
@@ -759,7 +782,7 @@ function render_package_products_shortcode() {
                 <div class="package-product__content">
                     <a href="<?php echo esc_url($permalink); ?>" class="package-product__link">
                         <h3><?php the_title(); ?></h3>
-                        
+
                     </a>
                 </div>
 
