@@ -1,0 +1,61 @@
+.didnt-find-banner{
+  max-width: 1900px;
+  width: 100%;
+  margin: 0px auto;
+  padding: 0px 50px !important;
+  border-radius: 32px;
+  margin-bottom: 80px;
+  aspect-ratio: 1890/928;
+  display: flex;
+  .banner-container{
+    background-color: white;
+    max-width: 70%;
+    width: 100%;
+    margin: auto;
+    aspect-ratio: 1000/600;
+    border-radius: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .label{
+      margin: 0px auto 32px auto !important;
+    }
+    h2{
+      margin: 0px auto;
+      text-align: center;
+      margin-bottom: 40px;
+      max-width: 600px;
+    }
+    p{
+      margin: 0px auto;
+      text-align: center;
+      margin-bottom: 48px;
+      max-width: 600px;
+    }
+    .btn-primary{
+      margin: 0px auto;
+      &:hover{
+        border-color: $black;
+      }
+    }
+    @media(max-width: 767px){
+      max-width: 100%;
+      aspect-ratio: 800/700;
+      padding: 15px;
+      .label{
+        margin-bottom: 15px !important;
+      }
+      h2{
+        margin-bottom: 15px;
+      }
+      p{
+        margin-bottoM: 20px;
+      }
+    }
+  }
+  @media(max-width: 767px){
+    padding: 0px 24px !important;
+    aspect-ratio: 900/1028;
+    margin-bottom: 40px;
+  }
+}

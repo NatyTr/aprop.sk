@@ -1,0 +1,183 @@
+.faq-answer {
+  display: none;
+}
+
+.faq-item.open .faq-answer {
+  display: flex;
+}
+
+.collaboration-container{
+  display: flex;
+  justify-content: space-between;
+  @media(max-width: 767px){
+    flex-direction: column;
+    row-gap: 30px;
+  }
+  .collaboration-intro{
+    width: 45%;
+    padding-right: 60px;
+    .label{
+      margin-bottom: 24px;
+    }
+    h2{
+      margin-bottom: 40px;
+    }
+    @media(max-width: 991px){
+      padding-right: 30px;
+      width: 40%;
+    }
+    @media(max-width: 767px){
+      width: 100%;
+      .label{
+        margin-bottom: 12px;
+      }
+    }
+  }
+  .collaboration-faqs{
+    width: 55%;
+    .faq-item{
+      border-top: 1px solid #00000026;
+      padding: 40px 0px;
+      @media(max-width: 1299px){
+        padding: 25px 0px;
+      }
+      @media(max-width: 991px){
+        padding: 15px 0px;
+      }
+      .faq-question{
+        border: 0px;
+        background: transparent;
+        color: black;
+        font-size: 44px;
+        line-height: 42px;
+        font-weight: 500;
+        padding: 0px;
+        padding-right: 80px;
+        position: relative;
+        width: 100%;
+        text-align: left;
+        position: relative;
+        padding-left: 65px;
+        span{
+          color: black;
+          color: #00000080;
+          font-size: 32px;
+          line-height: normal;
+          font-weight: 400;
+          position: absolute;
+          left: 0px;
+          top: calc(50% - 15px);
+        }
+        &:focus{
+          outline: none;
+        }
+        &:before{
+          content: "";
+          background-image: url('./images/circle-arrow.svg');
+          width: 70px;
+          height: 70px;
+          position: absolute;
+          background-repeat: no-repeat;
+          background-size: contain;
+          right: 0px;
+          top: calc(50% - 35px);
+        }
+        @media(max-width: 1299px){
+          font-size: 35px;
+          line-height: 37px;
+          &:before{
+            width: 44px;
+            height: 44px;
+            top: calc(50% - 22px);
+          }
+        }
+        @media(max-width: 991px){
+          font-size: 24px;
+          line-height: 28px;
+        }
+        @media(max-width: 767px){
+          font-size: 24px;
+          line-height: 24px;
+          padding: 0px 30px 0px 30px;
+          &:before{
+            width: 25px;
+            height: 25px;
+            top: calc(50% - 12.5px);
+
+          }
+          span{
+            font-size: 14px;
+            line-height: 14px;
+            top: 3px;
+          }
+        }
+      }
+      .faq-answer{
+        justify-content: space-between;
+        column-gap: 40px;
+        margin-top: 24px;
+        padding-left: 65px;
+        &--info{
+          max-width: 453px;
+          width: 100%;
+          p{
+            color: #00000099;
+            margin-bottom: 40px;
+          }
+          .btn-primary{
+            border: 1px solid black;
+          }
+        }
+        .faq-image{
+          border-radius: 32px;
+          img{
+            border-radius: 32px;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            max-width: 270px;
+            max-height: 270px;
+            width: 100%;
+            height: auto;
+          }
+        }
+        @media(max-width: 767px){
+          padding-left: 0px;
+          column-gap: 15px;
+          margin-top: 10px;
+          flex-direction: column-reverse;
+          row-gap: 15px;
+          &--info{
+            p{
+              margin-bottom: 24px;
+            }
+          }
+          .faq-image{
+            img{
+              max-width: unset;
+              border-radius: 18px;
+            }
+          }
+        }
+      }
+      &.open{
+        .faq-question{
+          &:before{
+            content: none;
+          }
+        }
+        .faq-answer{
+          display: flex !important;
+        }
+      }
+      @media(max-width: 767px){
+        padding: 20px 0px 20px 0px;
+      }
+    }
+    @media(max-width: 991px){
+      width: 60%;
+    }
+    @media(max-width: 767px){
+      width: 100%;
+    }
+  }
+}

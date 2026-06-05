@@ -1,0 +1,412 @@
+.courses-block {
+  border-radius: 32px;
+  background-color: $gray-background2;
+  padding: fluid(32, 95) fluid(24, 50);
+
+  @media(max-width: 767px) {
+    padding: 32px 24px;
+    border-radius: 16px;
+  }
+
+  .courses-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: fluid(32, 64);
+
+    div {
+      display: flex;
+      column-gap: 24px;
+
+      .btn-primary {
+        height: fit-content;
+        margin: auto 0;
+      }
+    }
+
+    .courses-text-mobile {
+      display: none;
+    }
+
+    a {
+      height: fit-content;
+      margin: auto 0;
+    }
+
+    @media(max-width: 1600px) {
+      margin-bottom: 40px;
+    }
+
+    @media(max-width: 1099px) {
+      flex-direction: column;
+      margin-bottom: 32px;
+
+      div {
+        flex-direction: column;
+        row-gap: 12px;
+        margin-bottom: 0;
+
+        .courses-text-mobile {
+          display: block;
+          font-weight: 400;
+          margin-bottom: 0;
+        }
+      }
+
+      a {
+        display: none;
+      }
+    }
+  }
+
+  .courses-product-list {
+    .products-grid {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 8px;
+      row-gap: 8px;
+      margin-bottom: fluid(28, 70);
+
+      .product-card {
+        width: calc(25% - 6px);
+        border-radius: 33px;
+        aspect-ratio: 439/550;
+        height: 100%;
+        position: relative;
+        display: inline-table;
+        overflow: hidden;
+
+        a {
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          width: 100%;
+          height: 100%;
+          img {
+            border-radius: 33px;
+            width: 100%;
+            max-width: unset !important;
+            height: 100% !important;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+          }
+          &:focus{
+            background: transparent !important;
+          }
+        }
+
+        .product-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          border-radius: 25px;
+          position: absolute;
+          bottom: 10px;
+          width: calc(100% - 20px);
+          left: 10px;
+          -webkit-backdrop-filter: blur(52px);
+          background: rgba(255, 255, 255, 0.10);
+          backdrop-filter: blur(52.42px);
+          padding: 16px;
+
+          .price {
+            font-size: fluid(14, 25);
+            line-height: normal;
+            font-weight: 600;
+            letter-spacing: -0.503px;
+            color: white;
+            display: block;
+            margin-bottom: fluid(10, 20);
+            min-height: 20px;
+          }
+
+          .btn-circle-icon-white {
+            position: absolute;
+            top: fluid(10, 20);
+            right: fluid(10, 20);
+            width: fluid(30, 40);
+            height: fluid(30, 40);
+            left: unset;
+
+            &:before {
+              width: fluid(13, 16);
+              height: fluid(13, 15);
+              top: calc(50% - fluid(6.5, 7.5));
+              left: calc(50% - fluid(6.5, 8));
+            }
+          }
+
+          h4 {
+            color: white;
+          }
+        }
+        &:hover{
+          a{
+            img{
+              transform: scale(1.05);
+            }
+          }
+        }
+      }
+    }
+
+    @media(max-width: 1600px) {
+      .products-grid {
+        .product-card {
+          .product-content {
+            padding: 15px;
+
+            .price {
+              font-size: 22px;
+              line-height: 28px;
+              margin-bottom: 15px;
+            }
+
+            .btn-circle-icon-white {
+              width: 30px;
+              height: 30px;
+              top: 10px;
+              right: 10px;
+
+              &:before {
+                width: 13px;
+                height: 13px;
+                top: calc(50% - 6.5px);
+                left: calc(50% - 6.5px);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    @media(max-width: 1099px) {
+      .products-grid {
+        .product-card {
+          width: calc((100% / 3) - 6px);
+        }
+      }
+    }
+
+    @media(max-width: 991px) {
+      .products-grid {
+        .product-card {
+          width: calc(50% - 6px);
+        }
+      }
+    }
+
+    @media(max-width: 767px) {
+      .products-grid {
+        .product-card {
+          margin-right: 4px;
+          border-radius: 16px;
+          aspect-ratio: 237 / 297;
+
+          a {
+            img {
+              border-radius: 16px;
+            }
+          }
+
+          .product-content {
+            border-radius: 12px;
+            padding: 10px;
+            bottom: 5px;
+            width: calc(100% - 10px);
+            left: 5px;
+
+            .price {
+              font-size: 14px;
+              line-height: normal;
+              letter-spacing: -0.28px;
+              margin-bottom: 10px;
+            }
+          }
+        }
+      }
+
+      .products-grid {
+        margin-bottom: 28px;
+      }
+    }
+  }
+
+  .courses-text {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+
+    p {
+      max-width: 1000px;
+      width: 100%;
+      text-align: right;
+      font-size: fluid(14, 24);
+      line-height: normal;
+      font-weight: 300;
+    }
+
+    .btn-mobile {
+      display: none;
+    }
+
+    .slider-nav {
+      display: none;
+    }
+
+    @media(max-width: 1600px) {
+      p {
+        font-size: 20px;
+      }
+    }
+
+    @media(max-width: 1099px) {
+      display: flex;
+      justify-content: flex-start;
+
+      p {
+        display: none;
+      }
+
+      .btn-mobile {
+        display: block;
+      }
+    }
+
+    @media(max-width: 767px) {
+      .slider-nav {
+        display: block;
+      }
+    }
+  }
+  @media(max-width: 767px){
+    width: 100vw !important;
+    margin-left: -24px;
+  }
+}
+
+
+
+
+
+.slider-nav{
+  .slick-prev{
+    position: absolute;
+    bottom: 0px;
+    top: unset;
+    display: block;
+    width: 70px;
+    height: 70px;
+    background: transparent !important;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 9;
+    right: 120px;
+    left: unset;
+    border: 1px solid black;
+
+    &:before {
+      content: "";
+      background-image: url('./images/arrow-black.svg');
+      width: 20px;
+      height: 18px;
+      background-repeat: no-repeat;
+      background-size: contain;
+      position: absolute;
+      top: calc(50% - 9px);
+      left: calc(50% - 10px);
+      transition: transform 0.3s ease;
+      transform: rotate(225deg) scale(1.1);
+    }
+
+    &:hover{
+      background-color: white;
+    }
+
+    &:hover:before {
+      background-image: url('./images/arrow-black.svg');
+    }
+    @media(max-width: 767px){
+      width: 30px;
+      height: 30px;
+      &:before{
+        width: 9px;
+        height: 8px;
+        top: calc(50% - 4px);
+        left: calc(50% - 4.5px);
+      }
+    }
+    @media(max-width: 1600px){
+      width: 40px;
+      height: 40px;
+      right: 70px;
+    }
+    @media(max-width: 767px){
+      width: 32px;
+      height: 32px;
+      right: 60px;
+      bottom: -10px;
+    }
+  }
+
+  .slick-next{
+    position: absolute;
+    bottom: 0px;
+    top: unset;
+    display: block;
+    width: 70px;
+    height: 70px;
+    background: transparent !important;
+    font-size: 0px;
+    line-height: 0px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 9;
+    right: 33px;
+    left: unset;
+    border: 1px solid black;
+
+    &:before {
+      content: "";
+      background-image: url('./images/arrow-black.svg');
+      width: 20px;
+      height: 18px;
+      background-repeat: no-repeat;
+      background-size: contain;
+      position: absolute;
+      top: calc(50% - 9px);
+      left: calc(50% - 10px);
+      transition: transform 0.3s ease;
+      transform: rotate(45deg) scale(1.1);
+    }
+
+    &:hover{
+      background-color: white;
+    }
+
+    &:hover:before {
+      background-image: url('./images/arrow-black.svg');
+    }
+    @media(max-width: 767px){
+      width: 30px;
+      height: 30px;
+      &:before{
+        width: 9px;
+        height: 8px;
+        top: calc(50% - 4px);
+        left: calc(50% - 4.5px);
+      }
+    }
+    @media(max-width: 1600px){
+      width: 40px;
+      height: 40px;
+      right: 20px;
+    }
+    @media(max-width: 767px){
+      width: 32px;
+      height: 32px;
+      right: 10px;
+      bottom: -10px;
+    }
+  }
+}

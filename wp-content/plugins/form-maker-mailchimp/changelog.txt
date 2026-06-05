@@ -1,0 +1,42 @@
+1.1.9
+*  Fixed: Bug on forms containing quotes in a field label that breaks form options page.
+
+1.1.8
+*  Fixed: Minor bug.
+
+1.1.7
+*  Added: Multisite support.
+
+1.1.6
+*  Added: Compatibility with Form Maker version 2.13.0.
+*  Fixed: Duplicate add-on data when duplicating a form.
+
+1.1.5
+*  Changed: Mailchimp address field.
+*  Added: Output from MailChimp add-on.
+*  Fixed: Minor bugs on MailChimp API v3.0 integration.
+
+1.1.4
+*  Changed: Integration with Mailchimp API version 3.0.
+
+1.1.3
+*  Changed: Field validation.
+
+1.1.2
+*  Added: Set a default values for function parameters.
+
+1.1.2
+*  Added: Loading in Options page
+*  Added: Validation - Mailchimp list is required
+
+1.1.1
+*  Added: Descriptions for options
+
+1.1.0
+*  Fixed: Compatibility with Form Maker 1.12.x and 2.12.x
+
+1.0.1
+*  Fixed: Bug in firefox
+
+1.0.0
+*  Initial version

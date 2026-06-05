@@ -1,0 +1,118 @@
+.kontakt-section{
+  max-width: 576px;
+  width: 100%;
+  margin: 0px auto;
+  .label{
+    margin: 0px auto 8px auto;
+  }
+  h2{
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  p{
+    text-align: center;
+    padding-bottom: 40px;
+  }
+  form{
+    p{
+      padding-bottom: 24px;
+      label{
+        font-size: 18px;
+        line-height: 20px;
+        letter-spacing: -0.9px;
+        display: block;
+        text-align: left;
+        span{
+          input,
+          textarea{
+            width: 100%;
+            margin-top: 10px;
+            background-color: $gray-background2;
+            border: 1px solid $gray-background2;
+            border-radius: 16px;
+            color: $black;
+            padding: 18px;
+            font-size: 16px;
+            line-height: 17px;
+            &::placeholder{
+              color: #00000080;
+            }
+            &:focus{
+              outline: none;
+              border-color: #00000080;
+            }
+          }
+        }
+      }
+    }
+    .wpcf7-submit{
+      width: 100%;
+      border-radius: 1000px;
+      font-size: 18px;
+      line-height: normal;
+      font-weight: 600;
+      border: 1px solid black;
+      &:hover{
+        background: transparent;
+        color: black;
+      }
+      &:focus{
+        outline: none !important;
+      }
+    }
+    .wpcf7-acceptance{
+      input{
+        border: 1px solid black;
+        border-radius: 3px;
+        margin-right: 4px;
+        width: 15px;
+        height: 15px;
+        &:focus{
+          outline: none !important;
+        }
+      }
+      .wpcf7-list-item-label{
+        color: #00000080;
+        font-size: 18px;
+        line-height: 19px;
+        a{
+          &:hover{
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+  @media(max-width: 767px){
+    .label{
+      margin-bottom: 12px;
+    }
+    h2{
+      margin-bottom: 12px;
+    }
+    .kontakt-text{
+      margin-bottom: 20px;
+      padding-bottom: 0px;
+    }
+    form{
+      p{
+        padding-bottom: 15px;
+        label{
+          font-size: 14px;
+          line-height: 15px;
+          font-weight: 500;
+          span{
+            input,
+            textarea{
+              border-radius: 8px;
+              padding: 11px 9px;
+              font-size: 12px;
+              line-height: 13px;
+
+            }
+          }
+        }
+      }
+    }
+  }
+}

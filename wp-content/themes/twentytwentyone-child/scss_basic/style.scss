@@ -1,0 +1,39 @@
+@import 'variables';
+@import 'typography';
+@import 'header';
+@import 'title-banner';
+@import 'pillars';
+@import 'courses';
+@import 'benefits';
+@import 'package-products';
+@import 'partners';
+@import 'posts';
+@import 'footer';
+
+.page .entry-content > .elementor{
+  max-width: unset !important;
+}
+
+.site-content .entry-content{
+  margin-top: 13px;
+  @media(max-width: 1099px){
+    margin-top: 0px;
+  }
+}
+
+body.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+body{
+  padding: 0px 15px !important;
+  @media(max-width: 767px){
+    padding: 0px !important;
+  }
+}
+
+.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) img{
+  outline: none !important;
+}

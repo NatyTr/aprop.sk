@@ -1,0 +1,281 @@
+# Translation of Themes - Twenty Twenty-Three in Slovak
+# This file is distributed under the same license as the Themes - Twenty Twenty-Three package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-11-24 09:04:21+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n >= 2 && n <= 4) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: sk\n"
+"Project-Id-Version: Themes - Twenty Twenty-Three\n"
+
+#. Theme Name of the theme
+#: style.css
+#, gp-priority: high
+msgid "Twenty Twenty-Three"
+msgstr "Twenty Twenty-Three"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr "Pätička"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr "Hlavička"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "404"
+msgstr "404"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog (Alternative)"
+msgstr "Blog (alternatívny)"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blank"
+msgstr "Prázdna"
+
+#: styles/pitch.json
+msgctxt "Font size name"
+msgid "Extra Large"
+msgstr "Extra veľké"
+
+#: styles/pitch.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr "Veľké"
+
+#: styles/pitch.json
+msgctxt "Font size name"
+msgid "2X Large"
+msgstr "Veľké 2X"
+
+#: styles/pitch.json
+msgctxt "Space size name"
+msgid "7"
+msgstr "7"
+
+#: styles/pitch.json
+msgctxt "Font size name"
+msgid "small"
+msgstr "malé"
+
+#: styles/pitch.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr "Stredné"
+
+#: styles/marigold.json
+msgctxt "Font size name"
+msgid "Gigantic"
+msgstr "Gigantické"
+
+#: styles/marigold.json
+msgctxt "Font size name"
+msgid "Huge"
+msgstr "Obrovské"
+
+#: styles/marigold.json
+msgctxt "Font size name"
+msgid "Normal"
+msgstr "Normálne"
+
+#: styles/marigold.json
+msgctxt "Font size name"
+msgid "Tiny"
+msgstr "Maličké"
+
+#: styles/marigold.json styles/pitch.json theme.json
+msgctxt "Space size name"
+msgid "6"
+msgstr "6"
+
+#: styles/marigold.json styles/pitch.json theme.json
+msgctxt "Space size name"
+msgid "5"
+msgstr "5"
+
+#: styles/marigold.json styles/pitch.json theme.json
+msgctxt "Space size name"
+msgid "4"
+msgstr "4"
+
+#: styles/marigold.json styles/pitch.json theme.json
+msgctxt "Space size name"
+msgid "3"
+msgstr "3"
+
+#: styles/marigold.json styles/pitch.json theme.json
+msgctxt "Space size name"
+msgid "2"
+msgstr "2"
+
+#: styles/marigold.json styles/pitch.json theme.json
+msgctxt "Space size name"
+msgid "1"
+msgstr "1"
+
+#: styles/block-out.json styles/canary.json styles/pilgrimage.json
+#: styles/sherbet.json
+msgctxt "Duotone name"
+msgid "Default filter"
+msgstr "Predvolený filter"
+
+#: styles/aubergine.json styles/block-out.json styles/canary.json
+#: styles/electric.json styles/grapes.json styles/marigold.json
+#: styles/pilgrimage.json styles/pitch.json styles/sherbet.json
+#: styles/whisper.json theme.json
+msgctxt "Color name"
+msgid "Secondary"
+msgstr "Sekundárna"
+
+#: styles/aubergine.json styles/block-out.json styles/canary.json
+#: styles/electric.json styles/grapes.json styles/marigold.json
+#: styles/pilgrimage.json styles/pitch.json styles/sherbet.json
+#: styles/whisper.json theme.json
+msgctxt "Color name"
+msgid "Tertiary"
+msgstr "Terciárna"
+
+#: styles/aubergine.json styles/block-out.json styles/canary.json
+#: styles/electric.json styles/grapes.json styles/marigold.json
+#: styles/pilgrimage.json styles/pitch.json styles/sherbet.json
+#: styles/whisper.json theme.json
+msgctxt "Color name"
+msgid "Primary"
+msgstr "Primárna"
+
+#: styles/aubergine.json styles/block-out.json styles/canary.json
+#: styles/electric.json styles/grapes.json styles/marigold.json
+#: styles/pilgrimage.json styles/pitch.json styles/sherbet.json
+#: styles/whisper.json theme.json
+msgctxt "Color name"
+msgid "Contrast"
+msgstr "Kontrastná"
+
+#: styles/aubergine.json styles/block-out.json styles/canary.json
+#: styles/electric.json styles/grapes.json styles/marigold.json
+#: styles/pilgrimage.json styles/pitch.json styles/sherbet.json
+#: styles/whisper.json theme.json
+msgctxt "Color name"
+msgid "Base"
+msgstr "Základná"
+
+#: patterns/post-meta.php:65
+msgctxt "Label for a list of post tags"
+msgid "Tags:"
+msgstr "Značky:"
+
+#: patterns/post-meta.php:49
+msgctxt "Preposition to show the relationship between the post and its author"
+msgid "by"
+msgstr "od"
+
+#: patterns/post-meta.php:37
+msgctxt "Preposition to show the relationship between the post and its categories"
+msgid "in"
+msgstr "v"
+
+#: patterns/call-to-action.php
+msgctxt "Pattern title"
+msgid "Call to action"
+msgstr "Výzva do akcie"
+
+#: patterns/hidden-404.php:13
+msgctxt "Error code for a webpage that is not found."
+msgid "404"
+msgstr "404"
+
+#: patterns/hidden-404.php:22 patterns/hidden-no-results.php:14
+msgctxt "label"
+msgid "Search"
+msgstr "Hľadať"
+
+#: patterns/hidden-404.php:22 patterns/hidden-no-results.php:14
+msgctxt "placeholder for search field"
+msgid "Search..."
+msgstr "Hľadať..."
+
+#: patterns/hidden-404.php:22 patterns/hidden-no-results.php:14
+msgid "Search"
+msgstr "Vyhľadávanie"
+
+#: patterns/hidden-404.php:19
+msgctxt "Message to convey that a webpage could not be found"
+msgid "This page could not be found."
+msgstr "Stránku sa nepodarilo nájsť."
+
+#: patterns/hidden-404.php
+msgctxt "Pattern title"
+msgid "Hidden 404"
+msgstr "Skrytá 404"
+
+#. Translators: WordPress link.
+#: patterns/footer-default.php:20
+msgid "Proudly powered by %s"
+msgstr "Používa technológiu %s"
+
+#: patterns/footer-default.php
+msgctxt "Pattern title"
+msgid "Default Footer"
+msgstr "Prevolená pätička"
+
+#: patterns/call-to-action.php:25
+msgctxt "sample content for call to action button"
+msgid "Get In Touch"
+msgstr "Kontaktujte nás"
+
+#: patterns/call-to-action.php:16
+msgctxt "sample content for call to action"
+msgid "Got any book recommendations?"
+msgstr "Odporučili by ste nejaké knihy?"
+
+#: patterns/hidden-comments.php
+msgctxt "Pattern title"
+msgid "Hidden Comments"
+msgstr "Skryté komentáre"
+
+#: patterns/hidden-comments.php:13
+msgctxt "Title of comments section"
+msgid "Comments"
+msgstr "Komentáre"
+
+#: patterns/post-meta.php:29
+msgctxt "Verb to explain the publication status of a post"
+msgid "Posted"
+msgstr "Publikovaný"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Post Meta"
+msgstr "Metadáta príspevku"
+
+#: patterns/post-meta.php
+msgctxt "Pattern title"
+msgid "Post Meta"
+msgstr "Metadáta článku"
+
+#. Author of the theme
+#: style.css
+#, gp-priority: low
+msgid "the WordPress team"
+msgstr "WordPress tím"
+
+#. Author URI of the theme
+#: style.css patterns/footer-default.php:21
+#, gp-priority: low
+msgid "https://wordpress.org"
+msgstr "https://wordpress.org"
+
+#. Theme URI of the theme
+#: style.css
+#, gp-priority: low
+msgid "https://wordpress.org/themes/twentytwentythree"
+msgstr "https://wordpress.org/themes/twentytwentythree"

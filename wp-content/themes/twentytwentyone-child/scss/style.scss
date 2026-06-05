@@ -1,0 +1,171 @@
+@import 'variables';
+@import 'typography';
+@import 'header';
+@import 'title-banner';
+@import 'pillars';
+@import 'courses';
+@import 'benefits';
+@import 'package-products';
+@import 'partners';
+@import 'posts';
+@import 'footer';
+@import 'collaboration';
+@import 'industries';
+@import 'services';
+@import 'contact';
+@import 'product-categories';
+@import 'didnt-find';
+@import 'product-detail';
+@import 'drones';
+@import 'cart';
+@import 'checkout';
+@import 'blog';
+@import 'article-detail';
+@import 'courses-table';
+
+.page .entry-content > .elementor{
+  max-width: unset !important;
+}
+
+.site-content .entry-content{
+  margin-top: 13px;
+  @media(max-width: 1099px){
+    margin-top: 0px;
+  }
+}
+
+body.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+body{
+  padding: 0px 15px !important;
+  @media(max-width: 767px){
+    padding: 0px !important;
+  }
+}
+
+.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) img{
+  outline: none !important;
+}
+
+
+.show-on-mobile{
+  @media(min-width: 1100px){
+    display: none !important;
+  }
+}
+
+.show-on-desktop{
+  @media(max-width: 1099px){
+    display: none !important;
+  }
+}
+
+.wp-singular{
+  .entry-header {
+    display: none;
+  }
+}
+
+body {
+  overflow-x: hidden;
+  position: relative !important;
+}
+#page{
+  position: relative;
+  max-width: 1890px;
+  margin: 0px auto;
+}
+html{
+  box-sizing: border-box;
+}
+
+
+
+.page-obchodne-podmienky .site-content,
+.privacy-policy .site-content{
+  h1,
+  p,
+  h2,
+  h3,
+  h4,
+  h5,
+  a,
+  span,
+  ul,
+  ol{
+    max-width: 1000px !important;
+    width: 100% !important;
+  }
+}
+
+
+.search{
+  .site-content{
+    max-width: 1000px;
+    margin: 0px auto;
+    padding-left: 50px;
+    padding-right: 50px;
+
+  }
+  .page-header{
+    position: relative;
+    border-bottom: none;
+    padding-bottom: 0px;
+    h1{
+      text-align: center;
+      padding-bottom: 0px;
+    }
+  }
+  .search-result-count{
+    margin-top: 30px;
+    margin-bottom: 50px;
+    font-weight: 600;
+  }
+  article{
+    margin-bottom: 50px;
+    header{
+      position: relative;
+    }
+    h2,
+    p{
+      max-width: unset;
+    }
+    .entry-content{
+      p{
+        max-width: unset !important;
+      }
+    }
+  }
+  .page-content{
+    .search-form{
+      display: flex;
+      column-gap: 10px;
+      > label{
+        display: none;
+      }
+      input{
+        border-radius: 1000px;
+        border: 1px solid black;
+        background: transparent;
+        margin: 0px;
+        color: black;
+        &::placeholder{
+          color: white;
+        }
+        &:focus{
+          outline: none !important;
+        }
+      }
+    }
+  }
+
+}
+
+
+body.page-drony{
+  background-color: $gray !important;
+}

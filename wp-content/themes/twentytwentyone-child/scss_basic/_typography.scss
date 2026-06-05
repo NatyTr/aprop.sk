@@ -1,0 +1,291 @@
+
+// Vytvára clamp() medzi 767px a 1920px šírkou
+@function fluid($min, $max, $min-vw: 767, $max-vw: 1920) {
+  $slope: ($max - $min) / ($max-vw - $min-vw) * 100;
+  $base: $min - ($slope * $min-vw / 100);
+  @return clamp(#{$min}px, #{$base}px + #{$slope}vw, #{$max}px);
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('../fonts/GeneralSans-ExtraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('../fonts/GeneralSans-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('../fonts/GeneralSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('../fonts/GeneralSans-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('../fonts/GeneralSans-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('../fonts/GeneralSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+.entry-content,
+body {
+  font-family: 'General Sans', sans-serif !important;
+}
+
+body {
+  h1 {
+    font-size: fluid(32, 88);
+    line-height: fluid(38, 96);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: fluid(24, 64);
+    line-height: fluid(30, 72);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  h3{
+    font-size: fluid(32, 56);
+    line-height: fluid(29, 52);
+    font-weight: 600;
+    letter-spacing: -2.24px;
+  }
+
+  h4 {
+    font-size: fluid(16, 28);
+    line-height: fluid(24, 36);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    font-size: fluid(14, 20);
+    line-height: fluid(20, 30);
+    font-weight: 400;
+  }
+
+  .p-24 {
+    font-size: fluid(14, 24);
+    line-height: fluid(20, 32);
+  }
+}
+
+.btn-primary {
+  font-size: fluid(12, 18);
+  line-height: fluid(16, 24);
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  padding: fluid(10, 12) 14px;
+  border-radius: 100px;
+  border: 1px solid black;
+  display: block;
+  width: fit-content;
+  text-decoration: none;
+
+  &:hover {
+    background: black;
+    color: white;
+  }
+  &.btn-small{
+    padding: 8px 12px;
+    font-size: 16px;
+    line-height: normal;
+    letter-spacing: -0.32px;
+    font-weight: 500;
+    @media(max-width: 767px){
+      font-size: 12px;
+      letter-spacing: -0.24px;
+    }
+  }
+}
+
+.btn-white {
+  background: white;
+  color: black;
+  border-color: white;
+
+  &:hover {
+    background-color: black;
+    border-color: black;
+    color: white;
+  }
+}
+
+.btn-black {
+  background: black;
+  border-color: black;
+  color: white;
+
+  &:hover {
+    background-color: white;
+    border-color: white;
+    color: black;
+  }
+}
+
+.btn-icon {
+  padding-right: fluid(38, 52);
+  position: relative;
+  cursor: pointer;
+      transition: transform 0.3s ease;
+
+  &:before {
+    content: "";
+    background-image: url('./images/arrow-white.svg');
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    right: fluid(15, 17);
+    top: calc(50% - 7.5px);
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: 99;
+  }
+
+  &:after {
+    content: "";
+    background-color: black;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    top: calc(50% - 15px);
+    right: 8px;
+    z-index: 9;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover {
+    &:before {
+      transform: rotate(45deg);
+    }
+  }
+
+  &.btn-white {
+    &:after {
+      background-color: black;
+    }
+    &:hover {
+      &:after {
+        background-color: white;
+      }
+      &:before {
+        background-image: url('./images/arrow-black.svg');
+      }
+    }
+  }
+
+  &.btn-black {
+    &:after {
+      background-color: white;
+    }
+    &:before {
+      background-image: url('./images/arrow-black.svg');
+    }
+    &:hover {
+      &:after {
+        background-color: black;
+      }
+      &:before {
+        background-image: url('./images/arrow-white.svg');
+      }
+    }
+  }
+  @media(max-width: 767px){
+    &:before{
+      width: 10px;
+      height: 10px;
+      top: calc(50% - 5px);
+    }
+    &:after{
+      width: 24px;
+      height: 24px;
+      top: calc(50% - 12px);
+    }
+  }
+}
+
+.btn-circle-icon-white,
+.btn-circle-icon-black {
+  display: block;
+  width: fluid(30, 70);
+  height: fluid(30, 70);
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+
+  &:before {
+    content: "";
+    background-image: url('./images/arrow-black.svg');
+    width: 18px;
+    height: 18px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    top: calc(50% - 9px);
+    left: calc(50% - 9px);
+    transition: transform 0.3s ease;
+  }
+
+  &:hover:before {
+    transform: rotate(45deg);
+  }
+  @media(max-width: 767px){
+    &:before{
+      width: 14px;
+      height: 14px;
+      top: calc(50% - 7px);
+      left: calc(50% - 7px);
+    }
+  }
+}
+
+.btn-circle-icon-black {
+  background: black;
+
+  &:before {
+    background-image: url('./images/arrow-white.svg');
+  }
+}
+
+.btn-circle-icon-white {
+  background: white;
+
+  &:before {
+    background-image: url('./images/arrow-black.svg');
+  }
+}
+
+.label {
+  padding: fluid(6, 8) fluid(10, 12);
+}

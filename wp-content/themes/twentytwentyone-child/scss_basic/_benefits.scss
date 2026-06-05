@@ -1,0 +1,176 @@
+.benefits-block {
+  .benefits-titles {
+    span {
+      margin-bottom: 9px;
+    }
+
+    h2 {
+      margin-bottom: fluid(24, 56);
+    }
+  }
+
+  .benefits-slider {
+    //width: 100vw;
+    position: relative;
+
+    &.is-centered {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .slick-list {
+      padding: 0;
+
+      .slick-track {
+        overflow: hidden;
+
+        .benefit-slide {
+          overflow: hidden;
+          border-radius: 32px;
+          aspect-ratio: 552 / 597;
+          width: 28vw;
+          max-width: 552px;
+          transition: width 0.3s ease, aspect-ratio 0.3s ease;
+          position: relative;
+          background-color: $gray;
+          margin: 0 10px;
+
+          &-content {
+            position: absolute;
+            bottom: fluid(27, 42);
+            left: fluid(30, 50);
+            width: calc(100% - clamp(60px, 6.9vw, 100px));
+            max-width: 454px;
+
+            h3 {
+              color: black;
+              font-size: fluid(28, 48);
+              line-height: fluid(32, 56);
+              font-weight: 600;
+              margin-bottom: 0;
+            }
+
+            p {
+              display: none;
+            }
+          }
+
+          a {
+            display: none;
+          }
+
+          &.is-active {
+            aspect-ratio: 935 / 597;
+            width: 47vw;
+            max-width: 935px;
+
+            .benefit-slide-content {
+              h3 {
+                color: white;
+              }
+
+              p {
+                display: block;
+                margin-top: fluid(15, 32);
+                color: white;
+                font-size: fluid(18, 24);
+                line-height: normal;
+                font-weight: 500;
+              }
+            }
+
+            a {
+              display: block;
+              position: absolute;
+              right: fluid(30, 50);
+              bottom: fluid(27, 42);
+            }
+          }
+
+          @media (max-width: 1099px) {
+            width: 32vw;
+
+            &-content {
+              width: calc(100% - 40px);
+              left: 20px;
+
+              h3 {
+                font-size: 28px;
+                line-height: 32px;
+              }
+            }
+
+            &.is-active {
+              width: 54vw;
+
+              .benefit-slide-content {
+                p {
+                  margin-top: 15px;
+                  font-size: 18px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    @media (max-width: 767px) {
+      display: flex;
+      flex-direction: column;
+      row-gap: 12px;
+      position: relative;
+      width: calc(100vw - 48px);
+
+      .benefit-slide {
+        overflow: hidden;
+        aspect-ratio: 327 / 262;
+        border-radius: 16px;
+        background: $gray;
+        position: relative;
+
+        .benefit-slide-content {
+          position: absolute;
+          bottom: 24px;
+          left: 24px;
+          width: calc(100% - 48px);
+          max-width: 75%;
+
+          p {
+            display: none;
+          }
+
+          h3 {
+            font-size: 18px;
+            line-height: 21px;
+            font-weight: 600;
+            letter-spacing: -0.36px;
+          }
+        }
+
+        a{
+          display: none;
+        }
+
+        &.is-active {
+          aspect-ratio: 328 / 424;
+
+          .benefit-slide-content {
+            h3 {
+              color: white;
+              font-size: 20px;
+              line-height: 23px;
+              letter-spacing: -0.4px;
+            }
+
+            p {
+              margin-top: 16px;
+              display: block;
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+}

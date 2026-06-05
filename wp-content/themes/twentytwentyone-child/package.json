@@ -1,0 +1,11 @@
+{
+  "name": "twentytwentyone-child",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npx sass scss/style.scss style.css",
+    "watch": "npx sass --watch scss/style.scss:style.css"
+  },
+  "devDependencies": {
+    "sass": "^1.89.0"
+  }
+}

@@ -1,0 +1,126 @@
+.title-banner {
+  aspect-ratio: 1888 / 1055;
+  padding: fluid(33, 166) fluid(24, 40) fluid(24, 60);
+  border-radius: 24px;
+  max-width: 1890px;
+  width: calc(100vw - 30px);
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+
+  @media(max-width: 1600px) {
+    aspect-ratio: 1888 / 950;
+  }
+
+
+  @media(max-width: 767px) {
+    aspect-ratio: 374 / 684;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    height: -webkit-fill-available;
+
+    &__box {
+      max-width: 328px;
+      width: 100%;
+
+      .box-img {
+        padding: 8px;
+        border-radius: 91px;
+        margin-bottom: fluid(15, 32);
+        border: 1px solid $border-color;
+        width: fit-content;
+        background-color: $gray-background;
+        max-width: 175px;
+        width: 100%;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      p {
+        color: white;
+        margin-bottom: fluid(25, 25);
+      }
+
+      @media(max-width: 1350px) {
+        max-width: 510px;
+
+        .box-img {
+          max-width: 100px;
+          margin-bottom: 15px;
+        }
+      }
+
+      @media(max-width: 1099px) {
+        display: none;
+      }
+    }
+
+    &__main {
+      max-width: 80%;
+      width: 100%;
+
+      h1 {
+        color: white;
+        margin-bottom: fluid(20, 32);
+        font-size: fluid(32, 88);
+        line-height: fluid(30, 85);
+        font-weight: 700;
+      }
+
+      p {
+        color: white;
+        max-width: 70%;
+        width: 100%;
+      }
+
+      .mobile-box-img {
+        display: none;
+      }
+
+      .mobile-box-button {
+        display: none;
+      }
+
+      @media(max-width: 1099px) {
+        max-width: unset;
+
+        .mobile-box-img {
+          display: block;
+          padding: 4px 5px 4px 0;
+          border-radius: 46px;
+          margin-bottom: 32px;
+          border: 1px solid $border-color;
+          width: fit-content;
+          background-color: $gray-background;
+          max-width: 98px;
+          width: 100%;
+
+          img {
+            width: 100%;
+          }
+        }
+
+        .mobile-box-button {
+          display: block;
+          margin-top: 32px;
+        }
+      }
+    }
+
+    @media(max-width: 1099px) {
+      justify-content: end;
+    }
+  }
+}

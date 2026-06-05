@@ -1,0 +1,24 @@
+# Translation of Themes - Twenty Twenty-Two in Slovak
+# This file is distributed under the same license as the Themes - Twenty Twenty-Two package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-12-31 10:55:35+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n >= 2 && n <= 4) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: sk\n"
+"Project-Id-Version: Themes - Twenty Twenty-Two\n"
+
+#. Author URI of the theme
+#: style.css
+#, gp-priority: low
+msgid "https://wordpress.org/"
+msgstr "https://sk.wordpress.org/"
+
+#. Author of the theme
+#: style.css
+#, gp-priority: low
+msgid "the WordPress team"
+msgstr "WordPress tím"

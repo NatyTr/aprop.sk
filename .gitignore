@@ -1,0 +1,13 @@
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+
+wp-admin/
+wp-includes/
+
+*.zip
+*.log
+
+wp-cli.phar
+readme.html
+license.txt

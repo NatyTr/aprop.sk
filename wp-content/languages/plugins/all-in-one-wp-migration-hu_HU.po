@@ -1,0 +1,507 @@
+# Translation of Plugins - All-in-One WP Migration and Backup - Stable (latest release) in Hungarian
+# This file is distributed under the same license as the Plugins - All-in-One WP Migration and Backup - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2024-05-08 15:37:39+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: hu\n"
+"Project-Id-Version: Plugins - All-in-One WP Migration and Backup - Stable (latest release)\n"
+
+#: lib/controller/class-ai1wm-main-controller.php:676
+#: lib/controller/class-ai1wm-main-controller.php:677
+msgid "Reset Hub"
+msgstr "Hub alaphelyzetbe állítása"
+
+#: lib/view/reset/index.php:36
+msgid "Star"
+msgstr "Csillag"
+
+#: lib/view/reset/index.php:37
+msgid "Experience Full Functionality with Premium!"
+msgstr "A prémium teljes funkciójának megtapasztalása!"
+
+#: lib/view/reset/index.php:41
+msgid "Upgrade to Premium "
+msgstr "Frissítés Prémiumra "
+
+#: lib/view/reset/index.php:41
+msgid "Reset Hub Demo"
+msgstr "Hub Demo alaphelyzetbe állítása"
+
+#: lib/view/reset/index.php:39
+msgid "Please note, the features displayed below are part of an image showcasing the potential of Reset Hub in its Premium version. To activate and enjoy these advanced features, <a href=\"https://servmask.com/products/unlimited-extension\" title=\"Upgrade to Premium\" target=\"_blank\">upgrade to Premium now</a>! Elevate your website management experience with these exclusive functionalities and priority support."
+msgstr "Figyelem, az alábbiakban megjelenített funkciók egy kép részét képezik, amely a Reset Hub Premium verziójának lehetőségeit mutatja be. Ahhoz, hogy aktiválja és élvezze ezeket a fejlett funkciókat, <a href=\"https://servmask.com/products/unlimited-extension\" title=\"Frissítés Prémiumra\" target=\"_blank\">Frissítsen Prémiumra most</a>! Növelje webhelykezelési élményét ezekkel az exkluzív funkciókkal és elsőbbségi támogatással."
+
+#: lib/view/main/premium-badge.php:33
+msgid "Premium"
+msgstr "Premium"
+
+#: lib/view/schedules/index.php:111
+msgid "Leverage the simplicity of Dropbox for your backup needs. Direct your scheduled backups to be stored in Dropbox. It's secure, straightforward, and keeps your backups at your fingertips."
+msgstr "Használja ki a Dropbox egyszerűségét biztonsági mentési igényeihez. Irányítsa az ütemezett biztonsági mentéseket a Dropboxban való tárolásra. Biztonságos, egyszerű, és a biztonsági mentések mindig kéznél vannak."
+
+#: lib/controller/class-ai1wm-main-controller.php:685
+#: lib/controller/class-ai1wm-main-controller.php:686
+msgid "Schedules"
+msgstr "Ütemezések"
+
+#: lib/view/schedules/index.php:37 lib/view/schedules/index.php:56
+msgid "Backup Scheduler"
+msgstr "Biztonsági mentés ütemező"
+
+#: lib/view/schedules/index.php:38
+msgid "Notification Settings"
+msgstr "Értesítési beállítások"
+
+#: lib/view/schedules/index.php:39
+msgid "Retention Settings"
+msgstr "Megőrzési beállítások"
+
+#: lib/view/schedules/index.php:40 lib/view/schedules/index.php:90
+#: lib/view/schedules/index.php:95
+msgid "Google Drive Storage"
+msgstr "Google Drive Storage"
+
+#: lib/view/schedules/index.php:41 lib/view/schedules/index.php:103
+#: lib/view/schedules/index.php:108
+msgid "Dropbox Storage"
+msgstr "Dropbox Storage"
+
+#: lib/view/schedules/index.php:42 lib/view/schedules/index.php:116
+#: lib/view/schedules/index.php:121
+msgid "OneDrive Storage"
+msgstr "OneDrive Storage"
+
+#: lib/view/schedules/index.php:43 lib/view/schedules/index.php:129
+#: lib/view/schedules/index.php:134
+msgid "FTP Storage"
+msgstr "FTP Storage"
+
+#: lib/view/schedules/index.php:44 lib/view/schedules/index.php:142
+#: lib/view/schedules/index.php:147
+msgid "More Storage Providers"
+msgstr "További tárhelyszolgáltatók"
+
+#: lib/view/schedules/index.php:45 lib/view/schedules/index.php:155
+#: lib/view/schedules/index.php:160
+msgid "Multisite Schedules"
+msgstr "Multisite Ütemtervek"
+
+#: lib/view/schedules/index.php:51
+msgid "Backup scheduler"
+msgstr "Biztonsági másolat ütemező"
+
+#: lib/view/schedules/index.php:56 lib/view/schedules/index.php:69
+#: lib/view/schedules/index.php:82 lib/view/schedules/index.php:95
+#: lib/view/schedules/index.php:108 lib/view/schedules/index.php:121
+#: lib/view/schedules/index.php:134 lib/view/schedules/index.php:147
+#: lib/view/schedules/index.php:160
+msgid "Enable this feature"
+msgstr "A funkció engedélyezése"
+
+#: lib/view/schedules/index.php:64 lib/view/schedules/index.php:69
+msgid "Notification settings"
+msgstr "Értesítések beállítása"
+
+#: lib/view/schedules/index.php:72
+msgid "Stay informed, not overwhelmed. Tailor your notification preferences to get updates that matter to you. Whether it's the status of each backup, or just critical alerts, control what you want to be notified about."
+msgstr "Legyen tájékozott, ne pedig túlterhelt. Testre szabhatja értesítési beállításait, hogy az Ön számára fontos frissítéseket kapja meg. Akár az egyes biztonsági mentések állapotáról, akár csak a kritikus riasztásokról van szó, szabályozhatja, hogy miről szeretne értesítést kapni."
+
+#: lib/view/schedules/index.php:77 lib/view/schedules/index.php:82
+msgid "Retention settings"
+msgstr "Megőrzési beállítások"
+
+#: lib/view/schedules/index.php:98
+msgid "Benefit from the robustness of Google Drive. Schedule your backups to be saved directly to your Google Drive account. Simple, secure, and integrated into a platform you already use."
+msgstr "Használja ki a Google Drive megbízhatóságát. Ütemezze biztonsági mentéseit közvetlenül a Google Drive-fiókjába történő mentésre. Egyszerű, biztonságos és egy olyan platformba integrált, amelyet már használ."
+
+#: lib/view/schedules/index.php:124
+msgid "Harness the power of OneDrive for your backups. Set up your scheduled backups to be saved directly in your OneDrive. It's secure, integrated with your Microsoft account, and keeps your data readily accessible."
+msgstr "Használja ki a OneDrive erejét biztonsági mentéseihez. Állítsa be ütemezett biztonsági mentéseit úgy, hogy azok közvetlenül a OneDrive fiókjába kerüljenek mentésre. Biztonságos, integrálva van a Microsoft-fiókjába, és adatai könnyen hozzáférhetőek maradnak."
+
+#: lib/view/schedules/index.php:137
+msgid "Enjoy the flexibility of FTP storage. Direct your scheduled backups to your own FTP server. You'll have full control over your data, providing you with a versatile and private storage solution."
+msgstr "Élvezze az FTP-tárolás rugalmasságát. Irányítsa időzített biztonsági mentéseit saját FTP-kiszolgálójára. Így teljes mértékben Ön rendelkezhet adatai felett, sokoldalú és privát tárolási megoldást biztosítva Önnek."
+
+#: lib/view/schedules/index.php:150
+msgid "We've got you covered with an array of supported storage providers. Whether you prefer Box, Amazon S3, WebDav or something else, you can choose the one that fits your needs best. Secure your backups exactly where you want them."
+msgstr "A támogatott tárhelyszolgáltatók széles skálájával gondoskodunk Önről. Akár a Boxot, az Amazon S3-at, a WebDav-et vagy bármi mást részesíti előnyben, kiválaszthatja az igényeinek leginkább megfelelőt. Biztosíthatja biztonsági mentéseit pontosan ott, ahol szeretné."
+
+#: lib/view/schedules/index.php:163
+msgid "Tailor your backup schedules to fit the complexity of your WordPress Multisite. Choose to export the entire network or only a selection of subsites according to your requirements. Effortless management for even the most intricate site networks."
+msgstr "Testre szabhatja biztonsági mentési ütemezését a WordPress Multisite összetettségének megfelelően. Válassza ki, hogy a teljes rendszert vagy csak az aloldalak egy részét exportálja az igényeinek megfelelően. Könnyed kezelés még a legbonyolultabb webhelyhálózatok esetében is."
+
+#: lib/view/schedules/index.php:59
+msgid "Never worry about forgetting to back up your site again. Choose from various scheduling options, from daily to monthly, and we'll automate the rest. Backups happen like clockwork, giving you peace of mind and a solid safety net"
+msgstr "Soha többé nem kell aggódni amiatt, hogy esetleg elfelejti biztonsági mentést készíteni webhelyéről. Válassza ki a különböző ütemezési lehetőségek közül a napi és a havi ütemezést, mi pedig automatizáljuk a többit. A biztonsági mentések óramű pontossággal történnek, így nyugalmat és szilárd biztonsági hálózatot biztosítunk"
+
+#: lib/view/schedules/index.php:85
+msgid "Manage your storage effectively with our flexible retention settings. Decide how many backups you want to keep at a time. Old backups are automatically cleared, keeping your storage neat and efficient."
+msgstr "Hatékonyan kezelheti tárolását rugalmas megőrzési beállításainkkal. Döntse el, hogy egyszerre hány biztonsági mentést szeretne megőrizni. A régi biztonsági mentések automatikusan törlődnek, így a tárhelye rendezett és hatékony marad."
+
+#: lib/model/import/class-ai1wm-import-check-encryption.php:61
+msgid "Backup is encrypted. Please provide decryption password: "
+msgstr "A biztonsági mentés titkosított. Kérjük megadni a visszafejtési jelszót:"
+
+#: lib/controller/class-ai1wm-main-controller.php:796
+msgid "The backup is encrypted"
+msgstr "A biztonsági mentés titkosítva van"
+
+#: lib/controller/class-ai1wm-main-controller.php:798
+msgid "Submit"
+msgstr "Elküldés"
+
+#: lib/controller/class-ai1wm-main-controller.php:800
+#: lib/view/export/advanced-settings.php:56
+msgid "Repeat the password"
+msgstr "A jelszó ismétlése"
+
+#: lib/controller/class-ai1wm-main-controller.php:801
+#: lib/view/export/advanced-settings.php:58
+msgid "The passwords do not match"
+msgstr "A jelszavak nem egyeznek"
+
+#: lib/view/export/advanced-settings.php:53
+msgid "A password is required"
+msgstr "Jelszó megadása kötelező"
+
+#: lib/view/export/advanced-settings.php:66
+msgid "Password-protect and encrypt backups"
+msgstr "Jelszóval védett és titkosított biztonsági mentések"
+
+#: lib/controller/class-ai1wm-main-controller.php:839
+msgid "Error"
+msgstr "Hiba"
+
+#: lib/controller/class-ai1wm-main-controller.php:841
+msgid "List the content of the backup"
+msgstr "A biztonsági mentés tartalmának listája"
+
+#: lib/controller/class-ai1wm-main-controller.php:842
+msgid "Reading..."
+msgstr "Olvasás..."
+
+#: lib/view/backups/backups-list.php:122
+msgid "Downloading is not possible because backups directory is not accessible."
+msgstr "A letöltés nem lehetséges, mert a biztonsági mentések könyvtára nem elérhető."
+
+#: lib/view/backups/backups-list.php:129
+msgid "Show backup content"
+msgstr "A biztonsági mentés tartalmának megjelenítése"
+
+#: lib/view/backups/backups-list.php:131
+msgid "List"
+msgstr "Lista"
+
+#. translators: 1: Number of backups.
+#: lib/controller/class-ai1wm-main-controller.php:775
+msgid "You have %d backups"
+msgstr "%d biztonsági másolata van"
+
+#: lib/view/backups/backups-list.php:95
+msgid "More"
+msgstr "Tovább"
+
+#. translators: 1: Number of backups.
+#. translators: Numbers of backups.
+#: lib/controller/class-ai1wm-main-controller.php:773
+#: lib/view/main/backups.php:33
+msgid "You have %d backup"
+msgid_plural "You have %d backups"
+msgstr[0] "Önnek %d biztonsági mentése van"
+msgstr[1] "Önnek %d biztonsági mentése van"
+
+#. translators: 1: Error message.
+#: lib/view/updater/error.php:33
+msgid "Error: %s"
+msgstr "Hiba: %s"
+
+#: lib/view/main/contact-support.php:33
+msgid "Contact Support"
+msgstr "Támogatás"
+
+#: lib/view/main/translate.php:33
+msgid "Translate"
+msgstr "Fordítás"
+
+#: lib/controller/class-ai1wm-main-controller.php:793
+msgid "I have enough disk space"
+msgstr "Elegendő tárhelyem van."
+
+#: lib/view/backups/backups-list.php:48 lib/view/backups/index.php:51
+msgid "Refreshing backup list..."
+msgstr "Mentési lista ismételt frissítése..."
+
+#: lib/view/import/button-file.php:33
+msgid "To choose a file please go inside the link and click on the browse button."
+msgstr "Fájl kiválasztásához lépjen a linkre, és kattintson a Tallózás gombra."
+
+#: lib/controller/class-ai1wm-main-controller.php:791
+msgid "Finish"
+msgstr "A művelet befejeződött"
+
+#: lib/view/import/import-buttons.php:41
+msgid "Drag & Drop a backup to import it"
+msgstr "Húzd és dobd ide a bizonsági mentést az importáláshoz"
+
+#: lib/controller/class-ai1wm-main-controller.php:251
+msgid "All-in-One WP Migration Command"
+msgstr "All-in-One WP Migration parancs"
+
+#: lib/controller/class-ai1wm-main-controller.php:764
+#: lib/model/export/class-ai1wm-export-init.php:47
+msgid "Preparing to export..."
+msgstr "Felkészülés az exportra ..."
+
+#. translators: Human time diff
+#: lib/view/backups/backups-list.php:84
+msgid "%s ago"
+msgstr "%s ezelőtt"
+
+#: lib/controller/class-ai1wm-main-controller.php:794
+msgid "Continue"
+msgstr "Folytatás"
+
+#: lib/controller/class-ai1wm-main-controller.php:792
+msgid "Proceed"
+msgstr "Tovább"
+
+#: lib/controller/class-ai1wm-main-controller.php:790
+msgid "Stop import"
+msgstr "Importálás megállítása"
+
+#: lib/controller/class-ai1wm-main-controller.php:771
+msgid "Stop export"
+msgstr "Exportálás megállítása"
+
+#: lib/controller/class-ai1wm-main-controller.php:770
+#: lib/controller/class-ai1wm-main-controller.php:789
+msgid "Close"
+msgstr "Bezár"
+
+#: lib/controller/class-ai1wm-main-controller.php:795
+msgid "Please do not close this browser window or your import will fail"
+msgstr "Kérjük, ne zárja be ezt a böngészőablakot, különben az importálás sikertelen lesz"
+
+#. translators: Progress.
+#: lib/model/export/class-ai1wm-export-database-file.php:69
+#: lib/model/export/class-ai1wm-export-database-file.php:105
+msgid "Archiving database...<br />%d%% complete"
+msgstr "Adatbázis archiválás...<br />%d%% elkészült"
+
+#. translators: Progress.
+#: lib/model/import/class-ai1wm-import-validate.php:90
+#: lib/model/import/class-ai1wm-import-validate.php:162
+msgid "Unpacking archive...<br />%d%% complete"
+msgstr "Archívum kicsomagolása...<br />%d%% kész"
+
+#. translators: Progress.
+#: lib/model/import/class-ai1wm-import-database.php:81
+#: lib/model/import/class-ai1wm-import-database.php:1037
+msgid "Restoring database...<br />%d%% complete"
+msgstr "Adatbázis helyreállítás<br />%d%% elkészült"
+
+#: lib/controller/class-ai1wm-main-controller.php:1318
+msgid "Monthly"
+msgstr "Havi"
+
+#: lib/controller/class-ai1wm-main-controller.php:1314
+msgid "Weekly"
+msgstr "Heti"
+
+#: lib/controller/class-ai1wm-main-controller.php:781
+msgid "Preparing to import..."
+msgstr "Előkészítés az importáláshoz..."
+
+#: lib/model/import/class-ai1wm-import-mu-plugins.php:37
+msgid "Activating mu-plugins..."
+msgstr "A mu-bővítmények aktiválása..."
+
+#: lib/model/import/class-ai1wm-import-blogs.php:37
+msgid "Preparing blogs..."
+msgstr "Blogok előkészítése..."
+
+#: lib/view/updater/modal.php:50
+msgid "Discard"
+msgstr "Eldobás"
+
+#: lib/view/updater/modal.php:57
+msgid "There is an update available. To update, you must enter your"
+msgstr "Van elérhető frissítés. A frissítéshez meg kell adnia"
+
+#: lib/view/updater/modal.php:44
+msgid "here"
+msgstr "itt"
+
+#: lib/view/updater/modal.php:48
+msgid "Save"
+msgstr "Metés"
+
+#: lib/view/updater/modal.php:36
+msgid "To update your plugin/extension to the latest version, please fill your Purchase ID below."
+msgstr "A bővítmény/kiterjesztés legújabb verzióra történő frissítéséhez kérjük, töltse ki az alábbi vásárlási azonosítót."
+
+#: lib/view/updater/modal.php:39 lib/view/updater/modal.php:58
+msgid "Purchase ID"
+msgstr "Vásárlási azonosító"
+
+#: lib/view/updater/modal.php:43
+msgid "Don't have a Purchase ID? You can find your Purchase ID"
+msgstr " Nincs vásárlási azonosítója? Megtalálhatja vásárlási azonosítóját"
+
+#: lib/view/updater/modal.php:35
+msgid "Enter your Purchase ID"
+msgstr "Írd be a vásárlási azonosítót"
+
+#: lib/controller/class-ai1wm-main-controller.php:759
+#: lib/view/updater/check.php:33
+msgid "Check for updates"
+msgstr "Frissítések ellenőrzése"
+
+#: lib/view/backups/backups-list.php:136 lib/view/backups/backups-list.php:138
+msgid "Delete"
+msgstr "Törlés"
+
+#: lib/view/backups/backups-list.php:39
+msgid "Date"
+msgstr "Dátum"
+
+#: lib/view/backups/backups-list.php:38
+msgid "Name"
+msgstr "Név"
+
+#: lib/view/common/leave-feedback.php:69
+msgid "Cancel"
+msgstr "Mégsem"
+
+#: lib/view/backups/backups-list.php:101 lib/view/backups/backups-list.php:103
+msgid "Restore"
+msgstr "Visszaállítás"
+
+#: lib/view/backups/backups-list.php:109 lib/view/backups/backups-list.php:111
+#: lib/view/backups/backups-list.php:114 lib/view/backups/backups-list.php:116
+#: lib/view/backups/backups-list.php:124
+msgid "Download"
+msgstr "Letöltés"
+
+#: lib/view/backups/backups-list.php:40
+msgid "Size"
+msgstr "Méret"
+
+#: lib/view/export/index.php:39
+msgid "Export Site"
+msgstr "Weboldal exportálása"
+
+#: lib/view/import/index.php:39
+msgid "Import Site"
+msgstr "Weboldal importálása"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: all-in-one-wp-migration.php
+msgid "https://servmask.com/"
+msgstr "https://servmask.com/"
+
+#: lib/view/import/import-buttons.php:45
+msgid "Import From"
+msgstr "Importálás Innen"
+
+#: lib/controller/class-ai1wm-main-controller.php:666
+#: lib/controller/class-ai1wm-main-controller.php:667
+#: lib/view/backups/index.php:39
+msgid "Backups"
+msgstr "Mentések"
+
+#: lib/view/common/leave-feedback.php:72
+msgid "Send"
+msgstr "Küldés"
+
+#: lib/controller/class-ai1wm-main-controller.php:657
+#: lib/controller/class-ai1wm-main-controller.php:658
+msgid "Import"
+msgstr "Importálás"
+
+#: lib/controller/class-ai1wm-main-controller.php:648
+#: lib/controller/class-ai1wm-main-controller.php:649
+msgid "Export"
+msgstr "Exportálás"
+
+#: lib/view/backups/index.php:59
+msgid "Create backup"
+msgstr "Biztonsági mentés készítése"
+
+#: lib/view/export/help-section.php:52
+msgid "Once the file is successfully downloaded on your computer, you can import it to any of your WordPress sites."
+msgstr "Ha a fájlt sikerült letöltened a számítógépedre, akkor bármelyik WordPress oldaladra importálhatod."
+
+#: lib/view/export/find-replace.php:54
+msgid "Add"
+msgstr "Hozzáad"
+
+#: lib/view/export/find-replace.php:41
+msgid "in the database"
+msgstr "az adatbázisban"
+
+#: lib/view/export/advanced-settings.php:37
+msgid "Advanced options"
+msgstr "Haladó beállítások"
+
+#: lib/view/common/share-buttons.php:73
+msgid "Tweet"
+msgstr "Tweet"
+
+#: lib/view/common/sidebar-right.php:41
+msgid "Leave Feedback"
+msgstr "Visszajelzés"
+
+#: lib/model/import/class-ai1wm-import-done.php:365
+#: lib/model/import/class-ai1wm-import-done.php:367
+#: lib/model/import/class-ai1wm-import-done.php:369
+msgid "Your site has been imported successfully!"
+msgstr "A weboldal importálása sikeres!"
+
+#: lib/view/export/find-replace.php:38
+msgid "<text>"
+msgstr "<text>"
+
+#: lib/view/export/find-replace.php:40
+msgid "<another-text>"
+msgstr "<another-text>"
+
+#: lib/view/main/multisite-notice.php:43
+msgid "Get multisite"
+msgstr "Több oldal szerzése"
+
+#: lib/view/export/advanced-settings.php:38
+msgid "(click to expand)"
+msgstr "(kattintson a kibontáshoz)"
+
+#: lib/view/export/button-file.php:33 lib/view/import/button-file.php:34
+msgid "File"
+msgstr "Fájl"
+
+#: lib/view/export/find-replace.php:39 lib/view/export/find-replace.php:47
+msgid "Replace with"
+msgstr "Csere erre"
+
+#: lib/view/export/help-section.php:44
+msgid "In the advanced settings section you can configure more precisely the way of exporting."
+msgstr "A speciális beállítások szakaszban pontosabban konfigurálhatja az exportálás módját."
+
+#: lib/view/export/help-section.php:48
+msgid "Press \"Export\" button and the site archive file will pop up in your browser."
+msgstr "Nyomja meg az 'Export' gombot, és a webhelyarchívum fájl megjelenik a böngészőjében."
+
+#. Author of the plugin
+#: all-in-one-wp-migration.php
+msgid "ServMask"
+msgstr "ServMask"
+
+#: lib/controller/class-ai1wm-main-controller.php:799
+#: lib/view/export/advanced-settings.php:51
+msgid "Enter a password"
+msgstr "Jelszó megadása"

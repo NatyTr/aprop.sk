@@ -1,0 +1,133 @@
+.courses-table{
+  border: none;
+  thead{
+    tr{
+      th{
+        border: none;
+        font-size: 24px;
+        line-height: 22px;
+        font-weight: 700;
+      }
+    }
+  }
+  tbody{
+    tr{
+      td{
+        border: none;
+        text-align: center;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        &:nth-of-type(1){
+          font-size: 24px;
+          line-height: 22px;
+          text-align: left;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+  @media(max-width: 767px){
+    thead{
+      tr{
+        th{
+          font-size: 14px;
+          line-height: 16px;
+        }
+      }
+    }
+    tbody{
+      tr{
+        td{
+          padding-top: 10px;
+          padding-bottom: 10px;
+          padding-left: 5px;
+          padding-right: 5px;
+          img{
+            width: 15px;
+            height: 15px;
+          }
+          &:nth-of-type(1){
+            font-size: 14px;
+            line-height: 16px;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+.which-package{
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  .which-package-title{
+    width: 100%;
+    font-size: 40px;
+    line-height: 40px;
+    margin-bottom: 48px;
+    text-align: center
+  }
+  .package{
+    width: calc((100% / 3) - 6px);
+    .package-image{
+      aspect-ratio: 592/455;
+      margin-bottom: 30px;
+      background: white;
+      border-radius: 32px;
+      img{
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+    h2{
+      font-size: 40px;
+      line-height: 50px;
+      margin-bottom: 19px;
+      padding-right: 20px;
+    }
+    h3{
+      font-size: 24px;
+      line-height: 30px;
+      margin-bottom: 25px;
+      letter-spacing: -1px;
+      padding-right: 20px;
+    }
+    .package-text,
+    .package-text-2{
+      padding-right: 30px;
+      p{
+        opacity: 0.8;
+        font-size: 18px;
+        line-height: 20px;
+        margin-bottom: 10px;
+        font-weight: 300;
+      }
+      ul{
+        padding-left: 25px;
+        li{
+          opacity: 0.8;
+          font-size: 18px;
+          line-height: 20px;
+          font-weight: 300;
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+  @media(max-width: 767px){
+    row-gap: 20px;
+    .which-package-title{
+      font-size: 24px;
+      line-height: 26px;
+      margin-bottom: 24px;
+    }
+    .package{
+      width: 100%;
+      margin-bottom: 40px;
+      .package-image{
+        border-radius: 18px;
+      }
+    }
+  }
+}

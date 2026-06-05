@@ -1,0 +1,707 @@
+/* Main admin style */
+@font-face {
+  font-family: 'toret-font';
+  src: url('fonts/toret-font.eot?5kiojs');
+  src: url('fonts/toret-font.eot?5kiojs#iefix') format('embedded-opentype'), url('fonts/toret-font.ttf?5kiojs') format('truetype'), url('fonts/toret-font.woff?5kiojs') format('woff'), url('fonts/toret-font.svg?5kiojs#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+#adminmenu #toplevel_page_toret-plugins .wp-menu-image:before {
+  content: '\e900';
+  font-family: 'toret-font';
+  font-style: normal;
+  font-weight: normal;
+}
+
+/* Cols */
+
+.t-col-12,
+.t-col-9,
+.t-col-6,
+.t-col-4 {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.t-col-12 {
+  width: 98%;
+  margin: 0 1% 0 1%;
+}
+
+.t-col-9 {
+  width: 73%;
+  margin: 0 1% 0 1%;
+}
+
+.t-col-6 {
+  width: 48%;
+  margin: 0 1% 0 1%;
+}
+
+.t-col-4 {
+  width: 31.333%;
+  margin: 0 1% 0 1%;
+}
+
+
+/* Boxes */
+
+.toret_box,
+.toret-box .box-header,
+.toret-box .box-body,
+.toret-box .box-footer {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.toret-box {
+  position: relative;
+  background: #ffffff;
+  border-top: 2px solid #c1c1c1;
+  margin-bottom: 20px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  width: 100%;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.toret-box.box-primary {
+  border-top-color: #3c8dbc;
+}
+
+.toret-box.box-info {
+  border-top-color: #00c0ef;
+}
+
+.toret-box.box-danger {
+  border-top-color: #f56954;
+}
+
+.toret-box.box-warning {
+  border-top-color: #f39c12;
+}
+
+.toret-box.box-success {
+  border-top-color: #00a65a;
+}
+
+.toret-box .box-header {
+  float: left;
+  width: 100%;
+  display: block;
+}
+
+.toret-box .box-body {
+  padding: 10px;
+}
+
+.toret-box .box-footer {}
+
+.toret-box .box-header>.fa,
+.toret-box .box-header>.glyphicon,
+.toret-box .box-header>.ion,
+.toret-box .box-header .box-title {
+  display: inline-block;
+  padding: 10px 0px 10px 10px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
+  float: left;
+  cursor: default;
+}
+
+
+/* Box forms */
+
+.toret-box label {
+  width: 40%;
+  margin-right: 1%;
+  float: left;
+}
+
+.toret-box input[type=text],
+.toret-box input[type=email],
+.toret-box input[type=password],
+.toret-box textarea {
+  width: 50%;
+}
+
+.toret-box input[type=text].input-big,
+.toret-box input[type=email].input-big,
+.toret-box input[type=password].input-big,
+.toret-box textarea {
+  width: 100%;
+}
+
+.input-big {
+  width: 100%;
+}
+
+
+/* Admin table */
+
+.table-bordered {
+  width: 100%;
+  max-width: 1200px;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+
+.table-bordered tr {}
+
+.table-bordered tr th {
+  color: #000000;
+  background-color: #ddd;
+  padding: 6px;
+  border: solid 1px #ddd;
+}
+
+.table-bordered tr td {
+  padding: 6px;
+  border: solid 1px #ddd;
+  background-color: #ffffff;
+}
+
+.table-bordered tr td.td_center {
+  text-align: center;
+}
+
+
+/* Buttons */
+
+.wrap .add-new-button {
+  margin: 20px 0 20px 0;
+}
+
+
+/*
+    Component: Buttons
+-------------------------
+*/
+
+.btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.428571429;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  -webkit-box-shadow: inset 0px -2px 0px 0px rgba(0, 0, 0, 0.09);
+  -moz-box-shadow: inset 0px -2px 0px 0px rgba(0, 0, 0, 0.09);
+  box-shadow: inset 0px -1px 0px 0px rgba(0, 0, 0, 0.09);
+}
+
+.btn:hover,
+.btn:focus {
+  color: #333;
+  text-decoration: none;
+}
+
+.btn.btn-default {
+  background-color: #fafafa;
+  color: #666;
+  border-color: #ddd;
+  border-bottom-color: #ddd;
+}
+
+.btn.btn-default:hover,
+.btn.btn-default:active,
+.btn.btn-default.hover {
+  background-color: #f4f4f4!important;
+}
+
+.btn.btn-default.btn-flat {
+  border-bottom-color: #d9dadc;
+}
+
+.btn.btn-primary {
+  color: #ffffff;
+  background-color: #3c8dbc;
+  border-color: #367fa9;
+}
+
+.btn.btn-primary:hover,
+.btn.btn-primary:active,
+.btn.btn-primary.hover {
+  color: #ffffff;
+  background-color: #367fa9;
+}
+
+.btn.btn-success {
+  color: #ffffff;
+  background-color: #00a65a;
+  border-color: #008d4c;
+}
+
+.btn.btn-success:hover,
+.btn.btn-success:active,
+.btn.btn-success.hover {
+  color: #ffffff;
+  background-color: #008d4c;
+}
+
+.btn.btn-info {
+  color: #ffffff;
+  background-color: #00c0ef;
+  border-color: #00acd6;
+}
+
+.btn.btn-info:hover,
+.btn.btn-info:active,
+.btn.btn-info.hover {
+  color: #ffffff;
+  background-color: #00acd6;
+}
+
+.btn.btn-danger {
+  color: #ffffff;
+  background-color: #f56954;
+  border-color: #f4543c;
+}
+
+.btn.btn-danger:hover,
+.btn.btn-danger:active,
+.btn.btn-danger.hover {
+  color: #ffffff;
+  background-color: #f4543c;
+}
+
+.btn.btn-warning {
+  color: #ffffff;
+  background-color: #f39c12;
+  border-color: #e08e0b;
+}
+
+.btn.btn-warning:hover,
+.btn.btn-warning:active,
+.btn.btn-warning.hover {
+  color: #ffffff;
+  background-color: #e08e0b;
+}
+
+.btn.btn-flat {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-width: 1px;
+}
+
+.btn:active {
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn.btn-file {
+  position: relative;
+  width: 120px;
+  height: 35px;
+  overflow: hidden;
+}
+
+.btn.btn-file>input[type='file'] {
+  display: block !important;
+  width: 100% !important;
+  height: 35px !important;
+  opacity: 0 !important;
+  position: absolute;
+  top: -10px;
+  cursor: pointer;
+}
+
+.btn.btn-app {
+  position: relative;
+  padding: 15px 5px;
+  margin: 0 0 10px 10px;
+  min-width: 80px;
+  height: 60px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  text-align: center;
+  color: #666;
+  border: 1px solid #ddd;
+  background-color: #fafafa;
+  font-size: 12px;
+}
+
+.btn.btn-app>.fa,
+.btn.btn-app>.glyphicon,
+.btn.btn-app>.ion {
+  font-size: 20px;
+  display: block;
+}
+
+.btn.btn-app:hover {
+  background: #f4f4f4;
+  color: #444;
+  border-color: #aaa;
+}
+
+.btn.btn-app:active,
+.btn.btn-app:focus {
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+.btn.btn-app>.badge {
+  position: absolute;
+  top: -3px;
+  right: -10px;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.btn.btn-social-old {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  opacity: 0.9;
+  padding: 0;
+}
+
+.btn.btn-social-old>.fa {
+  padding: 10px 0;
+  width: 40px;
+}
+
+.btn.btn-social-old>.fa+span {
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn.btn-social-old span {
+  padding: 10px;
+}
+
+.btn.btn-social-old:hover {
+  opacity: 1;
+}
+
+.btn.btn-circle {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  padding: 0;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
+
+/*
+    Component: Delimiters
+-------------------------
+*/
+
+.delimiter {
+  float: left;
+  width: 100%;
+  margin: 14px 0 14px 0;
+  clear: both;
+}
+
+.delimiter-red {
+  border: solid 3px #f56954;
+}
+
+
+/* administrace Toret*/
+
+.zasilkovna-wrap .table-bordered {
+  max-width: 100%;
+}
+
+.zasilkovna-pozadavek {
+  color: red;
+  text-align: center;
+}
+
+.zasilkovna-main-wrap {
+  width: 100%;
+  margin: 0px;
+}
+
+.toret-update-error {
+  font-weight: 400;
+  background: #fff8e5 !important;
+  border-left: 4px solid #ffb900;
+  border-top: 1px solid #ffb900;
+  padding: 9px 0 9px 12px !important;
+  margin: 0 -12px 0 -16px !important;
+}
+
+.toret-update-error::before {
+  content: '\f348' !important;
+  display: inline-block;
+  font: 400 18px/1 dashicons;
+  speak: none;
+  margin: 0 8px 0 -2px;
+  vertical-align: top;
+}
+
+.toret-padding {
+  padding-top: 1em !important;
+  padding-bottom: 1em !important;
+}
+
+.toret-box.box-info {
+  border-top-color: #001543;
+}
+
+.zas-admin-nactenidopravcu,
+.toret-ulozit,
+.toret-aktivovat,
+.pridathmzas,
+.pridatfeezas,
+.pridathm,
+.pridatfee,
+.toret-manual {
+  color: white;
+  border-color: #ff9243;
+  background-color: #ff9243;
+  vertical-align: top;
+  display: inline-block;
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 2.15384615;
+  min-height: 30px;
+  margin: 0;
+  padding: 0 10px;
+  cursor: pointer;
+  border-width: 1px;
+  border-style: solid;
+  -webkit-appearance: none;
+  border-radius: 3px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  text-transform: uppercase;
+  min-width: 145px;
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.zas-admin-nactenidopravcu:hover,
+.toret-ulozit:hover,
+.toret-aktivovat:hover,
+.pridathmzas:hover,
+.pridathm:hover,
+.toret-manual:hover {
+  color: #666 !important;
+  background: #edf3ff !important;
+  border-color: #edf3ff !important;
+}
+
+
+/* Toret plugins administrace 1.0 */
+
+.banner-akce img,
+.banner-vzdy img {
+  max-width: 750px;
+  width: 100%;
+}
+
+.toret-aktivni,
+.toret-vsechny {
+  background-color: white;
+  padding: 25px;
+  margin: 25px 0;
+}
+
+.toret-aktivni h3,
+.toret-vsechny h3 {
+  color: #fe7524;
+  margin-top: 0;
+}
+
+.toret-aktivni table,
+.toret-vsechny table {
+  border: 2px solid #f8f7fc;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.toret-aktivni th,
+.toret-aktivni td,
+.toret-vsechny th,
+.toret-vsechny td {
+  padding: 15px;
+  text-align: left;
+}
+
+.toret-aktivni table thead,
+.toret-vsechny thead {
+  background-color: #f8f7fc;
+}
+
+.toret-aktivni tr,
+.toret-vsechny tr {
+  border-bottom: 2px solid #f8f7fc;
+}
+
+.toret-instal-plug a,
+.toret-next-plug a {
+  color: #22134a;
+}
+
+.toret-tlacitka {
+  margin: 25px 0;
+  margin-left: 25px;
+  display: flex;
+}
+
+.toret-tlacitka a {
+  color: white;
+  background-color: #fe7524;
+  padding: 20px 35px;
+  border-radius: 10px;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.toret-tlacitka a.toret-podpora {
+  background-color: #2b1662;
+}
+
+.toret-tlacitka a:hover {
+  opacity: 0.7;
+}
+
+.toret-next-plug a {
+  color: #fe7524;
+}
+
+.toret-buy {
+  background-color: #fe7524;
+  color: white!important;
+  text-decoration: none;
+  border-radius: 7px;
+  padding: 7px 12px;
+}
+
+.toret-buy:hover {
+  opacity: 0.7;
+}
+
+.toret-tri-odkazy a {
+  margin-right: 10px;
+}
+
+@media only screen and (max-width: 720px) {
+  /* Force table to not be like tables anymore */
+  .toret-aktivni table,
+  .toret-aktivni thead,
+  .toret-aktivni tbody,
+  .toret-aktivni th,
+  .toret-aktivni td,
+  .toret-aktivni tr {
+    display: block;
+  }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  .toret-aktivni thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .toret-aktivni tr {
+    border: 1px solid #f8f7fc;
+  }
+  .toret-aktivni td {
+    /* Behave  like a "row" */
+    position: relative;
+    border-bottom: 1px solid #f8f7fc;
+  }
+  /* Force table to not be like tables anymore */
+  .toret-vsechny table,
+  .toret-vsechny thead,
+  .toret-vsechny tbody,
+  .toret-vsechny th,
+  .toret-vsechny td,
+  .toret-vsechny tr {
+    display: block;
+  }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  .toret-vsechny thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .toret-vsechny tr {
+    border: 1px solid #f8f7fc;
+  }
+  .toret-vsechny td {
+    /* Behave  like a "row" */
+    position: relative;
+    border-bottom: none;
+  }
+  .toret-aktivni th,
+  .toret-aktivni td,
+  .toret-vsechny th,
+  .toret-vsechny td {
+    padding: 15px;
+  }
+  .toret-tlacitka {
+    margin-left: 0;
+  }
+  .toret-tlacitka a {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.toret-licence-form {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.toret-overit {
+  margin-top: -5px;
+}
+
+.table-bordered tr th {
+  background: #f4f4f4;
+  font-weight: 500;
+}
+
+
+/* Toret plugins administrace konec */
