@@ -513,8 +513,46 @@ add_shortcode('piliere_slider', 'render_piliere_slider_shortcode');
 
 
 //show all products
+function aprop_render_product_cards_query( $args, $with_wrapper = true ) {
+    $products = new WP_Query($args);
+
+    if (!$products->have_posts()) {
+        return '<p>Žiadne produkty neboli nájdené.</p>';
+    }
+
+    ob_start();
+
+    if ( $with_wrapper ) {
+        echo '<div class="products-grid">';
+    }
+
+    while ($products->have_posts()): $products->the_post(); global $product; ?>
+        <article class="course-product-card">
+            <a class="course-product-card__link" href="<?php the_permalink(); ?>">
+                <div class="course-product-card__media">
+                    <?php if (has_post_thumbnail()) {
+                        the_post_thumbnail('large', array('class' => 'course-product-card__image'));
+                    } ?>
+                </div>
+                <div class="course-product-card__content">
+                    <h3 class="course-product-card__title"><?php the_title(); ?></h3>
+                    <div class="course-product-card__footer">
+                        <span class="course-product-card__price"><?php echo $product->get_price_html(); ?></span>
+                        <span class="course-product-card__detail">Pozrieť detail</span>
+                    </div>
+                </div>
+            </a>
+        </article>
+    <?php endwhile; wp_reset_postdata();
+
+    if ( $with_wrapper ) {
+        echo '</div>';
+    }
+
+    return ob_get_clean();
+}
+
 function render_all_products_shortcode() {
-    // Nastavenie dotazu
     $args = array(
         'post_type'      => 'product',
         'posts_per_page' => -1,
@@ -529,39 +567,64 @@ function render_all_products_shortcode() {
         ),
     );
 
-
-    $products = new WP_Query($args);
-
-    if (!$products->have_posts()) {
-        return '<p>Žiadne produkty neboli nájdené.</p>';
-    }
-
-    ob_start();
-    ?>
-    <div class="products-grid">
-        <?php while ($products->have_posts()): $products->the_post(); global $product; ?>
-            <article class="course-product-card">
-                <a class="course-product-card__link" href="<?php the_permalink(); ?>">
-                    <div class="course-product-card__media">
-                        <?php if (has_post_thumbnail()) {
-                            the_post_thumbnail('large', array('class' => 'course-product-card__image'));
-                        } ?>
-                    </div>
-                    <div class="course-product-card__content">
-                        <h3 class="course-product-card__title"><?php the_title(); ?></h3>
-                        <div class="course-product-card__footer">
-                            <span class="course-product-card__price"><?php echo $product->get_price_html(); ?></span>
-                            <span class="course-product-card__detail">Pozrieť detail</span>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        <?php endwhile; wp_reset_postdata(); ?>
-    </div>
-    <?php
-    return ob_get_clean();
+    return aprop_render_product_cards_query( $args );
 }
 add_shortcode('all_products', 'render_all_products_shortcode');
+
+function render_all_products_excluding_drones_shortcode() {
+    $drone_tax_query = array(
+        'taxonomy' => 'product_cat',
+        'operator' => 'NOT IN',
+        'include_children' => true,
+    );
+
+    if ( function_exists( 'aprop_drone_category_id' ) ) {
+        $drone_tax_query['field'] = 'term_id';
+        $drone_tax_query['terms'] = array( aprop_drone_category_id() );
+    } else {
+        $drone_tax_query['field'] = 'slug';
+        $drone_tax_query['terms'] = array( 'polnohospodarske-drony' );
+    }
+
+    $args = array(
+        'post_type'      => 'product',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'tax_query'      => array(
+            $drone_tax_query,
+        ),
+    );
+
+    return aprop_render_product_cards_query( $args );
+}
+add_shortcode('all_products_excluding_drones', 'render_all_products_excluding_drones_shortcode');
+
+function aprop_render_all_products_excluding_drones_items() {
+    $drone_tax_query = array(
+        'taxonomy' => 'product_cat',
+        'operator' => 'NOT IN',
+        'include_children' => true,
+    );
+
+    if ( function_exists( 'aprop_drone_category_id' ) ) {
+        $drone_tax_query['field'] = 'term_id';
+        $drone_tax_query['terms'] = array( aprop_drone_category_id() );
+    } else {
+        $drone_tax_query['field'] = 'slug';
+        $drone_tax_query['terms'] = array( 'polnohospodarske-drony' );
+    }
+
+    $args = array(
+        'post_type'      => 'product',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'tax_query'      => array(
+            $drone_tax_query,
+        ),
+    );
+
+    return aprop_render_product_cards_query( $args, false );
+}
 
 //block with products
 function render_kurzy_blok_shortcode() {
@@ -617,7 +680,7 @@ function render_kurzy_blok_shortcode() {
         </div>
 
         <div class="courses-product-list">
-            <?php echo do_shortcode('[all_products]'); ?>
+            <?php echo do_shortcode('[all_products_excluding_drones]'); ?>
         </div>
 
         <?php if ($courses_text): ?>
@@ -1380,14 +1443,14 @@ function related_products_shortcode() {
     $courses_label = get_field('courses-label', $home_id);
     $courses_title = get_field('courses-title', $home_id);
     $courses_text  = get_field('courses-text', $home_id);
+    $section_id = 'related-courses-slider-' . wp_unique_id();
 
     ob_start();
     ?>
-    <div class="courses-block discover-all-products">
-        <div class="courses-header">
+    <section id="<?php echo esc_attr( $section_id ); ?>" class="courses-block home-courses-slider discover-all-products">
+        <div class="courses-header home-courses-slider__header">
           <div>
-            <span class="btn-primary label">Naše kurzy</span>
-            <h2 class="courses-title">Objavte ďalšie produkty</h2>
+            <h2 class="courses-title home-courses-slider__title">Objavte ďalšie produkty</h2>
             <?php if ($courses_text): ?>
                 <div class="courses-text-mobile">
                     <?php echo wpautop(wp_kses_post($courses_text)); ?>
@@ -1395,28 +1458,86 @@ function related_products_shortcode() {
             <?php endif; ?>
 
           </div>
-            <a href="/sluzby" class="btn-primary btn-black btn-icon">Pozrieť všetky</a>
+            <a href="/sluzby" class="home-courses-slider__all-link btn-primary btn-black btn-icon">Pozrieť všetky</a>
         </div>
 
 
-        <div class="all-related-products">
-            <?php echo do_shortcode('[all_products]'); ?>
+        <div class="all-related-products home-courses-slider__track">
+            <?php echo aprop_render_all_products_excluding_drones_items(); ?>
         </div>
 
         <?php if ($courses_text): ?>
             <div class="courses-text">
                 <?php echo wpautop(wp_kses_post($courses_text)); ?>
                 <a href="/sluzby" class="btn-primary btn-black btn-icon btn-mobile">Pozrieť všetky</a>
-                <div class="slider-nav">
-                  <button id="slider-prev" class="slick-prev">‹</button>
-                  <button id="slider-next" class="slick-next">›</button>
-                </div>
             </div>
         <?php endif; ?>
-        <div class="slider-progress">
-            <div class="slider-progress-bar"></div>
+        <div class="home-courses-slider__footer">
+            <div class="home-courses-slider__arrows">
+                <button type="button" class="modern-agro-slider__arrow modern-agro-slider__arrow--prev" aria-label="Predchádzajúci kurz"></button>
+                <button type="button" class="modern-agro-slider__arrow modern-agro-slider__arrow--next" aria-label="Nasledujúci kurz"></button>
+            </div>
+            <div class="home-courses-slider__progress"><span></span></div>
         </div>
-    </div>
+        <script>
+        jQuery(function ($) {
+            var section = $('#<?php echo esc_js( $section_id ); ?>');
+            var track = section.find('.all-related-products.home-courses-slider__track');
+
+            if (!track.length || track.hasClass('slick-initialized') || typeof $.fn.slick !== 'function') {
+                return;
+            }
+
+            if (track.children().length <= 1) {
+                section.find('.home-courses-slider__footer').hide();
+                return;
+            }
+
+            function updateProgress(slick, currentSlide) {
+                var slidesToShow = slick.options.slidesToShow;
+
+                if (typeof slidesToShow !== 'number') {
+                    slidesToShow = 1;
+                }
+
+                var totalSlides = slick.slideCount;
+                var current = currentSlide || 0;
+                var maxSteps = Math.max(totalSlides - Math.ceil(slidesToShow), 1);
+                var progress = totalSlides <= slidesToShow ? 100 : Math.max((current / maxSteps) * 100, 10);
+
+                section.find('.home-courses-slider__progress span').css('width', progress + '%');
+            }
+
+            track.on('init reInit afterChange', function (event, slick, currentSlide) {
+                updateProgress(slick, currentSlide);
+            });
+
+            track.slick({
+                slidesToShow: 3.2,
+                slidesToScroll: 1,
+                infinite: false,
+                arrows: true,
+                dots: false,
+                prevArrow: section.find('.modern-agro-slider__arrow--prev'),
+                nextArrow: section.find('.modern-agro-slider__arrow--next'),
+                responsive: [
+                    {
+                        breakpoint: 1100,
+                        settings: {
+                            slidesToShow: 2.1
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 1.1
+                        }
+                    }
+                ]
+            });
+        });
+        </script>
+    </section>
     <?php
     return ob_get_clean();
 }

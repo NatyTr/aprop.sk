@@ -274,109 +274,36 @@
   .all-related-products{
     .products-grid{
       .slick-track {
+        display: flex;
         margin-bottom: fluid(28, 70);
+      }
 
-        .product-card {
-          width: calc(25% - 6px);
-          border-radius: 33px;
-          aspect-ratio: 439/550;
+      .slick-slide {
+        height: auto;
+
+        > div {
           height: 100%;
-          position: relative;
-          display: inline-table;
-          margin: 0px 4px;
-          overflow: hidden;
-
-          a {
-            position: absolute;
-            left: 0px;
-            top: 0px;
-            width: 100%;
-            height: 100%;
-            img {
-              border-radius: 33px;
-              width: 100%;
-              max-width: unset !important;
-              height: 100% !important;
-              object-fit: cover;
-              transition: transform 0.3s ease;
-            }
-            &:focus{
-              background: transparent;
-            }
-          }
-
-          .product-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            border-radius: 25px;
-            position: absolute;
-            bottom: 10px;
-            width: calc(100% - 20px);
-            left: 10px;
-            -webkit-backdrop-filter: blur(52px);
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(52.42px);
-            padding: 16px;
-
-            .price {
-              font-size: fluid(14, 25);
-              line-height: normal;
-              font-weight: 600;
-              letter-spacing: -0.503px;
-              color: white;
-              display: block;
-              margin-bottom: fluid(10, 20);
-            }
-
-            .btn-circle-icon-white {
-              position: absolute;
-              top: fluid(10, 20);
-              right: fluid(10, 20);
-              width: fluid(30, 40);
-              height: fluid(30, 40);
-              left: unset;
-
-              &:before {
-                width: fluid(13, 16);
-                height: fluid(13, 15);
-                top: calc(50% - fluid(6.5, 7.5));
-                left: calc(50% - fluid(6.5, 8));
-              }
-            }
-
-            h4 {
-              color: white;
-            }
-          }
-          &:hover{
-            a{
-              img{
-                transform: scale(1.05);
-              }
-            }
-          }
-          @media(max-width: 767px){
-            border-radius: 18px;
-            a{
-              img{
-                border-radius: 18px;
-              }
-            }
-          }
         }
+      }
+
+      .course-product-card {
+        display: flex !important;
+        height: inherit !important;
+        margin: 0 4px;
       }
     }
   }
-  .slider-progress{
-    background: #00000033;
-    .slider-progress-bar{
-      background: black;
+
+  .courses-header {
+    margin-bottom: 28px;
+
+    @media(max-width: 1099px) {
+      margin-bottom: 24px !important;
     }
-    @media(max-width: 767px){
-      display: none;
-    }
+  }
+
+  .courses-text {
+    justify-content: flex-start;
   }
 }
 

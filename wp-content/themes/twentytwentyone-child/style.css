@@ -2561,6 +2561,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   align-items: center;
   gap: 18px;
   margin-top: 22px;
+  margin-bottom: 8px;
 }
 
 .home-courses-slider__arrows {
@@ -4756,98 +4757,30 @@ footer .footer-meta .footer_socials li a:hover {
   }
 }
 .discover-all-products .all-related-products .products-grid .slick-track {
+  display: flex;
   margin-bottom: clamp(28px, 0.0607111882px + 3.6426712923vw, 70px);
 }
-.discover-all-products .all-related-products .products-grid .slick-track .product-card {
-  width: calc(25% - 6px);
-  border-radius: 33px;
-  aspect-ratio: 439/550;
-  height: 100%;
-  position: relative;
-  display: inline-table;
-  margin: 0px 4px;
-  overflow: hidden;
+.discover-all-products .all-related-products .products-grid .slick-slide {
+  height: auto;
 }
-.discover-all-products .all-related-products .products-grid .slick-track .product-card a {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
+.discover-all-products .all-related-products .products-grid .slick-slide > div {
   height: 100%;
 }
-.discover-all-products .all-related-products .products-grid .slick-track .product-card a img {
-  border-radius: 33px;
-  width: 100%;
-  max-width: unset !important;
-  height: 100% !important;
-  object-fit: cover;
-  transition: transform 0.3s ease;
+.discover-all-products .all-related-products .products-grid .course-product-card {
+  display: flex !important;
+  height: inherit !important;
+  margin: 0 4px;
 }
-.discover-all-products .all-related-products .products-grid .slick-track .product-card a:focus {
-  background: transparent;
+.discover-all-products .courses-header {
+  margin-bottom: 28px;
 }
-.discover-all-products .all-related-products .products-grid .slick-track .product-card .product-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  border-radius: 25px;
-  position: absolute;
-  bottom: 10px;
-  width: calc(100% - 20px);
-  left: 10px;
-  -webkit-backdrop-filter: blur(52px);
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(52.42px);
-  padding: 16px;
-}
-.discover-all-products .all-related-products .products-grid .slick-track .product-card .product-content .price {
-  font-size: clamp(14px, 6.682567216px + 0.9540329575vw, 25px);
-  line-height: normal;
-  font-weight: 600;
-  letter-spacing: -0.503px;
-  color: white;
-  display: block;
-  margin-bottom: clamp(10px, 3.3477883781px + 0.8673026886vw, 20px);
-}
-.discover-all-products .all-related-products .products-grid .slick-track .product-card .product-content .btn-circle-icon-white {
-  position: absolute;
-  top: clamp(10px, 3.3477883781px + 0.8673026886vw, 20px);
-  right: clamp(10px, 3.3477883781px + 0.8673026886vw, 20px);
-  width: clamp(30px, 23.3477883781px + 0.8673026886vw, 40px);
-  height: clamp(30px, 23.3477883781px + 0.8673026886vw, 40px);
-  left: unset;
-}
-.discover-all-products .all-related-products .products-grid .slick-track .product-card .product-content .btn-circle-icon-white:before {
-  width: clamp(13px, 11.0043365134px + 0.2601908066vw, 16px);
-  height: clamp(13px, 11.6695576756px + 0.1734605377vw, 15px);
-  top: calc(50% - clamp(6.5px, 5.8347788378px + 0.0867302689vw, 7.5px));
-  left: calc(50% - clamp(6.5px, 5.5021682567px + 0.1300954033vw, 8px));
-}
-.discover-all-products .all-related-products .products-grid .slick-track .product-card .product-content h4 {
-  color: white;
-}
-.discover-all-products .all-related-products .products-grid .slick-track .product-card:hover a img {
-  transform: scale(1.05);
-}
-@media (max-width: 767px) {
-  .discover-all-products .all-related-products .products-grid .slick-track .product-card {
-    border-radius: 18px;
-  }
-  .discover-all-products .all-related-products .products-grid .slick-track .product-card a img {
-    border-radius: 18px;
+@media (max-width: 1099px) {
+  .discover-all-products .courses-header {
+    margin-bottom: 24px !important;
   }
 }
-.discover-all-products .slider-progress {
-  background: rgba(0, 0, 0, 0.2);
-}
-.discover-all-products .slider-progress .slider-progress-bar {
-  background: black;
-}
-@media (max-width: 767px) {
-  .discover-all-products .slider-progress {
-    display: none;
-  }
+.discover-all-products .courses-text {
+  justify-content: flex-start;
 }
 
 .course-dates-wrapper {
