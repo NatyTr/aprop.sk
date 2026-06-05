@@ -1,18 +1,26 @@
+# Database / migration dumps
 apropsk-migrate-20260605014322.sql
+
+# Dependencies
 apiclient-master
+
+# WordPress generated content
 wp-content/uploads/
 wp-content/cache/
 wp-content/upgrade/
-wp-content/plugins/
-wp-content/languages/.
 wp-content/upgrade-temp-backup/
+wp-content/plugins/
+wp-content/languages/
 
+# WordPress core
 wp-admin/
 wp-includes/
 
+# Archives & logs
 *.zip
 *.log
 
+# WordPress default files
 wp-cli.phar
 readme.html
 license.txt
