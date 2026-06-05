@@ -1,6 +1,209 @@
 
 <?php
 
+function aprop_get_homepage_id() {
+    $front_page_id = (int) get_option( 'page_on_front' );
+
+    if ( $front_page_id > 0 ) {
+        return $front_page_id;
+    }
+
+    $home_page = get_page_by_path( 'domov' );
+
+    if ( $home_page instanceof WP_Post ) {
+        return (int) $home_page->ID;
+    }
+
+    return 0;
+}
+
+function aprop_get_homepage_help_cards_defaults() {
+    return array(
+        'label' => 'S ČÍM POMÔŽEME',
+        'title' => 'Začnite tam, kde to potrebujete',
+        'cards' => array(
+            array(
+                'index' => '01',
+                'category' => 'DRONY',
+                'title' => 'Kúpiť dron',
+                'description' => 'Profesionálne drony pre poľnohospodárstvo, monitoring a prácu v teréne.',
+                'button_text' => 'Vybrať dron',
+                'button_url' => home_url( '/drony/' ),
+                'theme' => 'dark',
+                'size' => 'large',
+                'image_url' => content_url( '/uploads/2022/01/dron_dji_agras_t30_postrekovanie_pola_aprop_enterra.jpg' ),
+            ),
+            array(
+                'index' => '02',
+                'category' => 'KURZY',
+                'title' => 'Vybrať kurz',
+                'description' => 'Online aj v teréne. Od základov A1 po pokročilé STS certifikácie aj profi pilotov.',
+                'button_text' => 'Pozrieť kurzy',
+                'button_url' => home_url( '/sluzby/' ),
+                'theme' => 'dark',
+                'size' => 'large',
+                'image_url' => content_url( '/uploads/2020/09/aprop-prakticke-skolenie-dron-fofoaparat-macbook-1-400x300.jpg' ),
+            ),
+            array(
+                'index' => '03',
+                'category' => 'LEGISLATÍVA',
+                'title' => 'Vyriešiť legislatívu',
+                'description' => '',
+                'button_text' => '',
+                'button_url' => home_url( '/clanok/legislativa-pravidla-lietanie-drony/' ),
+                'theme' => 'light',
+                'size' => 'small',
+                'image_url' => content_url( '/uploads/2022/01/novelizacia-leteckeho-zakona-pravidla-drony-2024.png' ),
+            ),
+            array(
+                'index' => '04',
+                'category' => 'PRE FIRMY',
+                'title' => 'Riešenie pre firmu',
+                'description' => '',
+                'button_text' => '',
+                'button_url' => home_url( '/pre-firmy/' ),
+                'theme' => 'light',
+                'size' => 'small',
+                'image_url' => content_url( '/uploads/2022/05/mapapobocky.jpg' ),
+            ),
+        ),
+    );
+}
+
+function aprop_normalize_homepage_help_card_image( $image_url, $default_card ) {
+    if ( empty( $image_url ) ) {
+        return $default_card['image_url'];
+    }
+
+    $invalid_fragments = array(
+        'ChatGPT-Image-21.-4.-2025-10_03_13',
+    );
+
+    foreach ( $invalid_fragments as $fragment ) {
+        if ( false !== strpos( $image_url, $fragment ) ) {
+            return $default_card['image_url'];
+        }
+    }
+
+    return $image_url;
+}
+
+function aprop_get_homepage_help_cards_data() {
+    $defaults = aprop_get_homepage_help_cards_defaults();
+    $page_id = aprop_get_homepage_id();
+
+    $label = $page_id ? get_field( 'home_help_cards_label', $page_id ) : '';
+    $title = $page_id ? get_field( 'home_help_cards_title', $page_id ) : '';
+
+    $cards = array();
+
+    foreach ( $defaults['cards'] as $index => $default_card ) {
+        $card_number = $index + 1;
+        $field_prefix = 'home_help_card_' . $card_number . '_';
+        $image = $page_id ? get_field( $field_prefix . 'image', $page_id ) : null;
+
+        $field_values = array(
+            'index' => $page_id ? get_field( $field_prefix . 'index', $page_id ) : '',
+            'category' => $page_id ? get_field( $field_prefix . 'category', $page_id ) : '',
+            'title' => $page_id ? get_field( $field_prefix . 'title', $page_id ) : '',
+            'description' => $page_id ? get_field( $field_prefix . 'description', $page_id ) : '',
+            'button_text' => $page_id ? get_field( $field_prefix . 'button_text', $page_id ) : '',
+            'button_url' => $page_id ? get_field( $field_prefix . 'button_url', $page_id ) : '',
+        );
+
+        $cards[] = array(
+            'index' => ! empty( $field_values['index'] ) ? $field_values['index'] : $default_card['index'],
+            'category' => ! empty( $field_values['category'] ) ? $field_values['category'] : $default_card['category'],
+            'title' => ! empty( $field_values['title'] ) ? $field_values['title'] : $default_card['title'],
+            'description' => $field_values['description'] !== '' ? $field_values['description'] : $default_card['description'],
+            'button_text' => $field_values['button_text'] !== '' ? $field_values['button_text'] : $default_card['button_text'],
+            'button_url' => ! empty( $field_values['button_url'] ) ? $field_values['button_url'] : $default_card['button_url'],
+            'theme' => $default_card['theme'],
+            'size' => $default_card['size'],
+            'image_url' => aprop_normalize_homepage_help_card_image( ! empty( $image['url'] ) ? $image['url'] : $default_card['image_url'], $default_card ),
+            'image_alt' => ! empty( $image['alt'] ) ? $image['alt'] : $default_card['title'],
+        );
+    }
+
+    return array(
+        'label' => $label ? $label : $defaults['label'],
+        'title' => $title ? $title : $defaults['title'],
+        'cards' => $cards,
+    );
+}
+
+function render_homepage_help_cards_shortcode() {
+    $section = aprop_get_homepage_help_cards_data();
+
+    if ( empty( $section['cards'] ) ) {
+        return '';
+    }
+
+    $large_cards = array_slice( $section['cards'], 0, 2 );
+    $small_cards = array_slice( $section['cards'], 2 );
+
+    ob_start();
+    ?>
+    <section class="homepage-help-cards">
+        <div class="homepage-help-cards__header">
+            <?php if ( ! empty( $section['label'] ) ) : ?>
+                <span class="homepage-help-cards__label label"><?php echo esc_html( $section['label'] ); ?></span>
+            <?php endif; ?>
+
+            <?php if ( ! empty( $section['title'] ) ) : ?>
+                <h2 class="homepage-help-cards__title"><?php echo nl2br( esc_html( $section['title'] ) ); ?></h2>
+            <?php endif; ?>
+        </div>
+
+        <div class="homepage-help-cards__grid">
+            <?php foreach ( $large_cards as $card ) : ?>
+                <article class="homepage-help-card homepage-help-card--large homepage-help-card--<?php echo esc_attr( $card['theme'] ); ?> homepage-help-card--index-<?php echo esc_attr( $card['index'] ); ?>" style="background-image: linear-gradient(180deg, rgba(7,7,7,0.02) 0%, rgba(7,7,7,0.14) 42%, rgba(7,7,7,0.72) 100%), url('<?php echo esc_url( $card['image_url'] ); ?>');">
+                    <div class="homepage-help-card__meta"><?php echo esc_html( $card['index'] . ' • ' . $card['category'] ); ?></div>
+                    <div class="homepage-help-card__content">
+                        <h3 class="homepage-help-card__title"><?php echo esc_html( $card['title'] ); ?></h3>
+
+                        <?php if ( ! empty( $card['description'] ) ) : ?>
+                            <p class="homepage-help-card__description"><?php echo esc_html( $card['description'] ); ?></p>
+                        <?php endif; ?>
+
+                        <?php if ( ! empty( $card['button_text'] ) && ! empty( $card['button_url'] ) ) : ?>
+                            <a class="homepage-help-card__button <?php echo '02' === $card['index'] ? 'btn-white-border-icon' : 'btn-green-icon'; ?>" href="<?php echo esc_url( $card['button_url'] ); ?>">
+                                <?php echo esc_html( $card['button_text'] ); ?>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+
+            <div class="homepage-help-cards__stack">
+                <?php foreach ( $small_cards as $card ) : ?>
+                    <article class="homepage-help-card homepage-help-card--small homepage-help-card--<?php echo esc_attr( $card['theme'] ); ?> homepage-help-card--index-<?php echo esc_attr( $card['index'] ); ?>">
+                        <div class="homepage-help-card__media">
+                            <?php if ( ! empty( $card['image_url'] ) ) : ?>
+                                <img src="<?php echo esc_url( $card['image_url'] ); ?>" alt="<?php echo esc_attr( $card['image_alt'] ); ?>" loading="lazy" />
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="homepage-help-card__meta"><?php echo esc_html( $card['index'] . ' • ' . $card['category'] ); ?></div>
+                        <div class="homepage-help-card__content">
+                            <h3 class="homepage-help-card__title"><?php echo esc_html( $card['title'] ); ?></h3>
+
+                            <?php if ( ! empty( $card['button_url'] ) ) : ?>
+                                <a class="homepage-help-card__icon-link btn-circle-icon-white" href="<?php echo esc_url( $card['button_url'] ); ?>" aria-label="<?php echo esc_attr( $card['title'] ); ?>"></a>
+                            <?php endif; ?>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+    <?php
+
+    return ob_get_clean();
+}
+
+add_shortcode( 'homepage_help_cards', 'render_homepage_help_cards_shortcode' );
+
 
 //title banner / hero banner
 function render_title_banner_shortcode() {
@@ -58,6 +261,166 @@ function render_title_banner_shortcode() {
 }
 
 add_shortcode('title_banner', 'render_title_banner_shortcode');
+
+
+function render_secondary_hero_banner_shortcode() {
+    $banner_image = get_field( 'secondary_hero_banner_image' );
+
+    if ( empty( $banner_image ) || empty( $banner_image['url'] ) ) {
+        return '';
+    }
+
+    $eyebrow = get_field( 'secondary_hero_eyebrow' );
+    $title_line_1 = get_field( 'secondary_hero_title_line_1' );
+    $title_line_2 = get_field( 'secondary_hero_title_line_2' );
+    $description = get_field( 'secondary_hero_description' );
+
+    $primary_button_text = get_field( 'secondary_hero_primary_button_text' );
+    $primary_button_url = get_field( 'secondary_hero_primary_button_url' );
+    $secondary_button_text = get_field( 'secondary_hero_secondary_button_text' );
+    $secondary_button_url = get_field( 'secondary_hero_secondary_button_url' );
+
+    $product_label = get_field( 'secondary_hero_product_label' );
+    $product_post = get_field( 'secondary_hero_product_post' );
+    $product_button_text = get_field( 'secondary_hero_product_button_text' );
+    $product_button_url = '';
+    $product_title = '';
+    $product_price = '';
+    $product_price_suffix = '';
+    $product_image = null;
+
+    if ( $product_post instanceof WP_Post ) {
+        $product_button_url = get_permalink( $product_post );
+        $product_title = get_the_title( $product_post );
+        $product_image_id = get_post_thumbnail_id( $product_post );
+
+        if ( $product_image_id ) {
+            $product_image = acf_get_attachment( $product_image_id );
+        }
+
+        if ( function_exists( 'wc_get_product' ) ) {
+            $product = wc_get_product( $product_post->ID );
+
+            if ( $product ) {
+                $product_price = wc_get_price_to_display( $product );
+                $product_price = number_format_i18n( $product_price, 2 ) . ' €';
+                $product_price_suffix = 's DPH';
+            }
+        }
+    }
+
+    $background_style = sprintf(
+        'style="background-image: linear-gradient(90deg, rgba(21,21,21,0.88) 0%%, rgba(21,21,21,0.70) 34%%, rgba(21,21,21,0.18) 68%%, rgba(21,21,21,0.08) 100%%), url(%s);"',
+        esc_url( $banner_image['url'] )
+    );
+
+    $has_product_card = $product_post instanceof WP_Post;
+
+    ob_start();
+    ?>
+    <div class="title-banner title-banner-secondary" <?php echo $background_style; ?>>
+      <div class="title-banner-secondary__content">
+        <div class="title-banner-secondary__text">
+          <?php if ( $eyebrow ) : ?>
+            <div class="title-banner-secondary__eyebrow">
+              <span class="title-banner-secondary__eyebrow-dot"></span>
+              <span><?php echo esc_html( $eyebrow ); ?></span>
+            </div>
+          <?php endif; ?>
+
+          <?php if ( $title_line_1 || $title_line_2 ) : ?>
+            <h2 class="title-banner-secondary__title">
+              <?php if ( $title_line_1 ) : ?>
+                <span><?php echo esc_html( $title_line_1 ); ?></span>
+              <?php endif; ?>
+              <?php if ( $title_line_2 ) : ?>
+                <span class="is-muted"><?php echo esc_html( $title_line_2 ); ?></span>
+              <?php endif; ?>
+            </h2>
+          <?php endif; ?>
+
+          <?php if ( $description ) : ?>
+            <p class="title-banner-secondary__description"><?php echo esc_html( $description ); ?></p>
+          <?php endif; ?>
+
+          <?php if ( ( $primary_button_text && $primary_button_url ) || ( $secondary_button_text && $secondary_button_url ) ) : ?>
+            <div class="title-banner-secondary__actions">
+              <?php if ( $primary_button_text && $primary_button_url ) : ?>
+                <a class="btn-green-icon" href="<?php echo esc_url( $primary_button_url ); ?>">
+                  <?php echo esc_html( $primary_button_text ); ?>
+                </a>
+              <?php endif; ?>
+
+              <?php if ( $secondary_button_text && $secondary_button_url ) : ?>
+                <a class="btn-white-border-icon" href="<?php echo esc_url( $secondary_button_url ); ?>">
+                  <?php echo esc_html( $secondary_button_text ); ?>
+                </a>
+              <?php endif; ?>
+            </div>
+          <?php endif; ?>
+        </div>
+
+        <div class="title-banner-secondary__mobile-image" aria-hidden="true">
+          <img src="<?php echo esc_url( $banner_image['url'] ); ?>" alt="<?php echo esc_attr( $banner_image['alt'] ?? '' ); ?>">
+        </div>
+
+        <?php if ( $has_product_card ) : ?>
+          <div class="title-banner-secondary__card">
+            <div class="title-banner-secondary__card-top">
+              <?php if ( $product_label ) : ?>
+                <span class="title-banner-secondary__card-label"><?php echo esc_html( $product_label ); ?></span>
+              <?php endif; ?>
+              <div class="title-banner-secondary__card-nav" aria-hidden="true">
+                <span class="nav-arrow is-left"></span>
+                <span class="nav-dots">
+                  <span></span>
+                  <span class="is-active"></span>
+                  <span></span>
+                </span>
+                <span class="nav-arrow is-right"></span>
+              </div>
+            </div>
+
+            <div class="title-banner-secondary__card-body">
+              <div class="title-banner-secondary__card-copy">
+                <?php if ( $product_title ) : ?>
+                  <h3><?php echo esc_html( $product_title ); ?></h3>
+                <?php endif; ?>
+
+                <?php if ( $product_price || $product_price_suffix ) : ?>
+                  <p class="title-banner-secondary__card-price">
+                    <?php if ( $product_price ) : ?>
+                      <strong><?php echo esc_html( $product_price ); ?></strong>
+                    <?php endif; ?>
+                    <?php if ( $product_price_suffix ) : ?>
+                      <span><?php echo esc_html( $product_price_suffix ); ?></span>
+                    <?php endif; ?>
+                  </p>
+                <?php endif; ?>
+              </div>
+
+              <?php if ( $product_image && ! empty( $product_image['url'] ) ) : ?>
+                <div class="title-banner-secondary__card-image">
+                  <img src="<?php echo esc_url( $product_image['url'] ); ?>" alt="<?php echo esc_attr( $product_image['alt'] ?? $product_title ); ?>">
+                </div>
+              <?php endif; ?>
+
+              <?php if ( $product_button_text && $product_button_url ) : ?>
+                <a class="btn-primary title-banner-secondary__card-button" href="<?php echo esc_url( $product_button_url ); ?>">
+                  <?php echo esc_html( $product_button_text ); ?>
+                </a>
+              <?php endif; ?>
+            </div>
+          </div>
+        <?php endif; ?>
+      </div>
+    </div>
+    <?php
+
+    return ob_get_clean();
+}
+
+add_shortcode( 'secondary_hero_banner', 'render_secondary_hero_banner_shortcode' );
 
 
 

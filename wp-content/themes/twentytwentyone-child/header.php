@@ -46,27 +46,67 @@
 							'menu_id'        => 'primary-menu',
 						] );
 					?>
+
+					<div class="mobile-menu-panel" aria-hidden="true">
+						<div class="mobile-menu-header">
+							<a href="/" class="mobile-menu-logo" aria-label="Aprop domov">
+								<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/logo-green.svg" alt="APROP" />
+							</a>
+							<button type="button" class="mobile-menu-close">Zatvoriť</button>
+						</div>
+
+						<div class="mobile-menu-sections">
+							<div class="mobile-menu-section">
+								<p class="mobile-menu-label">Nakupovať</p>
+								<div class="mobile-menu-links">
+									<a href="/drony">Drony</a>
+									<a href="/sluzby">Kurzy</a>
+									<a href="/balicky">Balíčky kurzov</a>
+								</div>
+							</div>
+
+							<div class="mobile-menu-section">
+								<p class="mobile-menu-label">Navigácia</p>
+								<div class="mobile-menu-links">
+									<a href="/">Domov</a>
+									<a href="/pre-firmy">Pre firmy</a>
+									<a href="/o-nas">O nás</a>
+									<a href="/blog">Blog</a>
+									<a href="/kontakt">Kontakt</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="mobile-menu-legal">
+							<a href="/obchodne-podmienky">VOP</a>
+							<a href="/cookies">Cookies</a>
+							<a href="/gdpr">GDPR</a>
+						</div>
+					</div>
 				</nav>
 
 
 				<!-- Login & Cart -->
 				<div class="header-tools">
-					<form role="search" method="get" class="search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-					    <label>
-					        <input type="search" class="search-field"
-					            placeholder="<?php echo esc_attr_x( 'Vyhľadávať', 'placeholder' ); ?>"
-					            value="<?php echo get_search_query(); ?>" name="s" />
-					    </label>
-					    <button type="submit" class="search-submit" aria-label="Vyhľadávať">
-					        <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/lupa.svg" alt="Hľadať" width="20" height="20" />
-					    </button>
-					</form>
+					<div class="header-quick-links">
+						<a class="header-pill-link" href="/blog">Blog</a>
+						<a class="header-pill-link" href="/kontakt">Kontakt</a>
+					</div>
 
+					<div class="header-actions">
+						<form class="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" role="search">
+							<label class="screen-reader-text" for="header-search-input">Vyhľadávať</label>
+							<button class="header-search" type="button" aria-label="Otvoriť vyhľadávanie" aria-expanded="false" aria-controls="header-search-panel">
+								<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/lupa.svg" alt="Hľadať" width="20" height="20" />
+							</button>
+							<div class="header-search-panel" id="header-search-panel">
+								<input id="header-search-input" type="search" name="s" placeholder="Hľadať..." autocomplete="off" />
+								<button class="header-search-submit" type="submit">Hľadať</button>
+							</div>
+						</form>
 
-
-
-
-					<a class="btn-primary btn-icon btn-black" href="/sluzby">Začni hneď</a>
+						<a class="btn-green-icon" href="/drony">Vybrať dron</a>
+					</div>
 					<?php if ( class_exists( 'WooCommerce' ) ) : ?>
 						<a href="<?php echo wc_get_cart_url(); ?>" class="cart-link">
 							<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/cart-white.svg" alt="Košík" width="24" height="24" />

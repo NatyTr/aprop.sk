@@ -1,4 +1,5 @@
 <?php
+//test
 function my_child_theme_enqueue_assets() {
     // Štýly
     wp_enqueue_style('parent-style', get_template_directory_uri() . '/style.css');
@@ -20,7 +21,7 @@ add_action('wp_enqueue_scripts', 'my_child_theme_enqueue_assets');
 wp_enqueue_style( 'custom-style', get_stylesheet_uri(), [], filemtime( get_stylesheet_directory() . '/style.css' ) );
 
 
-//add_filter('show_admin_bar', '__return_false');
+add_filter('show_admin_bar', '__return_false');
 
 require_once get_stylesheet_directory() . '/inc/shortcodes.php';
 require_once get_stylesheet_directory() . '/inc/drones.php';
@@ -752,4 +753,507 @@ function aprop_product_card_acf_fields() {
             'active' => true,
         )
     );
+}
+
+add_action( 'acf/init', 'aprop_homepage_help_cards_acf_fields', 5 );
+
+function aprop_homepage_help_cards_acf_fields() {
+    if ( ! function_exists( 'acf_get_field_group' ) || ! function_exists( 'acf_update_field' ) ) {
+        return;
+    }
+
+    if ( get_option( 'aprop_home_help_cards_fields_flat_migrated' ) ) {
+        return;
+    }
+
+    $field_group = acf_get_field_group( 'group_6828be0395a04' );
+
+    if ( empty( $field_group['ID'] ) ) {
+        return;
+    }
+
+    $parent_id = (int) $field_group['ID'];
+    $fields = array(
+        array(
+            'key' => 'field_aprop_home_help_cards_tab',
+            'label' => 'Začnite tam, kde to potrebujete',
+            'name' => '',
+            'type' => 'tab',
+            'placement' => 'top',
+            'endpoint' => 0,
+            'parent' => $parent_id,
+            'menu_order' => 34,
+        ),
+        array(
+            'key' => 'field_aprop_home_help_cards_label',
+            'label' => 'Label sekcie',
+            'name' => 'home_help_cards_label',
+            'type' => 'text',
+            'default_value' => 'S ČÍM POMÔŽEME',
+            'parent' => $parent_id,
+            'menu_order' => 35,
+        ),
+        array(
+            'key' => 'field_aprop_home_help_cards_title',
+            'label' => 'Nadpis sekcie',
+            'name' => 'home_help_cards_title',
+            'type' => 'text',
+            'default_value' => 'Začnite tam, kde to potrebujete',
+            'parent' => $parent_id,
+            'menu_order' => 36,
+        ),
+    );
+
+    $menu_order = 37;
+
+    foreach ( range( 1, 4 ) as $card_number ) {
+        $fields[] = array(
+            'key' => 'field_aprop_home_help_card_' . $card_number . '_tab',
+            'label' => 'Karta ' . sprintf( '%02d', $card_number ),
+            'name' => '',
+            'type' => 'message',
+            'message' => '<strong>Karta ' . sprintf( '%02d', $card_number ) . '</strong>',
+            'esc_html' => 0,
+            'new_lines' => 'wpautop',
+            'parent' => $parent_id,
+            'menu_order' => $menu_order++,
+        );
+
+        $prefix = 'home_help_card_' . $card_number . '_';
+
+        $fields[] = array(
+            'key' => 'field_aprop_' . $prefix . 'index',
+            'label' => 'Číslo',
+            'name' => $prefix . 'index',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => $menu_order++,
+            'wrapper' => array( 'width' => '20' ),
+        );
+        $fields[] = array(
+            'key' => 'field_aprop_' . $prefix . 'category',
+            'label' => 'Kategória',
+            'name' => $prefix . 'category',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => $menu_order++,
+            'wrapper' => array( 'width' => '30' ),
+        );
+        $fields[] = array(
+            'key' => 'field_aprop_' . $prefix . 'title',
+            'label' => 'Nadpis',
+            'name' => $prefix . 'title',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => $menu_order++,
+        );
+        $fields[] = array(
+            'key' => 'field_aprop_' . $prefix . 'description',
+            'label' => 'Popis',
+            'name' => $prefix . 'description',
+            'type' => 'textarea',
+            'rows' => 3,
+            'parent' => $parent_id,
+            'menu_order' => $menu_order++,
+        );
+        $fields[] = array(
+            'key' => 'field_aprop_' . $prefix . 'button_text',
+            'label' => 'Text tlačidla',
+            'name' => $prefix . 'button_text',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => $menu_order++,
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $fields[] = array(
+            'key' => 'field_aprop_' . $prefix . 'button_url',
+            'label' => 'URL tlačidla',
+            'name' => $prefix . 'button_url',
+            'type' => 'url',
+            'parent' => $parent_id,
+            'menu_order' => $menu_order++,
+            'wrapper' => array( 'width' => '50' ),
+        );
+        $fields[] = array(
+            'key' => 'field_aprop_' . $prefix . 'image',
+            'label' => 'Obrázok',
+            'name' => $prefix . 'image',
+            'type' => 'image',
+            'return_format' => 'array',
+            'preview_size' => 'medium',
+            'library' => 'all',
+            'parent' => $parent_id,
+            'menu_order' => $menu_order++,
+        );
+    }
+
+    foreach ( $fields as $field ) {
+        acf_update_field( $field );
+    }
+
+    update_option( 'aprop_home_help_cards_fields_flat_migrated', 1, false );
+}
+
+add_action( 'acf/init', 'aprop_remove_homepage_help_cards_repeater_fields', 8 );
+
+function aprop_remove_homepage_help_cards_repeater_fields() {
+    if ( ! function_exists( 'acf_get_field' ) || ! function_exists( 'acf_delete_field' ) ) {
+        return;
+    }
+
+    if ( get_option( 'aprop_home_help_cards_repeater_removed' ) ) {
+        return;
+    }
+
+    $repeater = acf_get_field( 'field_aprop_home_help_cards_items' );
+
+    if ( ! empty( $repeater ) ) {
+        acf_delete_field( 'field_aprop_home_help_cards_items' );
+    }
+
+    update_option( 'aprop_home_help_cards_repeater_removed', 1, false );
+}
+
+add_action( 'acf/init', 'aprop_remove_homepage_help_cards_old_tab_fields', 9 );
+
+function aprop_remove_homepage_help_cards_old_tab_fields() {
+    return;
+}
+
+add_action( 'acf/init', 'aprop_repair_homepage_help_cards_single_tab_layout', 9 );
+
+function aprop_repair_homepage_help_cards_single_tab_layout() {
+    if ( ! function_exists( 'acf_get_field_group' ) || ! function_exists( 'acf_get_field' ) || ! function_exists( 'acf_update_field' ) || ! function_exists( 'acf_delete_field' ) ) {
+        return;
+    }
+
+    if ( get_option( 'aprop_home_help_cards_single_tab_repaired' ) ) {
+        return;
+    }
+
+    $field_group = acf_get_field_group( 'group_6828be0395a04' );
+
+    if ( empty( $field_group['ID'] ) ) {
+        return;
+    }
+
+    $parent_id = (int) $field_group['ID'];
+
+    foreach ( range( 1, 4 ) as $card_number ) {
+        $field_key = 'field_aprop_home_help_card_' . $card_number . '_tab';
+        $field = acf_get_field( $field_key );
+
+        if ( empty( $field ) ) {
+            continue;
+        }
+
+        $field['label'] = 'Karta ' . sprintf( '%02d', $card_number );
+        $field['name'] = '';
+        $field['type'] = 'message';
+        $field['message'] = '<strong>Karta ' . sprintf( '%02d', $card_number ) . '</strong>';
+        $field['esc_html'] = 0;
+        $field['new_lines'] = 'wpautop';
+        $field['parent'] = $parent_id;
+
+        acf_update_field( $field );
+    }
+
+    $repeater_keys = array(
+        'field_aprop_home_help_cards_items',
+        'field_aprop_home_help_cards_item_index',
+        'field_aprop_home_help_cards_item_category',
+        'field_aprop_home_help_cards_item_size',
+        'field_aprop_home_help_cards_item_theme',
+        'field_aprop_home_help_cards_item_title',
+        'field_aprop_home_help_cards_item_description',
+        'field_aprop_home_help_cards_item_button_text',
+        'field_aprop_home_help_cards_item_button_url',
+        'field_aprop_home_help_cards_item_image',
+    );
+
+    foreach ( $repeater_keys as $field_key ) {
+        $field = acf_get_field( $field_key );
+
+        if ( ! empty( $field ) ) {
+            acf_delete_field( $field_key );
+        }
+    }
+
+    global $wpdb;
+
+    $duplicate_keys = array(
+        'field_aprop_home_help_cards_tab',
+        'field_aprop_home_help_cards_label',
+        'field_aprop_home_help_cards_title',
+    );
+
+    foreach ( $duplicate_keys as $duplicate_key ) {
+        $ids = $wpdb->get_col(
+            $wpdb->prepare(
+                "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'acf-field' AND post_name = %s ORDER BY ID DESC",
+                $duplicate_key
+            )
+        );
+
+        if ( count( $ids ) < 2 ) {
+            continue;
+        }
+
+        array_shift( $ids );
+
+        foreach ( $ids as $post_id ) {
+            wp_delete_post( (int) $post_id, true );
+        }
+    }
+
+    update_option( 'aprop_home_help_cards_single_tab_repaired', 1, false );
+}
+
+add_action( 'acf/init', 'aprop_seed_homepage_help_cards_defaults', 20 );
+
+function aprop_seed_homepage_help_cards_defaults() {
+    if ( ! function_exists( 'get_field' ) || ! function_exists( 'update_field' ) || ! function_exists( 'aprop_get_homepage_id' ) || ! function_exists( 'aprop_get_homepage_help_cards_defaults' ) ) {
+        return;
+    }
+
+    $page_id = aprop_get_homepage_id();
+
+    if ( ! $page_id ) {
+        return;
+    }
+
+    $defaults = aprop_get_homepage_help_cards_defaults();
+
+    if ( empty( get_field( 'home_help_cards_label', $page_id ) ) ) {
+        update_field( 'field_aprop_home_help_cards_label', $defaults['label'], $page_id );
+    }
+
+    if ( empty( get_field( 'home_help_cards_title', $page_id ) ) ) {
+        update_field( 'field_aprop_home_help_cards_title', $defaults['title'], $page_id );
+    }
+
+    foreach ( $defaults['cards'] as $index => $card ) {
+        $card_number = $index + 1;
+        $prefix = 'home_help_card_' . $card_number . '_';
+
+        $field_map = array(
+            'index' => 'field_aprop_' . $prefix . 'index',
+            'category' => 'field_aprop_' . $prefix . 'category',
+            'title' => 'field_aprop_' . $prefix . 'title',
+            'description' => 'field_aprop_' . $prefix . 'description',
+            'button_text' => 'field_aprop_' . $prefix . 'button_text',
+            'button_url' => 'field_aprop_' . $prefix . 'button_url',
+            'image' => 'field_aprop_' . $prefix . 'image',
+        );
+
+        foreach ( $field_map as $key => $field_key ) {
+            $current = get_field( $prefix . $key, $page_id );
+
+            if ( ! empty( $current ) ) {
+                continue;
+            }
+
+            if ( 'image' === $key ) {
+                $attachment_id = attachment_url_to_postid( $card['image_url'] );
+
+                if ( $attachment_id ) {
+                    update_field( $field_key, $attachment_id, $page_id );
+                }
+
+                continue;
+            }
+
+            update_field( $field_key, $card[ $key ], $page_id );
+        }
+    }
+}
+
+add_action( 'acf/init', 'aprop_install_homepage_secondary_hero_acf_fields', 6 );
+
+function aprop_install_homepage_secondary_hero_acf_fields() {
+    static $has_run = false;
+
+    if ( $has_run ) {
+        return;
+    }
+
+    $has_run = true;
+
+    if ( ! function_exists( 'acf_get_field_group' ) || ! function_exists( 'acf_get_field' ) || ! function_exists( 'acf_update_field' ) ) {
+        return;
+    }
+
+    if ( get_option( 'aprop_home_secondary_hero_fields_installed' ) ) {
+        return;
+    }
+
+    $field_group = acf_get_field_group( 'group_6828be0395a04' );
+
+    if ( empty( $field_group['ID'] ) ) {
+        return;
+    }
+
+    $parent_id = (int) $field_group['ID'];
+
+    global $wpdb;
+
+    $existing_field_id = (int) $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT ID FROM {$wpdb->posts}
+            WHERE post_type = 'acf-field'
+              AND post_parent = %d
+              AND post_name = %s
+            ORDER BY ID DESC
+            LIMIT 1",
+            $parent_id,
+            'field_aprop_home_secondary_hero_tab'
+        )
+    );
+
+    if ( $existing_field_id ) {
+        update_option( 'aprop_home_secondary_hero_fields_installed', 1, false );
+        return;
+    }
+
+    update_option( 'aprop_home_secondary_hero_fields_installed', 1, false );
+
+    $wpdb->query(
+        $wpdb->prepare(
+            "UPDATE {$wpdb->posts}
+            SET menu_order = menu_order + %d
+            WHERE post_parent = %d
+              AND post_type = 'acf-field'
+              AND menu_order >= %d",
+            13,
+            $parent_id,
+            6
+        )
+    );
+
+    $fields = array(
+        array(
+            'key' => 'field_aprop_home_secondary_hero_tab',
+            'label' => 'Title banner - nový',
+            'name' => '',
+            'type' => 'tab',
+            'placement' => 'top',
+            'endpoint' => 0,
+            'parent' => $parent_id,
+            'menu_order' => 6,
+        ),
+        array(
+            'key' => 'field_aprop_home_secondary_hero_banner_image',
+            'label' => 'Hlavný obrázok',
+            'name' => 'secondary_hero_banner_image',
+            'type' => 'image',
+            'return_format' => 'array',
+            'preview_size' => 'medium',
+            'library' => 'all',
+            'parent' => $parent_id,
+            'menu_order' => 7,
+        ),
+        array(
+            'key' => 'field_aprop_home_secondary_hero_eyebrow',
+            'label' => 'Eyebrow',
+            'name' => 'secondary_hero_eyebrow',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => 8,
+        ),
+        array(
+            'key' => 'field_aprop_home_secondary_hero_title_line_1',
+            'label' => 'Nadpis - 1. riadok',
+            'name' => 'secondary_hero_title_line_1',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => 9,
+        ),
+        array(
+            'key' => 'field_aprop_home_secondary_hero_title_line_2',
+            'label' => 'Nadpis - 2. riadok',
+            'name' => 'secondary_hero_title_line_2',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => 10,
+        ),
+        array(
+            'key' => 'field_aprop_home_secondary_hero_description',
+            'label' => 'Popis',
+            'name' => 'secondary_hero_description',
+            'type' => 'textarea',
+            'rows' => 4,
+            'parent' => $parent_id,
+            'menu_order' => 11,
+        ),
+        array(
+            'key' => 'field_aprop_home_secondary_hero_primary_button_text',
+            'label' => 'Primárne tlačidlo - text',
+            'name' => 'secondary_hero_primary_button_text',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => 12,
+            'wrapper' => array( 'width' => '50' ),
+        ),
+        array(
+            'key' => 'field_aprop_home_secondary_hero_primary_button_url',
+            'label' => 'Primárne tlačidlo - URL',
+            'name' => 'secondary_hero_primary_button_url',
+            'type' => 'url',
+            'parent' => $parent_id,
+            'menu_order' => 13,
+            'wrapper' => array( 'width' => '50' ),
+        ),
+        
+        array(
+            'key' => 'field_aprop_home_secondary_hero_secondary_button_text',
+            'label' => 'Sekundárne tlačidlo - text',
+            'name' => 'secondary_hero_secondary_button_text',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => 14,
+            'wrapper' => array( 'width' => '50' ),
+        ),
+        array(
+            'key' => 'field_aprop_home_secondary_hero_secondary_button_url',
+            'label' => 'Sekundárne tlačidlo - URL',
+            'name' => 'secondary_hero_secondary_button_url',
+            'type' => 'url',
+            'parent' => $parent_id,
+            'menu_order' => 15,
+            'wrapper' => array( 'width' => '50' ),
+        ),
+        array(
+            'key' => 'field_aprop_home_secondary_hero_product_label',
+            'label' => 'Karta produktu - label',
+            'name' => 'secondary_hero_product_label',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => 16,
+        ),
+        array(
+            'key' => 'field_aprop_home_secondary_hero_product_post',
+            'label' => 'Karta produktu - produkt',
+            'name' => 'secondary_hero_product_post',
+            'type' => 'post_object',
+            'post_type' => array( 'product' ),
+            'return_format' => 'object',
+            'ui' => 1,
+            'parent' => $parent_id,
+            'menu_order' => 17,
+        ),
+        array(
+            'key' => 'field_aprop_home_secondary_hero_product_button_text',
+            'label' => 'Karta produktu - text tlačidla',
+            'name' => 'secondary_hero_product_button_text',
+            'type' => 'text',
+            'parent' => $parent_id,
+            'menu_order' => 18,
+        ),
+    );
+
+    foreach ( $fields as $field ) {
+        acf_update_field( $field );
+    }
+
+    update_option( 'aprop_home_secondary_hero_fields_installed', 1, false );
 }
