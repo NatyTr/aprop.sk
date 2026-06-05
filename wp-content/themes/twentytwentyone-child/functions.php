@@ -1366,65 +1366,6 @@ function aprop_install_homepage_modern_agro_tabs_acf_fields() {
     update_option( 'aprop_home_modern_agro_fields_installed', 1, false );
 }
 
-add_action( 'acf/init', 'aprop_upgrade_homepage_modern_agro_slider_fields', 9 );
-
-function aprop_upgrade_homepage_modern_agro_slider_fields() {
-    if ( ! function_exists( 'acf_get_field_group' ) || ! function_exists( 'acf_update_field' ) ) {
-        return;
-    }
-
-    if ( get_option( 'aprop_home_modern_agro_slider_fields_added' ) ) {
-        return;
-    }
-
-    $field_group = acf_get_field_group( 'group_6828be0395a04' );
-
-    if ( empty( $field_group['ID'] ) ) {
-        return;
-    }
-
-    $parent_id = (int) $field_group['ID'];
-
-    $fields = array(
-        array(
-            'key' => 'field_aprop_home_modern_agro_button_text',
-            'label' => 'Tlačidlo - text',
-            'name' => 'home_modern_agro_button_text',
-            'type' => 'text',
-            'parent' => $parent_id,
-            'menu_order' => 202,
-            'wrapper' => array( 'width' => '50' ),
-        ),
-        array(
-            'key' => 'field_aprop_home_modern_agro_button_url',
-            'label' => 'Tlačidlo - URL',
-            'name' => 'home_modern_agro_button_url',
-            'type' => 'url',
-            'parent' => $parent_id,
-            'menu_order' => 203,
-            'wrapper' => array( 'width' => '50' ),
-        ),
-        array(
-            'key' => 'field_aprop_home_modern_agro_products',
-            'label' => 'Produkty do slidera',
-            'name' => 'home_modern_agro_products',
-            'type' => 'post_object',
-            'post_type' => array( 'product' ),
-            'return_format' => 'object',
-            'multiple' => 1,
-            'ui' => 1,
-            'parent' => $parent_id,
-            'menu_order' => 204,
-        ),
-    );
-
-    foreach ( $fields as $field ) {
-        acf_update_field( $field );
-    }
-
-    update_option( 'aprop_home_modern_agro_slider_fields_added', 1, false );
-}
-
 add_action( 'acf/init', 'aprop_cleanup_homepage_modern_agro_unused_fields', 10 );
 
 function aprop_cleanup_homepage_modern_agro_unused_fields() {
@@ -1465,4 +1406,63 @@ function aprop_cleanup_homepage_modern_agro_unused_fields() {
     }
 
     update_option( 'aprop_home_modern_agro_unused_fields_removed', 1, false );
+}
+
+add_action( 'acf/init', 'aprop_cleanup_homepage_modern_agro_duplicate_fields', 11 );
+
+function aprop_cleanup_homepage_modern_agro_duplicate_fields() {
+    if ( ! function_exists( 'acf_get_field_group' ) || ! function_exists( 'acf_get_fields' ) || ! function_exists( 'acf_delete_field' ) ) {
+        return;
+    }
+
+    if ( get_option( 'aprop_home_modern_agro_duplicate_fields_removed' ) ) {
+        return;
+    }
+
+    $field_group = acf_get_field_group( 'group_6828be0395a04' );
+
+    if ( empty( $field_group ) ) {
+        return;
+    }
+
+    $fields = (array) acf_get_fields( $field_group );
+
+    if ( empty( $fields ) ) {
+        update_option( 'aprop_home_modern_agro_duplicate_fields_removed', 1, false );
+        return;
+    }
+
+    $names_to_dedupe = array(
+        'home_modern_agro_button_text' => 'field_aprop_home_modern_agro_button_text',
+        'home_modern_agro_button_url'  => 'field_aprop_home_modern_agro_button_url',
+        'home_modern_agro_products'    => 'field_aprop_home_modern_agro_products',
+    );
+
+    foreach ( $names_to_dedupe as $field_name => $preferred_key ) {
+        $matches = array();
+
+        foreach ( $fields as $field ) {
+            if ( empty( $field['name'] ) || $field['name'] !== $field_name ) {
+                continue;
+            }
+
+            $matches[] = $field;
+        }
+
+        if ( count( $matches ) <= 1 ) {
+            continue;
+        }
+
+        foreach ( $matches as $field ) {
+            if ( ! empty( $field['key'] ) && $field['key'] === $preferred_key ) {
+                continue;
+            }
+
+            if ( ! empty( $field['ID'] ) ) {
+                acf_delete_field( (int) $field['ID'] );
+            }
+        }
+    }
+
+    update_option( 'aprop_home_modern_agro_duplicate_fields_removed', 1, false );
 }
