@@ -26,6 +26,9 @@ wp-includes/
 *.zip
 *.log
 
+# Environment-specific config (never commit local/production secrets)
+wp-config.php
+
 # WordPress default files
 wp-cli.phar
 readme.html
