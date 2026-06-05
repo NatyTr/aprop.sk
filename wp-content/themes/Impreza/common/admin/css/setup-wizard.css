@@ -1,0 +1,665 @@
+
+/* Main
+--------------------------------------------------------------------------*/
+body[class*=us-setup-wizard] {
+	background: var(--usof-color-white);
+	overflow-y: scroll;
+	}
+body[class*=us-setup-wizard] #wpfooter,
+body[class*=us-setup-wizard] .us-core-notice {
+	display: none;
+	}
+body[class*=us-setup-wizard] #wpbody-content {
+	padding-bottom: 0 !important;
+	}
+
+.us-wizard {
+	margin-left: -20px;
+	background: var(--usof-color-white);
+	}
+.rtl .us-wizard {
+	margin-left: 0;
+	margin-right: -20px;
+	}
+	.us-wizard img {
+		max-width: 100%;
+		height: auto;
+		}
+	.us-wizard .button {
+		font-size: 16px;
+		font-weight: 600;
+		padding: .5em 2.5em;
+		border-radius: 4em;
+		}
+	.us-wizard-header {
+		position: sticky;
+		z-index: 11;
+		top: var(--wp-admin--admin-bar--height);
+		text-align: center;
+		font-size: 14px;
+		padding: 15px;
+		background: var(--usof-color-gray-80);
+		color: var(--usof-color-white);
+		}
+		.us-wizard-menu {
+			display: flex;
+			justify-content: center;
+			gap: 10px;
+			}
+			.us-wizard-menu-item {
+				display: flex;
+				align-items: center;
+				padding: 10px 20px;
+				font-weight: 600;
+				line-height: 20px;
+				border-radius: 40px;
+				position: relative;
+				background: none;
+				border: none;
+				color: inherit;
+				cursor: pointer;
+				}
+				.us-wizard-menu-item i {
+					font-style: normal;
+					line-height: 30px;
+					height: 30px;
+					width: 30px;
+					border-radius: 50%;
+					margin-right: 8px;
+					background: var(--usof-color-gray-50);
+					color: var(--usof-color-white);
+					}
+			.us-wizard-menu-item:not(:disabled):not(.active):hover {
+				background: var(--usof-color-gray-70);
+				}
+			.us-wizard-menu-item.active {
+				font-size: 1.2em;
+				}
+				.us-wizard-menu-item.active:after {
+					content: '';
+					position: absolute;
+					bottom: -16px;
+					left: 50%;
+					margin-left: -12px;
+					border: 12px solid var(--usof-color-white);
+					border-top-color: transparent;
+					border-left-color: transparent;
+					border-right-color: transparent;
+					}
+			.us-wizard-menu-item:disabled {
+				color: var(--usof-color-gray-30);
+				cursor: default;
+				}
+			.us-wizard-menu-item.hidden {
+				display: none;
+				}
+		.us-wizard-step {
+			display: none;
+			padding: 30px;
+			}
+		.us-wizard-step.active {
+			display: block;
+			}
+			.us-wizard-notification {
+				text-align: center;
+				}
+				.us-wizard-notification > span {
+					display: inline-block;
+					vertical-align: top;
+					font-size: 14px;
+					padding: 10px 15px;
+					margin-bottom: 20px;
+					border-radius: 3px;
+					background: var(--usof-color-yellow-5);
+					}
+			.us-wizard-step-title {
+				text-align: center;
+				font-weight: 600;
+				font-size: 26px;
+				line-height: 1.4;
+				margin: 0 0 30px;
+				}
+			.us-wizard-step-row {
+				display: flex;
+				gap: 40px;
+				max-width: 1000px;
+				margin: 0 auto;
+				}
+			.us-wizard-step-footer {
+				text-align: center;
+				margin-top: 40px;
+				}
+
+/* Step: Activate lisence
+--------------------------------------------------------------------------*/
+.us-wizard.step-activate_theme .us-wizard-header {
+	display: none;
+	}
+.us-wizard.step-activate_theme .us-wizard-body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: calc(100vh - var(--wp-admin--admin-bar--height));
+	}
+
+/* Step: Select Setup Type
+--------------------------------------------------------------------------*/
+.us-wizard.step-setup_type .us-wizard-body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: calc(100vh - 102px);
+	}
+.us-wizard-setup-type {
+	display: flex;
+	gap: 30px;
+	max-width: 800px;
+	margin: 0 auto;
+	}
+	.us-wizard-setup-type > label {
+		flex: 1 0 300px;
+		}
+		.us-wizard-setup-type > label > input {
+			visibility: hidden;
+			position: absolute;
+			}
+		.us-wizard-setup-type-item {
+			text-align: center;
+			padding: 50px;
+			border: 3px solid transparent;
+			border-radius: 10px;
+			box-shadow: var(--usof-box-shadow-small);
+			}
+		.us-wizard-setup-type-item:hover {
+			box-shadow: var(--usof-box-shadow);
+			}
+			.us-wizard-setup-type-item-title {
+				font-size: 26px;
+				line-height: 1.4;
+				font-weight: 600;
+				margin-bottom: .6em;
+				}
+			.us-wizard-setup-type-item > span {
+				font-size: 16px;
+				line-height: 1.5;
+				}
+		input:checked + .us-wizard-setup-type-item {
+			border-color: var(--usof-color-blue-50);
+			}
+
+/* Step: Select Website
+--------------------------------------------------------------------------*/
+.us-wizard-step.prebuilt_site.active {
+	display: flex;
+	align-items: flex-start;
+	padding: 0;
+	}
+	.us-wizard-demos-filters {
+		flex-shrink: 0;
+		position: sticky;
+		top: 102px;
+		width: 180px;
+		padding: 10px;
+		height: calc(100vh - 122px);
+		overflow-y: auto;
+		background: var(--usof-color-gray-2);
+		}
+		.us-wizard-demos-filter {
+			display: block;
+			}
+			.us-wizard-demos-filter span {
+				display: block;
+				font-size: 15px;
+				font-weight: 600;
+				padding: .5em .7em;
+				border-radius: 3px;
+				text-transform: capitalize;
+				cursor: pointer;
+				position: relative;
+				}
+				.us-wizard-demos-filter span > i {
+					position: absolute;
+					top: .5em;
+					right: .7em;
+					font-style: normal;
+					color: var(--usof-color-gray-30);
+					}
+				.rtl .us-wizard-demos-filter span > i {
+					left: .7em;
+					right: auto;
+					}
+			.us-wizard-demos-filter:hover span,
+			.us-wizard-demos-filter input:focus + span {
+				background: var(--usof-color-gray-5);
+				}
+			.us-wizard-demos-filter input:checked + span {
+				background: var(--usof-color-white);
+				color: var(--usof-color-blue-50);
+				}
+.us-wizard-demos {
+	padding: 30px 20px;
+	width: 100%;
+	}
+	.us-wizard-demos-list {
+		flex-grow: 1;
+		display: grid;
+		grid-template-columns: repeat( auto-fill, minmax(320px, 1fr) );
+		}
+	.us-wizard-demos-item {
+		position: relative;
+		overflow: hidden;
+		padding: 5px 20px 15px;
+		border-radius: 10px;
+		cursor: pointer;
+		}
+	.us-wizard-demos-item:hover {
+		box-shadow: var(--usof-box-shadow), inset 0 0 0 3px var(--usof-color-blue-50);
+		}
+		.us-wizard-demos-item img {
+			display: block;
+			background: var(--usof-color-gray-2);
+			}
+		.us-wizard-demos-item-title {
+			text-align: center;
+			}
+		.us-wizard-demos-item > a {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			font-size: 16px;
+			text-align: center;
+			width: 40px;
+			line-height: 40px;
+			height: 40px;
+			text-decoration: none;
+			border-radius: 50%;
+			background: var(--usof-color-gray-2);
+			visibility: hidden;
+			}
+		.us-wizard-demos-item:hover > a {
+			visibility: visible;
+			}
+		.us-wizard-demos-item > a:hover {
+			background: var(--usof-color-gray-5);
+			}
+			.us-wizard-demos-item > a:before {
+				content: '\f06e';
+				}
+
+/* Step: Select Content
+--------------------------------------------------------------------------*/
+.us-wizard-preview-image {
+	max-width: 550px;
+	}
+	.us-wizard-preview-image img {
+		display: block;
+		background: var(--usof-color-gray-2);
+		}
+.us-wizard-install-actions,
+.us-wizard-content-options {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-self: stretch;
+	padding: 30px 60px;
+	background: var(--usof-color-gray-2);
+	border-radius: 10px;
+	}
+	.us-wizard-content-options label {
+		display: block;
+		position: relative;
+		padding-bottom: 10px;
+		}
+	.us-wizard-content-options label.child {
+		margin-left: 24px;
+		}
+	.rtl .us-wizard-content-options label.child {
+		margin-left: 0;
+		margin-right: 24px;
+		}
+		.us-wizard-content-options label > span {
+			font-size: 16px;
+			font-weight: 600;
+			white-space: nowrap;
+			}
+.us-tooltip {
+	cursor: help;
+	}
+	.us-tooltip > i:before {
+		content: '\f059';
+		font-size: 13px;
+		padding: 0 4px;
+		color: var(--usof-color-gray-30);
+		}
+	.us-tooltip > span {
+		display: none;
+		position: absolute;
+		top: 100%;
+		z-index: 11;
+		font-size: 13px;
+		font-weight: normal;
+		padding: 1em;
+		white-space: normal;
+		border-radius: 4px;
+		background: var(--usof-color-gray-80);
+		color: var(--usof-color-white);
+		}
+	.us-tooltip:hover > span {
+		display: block;
+		}
+
+/* Step: Select Header/Footer/Color/Fonts
+--------------------------------------------------------------------------*/
+.from_scratch_with_iframe .us-wizard-step-title,
+.from_scratch_with_iframe .us-wizard-install-actions {
+	display: none;
+	}
+.us-wizard.step-from_scratch_header .for_header,
+.us-wizard.step-from_scratch_footer .for_footer,
+.us-wizard.step-from_scratch_colors .for_colors,
+.us-wizard.step-from_scratch_fonts .for_fonts {
+	display: block;
+	}
+.us-wizard.step-from_scratch_header .us-wizard-step,
+.us-wizard.step-from_scratch_footer .us-wizard-step,
+.us-wizard.step-from_scratch_colors .us-wizard-step,
+.us-wizard.step-from_scratch_fonts .us-wizard-step {
+	padding: 0;
+	}
+	.us-wizard.step-from_scratch_header .us-wizard-step-row,
+	.us-wizard.step-from_scratch_footer .us-wizard-step-row,
+	.us-wizard.step-from_scratch_colors .us-wizard-step-row,
+	.us-wizard.step-from_scratch_fonts .us-wizard-step-row {
+		gap: 0;
+		align-items: flex-start;
+		max-width: 1920px;
+		}
+.us-wizard-preview-wrap {
+	position: sticky;
+	top: calc(70px + var(--wp-admin--admin-bar--height));
+	text-align: center;
+	padding: 30px;
+	flex: 1 0 60%;
+	}
+	.us-wizard-preview {
+		position: relative;
+		overflow: hidden;
+		height: 60vh;
+		max-width: 960px;
+		max-height: 600px;
+		margin: 0 auto;
+		box-shadow: var(--usof-box-shadow);
+		}
+		.us-wizard-preview iframe {
+			width: 200%;
+			height: 200%;
+			transform: scale(.5);
+			transform-origin: top left;
+			background: var(--usof-color-gray-5);
+			}
+		.rtl .us-wizard-preview iframe {
+			transform-origin: top right;
+			}
+	.us-wizard-install .us-wizard-preview {
+		height: 50vh;
+		}
+	.us-wizard-preview-wrap .button {
+		margin-top: 40px;
+		}
+
+/* Templates list
+--------------------------------------------------------------------------*/
+.us-wizard-templates-list {
+	display: none;
+	padding: 10px;
+	max-width: 600px;
+	background: var(--usof-color-gray-2);
+	}
+	.us-wizard-templates-item {
+		cursor: pointer;
+		padding: 10px;
+		border-radius: 10px;
+		width: 100%;
+		box-sizing: border-box;
+		}
+		.us-wizard-templates-item img {
+			display: block;
+			max-height: min(300px, 40vh);
+			}
+	.us-wizard-templates-item:not(.active):hover {
+		background: var(--usof-color-gray-20);
+		}
+	.us-wizard-templates-item.active {
+		box-shadow: inset 0 0 0 3px var(--usof-color-blue-50);
+		}
+.step-from_scratch_colors .us-wizard-templates-list.for_colors {
+	display: flex;
+	flex-wrap: wrap;
+	}
+	.us-wizard-templates-list.for_colors .us-wizard-templates-item {
+		width: 50%;
+		}
+
+/* Step: Select Plugins
+--------------------------------------------------------------------------*/
+.us-wizard-step .us-addons-lists {
+	margin: 0 auto;
+	}
+	.us-addon > label {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		}
+		.us-addon > label input {
+			position: absolute;
+			top: 25px;
+			right: 25px;
+			margin: 0;
+			height: 2rem;
+			width: 2rem;
+			}
+		.rtl .us-addon > label input {
+			left: 25px;
+			right: auto;
+			}
+	.us-addon:hover {
+		box-shadow: var(--usof-box-shadow);
+		}
+		.us-addon > label:hover input {
+			background: var(--usof-color-gray-2);
+			}
+			.us-addon > label input:before {
+				width: 2.2rem !important;
+				}
+		.us-addon > label input:checked + i {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			border-radius: 10px;
+			border: 3px solid var(--usof-color-blue-50);
+			}
+.us-wizard.step-from_scratch_plugins .us-wizard-step-footer {
+	position: sticky;
+	bottom: 0;
+	background: linear-gradient( transparent, var(--usof-color-white) 40% );
+	padding: 30px 0 10px;
+	margin-top: 0;
+	}
+
+/* Step: Installation
+--------------------------------------------------------------------------*/
+.us-wizard-install-actions-item {
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 1.4;
+	position: relative;
+	padding-right: 20px;
+	margin-bottom: 10px;
+	}
+.rtl .us-wizard-install-actions-item {
+	padding-left: 20px;
+	padding-right: 0;
+	}
+	.us-wizard-install-actions-item span {
+		display: block;
+		font-size: 14px;
+		margin-top: 5px;
+		}
+	.us-wizard-install-actions-item i {
+		position: absolute;
+		right: 0;
+		top: 6px;
+		font-size: 14px;
+		}
+	.rtl .us-wizard-install-actions-item i {
+		left: 0;
+		right: auto;
+		}
+		.us-wizard-install-actions-item i:after {
+			content: '';
+			}
+	.us-wizard-install-actions-item.loading i {
+		animation: rotation 0.8s infinite linear;
+		}
+		.us-wizard-install-actions-item.loading i:after {
+			content: '\f110';
+			}
+	.us-wizard-install-actions-item.loading_success {
+		color: var(--usof-color-green-40);
+		}
+		.us-wizard-install-actions-item.loading_success i:after {
+			content: '\f00c';
+			}
+	.us-wizard-install-actions-item.loading_fail {
+		color: var(--usof-color-red-30);
+		}
+		.us-wizard-install-actions-item.loading_fail i:after {
+			content: '\f00d';
+			}
+.us-wizard-install-actions .button {
+	margin-top: 20px;
+	position: relative;
+	}
+.us-wizard.step-from_scratch_install .us-wizard-preview-wrap .button {
+	display: none;
+	}
+.us-wizard.step-from_scratch_install .us-wizard-install-actions {
+	display: flex;
+	}
+.us-wizard.step-from_scratch_install .us-wizard-step-title.for_install {
+	display: block;
+	}
+.us-wizard.step-from_scratch_install .us-wizard-preview-wrap {
+	position: static;
+	padding: 0;
+	max-width: 550px;
+	}
+	.us-wizard.step-from_scratch_install .us-wizard-preview {
+		aspect-ratio: 3/2;
+		height: auto;
+		}
+		.us-wizard.step-from_scratch_install .us-wizard-preview iframe {
+			width: 300%;
+			height: 300%;
+			transform: scale(.3333);
+			}
+
+/* Step: Success
+--------------------------------------------------------------------------*/
+.us-wizard.step-success .us-wizard-body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	height: calc(100vh - var(--wp-admin--admin-bar--height));
+	}
+	.us-wizard.step-success i {
+		font-size: 50px;
+		line-height: 1;
+		background: var(--usof-color-green-40);
+		color: #fff;
+		border-radius: 50%;
+		box-shadow: var(--usof-box-shadow);
+		padding: 0.6em;
+		}
+	.us-wizard.step-success .us-wizard-step-title {
+		margin: 1.2em 0 1.5em;
+		}
+
+/* Responsive styles
+--------------------------------------------------------------------------*/
+@media (max-width: 1400px) {
+.us-wizard-header {
+	font-size: 13px;
+	padding: 10px;
+	}
+.us-wizard-menu {
+	gap: 5px;
+	}
+.us-wizard-menu-item.active::after {
+	bottom: -12px;
+	}
+.us-wizard-demos,
+.us-wizard-step {
+	padding: 20px;
+	}
+.us-wizard .button {
+	font-size: 14px;
+	}
+.us-wizard-step-title,
+.us-wizard-setup-type-item-title {
+	font-size: 20px;
+	margin: 0 0 20px;
+	}
+.us-wizard-demos-filters {
+	top: 92px;
+	height: calc(100vh - 112px);
+	}
+.us-wizard-demos-filter span {
+	font-size: 14px;
+	}
+.us-wizard-demos-list {
+	grid-template-columns: repeat( auto-fill, minmax(250px, 1fr) );
+	}
+.us-wizard-preview-wrap {
+	padding: 20px;
+	}
+.us-wizard-preview {
+	height: 55vh;
+	}
+.us-wizard-step-footer,
+.us-wizard-preview-wrap .button {
+	margin-top: 30px;
+	}
+}
+@media (max-width: 782px) {
+.us-wizard {
+	margin-left: -10px;
+	}
+.rtl .us-wizard {
+	margin-left: 0;
+	margin-right: -10px;
+	}
+.us-wizard-menu,
+.us-wizard-setup-type,
+.us-wizard-step-row,
+.us-wizard-demos {
+	flex-wrap: wrap;
+	}
+.us-wizard-header,
+.us-wizard-demos-filters,
+.us-wizard-preview-wrap {
+	position: static;
+	}
+.us-wizard-setup-type-item,
+.us-wizard-install-actions,
+.us-wizard-content-options {
+	padding: 30px;
+	}
+}

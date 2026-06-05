@@ -21,18 +21,22 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'j81p676svhcf2' );
-/** MySQL database username */
-define( 'DB_USER', 'j81p676svhcf2' );
-/** MySQL database password */
-define( 'DB_PASSWORD', 'j81p676svhcfA' );
-/** MySQL hostname */
-define( 'DB_HOST', 'mariadb103.websupport.sk:3313' );
-/** Database Charset to use in creating database tables. */
-define( 'DB_CHARSET', 'utf8' );
-/** The Database Collate type. Don't change this if in doubt. */
-define( 'DB_COLLATE', '' );
+define( 'DB_NAME', 'local' );
 
+/** Database username */
+define( 'DB_USER', 'root' );
+
+/** Database password */
+define( 'DB_PASSWORD', 'root' );
+
+/** Database hostname */
+define( 'DB_HOST', 'localhost' );
+
+/** Database charset to use in creating database tables. */
+define( 'DB_CHARSET', 'utf8' );
+
+/** The database collate type. Don't change this if in doubt. */
+define( 'DB_COLLATE', '' );
 
 /**#@+
  * Authentication unique keys and salts.
@@ -69,6 +73,8 @@ $table_prefix = 'szbnbs';
 
 /* Add any custom values between this line and the "stop editing" line. */
 
+define( 'WP_HOME', 'http://apropfull.local' );
+define( 'WP_SITEURL', 'http://apropfull.local' );
 
 
 /**
@@ -84,14 +90,13 @@ $table_prefix = 'szbnbs';
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
 if ( ! defined( 'WP_DEBUG' ) ) {
-	define( 'WP_DEBUG', false );
+	define( 'WP_DEBUG', true );
 }
 
 define( 'WP_DEBUG_LOG', false );
 define( 'WP_DEBUG_DISPLAY', false );
 
-define( 'WP_ENVIRONMENT_TYPE', 'production' );
-define( 'DISABLE_WP_CRON', true );   
+define( 'WP_ENVIRONMENT_TYPE', 'local' );
 define( 'DUPLICATOR_AUTH_KEY', '7q:Qo<+vt)5:)Ci~^),I<]7c#GUThF6vDhS>`}X<l3KX$.4#c@zuR+H{[*OqJnU;' );
 /* That's all, stop editing! Happy publishing. */
 

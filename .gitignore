@@ -11,6 +11,12 @@ wp-content/upgrade/
 wp-content/upgrade-temp-backup/
 wp-content/plugins/
 wp-content/languages/
+wp-content/backups-dup-pro/
+wp-content/updraft/
+wp-content/wp-rocket-config/
+wp-content/wphb-cache/
+wp-content/wpo-cache/
+wp-content/w3tc-config/updraft/
 
 # WordPress core
 wp-admin/
