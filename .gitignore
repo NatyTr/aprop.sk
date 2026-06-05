@@ -1,8 +1,11 @@
+apropsk-migrate-20260605014322.sql
+apiclient-master
 wp-content/uploads/
 wp-content/cache/
 wp-content/upgrade/
 wp-content/plugins/
-wp-content/languages/
+wp-content/languages/.
+wp-content/upgrade-temp-backup/
 
 wp-admin/
 wp-includes/
