@@ -97,7 +97,7 @@
 						<form class="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" role="search">
 							<label class="screen-reader-text" for="header-search-input">Vyhľadávať</label>
 							<button class="header-search" type="button" aria-label="Otvoriť vyhľadávanie" aria-expanded="false" aria-controls="header-search-panel">
-								<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/lupa.svg" alt="Hľadať" width="20" height="20" />
+								<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/lupa.svg?v2" alt="Hľadať" width="20" height="20" />
 							</button>
 							<div class="header-search-panel" id="header-search-panel">
 								<input id="header-search-input" type="search" name="s" placeholder="Hľadať..." autocomplete="off" />
