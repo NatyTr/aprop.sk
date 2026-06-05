@@ -1482,6 +1482,10 @@ function aprop_get_home_modern_agro_products( $page_id, $minimum_products = 6 ) 
         $selected_ids[] = (int) $selected_product->ID;
     }
 
+    if ( empty( $products ) ) {
+        return array();
+    }
+
     if ( count( $products ) >= $minimum_products || ! function_exists( 'aprop_drone_category_id' ) ) {
         return $products;
     }
@@ -1545,7 +1549,7 @@ function render_home_modern_agro_slider_shortcode() {
     $section = aprop_get_home_modern_agro_slider_data();
 
     if ( empty( $section['products'] ) ) {
-        return current_user_can( 'edit_pages' ) ? '<p class="modern-agro-tabs__empty">Vyplň ACF polia pre slider "Drony pre moderné poľnohospodárstvo".</p>' : '';
+        return '';
     }
 
     $section_id = 'modern-agro-slider-' . wp_unique_id();
