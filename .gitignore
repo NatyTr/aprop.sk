@@ -16,11 +16,19 @@ wp-content/updraft/
 wp-content/wp-rocket-config/
 wp-content/wphb-cache/
 wp-content/wpo-cache/
-wp-content/w3tc-config/updraft/
+wp-content/w3tc-config/
+wp-content/wflogs/
+wp-content/advanced-cache.php
+wp-content/autoptimize_404_handler.php
 
-# WordPress core
+# WordPress core (managed on server, not via git)
 wp-admin/
 wp-includes/
+/wp-*.php
+/index.php
+/xmlrpc.php
+/robots.txt
+/.htaccess
 
 # Archives & logs
 *.zip

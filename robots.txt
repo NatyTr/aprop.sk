@@ -1,3 +1,0 @@
-User-agent: *
-Disallow: /najnovsi/wp-admin/
-Allow: /najnovsi/wp-admin/admin-ajax.php
