@@ -1,5 +1,4 @@
 <?php
-//test
 function my_child_theme_enqueue_assets() {
     // Štýly
     wp_enqueue_style('parent-style', get_template_directory_uri() . '/style.css');
@@ -1203,7 +1202,7 @@ function aprop_install_homepage_secondary_hero_acf_fields() {
             'menu_order' => 13,
             'wrapper' => array( 'width' => '50' ),
         ),
-        
+
         array(
             'key' => 'field_aprop_home_secondary_hero_secondary_button_text',
             'label' => 'Sekundárne tlačidlo - text',
