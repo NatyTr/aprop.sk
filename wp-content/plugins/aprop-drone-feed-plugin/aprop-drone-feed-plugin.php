@@ -420,7 +420,7 @@ final class Aprop_Drone_Feed_Sync {
         }
 
         $title = $this->clean_enterra_suffix($feed_product['title'] ?? '');
-        $description = $this->clean_enterra_suffix($feed_product['description'] ?? '');
+        $description = $this->format_product_description($this->clean_enterra_suffix($feed_product['description'] ?? ''));
         $price = $this->parse_price($feed_product['price'] ?? '');
         $stock_status = $this->map_stock_status($feed_product['availability'] ?? '');
 
@@ -480,6 +480,19 @@ final class Aprop_Drone_Feed_Sync {
 
     private function clean_enterra_suffix(string $value): string {
         return trim(preg_replace('/\s*\|\s*Enterra\.sk\s*$/u', '', $value));
+    }
+
+    private function format_product_description(string $description): string {
+        $description = trim($description);
+        if ($description === '') {
+            return '';
+        }
+
+        $description = preg_replace('/([.!?])(?=(?:\p{Lu}|\p{N}))/u', "$1\n\n", $description);
+        $description = preg_replace("/[ \t]*\n[ \t]*/", "\n", (string) $description);
+        $description = preg_replace("/\n{3,}/", "\n\n", (string) $description);
+
+        return trim((string) $description);
     }
 
     private function parse_price(string $price): ?float {
