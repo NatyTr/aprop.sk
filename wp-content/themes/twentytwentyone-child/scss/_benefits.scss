@@ -1,176 +1,281 @@
 .benefits-block {
   .benefits-titles {
-    span {
-      margin-bottom: 9px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 460px);
+    gap: 24px 56px;
+    align-items: center;
+    margin-bottom: fluid(24, 42);
+
+    &__main {
+      max-width: 780px;
+      width: 100%;
+
+      .label {
+        margin-bottom: 12px;
+      }
+    }
+
+    &__text {
+      max-width: 460px;
+      width: 100%;
+      margin-left: auto;
+      color: $black;
+      text-wrap: balance;
     }
 
     h2 {
-      margin-bottom: fluid(24, 56);
+      max-width: 760px;
+      margin-bottom: 0;
+      font-size: fluid(40, 56);
+      line-height: 1.02;
+      letter-spacing: fluid(-0.8, -1.12);
+    }
+
+    @media (max-width: 1099px) {
+      grid-template-columns: 1fr;
+      gap: 16px;
+
+      &__text {
+        max-width: 720px;
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 767px) {
+      margin-bottom: 24px;
+
+      h2 {
+        font-size: fluid(32, 44);
+      }
+    }
+
+    @media (max-width: 1440px) {
+      margin-bottom: 28px;
     }
   }
 
   .benefits-slider {
-    //width: 100vw;
     position: relative;
-
-    &.is-centered {
-      left: 50%;
-      transform: translateX(-50%);
-    }
+    margin: 0 -10px;
 
     .slick-list {
-      padding: 0;
+      overflow: hidden;
+      padding-right: min(18vw, 280px);
+    }
 
-      .slick-track {
-        overflow: hidden;
+    .slick-track {
+      display: flex;
+    }
 
-        .benefit-slide {
-          overflow: hidden;
-          border-radius: 32px;
-          aspect-ratio: 552 / 597;
-          width: 28vw;
-          max-width: 552px;
-          transition: width 0.3s ease, aspect-ratio 0.3s ease;
-          position: relative;
-          background-color: $gray;
-          margin: 0 10px;
+    .slick-slide {
+      height: auto;
 
-          &-content {
-            position: absolute;
-            bottom: fluid(27, 42);
-            left: fluid(30, 50);
-            width: calc(100% - clamp(60px, 6.9vw, 100px));
-            max-width: 454px;
+      > div {
+        height: 100%;
+      }
+    }
 
-            h3 {
-              color: black;
-              font-size: fluid(24, 40);
-              line-height: fluid(30, 46);
-              font-weight: 500;
-              margin-bottom: 0;
-            }
+    .benefit-slide {
+      position: relative;
+      display: flex !important;
+      flex-direction: column;
+      justify-content: space-between;
+      width: min(69vw, 1060px);
+      min-height: 520px;
+      margin: 0 10px;
+      padding: clamp(28px, 2.8vw, 44px);
+      border-radius: 20px;
+      overflow: hidden;
+      background-color: #d9d9d9;
+      background-size: cover;
+      background-position: center;
+      transition: opacity 0.32s ease, transform 0.32s ease;
 
-            p {
-              display: none;
-            }
-          }
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(14, 14, 14, 0.18) 0%, rgba(14, 14, 14, 0.1) 36%, rgba(14, 14, 14, 0.84) 100%);
+      }
 
-          a {
-            display: none;
-          }
+      .benefit-slide__counter {
+        display: flex;
+        opacity: 1;
+        visibility: visible;
+      }
 
-          &.is-active {
-            aspect-ratio: 935 / 597;
-            width: 47vw;
-            max-width: 935px;
+      &-content,
+      &__counter {
+        position: relative;
+        z-index: 2;
+      }
 
-            .benefit-slide-content {
-              h3 {
-                color: white;
-              }
+      &-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        max-width: 78%;
 
-              p {
-                display: block;
-                margin-top: fluid(15, 32);
-                color: white;
-                font-size: fluid(18, 24);
-                line-height: normal;
-                font-weight: 500;
-              }
-            }
+        h3 {
+          margin-bottom: 0;
+          color: white;
+          font-size: fluid(28, 54);
+          line-height: 1.02;
+          font-weight: 500;
+          letter-spacing: fluid(-0.8, -1.08);
+        }
 
-            a {
-              display: block;
-              position: absolute;
-              right: fluid(30, 50);
-              bottom: fluid(27, 42);
-            }
-          }
+        p {
+          margin-bottom: 0;
+          color: rgba(255, 255, 255, 0.92);
+          font-size: fluid(16, 22);
+          line-height: 1.34;
+          font-weight: 400;
+          max-width: 430px;
+        }
+      }
 
-          @media (max-width: 1099px) {
-            width: 32vw;
+      &__counter {
+        position: absolute;
+        right: clamp(26px, 2.6vw, 40px);
+        bottom: clamp(26px, 2.6vw, 40px);
+        display: flex;
+        gap: 8px;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: none;
+      }
 
-            &-content {
-              width: calc(100% - 40px);
-              left: 20px;
+      &__counter-current,
+      &__counter-total {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 42px;
+        height: 34px;
+        padding: 0 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.54);
+        background: rgba(255, 255, 255, 0.04);
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 16px;
+        line-height: 1;
+        letter-spacing: -0.03em;
+      }
 
-              h3 {
-                font-size: 28px;
-                line-height: 32px;
-              }
-            }
+      &__counter-total {
+        color: rgba(255, 255, 255, 0.56);
+      }
+    }
 
-            &.is-active {
-              width: 54vw;
+    @media (max-width: 1199px) {
+      .slick-list {
+        padding-right: 180px;
+      }
 
-              .benefit-slide-content {
-                p {
-                  margin-top: 15px;
-                  font-size: 18px;
-                }
-              }
-            }
+      .benefit-slide {
+        width: 72vw;
+        min-height: 460px;
+
+        &-content {
+          max-width: 82%;
+        }
+      }
+    }
+
+    @media (max-width: 991px) {
+      .slick-list {
+        padding-right: 110px;
+      }
+
+      .benefit-slide {
+        min-height: 430px;
+        border-radius: 18px;
+        width: 78vw;
+
+        &-content {
+          max-width: 88%;
+
+          h3 {
+            font-size: 34px;
           }
         }
       }
     }
 
     @media (max-width: 767px) {
-      display: flex;
-      flex-direction: column;
-      row-gap: 12px;
-      position: relative;
-      width: calc(100vw - 48px);
+      margin: 0;
+
+      .slick-list {
+        padding-right: 64px;
+      }
 
       .benefit-slide {
-        overflow: hidden;
-        aspect-ratio: 327 / 262;
-        border-radius: 16px;
-        background: $gray;
-        position: relative;
+        width: 78vw;
+        min-height: 360px;
+        margin: 0 6px;
+        padding: 22px;
+        border-radius: 14px;
+        width: 84vw;
 
-        .benefit-slide-content {
-          position: absolute;
-          bottom: 24px;
-          left: 24px;
-          width: calc(100% - 48px);
-          max-width: 75%;
-
-          p {
-            display: none;
-          }
+        &-content {
+          max-width: 100%;
 
           h3 {
-            font-size: 18px;
-            line-height: 21px;
-            font-weight: 500;
-            letter-spacing: -0.36px;
+            font-size: 28px;
+          }
+
+          p {
+            font-size: 15px;
+            max-width: 250px;
           }
         }
 
-        a{
-          display: none;
+        &__counter {
+          right: 20px;
+          bottom: 20px;
         }
 
-        &.is-active {
-          aspect-ratio: 328 / 424;
-
-          .benefit-slide-content {
-            h3 {
-              color: white;
-              font-size: 20px;
-              line-height: 23px;
-              letter-spacing: -0.4px;
-            }
-
-            p {
-              margin-top: 16px;
-              display: block;
-              color: white;
-            }
-          }
+        &__counter-current,
+        &__counter-total {
+          min-width: 38px;
+          height: 32px;
+          font-size: 14px;
         }
       }
+    }
+  }
+
+  .benefits-slider-footer {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 22px;
+
+    &__arrows {
+      flex: 0 0 auto;
+    }
+
+    &__progress {
+      flex: 1 1 auto;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(19, 19, 19, 0.12);
+      overflow: hidden;
+
+      span {
+        display: block;
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: $black;
+        transition: width 0.25s ease;
+      }
+    }
+
+    @media (max-width: 767px) {
+      margin-top: 16px;
     }
   }
 }

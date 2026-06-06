@@ -148,12 +148,14 @@
   margin-top: 22px;
 }
 
-.modern-agro-slider__arrows {
+.modern-agro-slider__arrows,
+.slider-shared__arrows {
   display: flex;
   gap: 10px;
 }
 
-.modern-agro-slider__arrow {
+.modern-agro-slider__arrow,
+.slider-shared__arrow {
   position: relative;
   border-radius: 1210px;
   width: 44px;
@@ -186,11 +188,13 @@
   }
 }
 
-.modern-agro-slider__arrow--prev:before {
+.modern-agro-slider__arrow--prev:before,
+.slider-shared__arrow--prev:before {
   transform: translate(-50%, -50%);
 }
 
-.modern-agro-slider__arrow--next:before {
+.modern-agro-slider__arrow--next:before,
+.slider-shared__arrow--next:before {
   transform: translate(-50%, -50%) rotate(180deg);
 }
 

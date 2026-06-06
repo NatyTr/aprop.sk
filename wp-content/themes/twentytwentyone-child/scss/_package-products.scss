@@ -224,6 +224,21 @@
     &.special-color {
       &:last-child {
         background-image: linear-gradient(to bottom right, #7AD859 0%, #7AD859 58%, #CBF4BD 100%);
+
+        .package-product__top {
+          .btn-primary {
+            background: #171717;
+            border-color: #171717;
+            color: #ffffff;
+
+            &:hover,
+            &:focus {
+              background: #171717 !important;
+              border-color: #171717;
+              color: #ffffff;
+            }
+          }
+        }
       }
 
       .package-product__top {

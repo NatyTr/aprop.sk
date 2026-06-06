@@ -209,101 +209,109 @@ jQuery(document).ready(function ($) {
     $('.products-grid').slick('slickNext');
   });
 
-  // === Benefits Slider (desktop only) ===
-  function isMobile() {
-    return window.innerWidth <= 768;
-  }
-
-  let isCentered = false;
-  let slickInitialized = false;
-
-  function updateActiveSlide(index) {
-    $('.benefits-slider .benefit-slide').each(function (i) {
-      const $slide = $(this);
-      const thumb = $slide.data('thumb');
-      const detail = $slide.data('detail');
-
-      $slide.toggleClass('is-active', i === index);
-      $slide.css('background-image', `url(${i === index ? detail : thumb})`);
-    });
-  }
-
-  function activateClickMode() {
-    $('.benefit-slide').off('click').on('click', function () {
-      const $this = $(this);
-      const thumb = $this.data('thumb');
-      const detail = $this.data('detail');
-
-      $('.benefit-slide').removeClass('is-active');
-      $this.addClass('is-active');
-
-      if (detail) {
-        $this.css('background-image', `url(${detail})`);
-      }
-
-      $('.benefit-slide').not($this).each(function () {
-        const $s = $(this);
-        const thumbUrl = $s.data('thumb');
-        if (thumbUrl) {
-          $s.css('background-image', `url(${thumbUrl})`);
-        }
-      });
-    });
-  }
-
-  function initBenefitSlider() {
+  // === Benefits Slider ===
+  (function () {
     const $benefitSlider = $('.benefits-slider');
 
-    if (isMobile()) {
-      if (slickInitialized) {
-        $benefitSlider.slick('unslick');
-        slickInitialized = false;
-      }
-
-      activateClickMode();
-      updateActiveSlide(0);
-
-    } else {
-      if (!slickInitialized) {
-        $benefitSlider.slick({
-          arrows: false,
-          dots: false,
-          slidesToScroll: 1,
-          infinite: false,
-          variableWidth: true,
-          initialSlide: 0,
-          centerMode: false
-        });
-
-        slickInitialized = true;
-        isCentered = false;
-
-        $benefitSlider.on('beforeChange', function () {
-          $benefitSlider.addClass('is-animating');
-        });
-
-        $benefitSlider.on('afterChange', function (event, slick, currentSlide) {
-          updateActiveSlide(currentSlide);
-
-          if (currentSlide > 0 && !isCentered) {
-            isCentered = true;
-            $benefitSlider.slick('slickSetOption', 'centerMode', true, true);
-          }
-
-          setTimeout(() => {
-            $benefitSlider.removeClass('is-animating');
-          }, 300);
-        });
-
-        setTimeout(() => {
-          updateActiveSlide(0);
-        }, 100);
-      }
+    if (!$benefitSlider.length) {
+      return;
     }
-  }
 
-  initBenefitSlider();
-  $(window).on('resize', initBenefitSlider);
+    const $benefitPrev = $('.benefits-slider-prev');
+    const $benefitNext = $('.benefits-slider-next');
+    const $benefitProgress = $('.benefits-slider-footer__progress span');
+
+    function isBenefitMobile() {
+      return window.innerWidth <= 767;
+    }
+
+    function updateBenefitProgress(currentSlide, totalSlides) {
+      if (!$benefitProgress.length || !totalSlides) {
+        return;
+      }
+
+      const progress = ((currentSlide + 1) / totalSlides) * 100;
+      $benefitProgress.css('width', `${progress}%`);
+    }
+
+    function updateBenefitSliderState(index) {
+      const $slides = $benefitSlider.find('.benefit-slide');
+      const totalSlides = $slides.length;
+
+      $slides.each(function (i) {
+        const $slide = $(this);
+        $slide.find('.benefit-slide__counter').css({
+          display: 'flex',
+          opacity: 1,
+          visibility: 'visible'
+        });
+        $slide.find('.benefit-slide__counter-current').text(String(i + 1).padStart(2, '0'));
+        $slide.find('.benefit-slide__counter-total').text(String(totalSlides).padStart(2, '0'));
+      });
+
+      updateBenefitProgress(index, totalSlides);
+    }
+
+    function bindBenefitClicks() {
+      $benefitSlider.find('.benefit-slide').off('click').on('click', function () {
+        const $slide = $(this);
+        const slideIndex = parseInt($slide.attr('data-slick-index'), 10);
+
+        if ($benefitSlider.hasClass('slick-initialized') && !Number.isNaN(slideIndex)) {
+          $benefitSlider.slick('slickGoTo', slideIndex);
+          return;
+        }
+
+        updateActiveBenefitSlide($slide.index());
+      });
+    }
+
+    function initBenefitSlider() {
+      if ($benefitSlider.hasClass('slick-initialized')) {
+        $benefitSlider.slick('unslick');
+      }
+
+      $benefitSlider.off('init afterChange');
+      $benefitPrev.off('click');
+      $benefitNext.off('click');
+
+      $benefitSlider.on('init', function (event, slick) {
+        updateBenefitSliderState(slick.currentSlide || 0);
+      });
+
+      $benefitSlider.on('afterChange', function (event, slick, currentSlide) {
+        updateBenefitSliderState(currentSlide);
+      });
+
+      $benefitSlider.slick({
+        arrows: false,
+        dots: false,
+        infinite: false,
+        slidesToScroll: 1,
+        variableWidth: true,
+        swipeToSlide: true,
+        touchThreshold: 12,
+        initialSlide: 0
+      });
+
+      $benefitPrev.on('click', function () {
+        $benefitSlider.slick('slickPrev');
+      });
+
+      $benefitNext.on('click', function () {
+        $benefitSlider.slick('slickNext');
+      });
+
+      bindBenefitClicks();
+      updateBenefitSliderState(0);
+    }
+
+    initBenefitSlider();
+    $(window).on('resize', function () {
+      clearTimeout(window.__benefitResizeTimer);
+      window.__benefitResizeTimer = setTimeout(initBenefitSlider, isBenefitMobile() ? 50 : 120);
+    });
+  })();
 
 
 

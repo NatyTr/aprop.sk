@@ -862,6 +862,11 @@ add_shortcode( 'home_courses_slider', 'render_home_courses_slider_shortcode' );
 
   //Ako to funguje? How it works
   function render_benefity_slider_shortcode() {
+      $page_id = get_queried_object_id();
+      $benefits_label = $page_id ? get_field('benefits_block_label', $page_id) : '';
+      $benefits_title = $page_id ? get_field('benefits_block_title', $page_id) : '';
+      $benefits_intro_text = $page_id ? get_field('benefits_block_intro_text', $page_id) : '';
+
       $args = array(
           'post_type' => 'benefity',
           'posts_per_page' => -1,
@@ -870,6 +875,7 @@ add_shortcode( 'home_courses_slider', 'render_home_courses_slider_shortcode' );
       );
 
       $query = new WP_Query($args);
+      $total_slides = (int) $query->post_count;
 
       if (!$query->have_posts()) {
           return '<p>Žiadne benefity neboli nájdené.</p>';
@@ -879,8 +885,14 @@ add_shortcode( 'home_courses_slider', 'render_home_courses_slider_shortcode' );
       ?>
       <div class="benefits-block">
         <div class="benefits-titles">
-          <span class="btn-primary">Čo potrebujete vedieť?</span>
-          <h2>Ako to funguje?</h2>
+          <div class="benefits-titles__main">
+            <span class="label"><?php echo esc_html($benefits_label ?: 'Čo potrebujete vedieť?'); ?></span>
+            <h2><?php echo esc_html($benefits_title ?: 'Ako to funguje?'); ?></h2>
+          </div>
+
+          <?php if ($benefits_intro_text): ?>
+            <div class="benefits-titles__text p-24"><?php echo wp_kses_post($benefits_intro_text); ?></div>
+          <?php endif; ?>
         </div>
 
       <div class="benefits-slider">
@@ -893,22 +905,41 @@ add_shortcode( 'home_courses_slider', 'render_home_courses_slider_shortcode' );
                   $data_thumb = esc_url($thumb_url);
 
                   $active_class = '';
-                  $initial_bg = $query->current_post === 0 ? $data_detail : $data_thumb;
+                  $initial_bg = $data_detail ?: $data_thumb;
+                  $slide_number = str_pad((string) ($query->current_post + 1), 2, '0', STR_PAD_LEFT);
+                  $slide_total = str_pad((string) $total_slides, 2, '0', STR_PAD_LEFT);
               ?>
               <div
                 class="benefit-slide <?php echo $active_class; ?>"
                 style="background-image: url('<?php echo $initial_bg; ?>'); background-size: cover; background-position: center;"
                 data-detail="<?php echo $data_detail; ?>"
                 data-thumb="<?php echo $data_thumb; ?>"
+                data-step="<?php echo esc_attr($slide_number); ?>"
+                data-total="<?php echo esc_attr($slide_total); ?>"
               >
                   <div class="benefit-slide-content">
                       <h3><?php the_title(); ?></h3>
                       <p><?php echo esc_html(get_the_excerpt()); ?></p>
                   </div>
-                  <a href="/" class="btn-circle-icon-white"></a>
+
+                  <div class="benefit-slide__counter" aria-hidden="true">
+                      <span class="benefit-slide__counter-current"><?php echo esc_html($slide_number); ?></span>
+                      <span class="benefit-slide__counter-total"><?php echo esc_html($slide_total); ?></span>
+                  </div>
               </div>
           <?php endwhile; ?>
           <?php wp_reset_postdata(); ?>
+      </div>
+
+      <div class="benefits-slider-footer">
+          <div class="benefits-slider-footer__arrows slider-shared__arrows">
+              <button type="button" class="benefits-slider-prev slider-shared__arrow slider-shared__arrow--prev" aria-label="Predchádzajúci krok"></button>
+              <button type="button" class="benefits-slider-next slider-shared__arrow slider-shared__arrow--next" aria-label="Nasledujúci krok"></button>
+          </div>
+
+          <div class="benefits-slider-footer__progress" aria-hidden="true">
+              <span></span>
+          </div>
       </div>
   </div>
 

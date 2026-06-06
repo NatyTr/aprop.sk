@@ -825,3 +825,58 @@ function aprop_product_card_acf_fields() {
         )
     );
 }
+
+add_action( 'acf/include_fields', 'aprop_benefits_block_acf_fields' );
+
+function aprop_benefits_block_acf_fields() {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+        return;
+    }
+
+    acf_add_local_field_group(
+        array(
+            'key' => 'group_aprop_benefits_block',
+            'title' => 'Benefits block',
+            'fields' => array(
+                array(
+                    'key' => 'field_aprop_benefits_block_label',
+                    'label' => 'Label sekcie',
+                    'name' => 'benefits_block_label',
+                    'type' => 'text',
+                    'default_value' => 'Čo potrebujete vedieť?',
+                ),
+                array(
+                    'key' => 'field_aprop_benefits_block_title',
+                    'label' => 'Nadpis sekcie',
+                    'name' => 'benefits_block_title',
+                    'type' => 'text',
+                    'default_value' => 'Ako to funguje?',
+                ),
+                array(
+                    'key' => 'field_aprop_benefits_block_intro_text',
+                    'label' => 'Text pri nadpise',
+                    'name' => 'benefits_block_intro_text',
+                    'type' => 'textarea',
+                    'rows' => 4,
+                    'new_lines' => 'br',
+                    'instructions' => 'Krátky text vpravo od nadpisu sekcie.',
+                ),
+            ),
+            'location' => array(
+                array(
+                    array(
+                        'param' => 'post_type',
+                        'operator' => '==',
+                        'value' => 'page',
+                    ),
+                ),
+            ),
+            'menu_order' => 30,
+            'position' => 'normal',
+            'style' => 'default',
+            'label_placement' => 'top',
+            'instruction_placement' => 'label',
+            'active' => true,
+        )
+    );
+}
