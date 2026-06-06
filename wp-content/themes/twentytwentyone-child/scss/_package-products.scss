@@ -1,29 +1,39 @@
 .package-products-header{
-  max-width: 800px;
+  max-width: 980px;
   width: 100%;
   margin: 0px auto 64px auto;
+  text-align: center;
   .btn-primary{
     margin: 0px auto 16px auto;
   }
   h2{
+    max-width: 760px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
     margin-bottom: 32px;
   }
   div{
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
     text-align: center;
   }
   @media(max-width: 767px){
       margin: 0px auto 24px auto;
       .btn-primary{
-        margin: unset;
+        margin: 0 auto 12px auto;
         margin-bottom: 12px;
       }
       h2{
-        text-align: left;
+        max-width: 100%;
+        text-align: center;
         margin-bottom: 16px;
       }
       div{
-        text-align: left;
+        max-width: 100%;
+        text-align: center;
       }
   }
 }
@@ -41,18 +51,32 @@
   .package-product {
     width: calc((100% / 3) - 7px);
     border-radius: 32px;
-    background: $gray;
+    background: #171717;
     padding: 32px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    color: white;
 
     &__top {
       display: flex;
       justify-content: space-between;
+      align-items: center;
 
       .package-product__tag {
         height: fit-content;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.42);
+        color: rgba(255, 255, 255, 0.88);
+        font-weight: 500;
+        padding: 10px 18px;
+
+        &:hover,
+        &:focus {
+          background: transparent !important;
+          border-color: rgba(255, 255, 255, 0.6);
+          color: white;
+        }
       }
 
       .package-product__purpose {
@@ -60,11 +84,14 @@
         column-gap: 7px;
         max-width: 65%;
         width: 100%;
+        margin-left: auto;
+        justify-content: flex-end;
         text-align: right;
         font-size: fluid(14, 20); // zmenené
         line-height: normal;
         letter-spacing: fluid(-0.4, -0.8); // zmenené
         align-items: center;
+        color: white;
 
         .package-product__special-icon {
           max-width: fluid(48, 100); // zmenené
@@ -81,11 +108,13 @@
 
     .package-product__content {
       h3 {
-        margin-bottom: fluid(13, 24); // zmenené
+        margin-bottom: 0;
+        color: white;
       }
 
       p {
         margin-bottom: fluid(18, 40); // zmenené
+        color: rgba(255,255,255,0.78);
       }
     }
 
@@ -93,9 +122,19 @@
       position: relative;
 
       h3 {
+        display: flex;
+        align-items: flex-end;
+        gap: 14px;
+        margin: 0;
+        padding-right: 88px;
+        color: white;
         span {
-          font-weight: 600;
-          letter-spacing: fluid(-0.48, -0.96); // zmenené
+          font-size: fluid(14, 18);
+          line-height: 1;
+          font-weight: 400;
+          letter-spacing: -0.03em;
+          color: rgba(255,255,255,0.6);
+          transform: translateY(-4px);
         }
       }
 
@@ -113,7 +152,7 @@
 
       &__top {
         .btn-primary {
-          border: 0.5px solid black;
+          border: 1px solid rgba(255, 255, 255, 0.42);
           font-weight: 500;
           padding: 8px 11px;
         }
@@ -130,7 +169,7 @@
 
       .package-product__content {
         h3 {
-          margin-bottom: fluid(13, 24);
+          margin-bottom: 0;
         }
 
         p {
@@ -141,6 +180,8 @@
       .package-product__bottom {
         h3 {
           font-size: fluid(20, 28);
+          gap: 10px;
+          padding-right: 72px;
         }
       }
     }
@@ -148,14 +189,14 @@
     &.special-color {
       .package-product__top {
         .btn-primary {
-          background: black;
-          border-color: black;
-          color: white;
+          background: transparent;
+          border-color: rgba(255, 255, 255, 0.42);
+          color: rgba(255, 255, 255, 0.88);
 
           &:hover {
-            background-color: white;
-            border-color: white;
-            color: black;
+            background-color: transparent;
+            border-color: rgba(255, 255, 255, 0.6);
+            color: white;
           }
         }
 
@@ -179,6 +220,10 @@
           color: white;
         }
 
+        h3 span {
+          color: rgba(255,255,255,0.6);
+        }
+
         .btn-circle-icon-black {
           background-color: white;
 
@@ -188,6 +233,7 @@
         }
       }
     }
+
   }
 }
 

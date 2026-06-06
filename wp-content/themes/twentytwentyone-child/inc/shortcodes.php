@@ -557,6 +557,8 @@ function render_all_products_shortcode() {
         'post_type'      => 'product',
         'posts_per_page' => -1,
         'post_status'    => 'publish',
+        'orderby'        => 'date',
+        'order'          => 'ASC',
         'tax_query'      => array(
             array(
                 'taxonomy' => 'product_cat',
@@ -939,6 +941,7 @@ function render_package_products_shortcode() {
     );
 
     $query = new WP_Query($args);
+    $query->posts = array_reverse($query->posts);
 
     if (!$query->have_posts()) {
         return '<p>Žiadne balíčky neboli nájdené.</p>';
@@ -949,7 +952,7 @@ function render_package_products_shortcode() {
 
     <div class="package-products-header">
         <?php if ($package_label): ?>
-            <span class="btn-primary"><?php echo esc_html($package_label); ?></span>
+            <span class="btn-primary label"><?php echo esc_html($package_label); ?></span>
         <?php endif; ?>
 
         <?php if ($package_title): ?>
@@ -967,13 +970,18 @@ function render_package_products_shortcode() {
                 global $product;
 
                 $thumb_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
+                $display_title = get_the_title();
+                if ( function_exists( 'mb_strtoupper' ) && function_exists( 'mb_strtolower' ) && function_exists( 'mb_convert_case' ) ) {
+                    if ( $display_title === mb_strtoupper( $display_title, 'UTF-8' ) ) {
+                        $display_title = mb_convert_case( mb_strtolower( $display_title, 'UTF-8' ), MB_CASE_TITLE, 'UTF-8' );
+                    }
+                }
                 $purpose = get_field('purpose');
                 $short_desc = get_the_excerpt();
                 $price = $product->get_price_html();
                 $tags = get_the_terms(get_the_ID(), 'product_tag');
                 $first_tag = $tags && !is_wp_error($tags) ? $tags[0]->name : null;
 
-                $special_icon = get_field('special_icon');
                 $special_background = get_field('special_background');
                 $special_class = $special_background ? ' special-color' : '';
                 $background_style = $special_background ? 'style="background-color:' . esc_attr($special_background) . ';"' : '';
@@ -988,9 +996,6 @@ function render_package_products_shortcode() {
                     <?php if ($purpose): ?>
                         <span class="package-product__purpose">
                             <?php echo esc_html($purpose); ?>
-                            <?php if ($special_icon): ?>
-                                <img src="<?php echo esc_url($special_icon['url']); ?>" alt="<?php echo esc_attr($special_icon['alt'] ?? ''); ?>" class="package-product__special-icon" />
-                            <?php endif; ?>
                         </span>
                     <?php endif; ?>
                 </div>
@@ -1003,7 +1008,7 @@ function render_package_products_shortcode() {
 
                 <div class="package-product__content">
                     <a href="<?php echo esc_url($permalink); ?>" class="package-product__link">
-                        <h3><?php the_title(); ?></h3>
+                        <h3><?php echo esc_html( $display_title ); ?></h3>
 
                     </a>
                 </div>

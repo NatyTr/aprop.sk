@@ -3036,18 +3036,26 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 }
 
 .package-products-header {
-  max-width: 800px;
+  max-width: 980px;
   width: 100%;
   margin: 0px auto 64px auto;
+  text-align: center;
 }
 .package-products-header .btn-primary {
   margin: 0px auto 16px auto;
 }
 .package-products-header h2 {
+  max-width: 760px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
   margin-bottom: 32px;
 }
 .package-products-header div {
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
   text-align: center;
 }
 @media (max-width: 767px) {
@@ -3055,15 +3063,17 @@ header .container .header-container .header-tools .header-search-form.is-open .h
     margin: 0px auto 24px auto;
   }
   .package-products-header .btn-primary {
-    margin: unset;
+    margin: 0 auto 12px auto;
     margin-bottom: 12px;
   }
   .package-products-header h2 {
-    text-align: left;
+    max-width: 100%;
+    text-align: center;
     margin-bottom: 16px;
   }
   .package-products-header div {
-    text-align: left;
+    max-width: 100%;
+    text-align: center;
   }
 }
 
@@ -3080,29 +3090,44 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 .package-products .package-product {
   width: calc(33.3333333333% - 7px);
   border-radius: 32px;
-  background: #F6F6F6;
+  background: #171717;
   padding: 32px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  color: white;
 }
 .package-products .package-product__top {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .package-products .package-product__top .package-product__tag {
   height: fit-content;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 500;
+  padding: 10px 18px;
+}
+.package-products .package-product__top .package-product__tag:hover, .package-products .package-product__top .package-product__tag:focus {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.6);
+  color: white;
 }
 .package-products .package-product__top .package-product__purpose {
   display: flex;
   column-gap: 7px;
   max-width: 65%;
   width: 100%;
+  margin-left: auto;
+  justify-content: flex-end;
   text-align: right;
   font-size: clamp(14px, 10.0086730269px + 0.5203816132vw, 20px);
   line-height: normal;
   letter-spacing: clamp(-0.4px, -0.1339115351px + -0.0346921075vw, -0.8px);
   align-items: center;
+  color: white;
 }
 .package-products .package-product__top .package-product__purpose .package-product__special-icon {
   max-width: clamp(48px, 13.4084995663px + 4.5099739809vw, 100px);
@@ -3114,17 +3139,31 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   aspect-ratio: 558/433;
 }
 .package-products .package-product .package-product__content h3 {
-  margin-bottom: clamp(13px, 5.682567216px + 0.9540329575vw, 24px);
+  margin-bottom: 0;
+  color: white;
 }
 .package-products .package-product .package-product__content p {
   margin-bottom: clamp(18px, 3.3651344319px + 1.908065915vw, 40px);
+  color: rgba(255, 255, 255, 0.78);
 }
 .package-products .package-product .package-product__bottom {
   position: relative;
 }
+.package-products .package-product .package-product__bottom h3 {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  margin: 0;
+  padding-right: 88px;
+  color: white;
+}
 .package-products .package-product .package-product__bottom h3 span {
-  font-weight: 600;
-  letter-spacing: clamp(-0.48px, -0.1606938422px + -0.0416305291vw, -0.96px);
+  font-size: clamp(14px, 11.3391153513px + 0.3469210755vw, 18px);
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-4px);
 }
 .package-products .package-product .package-product__bottom a {
   position: absolute;
@@ -3138,7 +3177,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
     padding: 17px;
   }
   .package-products .package-product__top .btn-primary {
-    border: 0.5px solid black;
+    border: 1px solid rgba(255, 255, 255, 0.42);
     font-weight: 500;
     padding: 8px 11px;
   }
@@ -3150,24 +3189,26 @@ header .container .header-container .header-tools .header-search-form.is-open .h
     max-width: clamp(48px, 13.4084995663px + 4.5099739809vw, 100px);
   }
   .package-products .package-product .package-product__content h3 {
-    margin-bottom: clamp(13px, 5.682567216px + 0.9540329575vw, 24px);
+    margin-bottom: 0;
   }
   .package-products .package-product .package-product__content p {
     margin-bottom: clamp(18px, 3.3651344319px + 1.908065915vw, 40px);
   }
   .package-products .package-product .package-product__bottom h3 {
     font-size: clamp(20px, 14.6782307025px + 0.6938421509vw, 28px);
+    gap: 10px;
+    padding-right: 72px;
   }
 }
 .package-products .package-product.special-color .package-product__top .btn-primary {
-  background: black;
-  border-color: black;
-  color: white;
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.42);
+  color: rgba(255, 255, 255, 0.88);
 }
 .package-products .package-product.special-color .package-product__top .btn-primary:hover {
-  background-color: white;
-  border-color: white;
-  color: black;
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.6);
+  color: white;
 }
 .package-products .package-product.special-color .package-product__top .package-product__purpose {
   color: white;
@@ -3181,6 +3222,9 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 .package-products .package-product.special-color .package-product__bottom a,
 .package-products .package-product.special-color .package-product__bottom span {
   color: white;
+}
+.package-products .package-product.special-color .package-product__bottom h3 span {
+  color: rgba(255, 255, 255, 0.6);
 }
 .package-products .package-product.special-color .package-product__bottom .btn-circle-icon-black {
   background-color: white;
