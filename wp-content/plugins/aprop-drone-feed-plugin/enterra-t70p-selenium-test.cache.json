@@ -1,0 +1,224 @@
+{
+  "https://www.enterra.sk/produkt/dji-agras-t70p/": {
+    "source_url": "https://www.enterra.sk/produkt/dji-agras-t70p/",
+    "fetched_at": "2026-06-05T09:04:46.884482+00:00",
+    "count": 43,
+    "specs": [
+      {
+        "section": "DJI Agras T70P",
+        "name": "Hmotnosť",
+        "value": "S inteligentnou letovou batériou DB2160: 56 kg (vrátane batérie)"
+      },
+      {
+        "section": "DJI Agras T70P",
+        "name": "Maximálna vzletová hmotnosť",
+        "value": "Maximálna vzletová hmotnosť pre postrek (štandardne s 2 tryskami): 126 kg; Maximálna vzletová hmotnosť pre rozmetávanie: 130 kg"
+      },
+      {
+        "section": "DJI Agras T70P",
+        "name": "Maximálny uhlopriečkový rázvor",
+        "value": "2 440 mm"
+      },
+      {
+        "section": "DJI Agras T70P",
+        "name": "Rozmery",
+        "value": "3200 mm × 3520 mm × 960 mm (ramená a vrtule rozložené); 1160 mm × 900 mm × 960 mm (ramená a vrtule zložené)"
+      },
+      {
+        "section": "DJI Agras T70P",
+        "name": "Rozsah presnosti vznášania (pri silnom signále GNSS)",
+        "value": "RTK zapnuté: ±10 cm (horizontálne), ±10 cm (vertikálne); RTK vypnuté: Horizontálne ± 0,6 m, vertikálne ± 0,3 m"
+      },
+      {
+        "section": "DJI Agras T70P",
+        "name": "Maximálny konfigurovateľný rádius letu",
+        "value": "2 km"
+      },
+      {
+        "section": "DJI Agras T70P",
+        "name": "Prevádzková teplota",
+        "value": "0 °C až 40 °C"
+      },
+      {
+        "section": "DJI Agras T70P",
+        "name": "Maximálna odolnosť voči vetru",
+        "value": "<6 m/s"
+      },
+      {
+        "section": "Pohon - motory",
+        "name": "Rozmery statora",
+        "value": "155 × 22 mm"
+      },
+      {
+        "section": "Pohon - motory",
+        "name": "KV",
+        "value": "65 ot./min/V"
+      },
+      {
+        "section": "Pohon – vrtule",
+        "name": "Materiál",
+        "value": "Kompozit z uhlíkových vlákien"
+      },
+      {
+        "section": "Pohon – vrtule",
+        "name": "Rozmery",
+        "value": "62 palcov"
+      },
+      {
+        "section": "Pohon – vrtule",
+        "name": "Počet",
+        "value": "4"
+      },
+      {
+        "section": "Systém postrekovania – postrekovačná nádrž",
+        "name": "Materiál",
+        "value": "HDPE"
+      },
+      {
+        "section": "Systém postrekovania – postrekovačná nádrž",
+        "name": "Objem",
+        "value": "70 L"
+      },
+      {
+        "section": "Systém postrekovania – postrekovačná nádrž",
+        "name": "Prevádzková nosnosť",
+        "value": "70 kg"
+      },
+      {
+        "section": "Systém postrekovania – trysky",
+        "name": "Model",
+        "value": "LX07550SX (štandardná tryska) / LX09550SX (voliteľná tryska na hmlu)"
+      },
+      {
+        "section": "Systém postrekovania – trysky",
+        "name": "Počet",
+        "value": "2 (štandardne) / 4 (voliteľne)"
+      },
+      {
+        "section": "Systém postrekovania – trysky",
+        "name": "Vzdialenosť medzi tryskami",
+        "value": "1874 mm (zadné trysky)"
+      },
+      {
+        "section": "Systém postrekovania – trysky",
+        "name": "Veľkosť kvapiek",
+        "value": "50 – 500 μm"
+      },
+      {
+        "section": "Systém postrekovania – trysky",
+        "name": "Efektívna šírka postreku",
+        "value": "4 - 11 m"
+      },
+      {
+        "section": "Systém postrekovania – čerpadlá",
+        "name": "Typ",
+        "value": "Oběžné čerpadlo (magnetický pohon)"
+      },
+      {
+        "section": "Systém postrekovania – čerpadlá",
+        "name": "Počet",
+        "value": "2"
+      },
+      {
+        "section": "Systém postrekovania – čerpadlá",
+        "name": "Maximálny prietok",
+        "value": "30 l/min (štandardné 2 postrekovače); 40 l/min (voliteľné 4 postrekovače)"
+      },
+      {
+        "section": "Rozmetávací systém 4.0",
+        "name": "Priemery kompatibilných materiálov",
+        "value": "Štandardná konfigurácia - Extra veľký šnek: granule s priemerom 0,5 mm – 10 mm (hnojivo, pšenica, krmivo atď.)"
+      },
+      {
+        "section": "Rozmetávací systém 4.0",
+        "name": "Objem rozmetávacej nádrže",
+        "value": "100 L"
+      },
+      {
+        "section": "Rozmetávací systém 4.0",
+        "name": "Typ konštrukcie rozmetávača",
+        "value": "Odstredivý disk"
+      },
+      {
+        "section": "Rozmetávací systém 4.0",
+        "name": "Typ konštrukcie výstupu",
+        "value": "Podávanie z podávača"
+      },
+      {
+        "section": "Rozmetávací systém 4.0",
+        "name": "Maximálna rýchlosť výstupu",
+        "value": "400 kg/min"
+      },
+      {
+        "section": "Rozmetávací systém 4.0",
+        "name": "Maximálne zaťaženie vnútri rozmetávacej komory",
+        "value": "70 kg"
+      },
+      {
+        "section": "Rozmetávací systém 4.0",
+        "name": "Efektívna šírka rozmetávania",
+        "value": "3 - 10 m"
+      },
+      {
+        "section": "Zdvíhací systém",
+        "name": "Nosnosť",
+        "value": "65 kg"
+      },
+      {
+        "section": "Zdvíhací systém",
+        "name": "Dĺžka zdvíhacieho lana",
+        "value": "10 m (štandardná konfigurácia)"
+      },
+      {
+        "section": "Zdvíhací systém",
+        "name": "Odporúčaná dĺžka lana",
+        "value": "10 - 15 m"
+      },
+      {
+        "section": "Zdvíhací systém",
+        "name": "Prevádzková teplota",
+        "value": "0 °C až 40 °C"
+      },
+      {
+        "section": "Bezpečnostný systém 3.0",
+        "name": "EIRP milimetrového radaru",
+        "value": "< 20 dBm (NCC / MIC / KC / CE / FCC)"
+      },
+      {
+        "section": "Bezpečnostný systém 3.0",
+        "name": "Prevádzková teplota",
+        "value": "0 °C až 40 °C"
+      },
+      {
+        "section": "Bezpečnostný systém 3.0",
+        "name": "Prevádzkové prostredie",
+        "value": "Dostatočné osvetlenie a zreteľné okolie"
+      },
+      {
+        "section": "Bezpečnostný systém 3.0",
+        "name": "Zorné pole (FOV)",
+        "value": "Predný radar s milimetrovými vlnami: horizontálne 360°, vertikálne ± 45°, nahor ± 45° (kužeľ); Zadný radar s milimetrovými vlnami: vertikálne 360°, horizontálne ± 45°; Tri-eye Visionary Intelligence: horizontálne 90°, vertikálne 180°"
+      },
+      {
+        "section": "Bezpečnostný systém 3.0",
+        "name": "Dosah",
+        "value": "≤ 60 m"
+      },
+      {
+        "section": "Bezpečnostný systém 3.0",
+        "name": "Efektívna rýchlosť bezpečného vyhýbania sa prekážkam",
+        "value": "≤ 13,8 m/s"
+      },
+      {
+        "section": "Bezpečnostný systém 3.0",
+        "name": "Efektívna výška vyhýbania sa prekážkam",
+        "value": "≥ 1,5 m"
+      },
+      {
+        "section": "Bezpečnostný systém 3.0",
+        "name": "Bezpečná vzdialenosť",
+        "value": "2,5 m (vzdialenosť medzi dronom a prekážkou po zabrzdení a stabilnom vznášaní)"
+      }
+    ]
+  }
+}

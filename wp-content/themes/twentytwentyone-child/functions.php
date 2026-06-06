@@ -275,6 +275,75 @@ add_action( 'woocommerce_after_single_product_summary', 'insert_note_and_slider_
 
 remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
 
+function aprop_get_enterra_product_specifications( $product_id ) {
+    $specifications_json = get_post_meta( $product_id, '_aprop_enterra_specifications_json', true );
+    $specifications = json_decode( (string) $specifications_json, true );
+    $rows = array();
+
+    if ( is_array( $specifications ) && ! empty( $specifications['rows'] ) && is_array( $specifications['rows'] ) ) {
+        $rows = $specifications['rows'];
+    }
+
+    if ( empty( $rows ) ) {
+        $meta_keys_json = get_post_meta( $product_id, '_aprop_enterra_specification_meta_keys', true );
+        $meta_keys = json_decode( (string) $meta_keys_json, true );
+
+        if ( is_array( $meta_keys ) ) {
+            foreach ( $meta_keys as $meta_key ) {
+                if ( ! is_array( $meta_key ) || empty( $meta_key['key'] ) ) {
+                    continue;
+                }
+
+                $rows[] = array(
+                    'section' => isset( $meta_key['section'] ) ? $meta_key['section'] : '',
+                    'name'    => isset( $meta_key['name'] ) ? $meta_key['name'] : '',
+                    'value'   => get_post_meta( $product_id, $meta_key['key'], true ),
+                );
+            }
+        }
+    }
+
+    return array_values(
+        array_filter(
+            $rows,
+            function ( $row ) {
+                return is_array( $row ) && ! empty( $row['name'] ) && ! empty( $row['value'] );
+            }
+        )
+    );
+}
+
+function aprop_get_product_card_specifications( $product_id, $limit = 3 ) {
+    $specifications = aprop_get_enterra_product_specifications( $product_id );
+
+    return array_slice( $specifications, 0, $limit );
+}
+
+function aprop_show_enterra_product_specifications() {
+    if ( ! is_singular( 'product' ) ) {
+        return;
+    }
+
+    $rows = aprop_get_enterra_product_specifications( get_the_ID() );
+    if ( empty( $rows ) ) {
+        return;
+    }
+    ?>
+    <section class="aprop-product-specifications" aria-labelledby="aprop-product-specifications-title">
+        <h2 id="aprop-product-specifications-title"><?php echo esc_html__( 'Technické parametre', 'aprop' ); ?></h2>
+        <dl class="aprop-product-specifications__list">
+            <?php foreach ( $rows as $row ) : ?>
+                <div class="aprop-product-specifications__row">
+                    <dt><?php echo esc_html( $row['name'] ); ?></dt>
+                    <dd><?php echo esc_html( $row['value'] ); ?></dd>
+                </div>
+            <?php endforeach; ?>
+        </dl>
+    </section>
+    <?php
+}
+add_action( 'woocommerce_after_single_product_summary', 'aprop_show_enterra_product_specifications', 12 );
+
 
 add_filter( 'woocommerce_product_tabs', 'rename_description_tab', 98 );
 function rename_description_tab( $tabs ) {

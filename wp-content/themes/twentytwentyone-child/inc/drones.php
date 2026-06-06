@@ -613,6 +613,7 @@ function render_drone_products_shortcode() {
                             $product_id = get_the_ID();
                             $permalink = get_permalink($product_id);
                             $badge = get_post_meta($product_id, 'aprop_card_badge', true);
+                            $card_specifications = function_exists('aprop_get_product_card_specifications') ? aprop_get_product_card_specifications($product_id, 3) : array();
                             $hover_image_id = 0;
 
                             if ( $product instanceof WC_Product ) {
@@ -650,20 +651,16 @@ function render_drone_products_shortcode() {
                                         <span class="drone-product-card__price"><?php echo wp_kses_post($product->get_price_html()); ?></span>
                                     </div>
 
-                                    <div class="drone-product-card__specs">
-                                        <?php for ($i = 1; $i <= 3; $i++) : ?>
-                                            <?php
-                                                $label = get_post_meta($product_id, 'aprop_card_spec_' . $i . '_label', true);
-                                                $value = get_post_meta($product_id, 'aprop_card_spec_' . $i . '_value', true);
-                                            ?>
-                                            <?php if ($label || $value) : ?>
+                                    <?php if ( ! empty($card_specifications) ) : ?>
+                                        <div class="drone-product-card__specs">
+                                            <?php foreach ($card_specifications as $specification) : ?>
                                                 <div class="drone-product-card__spec">
-                                                    <span class="drone-product-card__spec-label"><?php echo esc_html($label); ?></span>
-                                                    <span class="drone-product-card__spec-value"><?php echo esc_html($value); ?></span>
+                                                    <span class="drone-product-card__spec-label"><?php echo esc_html($specification['name']); ?></span>
+                                                    <span class="drone-product-card__spec-value"><?php echo esc_html($specification['value']); ?></span>
                                                 </div>
-                                            <?php endif; ?>
-                                        <?php endfor; ?>
-                                    </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </a>
                         </article>

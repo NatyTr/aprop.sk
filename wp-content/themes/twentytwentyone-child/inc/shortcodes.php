@@ -1868,6 +1868,7 @@ function render_home_modern_agro_slider_shortcode() {
                     }
 
                     $badge = get_post_meta( $selected_product->ID, 'aprop_card_badge', true );
+                    $card_specifications = function_exists( 'aprop_get_product_card_specifications' ) ? aprop_get_product_card_specifications( $selected_product->ID, 3 ) : array();
                 ?>
                 <article class="modern-agro-slider__card">
                     <a class="modern-agro-slider__card-link" href="<?php echo esc_url( get_permalink( $selected_product->ID ) ); ?>">
@@ -1885,24 +1886,16 @@ function render_home_modern_agro_slider_shortcode() {
                                 <span class="modern-agro-slider__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
                             </div>
 
-                            <div class="modern-agro-slider__specs">
-                                <?php for ( $i = 1; $i <= 3; $i++ ) : ?>
-                                    <?php
-                                        $label = get_post_meta( $selected_product->ID, 'aprop_card_spec_' . $i . '_label', true );
-                                        $value = get_post_meta( $selected_product->ID, 'aprop_card_spec_' . $i . '_value', true );
-                                    ?>
-                                    <?php if ( $label || $value ) : ?>
+                            <?php if ( ! empty( $card_specifications ) ) : ?>
+                                <div class="modern-agro-slider__specs">
+                                    <?php foreach ( $card_specifications as $specification ) : ?>
                                         <div class="modern-agro-slider__spec">
-                                            <?php if ( $label ) : ?>
-                                                <span class="modern-agro-slider__spec-label"><?php echo esc_html( $label ); ?></span>
-                                            <?php endif; ?>
-                                            <?php if ( $value ) : ?>
-                                                <span class="modern-agro-slider__spec-value"><?php echo esc_html( $value ); ?></span>
-                                            <?php endif; ?>
+                                            <span class="modern-agro-slider__spec-label"><?php echo esc_html( $specification['name'] ); ?></span>
+                                            <span class="modern-agro-slider__spec-value"><?php echo esc_html( $specification['value'] ); ?></span>
                                         </div>
-                                    <?php endif; ?>
-                                <?php endfor; ?>
-                            </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </a>
                 </article>
