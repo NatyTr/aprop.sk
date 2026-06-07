@@ -349,17 +349,39 @@ function add_page_slug_to_body_class($classes) {
 }
 add_filter('body_class', 'add_page_slug_to_body_class');
 
+function aprop_is_sluzby_shop_page() {
+    if ( function_exists( 'is_shop' ) && is_shop() ) {
+        return true;
+    }
+
+    $shop_page_id = (int) get_option( 'woocommerce_shop_page_id' );
+
+    return $shop_page_id > 0 && is_page( $shop_page_id );
+}
+
+function aprop_sluzby_excluded_product_category_ids() {
+    return array( 211 );
+}
+
 //odfiltruje balíčky a samostatné dronové produkty z hlavného produktového listingu
 function exclude_package_category_from_shop( $query ) {
-	if ( ! is_admin() && $query->is_main_query() && is_post_type_archive('product') ) {
+	if ( ! is_admin() && $query->is_main_query() && aprop_is_sluzby_shop_page() ) {
 		$tax_query = $query->get('tax_query');
 
 		$tax_query[] = array(
 			'taxonomy' => 'product_cat',
 			'field'    => 'slug',
-			'terms'    => array( 'package', 'polnohospodarske-drony' ),
+			'terms'    => array( 'package', 'polnohospodarske-drony', 'drony', 'dji-drony', 'drony-new' ),
 			'operator' => 'NOT IN',
 		);
+
+        $tax_query[] = array(
+            'taxonomy'         => 'product_cat',
+            'field'            => 'term_id',
+            'terms'            => aprop_sluzby_excluded_product_category_ids(),
+            'operator'         => 'NOT IN',
+            'include_children' => true,
+        );
 
 		$query->set( 'tax_query', $tax_query );
 	}
@@ -371,7 +393,7 @@ function aprop_exclude_drone_products_from_sluzby_page( $query ) {
         return;
     }
 
-    if ( ! is_page( 'sluzby' ) ) {
+    if ( ! aprop_is_sluzby_shop_page() ) {
         return;
     }
 
@@ -389,13 +411,8 @@ function aprop_exclude_drone_products_from_sluzby_page( $query ) {
         'include_children' => true,
     );
 
-    if ( function_exists( 'aprop_drone_category_id' ) ) {
-        $drone_tax_query['field'] = 'term_id';
-        $drone_tax_query['terms'] = array( aprop_drone_category_id() );
-    } else {
-        $drone_tax_query['field'] = 'slug';
-        $drone_tax_query['terms'] = array( 'polnohospodarske-drony' );
-    }
+    $drone_tax_query['field'] = 'term_id';
+    $drone_tax_query['terms'] = aprop_sluzby_excluded_product_category_ids();
 
     $tax_query[] = $drone_tax_query;
     $query->set( 'tax_query', $tax_query );
