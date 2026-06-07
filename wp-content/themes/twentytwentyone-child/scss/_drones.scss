@@ -689,9 +689,16 @@
 
 .drone-product-card__image--main {
   z-index: 1;
-  padding: 28px 0 24px;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: auto;
+  height: 100%;
+  max-width: none;
+  padding: 0;
   object-fit: contain;
   object-position: center center;
+  transform: translateX(-50%);
   transition: opacity 0.32s ease, transform 0.32s ease;
 }
 
@@ -803,7 +810,7 @@
 
     .drone-product-card__image--main {
       opacity: 1;
-      transform: scale(1.03);
+      transform: translateX(-50%) scale(1.03);
     }
 
     .drone-product-card__media {
