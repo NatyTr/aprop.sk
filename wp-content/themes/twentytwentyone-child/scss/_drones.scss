@@ -764,12 +764,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  padding-top: 0;
-  transform: translateY(8px);
-  transition: max-height 0.32s ease, opacity 0.24s ease, padding-top 0.32s ease, transform 0.32s ease;
+  padding-top: 10px;
 }
 
 .drone-product-card__spec {
@@ -797,16 +792,6 @@
   font-size: 14px;
   font-weight: 500;
   line-height: 1.2;
-}
-
-.drone-product-card__link:hover,
-.drone-product-card__link:focus {
-  .drone-product-card__specs {
-    max-height: 90px;
-    opacity: 1;
-    padding-top: 10px;
-    transform: translateY(0);
-  }
 }
 
 .drone-product-card--has-hover-media {

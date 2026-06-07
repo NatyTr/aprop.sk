@@ -445,9 +445,23 @@ function aprop_get_enterra_product_specifications( $product_id ) {
 }
 
 function aprop_get_product_card_specifications( $product_id, $limit = 3 ) {
-    $specifications = aprop_get_enterra_product_specifications( $product_id );
+    $specifications = array();
 
-    return array_slice( $specifications, 0, $limit );
+    for ( $index = 1; $index <= $limit; $index++ ) {
+        $label = trim( (string) get_post_meta( $product_id, 'aprop_card_spec_' . $index . '_label', true ) );
+        $value = trim( (string) get_post_meta( $product_id, 'aprop_card_spec_' . $index . '_value', true ) );
+
+        if ( $label === '' || $value === '' ) {
+            continue;
+        }
+
+        $specifications[] = array(
+            'name' => $label,
+            'value' => $value,
+        );
+    }
+
+    return $specifications;
 }
 
 function aprop_show_enterra_product_specifications() {
