@@ -6398,7 +6398,7 @@ footer .footer-meta .footer_socials li a:hover {
 
 .drone-product-card__image--main {
   z-index: 1;
-  padding: 20px 12px 62px;
+  padding: 28px 0 24px;
   object-fit: contain;
   object-position: center center;
   transition: opacity 0.32s ease, transform 0.32s ease;
