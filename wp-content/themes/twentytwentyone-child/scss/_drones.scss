@@ -729,7 +729,8 @@
   gap: 16px;
   padding: 0;
 
-  h2 {
+  h2,
+  h3 {
     margin: 0;
     font-size: 24px;
     font-weight: 500;
@@ -823,7 +824,8 @@
     }
 
     .drone-product-card__title-price {
-      h2 {
+      h2,
+      h3 {
         color: #fff;
       }
     }
@@ -964,7 +966,8 @@
   .drone-product-card__title-price {
     gap: 10px;
 
-    h2 {
+    h2,
+    h3 {
       font-size: 18px;
     }
   }

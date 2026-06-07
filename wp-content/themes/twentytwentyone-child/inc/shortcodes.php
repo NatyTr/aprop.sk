@@ -2052,39 +2052,10 @@ function render_home_modern_agro_slider_shortcode() {
                     if ( ! $product ) {
                         continue;
                     }
-
-                    $badge = get_post_meta( $selected_product->ID, 'aprop_card_badge', true );
-                    $card_specifications = function_exists( 'aprop_get_product_card_specifications' ) ? aprop_get_product_card_specifications( $selected_product->ID, 3 ) : array();
                 ?>
-                <article class="modern-agro-slider__card">
-                    <a class="modern-agro-slider__card-link" href="<?php echo esc_url( get_permalink( $selected_product->ID ) ); ?>">
-                        <?php if ( $badge ) : ?>
-                            <span class="modern-agro-slider__badge"><?php echo esc_html( $badge ); ?></span>
-                        <?php endif; ?>
-
-                        <div class="modern-agro-slider__media">
-                            <?php echo get_the_post_thumbnail( $selected_product->ID, 'large' ); ?>
-                        </div>
-
-                        <div class="modern-agro-slider__content">
-                            <div class="modern-agro-slider__title-price">
-                                <h3 class="modern-agro-slider__title"><?php echo esc_html( get_the_title( $selected_product->ID ) ); ?></h3>
-                                <span class="modern-agro-slider__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
-                            </div>
-
-                            <?php if ( ! empty( $card_specifications ) ) : ?>
-                                <div class="modern-agro-slider__specs">
-                                    <?php foreach ( $card_specifications as $specification ) : ?>
-                                        <div class="modern-agro-slider__spec">
-                                            <span class="modern-agro-slider__spec-label"><?php echo esc_html( $specification['name'] ); ?></span>
-                                            <span class="modern-agro-slider__spec-value"><?php echo esc_html( $specification['value'] ); ?></span>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </a>
-                </article>
+                <div class="modern-agro-slider__slide">
+                    <?php echo aprop_render_drone_product_card( $selected_product->ID, array( 'title_tag' => 'h3' ) ); ?>
+                </div>
             <?php endforeach; ?>
         </div>
 

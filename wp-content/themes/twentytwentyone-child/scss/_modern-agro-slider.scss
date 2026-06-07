@@ -44,101 +44,16 @@
   margin: 0 -8px;
 }
 
-.modern-agro-slider__card {
+.modern-agro-slider__slide {
   margin: 0 4px;
-  border-radius: 18px;
-  background: #fff;
-  overflow: hidden;
 }
 
-.modern-agro-slider__card-link {
-  display: block;
-  color: inherit;
-  text-decoration: none;
+.modern-agro-slider__slide .drone-product-card {
+  height: 100%;
 }
 
-.modern-agro-slider__badge {
-  position: absolute;
-  top: 22px;
-  left: 22px;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  min-height: 40px;
-  padding: 8px 18px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
-  color: $black;
-  font-size: 14px;
-  line-height: 1;
-}
-
-.modern-agro-slider__media {
-  position: relative;
-  aspect-ratio: 1 / 1.05;
-  background: #f6f6f3;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-.modern-agro-slider__content {
-  padding: 18px 20px 20px;
-}
-
-.modern-agro-slider__title-price {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(21, 21, 21, 0.12);
-}
-
-.modern-agro-slider__title {
-  margin: 0;
-  font-size: 24px;
-  line-height: 1.02;
-}
-
-.modern-agro-slider__price {
-  flex: 0 0 auto;
-  font-size: 18px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.modern-agro-slider__specs {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 16px;
-}
-
-.modern-agro-slider__spec {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-height: 68px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  background: #f6f6f3;
-}
-
-.modern-agro-slider__spec-label {
-  color: rgba(21, 21, 21, 0.48);
-  font-size: 12px;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.modern-agro-slider__spec-value {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.2;
+.modern-agro-slider__slide .drone-product-card__link {
+  min-height: 100%;
 }
 
 .modern-agro-slider__footer {
@@ -240,15 +155,6 @@
     margin-top: 8px;
   }
 
-  .modern-agro-slider__title-price {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .modern-agro-slider__specs {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
 }
 
 @media (max-width: 767px) {
@@ -259,10 +165,6 @@
   .modern-agro-slider {
     padding: 28px 24px 24px 24px;
     border-radius: 24px;
-  }
-
-  .modern-agro-slider__specs {
-    grid-template-columns: 1fr;
   }
 
   .modern-agro-slider__footer {

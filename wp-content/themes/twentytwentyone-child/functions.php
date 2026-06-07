@@ -255,6 +255,199 @@ function aprop_get_product_hover_image_url( $product_id ) {
     return '';
 }
 
+function aprop_get_transparent_attachment_image_url( $attachment_id ) {
+    $attachment_id = (int) $attachment_id;
+
+    if ( $attachment_id <= 0 ) {
+        return '';
+    }
+
+    $source_path = get_attached_file( $attachment_id );
+
+    if ( ! $source_path || ! file_exists( $source_path ) ) {
+        return '';
+    }
+
+    $path_info = pathinfo( $source_path );
+    $transparent_path = $path_info['dirname'] . '/' . $path_info['filename'] . '-transparent.png';
+
+    if ( ! file_exists( $transparent_path ) ) {
+        return '';
+    }
+
+    $uploads = wp_get_upload_dir();
+
+    if ( empty( $uploads['basedir'] ) || empty( $uploads['baseurl'] ) ) {
+        return '';
+    }
+
+    $relative_path = ltrim( str_replace( wp_normalize_path( $uploads['basedir'] ), '', wp_normalize_path( $transparent_path ) ), '/' );
+
+    if ( $relative_path === '' ) {
+        return '';
+    }
+
+    return trailingslashit( $uploads['baseurl'] ) . str_replace( '%2F', '/', rawurlencode( $relative_path ) );
+}
+
+function aprop_get_product_card_image_override_url( $product_id ) {
+    $product = get_post( $product_id );
+
+    if ( ! $product instanceof WP_Post ) {
+        return '';
+    }
+
+    $uploads = wp_get_upload_dir();
+
+    if ( empty( $uploads['baseurl'] ) ) {
+        return '';
+    }
+
+    $overrides = array(
+        'dji-agras-t25-drone' => '2026/06/dji-agras-t25-transparent.png',
+        'dji-agras-t50-drone' => '2026/06/dji_agras_t50_enterra_agrodrony_render_2-1-transparent.png',
+    );
+
+    if ( empty( $overrides[ $product->post_name ] ) ) {
+        return '';
+    }
+
+    return trailingslashit( $uploads['baseurl'] ) . ltrim( $overrides[ $product->post_name ], '/' );
+}
+
+function aprop_get_product_card_image_html( $product_id, $size = 'large', $class = '' ) {
+    $product_id = (int) $product_id;
+    $attachment_id = get_post_thumbnail_id( $product_id );
+
+    if ( $attachment_id <= 0 ) {
+        return '';
+    }
+
+    $transparent_url = aprop_get_transparent_attachment_image_url( $attachment_id );
+
+    if ( $transparent_url === '' ) {
+        $transparent_url = aprop_get_product_card_image_override_url( $product_id );
+    }
+
+    if ( $transparent_url === '' ) {
+        return wp_get_attachment_image( $attachment_id, $size, false, array( 'class' => $class ) );
+    }
+
+    $alt = trim( (string) get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) );
+
+    if ( $alt === '' ) {
+        $alt = get_the_title( $product_id );
+    }
+
+    return sprintf(
+        '<img src="%1$s" class="%2$s" alt="%3$s" loading="lazy" decoding="async" />',
+        esc_url( $transparent_url ),
+        esc_attr( $class ),
+        esc_attr( $alt )
+    );
+}
+
+function aprop_render_drone_product_card( $product_id, $args = array() ) {
+    $product_id = (int) $product_id;
+    $product = wc_get_product( $product_id );
+
+    if ( ! $product || ! $product->is_visible() ) {
+        return '';
+    }
+
+    $args = wp_parse_args(
+        $args,
+        array(
+            'title_tag' => 'h2',
+            'article_class' => 'drone-product-card',
+            'image_size' => 'large',
+            'image_class' => 'drone-product-card__image drone-product-card__image--main',
+            'article_attributes' => array(),
+        )
+    );
+
+    $allowed_title_tags = array( 'h2', 'h3', 'h4' );
+    $title_tag = in_array( $args['title_tag'], $allowed_title_tags, true ) ? $args['title_tag'] : 'h2';
+    $article_class = trim( (string) $args['article_class'] );
+    $badge = get_post_meta( $product_id, 'aprop_card_badge', true );
+    $card_specifications = aprop_get_product_card_specifications( $product_id, 3 );
+    $hover_image_url = aprop_get_product_hover_image_url( $product_id );
+    $card_style = '';
+
+    if ( $hover_image_url ) {
+        $article_class .= ' drone-product-card--has-hover-media';
+        $card_style = '--drone-hover-image: url(' . esc_url( $hover_image_url ) . ');';
+    }
+
+    $article_attributes = array(
+        'class' => trim( $article_class ),
+        'data-product_id' => (string) $product_id,
+        'data-product_name' => $product->get_name(),
+        'data-product_price' => (string) $product->get_price(),
+    );
+
+    if ( $card_style !== '' ) {
+        $article_attributes['style'] = $card_style;
+    }
+
+    if ( ! empty( $args['article_attributes'] ) && is_array( $args['article_attributes'] ) ) {
+        foreach ( $args['article_attributes'] as $attribute_name => $attribute_value ) {
+            if ( $attribute_value === null || $attribute_value === '' ) {
+                continue;
+            }
+
+            $article_attributes[ $attribute_name ] = (string) $attribute_value;
+        }
+    }
+
+    $attributes_html = '';
+
+    foreach ( $article_attributes as $attribute_name => $attribute_value ) {
+        $attributes_html .= sprintf(
+            ' %1$s="%2$s"',
+            esc_attr( $attribute_name ),
+            esc_attr( $attribute_value )
+        );
+    }
+
+    ob_start();
+    ?>
+    <article<?php echo $attributes_html; ?>>
+        <a class="drone-product-card__link" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>" aria-label="<?php echo esc_attr( $product->get_name() ); ?>">
+            <?php if ( $badge ) : ?>
+                <span class="drone-product-card__badge"><?php echo esc_html( $badge ); ?></span>
+            <?php endif; ?>
+
+            <div class="drone-product-card__media">
+                <?php if ( $product->get_image_id() ) : ?>
+                    <?php echo aprop_get_product_card_image_html( $product_id, $args['image_size'], $args['image_class'] ); ?>
+                <?php endif; ?>
+            </div>
+
+            <div class="drone-product-card__content">
+                <div class="drone-product-card__title-price<?php echo ! empty( $card_specifications ) ? ' drone-product-card__title-price--has-specs' : ''; ?>">
+                    <<?php echo esc_html( $title_tag ); ?>><?php echo esc_html( $product->get_name() ); ?></<?php echo esc_html( $title_tag ); ?>>
+                    <span class="drone-product-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
+                </div>
+
+                <?php if ( ! empty( $card_specifications ) ) : ?>
+                    <div class="drone-product-card__specs">
+                        <?php foreach ( $card_specifications as $specification ) : ?>
+                            <div class="drone-product-card__spec">
+                                <span class="drone-product-card__spec-label"><?php echo esc_html( $specification['name'] ); ?></span>
+                                <span class="drone-product-card__spec-value"><?php echo esc_html( $specification['value'] ); ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </a>
+    </article>
+    <?php
+
+    return ob_get_clean();
+}
+
 function aprop_render_product_category_hover_background_field( $term ) {
     $value = aprop_product_category_uses_hover_background( $term->term_id ) ? 1 : 0;
     ?>
