@@ -366,6 +366,42 @@ function exclude_package_category_from_shop( $query ) {
 }
 add_action( 'pre_get_posts', 'exclude_package_category_from_shop' );
 
+function aprop_exclude_drone_products_from_sluzby_page( $query ) {
+    if ( is_admin() || ! $query instanceof WP_Query ) {
+        return;
+    }
+
+    if ( ! is_page( 'sluzby' ) ) {
+        return;
+    }
+
+    $post_type = $query->get( 'post_type' );
+    $is_product_query = $post_type === 'product' || ( is_array( $post_type ) && in_array( 'product', $post_type, true ) );
+
+    if ( ! $is_product_query ) {
+        return;
+    }
+
+    $tax_query = (array) $query->get( 'tax_query' );
+    $drone_tax_query = array(
+        'taxonomy' => 'product_cat',
+        'operator' => 'NOT IN',
+        'include_children' => true,
+    );
+
+    if ( function_exists( 'aprop_drone_category_id' ) ) {
+        $drone_tax_query['field'] = 'term_id';
+        $drone_tax_query['terms'] = array( aprop_drone_category_id() );
+    } else {
+        $drone_tax_query['field'] = 'slug';
+        $drone_tax_query['terms'] = array( 'polnohospodarske-drony' );
+    }
+
+    $tax_query[] = $drone_tax_query;
+    $query->set( 'tax_query', $tax_query );
+}
+add_action( 'pre_get_posts', 'aprop_exclude_drone_products_from_sluzby_page' );
+
 
 // zmena textu tlačidla pridať do košíka
 add_filter( 'woocommerce_product_single_add_to_cart_text', 'custom_single_product_button_text' );
