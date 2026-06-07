@@ -255,98 +255,6 @@ function aprop_get_product_hover_image_url( $product_id ) {
     return '';
 }
 
-function aprop_get_transparent_attachment_image_url( $attachment_id ) {
-    $attachment_id = (int) $attachment_id;
-
-    if ( $attachment_id <= 0 ) {
-        return '';
-    }
-
-    $source_path = get_attached_file( $attachment_id );
-
-    if ( ! $source_path || ! file_exists( $source_path ) ) {
-        return '';
-    }
-
-    $path_info = pathinfo( $source_path );
-    $transparent_path = $path_info['dirname'] . '/' . $path_info['filename'] . '-transparent.png';
-
-    if ( ! file_exists( $transparent_path ) ) {
-        return '';
-    }
-
-    $uploads = wp_get_upload_dir();
-
-    if ( empty( $uploads['basedir'] ) || empty( $uploads['baseurl'] ) ) {
-        return '';
-    }
-
-    $relative_path = ltrim( str_replace( wp_normalize_path( $uploads['basedir'] ), '', wp_normalize_path( $transparent_path ) ), '/' );
-
-    if ( $relative_path === '' ) {
-        return '';
-    }
-
-    return trailingslashit( $uploads['baseurl'] ) . str_replace( '%2F', '/', rawurlencode( $relative_path ) );
-}
-
-function aprop_get_product_card_image_override_url( $product_id ) {
-    $product = get_post( $product_id );
-
-    if ( ! $product instanceof WP_Post ) {
-        return '';
-    }
-
-    $uploads = wp_get_upload_dir();
-
-    if ( empty( $uploads['baseurl'] ) ) {
-        return '';
-    }
-
-    $overrides = array(
-        'dji-agras-t25-drone' => '2026/06/dji-agras-t25-transparent.png',
-        'dji-agras-t50-drone' => '2026/06/dji_agras_t50_enterra_agrodrony_render_2-1-transparent.png',
-    );
-
-    if ( empty( $overrides[ $product->post_name ] ) ) {
-        return '';
-    }
-
-    return trailingslashit( $uploads['baseurl'] ) . ltrim( $overrides[ $product->post_name ], '/' );
-}
-
-function aprop_get_product_card_image_html( $product_id, $size = 'large', $class = '' ) {
-    $product_id = (int) $product_id;
-    $attachment_id = get_post_thumbnail_id( $product_id );
-
-    if ( $attachment_id <= 0 ) {
-        return '';
-    }
-
-    $transparent_url = aprop_get_transparent_attachment_image_url( $attachment_id );
-
-    if ( $transparent_url === '' ) {
-        $transparent_url = aprop_get_product_card_image_override_url( $product_id );
-    }
-
-    if ( $transparent_url === '' ) {
-        return wp_get_attachment_image( $attachment_id, $size, false, array( 'class' => $class ) );
-    }
-
-    $alt = trim( (string) get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) );
-
-    if ( $alt === '' ) {
-        $alt = get_the_title( $product_id );
-    }
-
-    return sprintf(
-        '<img src="%1$s" class="%2$s" alt="%3$s" loading="lazy" decoding="async" />',
-        esc_url( $transparent_url ),
-        esc_attr( $class ),
-        esc_attr( $alt )
-    );
-}
-
 function aprop_render_drone_product_card( $product_id, $args = array() ) {
     $product_id = (int) $product_id;
     $product = wc_get_product( $product_id );
@@ -420,7 +328,7 @@ function aprop_render_drone_product_card( $product_id, $args = array() ) {
 
             <div class="drone-product-card__media">
                 <?php if ( $product->get_image_id() ) : ?>
-                    <?php echo aprop_get_product_card_image_html( $product_id, $args['image_size'], $args['image_class'] ); ?>
+                    <?php echo wp_get_attachment_image( $product->get_image_id(), $args['image_size'], false, array( 'class' => $args['image_class'] ) ); ?>
                 <?php endif; ?>
             </div>
 

@@ -1939,10 +1939,9 @@ function shortcode_which_package($atts) {
 }
 add_shortcode('shortcode_which_package', 'shortcode_which_package');
 
-function aprop_get_home_modern_agro_products( $page_id, $minimum_products = 6 ) {
+function aprop_get_home_modern_agro_products( $page_id ) {
     $selected_products = (array) get_field( 'home_modern_agro_products', $page_id );
     $products = array();
-    $selected_ids = array();
 
     foreach ( $selected_products as $selected_product ) {
         if ( ! $selected_product instanceof WP_Post ) {
@@ -1950,48 +1949,7 @@ function aprop_get_home_modern_agro_products( $page_id, $minimum_products = 6 ) 
         }
 
         $products[] = $selected_product;
-        $selected_ids[] = (int) $selected_product->ID;
     }
-
-    if ( empty( $products ) ) {
-        return array();
-    }
-
-    if ( count( $products ) >= $minimum_products || ! function_exists( 'aprop_drone_category_id' ) ) {
-        return $products;
-    }
-
-    $fallback_query = new WP_Query(
-        array(
-            'post_type'      => 'product',
-            'posts_per_page' => $minimum_products - count( $products ),
-            'post_status'    => 'publish',
-            'post__not_in'   => $selected_ids,
-            'orderby'        => array(
-                'menu_order' => 'ASC',
-                'title'      => 'ASC',
-            ),
-            'tax_query'      => array(
-                array(
-                    'taxonomy'         => 'product_cat',
-                    'field'            => 'term_id',
-                    'terms'            => array( aprop_drone_category_id() ),
-                    'operator'         => 'IN',
-                    'include_children' => true,
-                ),
-            ),
-        )
-    );
-
-    if ( $fallback_query->have_posts() ) {
-        foreach ( $fallback_query->posts as $fallback_product ) {
-            if ( $fallback_product instanceof WP_Post ) {
-                $products[] = $fallback_product;
-            }
-        }
-    }
-
-    wp_reset_postdata();
 
     return $products;
 }
