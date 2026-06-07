@@ -2,6 +2,19 @@
 defined( 'ABSPATH' ) || exit;
 
 get_header( 'shop' );
+
+$is_drone_category_listing = false;
+
+if ( is_product_category() && function_exists( 'aprop_drone_category_id' ) ) {
+    $term = get_queried_object();
+
+    if ( $term instanceof WP_Term ) {
+        $drone_category_id = aprop_drone_category_id();
+        $is_drone_category_listing = (int) $term->term_id === (int) $drone_category_id || term_is_ancestor_of( $drone_category_id, $term->term_id, 'product_cat' );
+    }
+}
+
+$archive_heading = $is_drone_category_listing ? 'Poľnohospodárske drony' : 'Kurzy a služby';
 ?>
 
 <div class="shop-page-wrapper" style="display: flex; gap: 30px; align-items: flex-start;">
@@ -9,7 +22,7 @@ get_header( 'shop' );
     <!-- Sidebar -->
 		<!-- Sidebar s titulkom -->
     <aside class="shop-sidebar" style="width: 25%;">
-            <h1 class="show-on-mobile">Kurzy a služby</h1>
+            <h1 class="show-on-mobile"><?php echo esc_html( $archive_heading ); ?></h1>
           <div class="sidebar-section" id="sidebar-section">
               <div class="sidebar-toggle" id="toggle-filter">Filtruj podľa</div>
               <div class="sidebar-content" id="sidebar-filter">
@@ -58,7 +71,7 @@ get_header( 'shop' );
 
     <!-- Hlavný obsah -->
     <div class="shop-main" style="width: 75%;">
-      <h1 class="show-on-desktop">Kurzy a služby</h1>
+      <h1 class="show-on-desktop"><?php echo esc_html( $archive_heading ); ?></h1>
 			<div class="category-title">
 				<?php
 					if ( is_product_category() ) {
@@ -106,7 +119,11 @@ get_header( 'shop' );
              * @hooked woocommerce_catalog_ordering - 30
              */
 
-            woocommerce_product_loop_start();
+            if ( $is_drone_category_listing ) {
+                echo '<div class="drone-products-grid drone-products-grid--category">';
+            } else {
+                woocommerce_product_loop_start();
+            }
 
             if ( wc_get_loop_prop( 'total' ) ) {
                 while ( have_posts() ) {
@@ -121,7 +138,11 @@ get_header( 'shop' );
                 }
             }
 
-            woocommerce_product_loop_end();
+            if ( $is_drone_category_listing ) {
+                echo '</div>';
+            } else {
+                woocommerce_product_loop_end();
+            }
 
 							// Nastav hodnoty podľa toho, kde sa používateľ nachádza
 							$item_list_id = is_product_category() ? 'kategoria-' . get_queried_object_id() : 'shop';

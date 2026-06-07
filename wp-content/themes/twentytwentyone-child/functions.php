@@ -481,6 +481,28 @@ function custom_checkout_payment_heading() {
     echo '<h3 class="checkout-payment-title">Platba</h3>';
 }
 
+add_filter( 'woocommerce_get_availability_text', 'aprop_translate_product_availability_text', 10, 2 );
+function aprop_translate_product_availability_text( $availability, $product ) {
+    if ( ! $product instanceof WC_Product ) {
+        return $availability;
+    }
+
+    if ( $product->is_on_backorder( 1 ) ) {
+        return 'Na objednávku';
+    }
+
+    if ( $product->is_in_stock() ) {
+        return 'Skladom';
+    }
+
+    return 'Nie je skladom';
+}
+
+add_filter( 'woocommerce_cart_item_backorder_notification', 'aprop_translate_cart_backorder_notification' );
+function aprop_translate_cart_backorder_notification( $notification ) {
+    return '<p class="backorder_notification">' . esc_html__( 'Na objednávku', 'aprop' ) . '</p>';
+}
+
 
 add_filter( 'gettext', 'custom_translate_checkout_strings', 20, 3 );
 function custom_translate_checkout_strings( $translated_text, $text, $domain ) {

@@ -152,9 +152,22 @@ function aprop_drone_meta_query_from_filters( $filters, $exclude = '', $override
     }
 
     if ( ( 'availability' !== $exclude || array_key_exists('availability', $override) ) && ! empty($filters['availability']) ) {
+        $stock_statuses = array(
+            'skladom' => array('instock'),
+            'na-objednavku' => array('onbackorder'),
+        );
+
         $meta_query[] = array(
-            'key'   => 'aprop_drone_availability',
-            'value' => $filters['availability'],
+            'relation' => 'OR',
+            array(
+                'key'   => 'aprop_drone_availability',
+                'value' => $filters['availability'],
+            ),
+            array(
+                'key'     => '_stock_status',
+                'value'   => $stock_statuses[$filters['availability']] ?? array(),
+                'compare' => 'IN',
+            ),
         );
     }
 
@@ -396,23 +409,19 @@ function aprop_render_drone_sort( $current_filters ) {
     $sort_options = aprop_drone_sort_options();
     $current_label = $sort_options[$current_filters['sort']] ?? $sort_options['recommended'];
 
-    $base_args = array(
-        'drone_category' => $current_filters['category'],
-        'drone_display' => $current_filters['display'],
-        'drone_capacity_max' => $current_filters['capacity_max'],
-    );
-
-    if ( $current_filters['purpose'] ) {
-        $base_args['drone_purpose'] = $current_filters['purpose'];
-    }
-
-    if ( $current_filters['availability'] ) {
-        $base_args['drone_availability'] = $current_filters['availability'];
-    }
-
     ob_start();
     ?>
-    <div class="drone-products-sort">
+    <form method="get" class="drone-products-sort">
+        <input type="hidden" name="drone_category" value="<?php echo esc_attr( $current_filters['category'] ); ?>" />
+        <input type="hidden" name="drone_display" value="<?php echo esc_attr( $current_filters['display'] ); ?>" />
+        <input type="hidden" name="drone_capacity_max" value="<?php echo esc_attr( $current_filters['capacity_max'] ); ?>" />
+        <?php if ( $current_filters['purpose'] ) : ?>
+            <input type="hidden" name="drone_purpose" value="<?php echo esc_attr( $current_filters['purpose'] ); ?>" />
+        <?php endif; ?>
+        <?php if ( $current_filters['availability'] ) : ?>
+            <input type="hidden" name="drone_availability" value="<?php echo esc_attr( $current_filters['availability'] ); ?>" />
+        <?php endif; ?>
+
         <details class="drone-products-sort__dropdown">
             <summary class="drone-products-sort__summary">
                 <span class="drone-products-sort__label">Zoradiť podľa</span>
@@ -421,22 +430,18 @@ function aprop_render_drone_sort( $current_filters ) {
 
             <div class="drone-products-sort__menu">
                 <?php foreach ( $sort_options as $value => $label ) : ?>
-                    <?php
-                        $sort_url = add_query_arg(
-                            array_merge($base_args, array('drone_sort' => $value)),
-                            get_permalink()
-                        );
-                    ?>
-                    <a
-                        href="<?php echo esc_url($sort_url); ?>"
+                    <button
+                        type="submit"
+                        name="drone_sort"
+                        value="<?php echo esc_attr( $value ); ?>"
                         class="drone-products-sort__option<?php echo $current_filters['sort'] === $value ? ' is-active' : ''; ?>"
                     >
                         <?php echo esc_html($label); ?>
-                    </a>
+                    </button>
                 <?php endforeach; ?>
             </div>
         </details>
-    </div>
+    </form>
     <?php
     return ob_get_clean();
 }
@@ -549,7 +554,10 @@ function render_drone_products_shortcode() {
         'post_type'      => 'product',
         'posts_per_page' => -1,
         'post_status'    => 'publish',
-        'orderby'        => 'menu_order title',
+        'orderby'        => array(
+            'menu_order' => 'ASC',
+            'title'      => 'ASC',
+        ),
         'order'          => 'ASC',
         'tax_query'      => aprop_drone_tax_query_from_filters( $current_filters ),
         'meta_query'     => aprop_drone_meta_query_from_filters($current_filters),
