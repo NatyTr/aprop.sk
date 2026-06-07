@@ -2,7 +2,7 @@
 
 function aprop_product_card_migration_payload() {
     return array(
-        'version' => '2026-06-07-02',
+        'version' => '2026-06-07-03',
         'products' => array(
             'autel-alpha-l35t-standard-bundle' => array(
                 'badge' => '',
@@ -58,6 +58,15 @@ function aprop_product_card_migration_payload() {
                 'spec_3_label' => 'ZABER',
                 'spec_3_value' => '4-9 m',
             ),
+            'dji-agras-t50-drone' => array(
+                'badge' => 'Odporúčané',
+                'spec_1_label' => 'NADRZ',
+                'spec_1_value' => '40 L',
+                'spec_2_label' => 'NOSNOST',
+                'spec_2_value' => '40 kg',
+                'spec_3_label' => 'PRIETOK',
+                'spec_3_value' => '16 - 24 L/min',
+            ),
             'dji-agras-t25-drone' => array(
                 'badge' => '',
                 'spec_1_label' => 'NADRZ',
@@ -112,6 +121,15 @@ function aprop_product_card_migration_payload() {
                 'spec_3_label' => 'KRYTIE',
                 'spec_3_value' => 'IP54',
             ),
+            'dji-matrice-400' => array(
+                'badge' => '',
+                'spec_1_label' => 'LET',
+                'spec_1_value' => '59 min',
+                'spec_2_label' => 'NOSNOST',
+                'spec_2_value' => '6 kg',
+                'spec_3_label' => 'DOSAH',
+                'spec_3_value' => '40 km',
+            ),
             'dji-matrice-4e' => array(
                 'badge' => '',
                 'spec_1_label' => 'LET',
@@ -136,6 +154,15 @@ function aprop_product_card_migration_payload() {
                 'spec_1_value' => '45 min',
                 'spec_2_label' => 'ZOOM',
                 'spec_2_value' => '56x',
+                'spec_3_label' => 'RTK',
+                'spec_3_value' => 'CM',
+            ),
+            'dji-mavic-3-enterprise-multispectral-dji-care-1-rok' => array(
+                'badge' => '',
+                'spec_1_label' => 'LET',
+                'spec_1_value' => '43 min',
+                'spec_2_label' => 'DOSAH',
+                'spec_2_value' => '15 km',
                 'spec_3_label' => 'RTK',
                 'spec_3_value' => 'CM',
             ),
