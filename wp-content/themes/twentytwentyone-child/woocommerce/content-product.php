@@ -23,9 +23,7 @@ if ( $is_drone_category_listing ) {
 	$permalink = get_permalink( $product_id );
 	$badge = get_post_meta( $product_id, 'aprop_card_badge', true );
 	$card_specifications = function_exists( 'aprop_get_product_card_specifications' ) ? aprop_get_product_card_specifications( $product_id, 3 ) : array();
-	$gallery_image_ids = $product->get_gallery_image_ids();
-	$hover_image_id = ! empty( $gallery_image_ids ) ? (int) $gallery_image_ids[0] : 0;
-	$hover_image_url = $hover_image_id ? wp_get_attachment_image_url( $hover_image_id, 'large' ) : '';
+	$hover_image_url = function_exists( 'aprop_get_product_hover_image_url' ) ? aprop_get_product_hover_image_url( $product_id ) : '';
 	$card_classes = 'drone-product-card';
 	$card_style = '';
 

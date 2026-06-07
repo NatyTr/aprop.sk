@@ -206,6 +206,137 @@ function enable_excerpt_for_products() {
 }
 add_action( 'init', 'enable_excerpt_for_products' );
 
+function aprop_product_category_uses_hover_background( $term_id ) {
+    $enabled = get_term_meta( $term_id, 'aprop_use_hover_background', true );
+
+    if ( $enabled !== '' ) {
+        return $enabled === '1';
+    }
+
+    $term = get_term( $term_id, 'product_cat' );
+
+    return $term instanceof WP_Term && in_array( $term->slug, array( 'drony', 'dji-drony' ), true );
+}
+
+function aprop_product_has_hover_background_category( $product_id ) {
+    $terms = get_the_terms( $product_id, 'product_cat' );
+
+    if ( empty( $terms ) || is_wp_error( $terms ) ) {
+        return false;
+    }
+
+    foreach ( $terms as $term ) {
+        if ( ! $term instanceof WP_Term ) {
+            continue;
+        }
+
+        if ( aprop_product_category_uses_hover_background( $term->term_id ) ) {
+            return true;
+        }
+
+        $ancestor_ids = get_ancestors( $term->term_id, 'product_cat', 'taxonomy' );
+
+        foreach ( $ancestor_ids as $ancestor_id ) {
+            if ( aprop_product_category_uses_hover_background( (int) $ancestor_id ) ) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+function aprop_get_product_hover_image_url( $product_id ) {
+    if ( aprop_product_has_hover_background_category( $product_id ) ) {
+        return get_stylesheet_directory_uri() . '/images/produkty-pozadie.png';
+    }
+
+    return '';
+}
+
+function aprop_render_product_category_hover_background_field( $term ) {
+    $value = aprop_product_category_uses_hover_background( $term->term_id ) ? 1 : 0;
+    ?>
+    <tr class="form-field">
+        <th scope="row" valign="top">
+            <label for="aprop_use_hover_background">Hover pozadie produktov</label>
+        </th>
+        <td>
+            <label for="aprop_use_hover_background">
+                <input
+                    type="checkbox"
+                    name="aprop_use_hover_background"
+                    id="aprop_use_hover_background"
+                    value="1"
+                    <?php checked( $value, 1 ); ?>
+                />
+                Použiť fixné hover pozadie `produkty-pozadie.png`
+            </label>
+            <p class="description">Keď je zapnuté, produkty z tejto kategórie použijú na hover fixný obrázok namiesto prvého obrázka z galérie.</p>
+        </td>
+    </tr>
+    <?php
+}
+
+function aprop_render_product_category_hover_background_add_field() {
+    ?>
+    <div class="form-field">
+        <label for="aprop_use_hover_background">Hover pozadie produktov</label>
+        <label for="aprop_use_hover_background">
+            <input
+                type="checkbox"
+                name="aprop_use_hover_background"
+                id="aprop_use_hover_background"
+                value="1"
+            />
+            Použiť fixné hover pozadie `produkty-pozadie.png`
+        </label>
+        <p>Keď je zapnuté, produkty z tejto kategórie použijú na hover fixný obrázok namiesto prvého obrázka z galérie.</p>
+    </div>
+    <?php
+}
+
+add_action( 'product_cat_add_form_fields', 'aprop_render_product_category_hover_background_add_field', 5 );
+
+add_action(
+    'product_cat_edit_form_fields',
+    function( $term ) {
+        aprop_render_product_category_hover_background_field( $term );
+    },
+    5
+);
+
+add_action(
+    'edited_product_cat',
+    function( $term_id ) {
+        update_term_meta( $term_id, 'aprop_use_hover_background', isset( $_POST['aprop_use_hover_background'] ) ? '1' : '0' );
+    }
+);
+
+add_action(
+    'created_product_cat',
+    function( $term_id ) {
+        update_term_meta( $term_id, 'aprop_use_hover_background', isset( $_POST['aprop_use_hover_background'] ) ? '1' : '0' );
+    }
+);
+
+add_action(
+    'init',
+    function() {
+        foreach ( array( 'drony', 'dji-drony' ) as $default_term_slug ) {
+            $default_term = get_term_by( 'slug', $default_term_slug, 'product_cat' );
+
+            if ( $default_term instanceof WP_Term ) {
+                $saved_value = get_term_meta( $default_term->term_id, 'aprop_use_hover_background', true );
+
+                if ( $saved_value === '' ) {
+                    update_term_meta( $default_term->term_id, 'aprop_use_hover_background', '1' );
+                }
+            }
+        }
+    }
+);
+
 
 function add_page_slug_to_body_class($classes) {
     if (is_singular() || is_page()) {

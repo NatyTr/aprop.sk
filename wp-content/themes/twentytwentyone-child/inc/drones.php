@@ -4,6 +4,12 @@ function aprop_drone_category_id() {
     return 211;
 }
 
+function aprop_default_drone_filter_category_id() {
+    $term = get_term_by( 'slug', 'drony', 'product_cat' );
+
+    return $term instanceof WP_Term ? (int) $term->term_id : 0;
+}
+
 function aprop_drone_category_tree( $parent_id = null ) {
     if ( null === $parent_id ) {
         $parent_id = aprop_drone_category_id();
@@ -327,63 +333,6 @@ function aprop_render_drone_filters( $current_filters ) {
             </div>
 
             <div class="drone-products-filter__group">
-                <h2>Zobrazenie</h2>
-                <?php
-                    echo aprop_render_drone_filter_radio(
-                        'drone_display',
-                        'all',
-                        $options['display']['all'],
-                        $current_filters['display'],
-                        aprop_drone_filter_count($current_filters, 'display', array('display' => 'all'))
-                    );
-
-                    foreach ( array('drony', 'prislusenstvo') as $value ) {
-                        echo aprop_render_drone_filter_radio(
-                            'drone_display',
-                            $value,
-                            $options['display'][$value],
-                            $current_filters['display'],
-                            aprop_drone_filter_count($current_filters, 'display', array('display' => $value))
-                        );
-                    }
-                ?>
-            </div>
-
-            <div class="drone-products-filter__group">
-                <h2>Účel použitia</h2>
-                <?php foreach ( $options['purpose'] as $value => $label ) : ?>
-                    <?php
-                        echo aprop_render_drone_filter_radio(
-                            'drone_purpose',
-                            $value,
-                            $label,
-                            $current_filters['purpose'],
-                            aprop_drone_filter_count($current_filters, 'purpose', array('purpose' => $value))
-                        );
-                    ?>
-                <?php endforeach; ?>
-            </div>
-
-            <div class="drone-products-filter__group">
-                <h2>Nosnosť nádrže</h2>
-                <?php $capacity_progress = max(0, min(100, (($current_filters['capacity_max'] - 10) / 90) * 100)); ?>
-                <input
-                    type="range"
-                    name="drone_capacity_max"
-                    min="10"
-                    max="100"
-                    step="10"
-                    value="<?php echo esc_attr($current_filters['capacity_max']); ?>"
-                    style="--range-progress: <?php echo esc_attr($capacity_progress); ?>%;"
-                    onchange="this.form.submit()"
-                />
-                <div class="drone-products-filter__range-labels">
-                    <span>10 L</span>
-                    <span>100 L+</span>
-                </div>
-            </div>
-
-            <div class="drone-products-filter__group">
                 <h2>Dostupnosť</h2>
                 <?php foreach ( $options['availability'] as $value => $label ) : ?>
                     <?php
@@ -517,8 +466,9 @@ function render_drone_products_shortcode() {
     $sort_options = aprop_drone_sort_options();
     $category_tree = aprop_drone_category_tree();
     $valid_category_ids = aprop_drone_category_ids_from_tree( $category_tree );
+    $default_category_id = ( ! isset( $_GET['drone_category'] ) && is_page( 'drony' ) ) ? aprop_default_drone_filter_category_id() : 0;
     $current_filters = array(
-        'category'     => isset($_GET['drone_category']) ? absint($_GET['drone_category']) : 0,
+        'category'     => isset($_GET['drone_category']) ? absint($_GET['drone_category']) : $default_category_id,
         'display'      => isset($_GET['drone_display']) ? sanitize_key($_GET['drone_display']) : 'all',
         'purpose'      => isset($_GET['drone_purpose']) ? sanitize_key($_GET['drone_purpose']) : '',
         'availability' => isset($_GET['drone_availability']) ? sanitize_key($_GET['drone_availability']) : '',
@@ -622,16 +572,7 @@ function render_drone_products_shortcode() {
                             $permalink = get_permalink($product_id);
                             $badge = get_post_meta($product_id, 'aprop_card_badge', true);
                             $card_specifications = function_exists('aprop_get_product_card_specifications') ? aprop_get_product_card_specifications($product_id, 3) : array();
-                            $hover_image_id = 0;
-
-                            if ( $product instanceof WC_Product ) {
-                                $gallery_image_ids = $product->get_gallery_image_ids();
-                                if ( ! empty($gallery_image_ids) ) {
-                                    $hover_image_id = (int) $gallery_image_ids[0];
-                                }
-                            }
-
-                            $hover_image_url = $hover_image_id ? wp_get_attachment_image_url($hover_image_id, 'large') : '';
+                            $hover_image_url = function_exists('aprop_get_product_hover_image_url') ? aprop_get_product_hover_image_url($product_id) : '';
                             $card_classes = 'drone-product-card';
                             $card_style = '';
 
@@ -654,7 +595,7 @@ function render_drone_products_shortcode() {
                                 </div>
 
                                 <div class="drone-product-card__content">
-                                    <div class="drone-product-card__title-price">
+                                    <div class="drone-product-card__title-price<?php echo ! empty($card_specifications) ? ' drone-product-card__title-price--has-specs' : ''; ?>">
                                         <h2><?php the_title(); ?></h2>
                                         <span class="drone-product-card__price"><?php echo wp_kses_post($product->get_price_html()); ?></span>
                                     </div>

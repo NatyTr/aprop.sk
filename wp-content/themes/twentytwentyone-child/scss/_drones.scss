@@ -721,8 +721,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
-  padding: 0 0 14px;
-  border-bottom: 1px solid rgba(21, 21, 21, 0.1);
+  padding: 0;
 
   h2 {
     margin: 0;
@@ -731,6 +730,11 @@
     line-height: 1.08;
     letter-spacing: -0.02em;
   }
+}
+
+.drone-product-card__title-price--has-specs {
+  padding: 0 0 14px;
+  border-bottom: 1px solid rgba(21, 21, 21, 0.1);
 }
 
 .drone-product-card__price {
@@ -813,7 +817,7 @@
     }
 
     .drone-product-card__image--main {
-      opacity: 0;
+      opacity: 1;
       transform: scale(1.03);
     }
 
@@ -828,11 +832,13 @@
     }
 
     .drone-product-card__title-price {
-      border-bottom-color: rgba(255, 255, 255, 0.2);
-
       h2 {
         color: #fff;
       }
+    }
+
+    .drone-product-card__title-price--has-specs {
+      border-bottom-color: rgba(255, 255, 255, 0.2);
     }
 
     .drone-product-card__price {
