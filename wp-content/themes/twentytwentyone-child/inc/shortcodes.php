@@ -266,6 +266,82 @@ function render_why_aprop_block_shortcode() {
 }
 add_shortcode( 'why_aprop_block', 'render_why_aprop_block_shortcode' );
 
+function render_aprop_features_block_shortcode() {
+    $page_id = get_queried_object_id();
+
+    if ( ! $page_id ) {
+        return '';
+    }
+
+    $main_image = get_field( 'aprop_features_main_image', $page_id );
+    $deco_image = get_field( 'aprop_features_deco_image', $page_id );
+    $cards      = array();
+
+    for ( $i = 1; $i <= 3; $i++ ) {
+        $icon  = get_field( 'aprop_features_card_' . $i . '_icon', $page_id );
+        $title = get_field( 'aprop_features_card_' . $i . '_title', $page_id );
+        $text  = get_field( 'aprop_features_card_' . $i . '_text', $page_id );
+
+        if ( empty( $icon ) && empty( $title ) && empty( $text ) ) {
+            continue;
+        }
+
+        $cards[] = array(
+            'icon'  => $icon,
+            'title' => $title,
+            'text'  => $text,
+        );
+    }
+
+    if ( empty( $main_image ) && empty( $cards ) ) {
+        return '';
+    }
+
+    ob_start();
+    ?>
+    <section class="aprop-features-block">
+        <?php if ( ! empty( $deco_image['url'] ) ) : ?>
+            <div class="aprop-features-block__deco" aria-hidden="true">
+                <img src="<?php echo esc_url( $deco_image['url'] ); ?>" alt="" loading="lazy" />
+            </div>
+        <?php endif; ?>
+
+        <div class="aprop-features-block__inner">
+            <?php if ( ! empty( $main_image['url'] ) ) : ?>
+                <div class="aprop-features-block__media">
+                    <img src="<?php echo esc_url( $main_image['url'] ); ?>" alt="<?php echo esc_attr( $main_image['alt'] ?? 'Aprop tím' ); ?>" loading="lazy" />
+                </div>
+            <?php endif; ?>
+
+            <?php if ( ! empty( $cards ) ) : ?>
+                <div class="aprop-features-block__cards">
+                    <?php foreach ( $cards as $card ) : ?>
+                        <article class="aprop-features-block__card">
+                            <?php if ( ! empty( $card['icon']['url'] ) ) : ?>
+                                <div class="aprop-features-block__icon">
+                                    <img src="<?php echo esc_url( $card['icon']['url'] ); ?>" alt="<?php echo esc_attr( $card['icon']['alt'] ?? $card['title'] ); ?>" loading="lazy" />
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if ( ! empty( $card['title'] ) ) : ?>
+                                <h3><?php echo esc_html( $card['title'] ); ?></h3>
+                            <?php endif; ?>
+
+                            <?php if ( ! empty( $card['text'] ) ) : ?>
+                                <p><?php echo esc_html( $card['text'] ); ?></p>
+                            <?php endif; ?>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+    <?php
+
+    return ob_get_clean();
+}
+add_shortcode( 'aprop_features_block', 'render_aprop_features_block_shortcode' );
+
 
 //title banner / hero banner
 function render_title_banner_shortcode() {
