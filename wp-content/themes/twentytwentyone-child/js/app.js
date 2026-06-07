@@ -76,66 +76,65 @@ jQuery(document).ready(function ($) {
 
 
 
-  // === All Posts Slider + Progress Bar ===
+  // === All Posts Slider ===
   (function ($) {
-  const $postSlider = $('.all-posts-slider');
+    const $postSlider = $('.all-posts-slider');
+    const $postPrev = $('.posts-slider-prev');
+    const $postNext = $('.posts-slider-next');
+    const $postProgress = $('.posts-slider-footer__progress span');
 
-  function updateProgressBar(slick, currentSlide) {
-        let slidesToShow = slick.options.slidesToShow;
-
-        if (typeof slidesToShow === 'function') {
-            slidesToShow = slidesToShow();
-        }
-
-        const totalSlides = slick.slideCount;
-        const current = currentSlide || 0;
-        const maxSteps = Math.max(totalSlides - Math.floor(slidesToShow), 1);
-
-        let progress = (current / maxSteps) * 100;
-
-        // Ak chceme mať vždy aspoň trochu viditeľný progress
-        progress = Math.max(progress, 5);
-
-        $('.slider-progress-bar').css('width', progress + '%');
+    if (!$postSlider.length) {
+      return;
     }
 
+    function updatePostProgress(slick, currentSlide) {
+      const current = typeof currentSlide === 'number' ? currentSlide : slick.currentSlide || 0;
+      const visibleSlides = Math.max(1, Math.ceil(slick.options.slidesToShow || 1));
+      const maxSteps = Math.max(slick.slideCount - visibleSlides, 0);
+      const progress = maxSteps === 0 ? 100 : ((current + visibleSlides) / slick.slideCount) * 100;
 
-
-  console.log('Inicializujem slick...');
-
-  $postSlider.slick({
-    slidesToShow: 2.9,
-    slidesToScroll: 1,
-    infinite: false,
-    arrows: false,
-    dots: false,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1.2
-        }
-      }
-    ]
-  });
-
-  $postSlider.on('afterChange', function (event, slick, currentSlide) {
-    console.log('afterChange fired');
-    updateProgressBar(slick, currentSlide);
-  });
-
-  // Fallback: čakáme, kým slick bude hotový
-  const waitForSlider = setInterval(function () {
-    if ($postSlider.hasClass('slick-initialized')) {
-      console.log('Slider is initialized ✅');
-      const slick = $postSlider.slick('getSlick');
-      updateProgressBar(slick, slick.currentSlide);
-      clearInterval(waitForSlider);
-    } else {
-      console.log('⏳ Waiting for slider to initialize...');
+      $postProgress.css('width', `${Math.min(progress, 100)}%`);
     }
-  }, 100);
-})(jQuery);
+
+    $postSlider.on('init', function (event, slick) {
+      updatePostProgress(slick, 0);
+    });
+
+    $postSlider.slick({
+      slidesToShow: 2.85,
+      slidesToScroll: 1,
+      infinite: false,
+      arrows: false,
+      dots: false,
+      adaptiveHeight: false,
+      responsive: [
+        {
+          breakpoint: 1100,
+          settings: {
+            slidesToShow: 2.2
+          }
+        },
+        {
+          breakpoint: 768,
+          settings: {
+            slidesToShow: 1.15
+          }
+        }
+      ]
+    });
+
+    $postSlider.on('afterChange', function (event, slick, currentSlide) {
+      updatePostProgress(slick, currentSlide);
+    });
+
+    $postPrev.on('click', function () {
+      $postSlider.slick('slickPrev');
+    });
+
+    $postNext.on('click', function () {
+      $postSlider.slick('slickNext');
+    });
+  })(jQuery);
 
 
 

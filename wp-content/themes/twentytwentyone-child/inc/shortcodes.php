@@ -1215,7 +1215,8 @@ function render_partners_shortcode() {
 
     ob_start(); ?>
     <div class="partners-container">
-        <h2>Firmy, ktoré nám dôverujú</h2>
+        <span class="label">Dôvera v praxi</span>
+        <h2>Firmy a inštitúcie, ktoré nám dôverujú</h2>
         <div class="partners-wrapper">
             <?php while ($query->have_posts()) : $query->the_post(); ?>
                 <?php if (has_post_thumbnail()) : ?>
@@ -1255,7 +1256,7 @@ function shortcode_all_posts_slider() {
 
     <div class="posts-block">
         <div class="posts-header">
-            <div>
+            <div class="posts-header__main">
                 <?php if ($posts_label): ?>
                     <span class="btn-primary btn-white btn-small label"><?php echo esc_html($posts_label); ?></span>
                 <?php endif; ?>
@@ -1272,20 +1273,36 @@ function shortcode_all_posts_slider() {
                     $image_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
                     $categories = get_the_category();
                     ?>
-                    <div class="post-item" style="background-image: url('<?php echo esc_url($image_url); ?>');">
-                        <div class="post-content">
-                            <?php if (!empty($categories)) : ?>
-                                <span class="btn-primary btn-white btn-small"><?php echo esc_html($categories[0]->name); ?></span>
-                            <?php endif; ?>
+                    <div class="post-item">
+                        <article class="post-card">
+                            <a href="<?php the_permalink(); ?>" class="post-card__image-link" aria-label="<?php the_title_attribute(); ?>">
+                                <?php if (!empty($categories)) : ?>
+                                    <span class="post-card__category btn-primary btn-white btn-small"><?php echo esc_html($categories[0]->name); ?></span>
+                                <?php endif; ?>
 
-                            <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                            <a class="btn-circle-icon-white" href="<?php the_permalink(); ?>"></a>
-                        </div>
+                                <?php if ($image_url) : ?>
+                                    <img class="post-card__image" src="<?php echo esc_url($image_url); ?>" alt="<?php the_title_attribute(); ?>" loading="lazy" />
+                                <?php endif; ?>
+                            </a>
+
+                            <div class="post-card__content">
+                                <div class="post-card__bottom">
+                                    <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                                    <a class="btn-circle-icon-black" href="<?php the_permalink(); ?>" aria-label="<?php the_title_attribute(); ?>"></a>
+                                </div>
+                            </div>
+                        </article>
                     </div>
                 <?php endwhile; ?>
             </div>
-            <div class="slider-progress">
-                <div class="slider-progress-bar"></div>
+            <div class="posts-slider-footer">
+                <div class="posts-slider-footer__arrows slider-shared__arrows">
+                    <button type="button" class="posts-slider-prev slider-shared__arrow slider-shared__arrow--prev" aria-label="Predchádzajúci článok"></button>
+                    <button type="button" class="posts-slider-next slider-shared__arrow slider-shared__arrow--next" aria-label="Nasledujúci článok"></button>
+                </div>
+                <div class="posts-slider-footer__progress">
+                    <span></span>
+                </div>
             </div>
         <?php else : ?>
             <p>No posts found.</p>
