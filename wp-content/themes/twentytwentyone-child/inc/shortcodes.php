@@ -204,6 +204,68 @@ function render_homepage_help_cards_shortcode() {
 
 add_shortcode( 'homepage_help_cards', 'render_homepage_help_cards_shortcode' );
 
+function render_why_aprop_block_shortcode() {
+    $page_id = get_queried_object_id();
+
+    if ( ! $page_id ) {
+        return '';
+    }
+
+    $label = get_field( 'why_aprop_label', $page_id );
+    $title = get_field( 'why_aprop_title', $page_id );
+    $text = get_field( 'why_aprop_text', $page_id );
+    $button_text = get_field( 'why_aprop_button_text', $page_id );
+    $button_url = get_field( 'why_aprop_button_url', $page_id );
+    $image_left = get_field( 'why_aprop_image_left', $page_id );
+    $image_right = get_field( 'why_aprop_image_right', $page_id );
+
+    if ( empty( $title ) && empty( $text ) && empty( $image_left ) && empty( $image_right ) ) {
+        return '';
+    }
+
+    ob_start();
+    ?>
+    <section class="why-aprop-block">
+        <?php if ( ! empty( $image_left['url'] ) ) : ?>
+            <div class="why-aprop-block__deco why-aprop-block__deco--left" aria-hidden="true">
+                <img src="<?php echo esc_url( $image_left['url'] ); ?>" alt="" loading="lazy" />
+            </div>
+        <?php endif; ?>
+
+        <?php if ( ! empty( $image_right['url'] ) ) : ?>
+            <div class="why-aprop-block__deco why-aprop-block__deco--right" aria-hidden="true">
+                <img src="<?php echo esc_url( $image_right['url'] ); ?>" alt="" loading="lazy" />
+            </div>
+        <?php endif; ?>
+
+        <div class="why-aprop-block__inner">
+            <div class="why-aprop-block__content">
+                <?php if ( ! empty( $label ) ) : ?>
+                    <span class="label"><?php echo esc_html( $label ); ?></span>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $title ) ) : ?>
+                    <h2><?php echo nl2br( esc_html( $title ) ); ?></h2>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $text ) ) : ?>
+                    <div class="why-aprop-block__text p-24"><?php echo wp_kses_post( $text ); ?></div>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $button_text ) && ! empty( $button_url ) ) : ?>
+                    <a class="btn-green-icon" href="<?php echo esc_url( $button_url ); ?>">
+                        <?php echo esc_html( $button_text ); ?>
+                    </a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
+    <?php
+
+    return ob_get_clean();
+}
+add_shortcode( 'why_aprop_block', 'render_why_aprop_block_shortcode' );
+
 
 //title banner / hero banner
 function render_title_banner_shortcode() {
