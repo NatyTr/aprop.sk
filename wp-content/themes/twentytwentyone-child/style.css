@@ -5134,10 +5134,20 @@ footer .footer-meta .footer_socials li a:hover {
   font-weight: 500;
 }
 .product.type-product .summary.entry-summary .price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: 8px;
   font-size: 32px;
   line-height: 36px;
   font-weight: 600;
   margin-bottom: 40px;
+}
+.product.type-product .summary.entry-summary .price .aprop-price-tax-note {
+  color: rgba(21, 21, 21, 0.62);
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 500;
 }
 .product.type-product .summary.entry-summary .stock {
   display: inline-flex;
@@ -5290,6 +5300,10 @@ footer .footer-meta .footer_socials li a:hover {
     font-size: 24px;
     line-height: 24px;
     font-weight: 700;
+  }
+  .product.type-product .summary.entry-summary .price .aprop-price-tax-note {
+    font-size: 13px;
+    line-height: 17px;
   }
   .product.type-product .summary.entry-summary {
     margin-bottom: 40px;

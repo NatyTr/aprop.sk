@@ -529,6 +529,23 @@ function custom_single_product_button_text() {
     return 'Pridať do košíka'; // <-- Tvoj vlastný text
 }
 
+add_filter(
+    'woocommerce_get_price_html',
+    function( $price_html, $product ) {
+        if ( ! $product instanceof WC_Product || ! is_singular( 'product' ) ) {
+            return $price_html;
+        }
+
+        if ( $price_html === '' ) {
+            return $price_html;
+        }
+
+        return $price_html . '<span class="aprop-price-tax-note">Vrátane DPH</span>';
+    },
+    20,
+    2
+);
+
 // posunúť tlačidlo
 function move_add_to_cart_button_above_excerpt() {
 	// Odstráň z pôvodnej pozície
