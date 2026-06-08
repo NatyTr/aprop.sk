@@ -16,7 +16,7 @@ header{
       z-index: 9;
       height: 84px;
       @media(max-width: 1600px){
-        height: 75px;
+        height: fit-content;
       }
       @media(max-width: 1099px){
         height: unset;
@@ -35,6 +35,20 @@ header{
         }
         &:focus{
           background: transparent !important;
+          outline: none !important;
+          box-shadow: none !important;
+          img{
+            outline: none !important;
+            box-shadow: none !important;
+          }
+        }
+        &:focus-visible{
+          outline: none !important;
+          box-shadow: none !important;
+          img{
+            outline: none !important;
+            box-shadow: none !important;
+          }
         }
         &:before{
           content: "";

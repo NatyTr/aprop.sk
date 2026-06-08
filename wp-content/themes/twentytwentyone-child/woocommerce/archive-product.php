@@ -45,10 +45,10 @@ $archive_heading = $is_drone_category_listing ? 'Poľnohospodárske drony' : 'Ku
 
                       foreach ( $orderby_options as $value => $label ) {
                           $checked = $current_orderby === $value ? 'checked' : '';
-                          echo '<div style="margin-bottom: 10px;">
-                              <label>
-                                  <input type="radio" name="orderby" value="' . esc_attr($value) . '" ' . $checked . ' onchange="this.form.submit()" />
-                                  ' . esc_html($label) . '
+                          echo '<div class="custom-ordering-option">
+                              <label class="custom-ordering-option__label">
+                                  <input class="custom-ordering-option__input" type="radio" name="orderby" value="' . esc_attr($value) . '" ' . $checked . ' onchange="this.form.submit()" />
+                                  <span class="custom-ordering-option__text">' . esc_html($label) . '</span>
                               </label>
                           </div>';
                       }
