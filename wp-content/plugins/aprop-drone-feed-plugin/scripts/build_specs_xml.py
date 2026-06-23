@@ -8,6 +8,7 @@ import datetime as dt
 import html
 import json
 import os
+import re
 import shutil
 import time
 import urllib.parse
@@ -24,6 +25,23 @@ FEED_URL = (
 )
 GOOGLE_NS = "http://base.google.com/ns/1.0"
 APROP_NS = "https://aprop.sk/feed/specs"
+DRONE_CATEGORY_PAGES = {
+    "Agriculture": {
+        "path": "Home > Drony > Agriculture",
+        "urls": ["https://www.enterra.sk/shop/drones/agriculture/"],
+    },
+    "Enterprise": {
+        "path": "Home > Drony > Enterprise",
+        "urls": [
+            "https://www.enterra.sk/shop/drones/enterprise/",
+            "https://www.enterra.sk/shop/drones/enterprise/page/2/",
+        ],
+    },
+    "AUTEL": {
+        "path": "Home > Drony > AUTEL",
+        "urls": ["https://www.enterra.sk/shop/drones/autel/"],
+    },
+}
 
 
 ET.register_namespace("g", GOOGLE_NS)
@@ -57,6 +75,24 @@ def fetch_url(url: str, timeout: int) -> bytes:
         return response.read()
 
 
+def fetch_html(url: str, timeout: int) -> str:
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "ApropDroneFeedPlugin-spec-builder/1.0",
+            "Accept": "text/html,application/xhtml+xml,*/*",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        return response.read().decode(response.headers.get_content_charset() or "utf-8", errors="replace")
+
+
+def canonical_product_url(url: str) -> str:
+    parsed = urllib.parse.urlsplit(url)
+    path = parsed.path.rstrip("/") + "/" if parsed.path else "/"
+    return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
+
+
 def cache_key_for_product_url(url: str) -> str:
     parsed = urllib.parse.urlsplit(url)
     return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "", ""))
@@ -83,37 +119,103 @@ def attr_value(attrs: list[tuple[str, str | None]], name: str) -> str:
     return ""
 
 
-class SpecificationsParser(HTMLParser):
+def image_url_sort_key(url: str) -> tuple[int, int]:
+    parsed = urllib.parse.urlsplit(url)
+    path = parsed.path
+    match = re.search(r"-(\d+)x(\d+)(?=\.[^.]+(?:\.webp)?$)", path)
+    if not match:
+        return (0, 0)
+
+    width = int(match.group(1))
+    height = int(match.group(2))
+    return (width * height, width)
+
+
+def largest_srcset_url(srcset: str, fallback: str = "") -> str:
+    candidates: list[tuple[int, str]] = []
+
+    for candidate in srcset.split(","):
+        parts = candidate.strip().split()
+        if not parts:
+            continue
+
+        url = parts[0]
+        width = 0
+        if len(parts) > 1 and parts[1].endswith("w"):
+            try:
+                width = int(parts[1][:-1])
+            except ValueError:
+                width = 0
+
+        candidates.append((width, url))
+
+    if not candidates:
+        return fallback
+
+    return max(candidates, key=lambda item: item[0])[1]
+
+
+class ProductPageParser(HTMLParser):
     """Fallback parser for Selenium page_source."""
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self.in_panel = False
-        self.panel_depth = 0
+        self.in_specs_panel = False
+        self.specs_panel_depth = 0
+        self.in_products_panel = False
+        self.products_panel_depth = 0
         self.capture_kind: str | None = None
         self.capture_depth = 0
         self.capture_parts: list[str] = []
         self.current_section = ""
         self.current_row: dict[str, str] | None = None
         self.row_depth = 0
+        self.current_product: dict[str, str] | None = None
+        self.product_depth = 0
         self.specs: list[dict[str, str]] = []
+        self.products: list[dict[str, str]] = []
+        self.images: list[dict[str, str]] = []
+        self.image_urls: set[str] = set()
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        if not self.in_panel and attr_value(attrs, "id") == "tab-specifications":
-            self.in_panel = True
-            self.panel_depth = 1
+        element_id = attr_value(attrs, "id")
+        if not self.in_specs_panel and not self.in_products_panel and element_id == "tab-specifications":
+            self.in_specs_panel = True
+            self.specs_panel_depth = 1
             return
 
-        if not self.in_panel:
+        if not self.in_specs_panel and not self.in_products_panel and element_id == "tab-products":
+            self.in_products_panel = True
+            self.products_panel_depth = 1
             return
 
-        self.panel_depth += 1
+        if tag == "img":
+            classes = attr_value(attrs, "class")
+            if "product_thumbnail_item" in classes or "attachment-woocommerce_gallery_thumbnail" in classes or "wp-post-image" in classes:
+                image_url = largest_srcset_url(attr_value(attrs, "srcset") or attr_value(attrs, "data-o_srcset"), attr_value(attrs, "src"))
+                if image_url and image_url not in self.image_urls and "woocommerce-placeholder" not in image_url:
+                    self.image_urls.add(image_url)
+                    self.images.append(
+                        {
+                            "url": image_url,
+                            "alt": collapse_space(attr_value(attrs, "alt")),
+                            "title": collapse_space(attr_value(attrs, "title")),
+                        }
+                    )
 
-        if tag == "h2" and class_contains(attrs, "specification__main-title"):
+        if not self.in_specs_panel and not self.in_products_panel:
+            return
+
+        if self.in_specs_panel:
+            self.specs_panel_depth += 1
+        if self.in_products_panel:
+            self.products_panel_depth += 1
+
+        if self.in_specs_panel and tag == "h2" and class_contains(attrs, "specification__main-title"):
             self.start_capture("section")
             return
 
-        if tag == "div" and class_contains(attrs, "specification__content"):
+        if self.in_specs_panel and tag == "div" and class_contains(attrs, "specification__content"):
             self.current_row = {"section": self.current_section, "name": "", "value": ""}
             self.row_depth = 1
             return
@@ -121,19 +223,35 @@ class SpecificationsParser(HTMLParser):
         if self.current_row is not None:
             self.row_depth += 1
 
-            if tag == "div" and class_contains(attrs, "specification-content__title"):
+            if tag in {"div", "p"} and class_contains(attrs, "specification-content__title"):
                 self.start_capture("name")
                 return
 
-            if tag == "div" and class_contains(attrs, "specification-content__description"):
+            if tag in {"div", "p"} and class_contains(attrs, "specification-content__description"):
                 self.start_capture("value")
+                return
+
+        if self.in_products_panel and tag == "div" and class_contains(attrs, "specification__content"):
+            self.current_product = {"name": "", "quantity": ""}
+            self.product_depth = 1
+            return
+
+        if self.current_product is not None:
+            self.product_depth += 1
+
+            if tag in {"div", "p"} and class_contains(attrs, "specification-content__title"):
+                self.start_capture("product_name")
+                return
+
+            if tag in {"div", "p"} and class_contains(attrs, "specification-content__description"):
+                self.start_capture("product_quantity")
                 return
 
         if self.capture_kind:
             self.capture_depth += 1
 
     def handle_endtag(self, tag: str) -> None:
-        if not self.in_panel:
+        if not self.in_specs_panel and not self.in_products_panel:
             return
 
         if self.capture_kind:
@@ -150,9 +268,24 @@ class SpecificationsParser(HTMLParser):
                     self.specs.append(dict(self.current_row))
                 self.current_row = None
 
-        self.panel_depth -= 1
-        if self.panel_depth <= 0:
-            self.in_panel = False
+        if self.current_product is not None:
+            self.product_depth -= 1
+            if self.product_depth <= 0:
+                name = self.current_product.get("name", "")
+                quantity = self.current_product.get("quantity", "")
+                if name or quantity:
+                    self.products.append(dict(self.current_product))
+                self.current_product = None
+
+        if self.in_specs_panel:
+            self.specs_panel_depth -= 1
+            if self.specs_panel_depth <= 0:
+                self.in_specs_panel = False
+
+        if self.in_products_panel:
+            self.products_panel_depth -= 1
+            if self.products_panel_depth <= 0:
+                self.in_products_panel = False
 
     def handle_data(self, data: str) -> None:
         if self.capture_kind:
@@ -170,16 +303,119 @@ class SpecificationsParser(HTMLParser):
             self.current_section = value
         elif self.current_row is not None and self.capture_kind in {"name", "value"}:
             self.current_row[self.capture_kind] = value
+        elif self.current_product is not None and self.capture_kind == "product_name":
+            self.current_product["name"] = value
+        elif self.current_product is not None and self.capture_kind == "product_quantity":
+            self.current_product["quantity"] = value
 
         self.capture_kind = None
         self.capture_depth = 0
         self.capture_parts = []
 
 
-def extract_specs_from_html(page_html: str) -> list[dict[str, str]]:
-    parser = SpecificationsParser()
+class DroneCategoryParser(HTMLParser):
+    """Parser for Enterra WooCommerce category listing cards."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.in_product = False
+        self.product_depth = 0
+        self.current_url = ""
+        self.current_title = ""
+        self.capture_title = False
+        self.capture_depth = 0
+        self.capture_parts: list[str] = []
+        self.products: list[dict[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "li" and class_contains(attrs, "product"):
+            self.in_product = True
+            self.product_depth = 1
+            self.current_url = ""
+            self.current_title = ""
+            return
+
+        if not self.in_product:
+            return
+
+        self.product_depth += 1
+
+        href = attr_value(attrs, "href")
+        if tag == "a" and "/produkt/" in href and not self.current_url:
+            self.current_url = canonical_product_url(href)
+
+        if tag in {"h2", "h3"} and class_contains(attrs, "woocommerce-loop-product__title"):
+            self.capture_title = True
+            self.capture_depth = 1
+            self.capture_parts = []
+            return
+
+        if self.capture_title:
+            self.capture_depth += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        if not self.in_product:
+            return
+
+        if self.capture_title:
+            self.capture_depth -= 1
+            if self.capture_depth <= 0:
+                self.current_title = collapse_space(" ".join(self.capture_parts))
+                self.capture_title = False
+                self.capture_parts = []
+
+        self.product_depth -= 1
+        if self.product_depth <= 0:
+            if self.current_url:
+                self.products.append({"url": self.current_url, "title": self.current_title})
+            self.in_product = False
+
+    def handle_data(self, data: str) -> None:
+        if self.capture_title:
+            self.capture_parts.append(data)
+
+
+def extract_page_data_from_html(page_html: str) -> dict[str, list[dict[str, str]]]:
+    parser = ProductPageParser()
     parser.feed(page_html)
-    return parser.specs
+    return {
+        "specs": parser.specs,
+        "products": parser.products,
+        "images": parser.images,
+    }
+
+
+def extract_category_products_from_html(page_html: str) -> list[dict[str, str]]:
+    parser = DroneCategoryParser()
+    parser.feed(page_html)
+    return parser.products
+
+
+def scrape_drone_web_categories(timeout: int) -> dict[str, list[dict[str, str]]]:
+    products_by_url: dict[str, list[dict[str, str]]] = {}
+
+    for category_name, category in DRONE_CATEGORY_PAGES.items():
+        for category_url in category["urls"]:
+            page_html = fetch_html(category_url, timeout)
+            for product in extract_category_products_from_html(page_html):
+                product_url = product.get("url", "")
+                if not product_url:
+                    continue
+
+                rows = products_by_url.setdefault(product_url, [])
+                if any(row["name"] == category_name for row in rows):
+                    continue
+
+                rows.append(
+                    {
+                        "name": category_name,
+                        "path": category["path"],
+                        "category_url": category_url,
+                        "product_title": product.get("title", ""),
+                    }
+                )
+
+    return products_by_url
 
 
 def create_driver(args: argparse.Namespace):
@@ -235,7 +471,7 @@ def remove_driver_from_path(browser: str) -> None:
     )
 
 
-def scrape_specs_with_selenium(driver: Any, url: str, timeout: int) -> list[dict[str, str]]:
+def scrape_page_data_with_selenium(driver: Any, url: str, timeout: int) -> dict[str, list[dict[str, str]]]:
     from selenium.common.exceptions import TimeoutException
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support import expected_conditions as EC
@@ -250,31 +486,72 @@ def scrape_specs_with_selenium(driver: Any, url: str, timeout: int) -> list[dict
             EC.presence_of_element_located((By.CSS_SELECTOR, "#tab-specifications"))
         )
     except TimeoutException:
-        return extract_specs_from_html(driver.page_source)
+        return extract_page_data_from_html(driver.page_source)
 
-    specs = driver.execute_script(
+    page_data = driver.execute_script(
         """
-        const panel = document.querySelector('#tab-specifications');
-        if (!panel) return [];
+        const text = (el) => (el?.textContent || '').trim().replace(/\\s+/g, ' ');
+        const largestSrcsetUrl = (srcset, fallback = '') => {
+            const candidates = String(srcset || '').split(',')
+                .map((candidate) => {
+                    const parts = candidate.trim().split(/\\s+/);
+                    const width = parts[1] && parts[1].endsWith('w') ? parseInt(parts[1], 10) || 0 : 0;
+                    return {url: parts[0] || '', width};
+                })
+                .filter((candidate) => candidate.url);
 
-        let section = '';
+            if (!candidates.length) return fallback;
+            candidates.sort((a, b) => b.width - a.width);
+            return candidates[0].url;
+        };
+
         const specs = [];
-        panel.querySelectorAll('.specification__main-title, .specification__content').forEach((el) => {
-            if (el.classList.contains('specification__main-title')) {
-                section = el.textContent.trim().replace(/\\s+/g, ' ');
-                return;
-            }
+        const specsPanel = document.querySelector('#tab-specifications');
+        if (specsPanel) {
+            let section = '';
+            specsPanel.querySelectorAll('.specification__main-title, .specification__content').forEach((el) => {
+                if (el.classList.contains('specification__main-title')) {
+                    section = text(el);
+                    return;
+                }
 
-            const name = el.querySelector('.specification-content__title')?.textContent
-                .trim().replace(/\\s+/g, ' ') || '';
-            const value = el.querySelector('.specification-content__description')?.textContent
-                .trim().replace(/\\s+/g, ' ') || '';
+                const name = text(el.querySelector('.specification-content__title'));
+                const value = text(el.querySelector('.specification-content__description'));
 
-            if (name || value) {
-                specs.push({section, name, value});
-            }
+                if (name || value) {
+                    specs.push({section, name, value});
+                }
+            });
+        }
+
+        const products = [];
+        const productsPanel = document.querySelector('#tab-products');
+        if (productsPanel) {
+            productsPanel.querySelectorAll('.specification__content').forEach((el) => {
+                const name = text(el.querySelector('.specification-content__title'));
+                const quantity = text(el.querySelector('.specification-content__description'));
+
+                if (name || quantity) {
+                    products.push({name, quantity});
+                }
+            });
+        }
+
+        const seenImages = new Set();
+        const images = [];
+        document.querySelectorAll('.woocommerce-product-gallery img, .nickx-slider-for img, .nickx-slider-nav img, .product_thumbnail_item img, img.attachment-woocommerce_gallery_thumbnail').forEach((img) => {
+            const url = largestSrcsetUrl(img.getAttribute('srcset') || img.getAttribute('data-o_srcset'), img.currentSrc || img.src || '');
+            if (!url || seenImages.has(url) || url.includes('woocommerce-placeholder')) return;
+
+            seenImages.add(url);
+            images.push({
+                url,
+                alt: text(img.getAttribute('alt') ? {textContent: img.getAttribute('alt')} : null),
+                title: text(img.getAttribute('title') ? {textContent: img.getAttribute('title')} : null),
+            });
         });
-        return specs;
+
+        return {specs, products, images};
         """
     )
 
@@ -284,10 +561,33 @@ def scrape_specs_with_selenium(driver: Any, url: str, timeout: int) -> list[dict
             "name": collapse_space(str(spec.get("name", ""))),
             "value": collapse_space(str(spec.get("value", ""))),
         }
-        for spec in specs
+        for spec in (page_data or {}).get("specs", [])
         if isinstance(spec, dict)
     ]
-    return cleaned_specs or extract_specs_from_html(driver.page_source)
+    cleaned_products = [
+        {
+            "name": collapse_space(str(product.get("name", ""))),
+            "quantity": collapse_space(str(product.get("quantity", ""))),
+        }
+        for product in (page_data or {}).get("products", [])
+        if isinstance(product, dict)
+    ]
+    cleaned_images = [
+        {
+            "url": str(image.get("url", "")).strip(),
+            "alt": collapse_space(str(image.get("alt", ""))),
+            "title": collapse_space(str(image.get("title", ""))),
+        }
+        for image in (page_data or {}).get("images", [])
+        if isinstance(image, dict) and str(image.get("url", "")).strip()
+    ]
+
+    fallback = extract_page_data_from_html(driver.page_source)
+    return {
+        "specs": cleaned_specs or fallback["specs"],
+        "products": cleaned_products or fallback["products"],
+        "images": cleaned_images or fallback["images"],
+    }
 
 
 def quit_driver(driver: Any | None) -> None:
@@ -328,6 +628,93 @@ def add_specs_to_item(item: ET.Element, specs: list[dict[str, str]], source_url:
         value_el.text = spec.get("value", "")
 
 
+def add_products_to_item(item: ET.Element, products: list[dict[str, str]], source_url: str) -> None:
+    for child in list(item):
+        if child.tag == f"{{{APROP_NS}}}products":
+            item.remove(child)
+
+    root = ET.SubElement(
+        item,
+        f"{{{APROP_NS}}}products",
+        {
+            "source_url": source_url,
+            "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+            "count": str(len(products)),
+        },
+    )
+
+    for product in products:
+        product_el = ET.SubElement(root, f"{{{APROP_NS}}}product")
+        name_el = ET.SubElement(product_el, f"{{{APROP_NS}}}name")
+        name_el.text = product.get("name", "")
+        quantity_el = ET.SubElement(product_el, f"{{{APROP_NS}}}quantity")
+        quantity_el.text = product.get("quantity", "")
+
+
+def add_gallery_to_item(item: ET.Element, images: list[dict[str, str]], source_url: str) -> None:
+    for child in list(item):
+        if child.tag == f"{{{APROP_NS}}}gallery":
+            item.remove(child)
+
+    root = ET.SubElement(
+        item,
+        f"{{{APROP_NS}}}gallery",
+        {
+            "source_url": source_url,
+            "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+            "count": str(len(images)),
+        },
+    )
+
+    for image in images:
+        url = image.get("url", "")
+        if not url:
+            continue
+
+        ET.SubElement(
+            root,
+            f"{{{APROP_NS}}}image",
+            {
+                "url": url,
+                "alt": image.get("alt", ""),
+                "title": image.get("title", ""),
+            },
+        )
+
+
+def add_web_categories_to_item(item: ET.Element, categories: list[dict[str, str]], source_url: str) -> None:
+    for child in list(item):
+        if child.tag == f"{{{APROP_NS}}}web_categories":
+            item.remove(child)
+
+    root = ET.SubElement(
+        item,
+        f"{{{APROP_NS}}}web_categories",
+        {
+            "source_url": source_url,
+            "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+            "count": str(len(categories)),
+        },
+    )
+
+    for category in categories:
+        name = category.get("name", "")
+        path = category.get("path", "")
+        if not name or not path:
+            continue
+
+        ET.SubElement(
+            root,
+            f"{{{APROP_NS}}}category",
+            {
+                "name": name,
+                "path": path,
+                "url": category.get("category_url", ""),
+                "product_title": category.get("product_title", ""),
+            },
+        )
+
+
 def find_specs_node(item: ET.Element) -> ET.Element | None:
     for child in item:
         if child.tag == f"{{{APROP_NS}}}specifications":
@@ -335,25 +722,39 @@ def find_specs_node(item: ET.Element) -> ET.Element | None:
     return None
 
 
-def has_completed_specs(item: ET.Element, retry_empty: bool) -> bool:
+def find_aprop_node(item: ET.Element, name: str) -> ET.Element | None:
+    for child in item:
+        if child.tag == f"{{{APROP_NS}}}{name}":
+            return child
+    return None
+
+
+def has_completed_page_data(item: ET.Element, retry_empty: bool) -> bool:
     node = find_specs_node(item)
     if node is None:
         return False
     if retry_empty and node.attrib.get("count") == "0":
         return False
+    if find_aprop_node(item, "products") is None or find_aprop_node(item, "gallery") is None:
+        return False
     return True
 
 
-def copy_specs_node(source_item: ET.Element, target_item: ET.Element) -> None:
-    source_specs = find_specs_node(source_item)
-    if source_specs is None:
-        return
+def copy_aprop_nodes(source_item: ET.Element, target_item: ET.Element) -> None:
+    copied_tags = {
+        f"{{{APROP_NS}}}specifications",
+        f"{{{APROP_NS}}}products",
+        f"{{{APROP_NS}}}gallery",
+        f"{{{APROP_NS}}}web_categories",
+    }
 
     for child in list(target_item):
-        if child.tag == f"{{{APROP_NS}}}specifications":
+        if child.tag in copied_tags:
             target_item.remove(child)
 
-    target_item.append(ET.fromstring(ET.tostring(source_specs, encoding="utf-8")))
+    for child in source_item:
+        if child.tag in copied_tags:
+            target_item.append(ET.fromstring(ET.tostring(child, encoding="utf-8")))
 
 
 def iter_items(root: ET.Element) -> list[ET.Element]:
@@ -391,10 +792,16 @@ def save_cache(path: Path, cache: dict[str, Any]) -> None:
     os.replace(tmp_path, path)
 
 
-def specs_from_cache(cache_entry: Any) -> list[dict[str, str]] | None:
-    if not isinstance(cache_entry, dict) or not isinstance(cache_entry.get("specs"), list):
+def page_data_from_cache(cache_entry: Any) -> dict[str, list[dict[str, str]]] | None:
+    if (
+        not isinstance(cache_entry, dict)
+        or not isinstance(cache_entry.get("specs"), list)
+        or not isinstance(cache_entry.get("products"), list)
+        or not isinstance(cache_entry.get("images"), list)
+    ):
         return None
-    return [
+
+    specs = [
         {
             "section": str(spec.get("section", "")),
             "name": str(spec.get("name", "")),
@@ -403,6 +810,25 @@ def specs_from_cache(cache_entry: Any) -> list[dict[str, str]] | None:
         for spec in cache_entry["specs"]
         if isinstance(spec, dict)
     ]
+    products = [
+        {
+            "name": str(product.get("name", "")),
+            "quantity": str(product.get("quantity", "")),
+        }
+        for product in cache_entry["products"]
+        if isinstance(product, dict)
+    ]
+    images = [
+        {
+            "url": str(image.get("url", "")),
+            "alt": str(image.get("alt", "")),
+            "title": str(image.get("title", "")),
+        }
+        for image in cache_entry["images"]
+        if isinstance(image, dict) and str(image.get("url", ""))
+    ]
+
+    return {"specs": specs, "products": products, "images": images}
 
 
 def main() -> int:
@@ -423,6 +849,7 @@ def main() -> int:
     parser.add_argument("--headless", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--force", action="store_true", help="Re-scrape products even if output already has specs.")
     parser.add_argument("--retry-empty", action="store_true", help="Re-scrape products whose existing spec count is 0.")
+    parser.add_argument("--skip-web-categories", action="store_true", help="Do not scrape Enterra drone category pages.")
     args = parser.parse_args()
 
     output = Path(args.output)
@@ -439,7 +866,29 @@ def main() -> int:
             feed_id = child_text(item, "id")
             previous_item = previous_items.get(feed_id)
             if previous_item is not None:
-                copy_specs_node(previous_item, item)
+                copy_aprop_nodes(previous_item, item)
+
+    web_categories: dict[str, list[dict[str, str]]] = {}
+    if not args.skip_web_categories:
+        try:
+            web_categories = scrape_drone_web_categories(args.timeout)
+        except Exception as exc:
+            print(f"Could not scrape Enterra drone categories: {type(exc).__name__}: {exc}", flush=True)
+
+    if web_categories:
+        web_category_source = ", ".join(
+            url
+            for category in DRONE_CATEGORY_PAGES.values()
+            for url in category["urls"]
+        )
+        matched_web_categories = 0
+        for item in items:
+            link = child_text(item, "link")
+            categories = web_categories.get(canonical_product_url(link), [])
+            if categories:
+                matched_web_categories += 1
+            add_web_categories_to_item(item, categories, web_category_source)
+        print(f"Drone website categories matched: {matched_web_categories}")
 
     only_ids = set(args.only_id)
     selected_items = [
@@ -465,29 +914,36 @@ def main() -> int:
             title = child_text(item, "title")
             link = child_text(item, "link")
 
-            if not args.force and has_completed_specs(item, args.retry_empty):
+            if not args.force and has_completed_page_data(item, args.retry_empty):
                 skipped += 1
                 count = find_specs_node(item).attrib.get("count", "0")  # type: ignore[union-attr]
-                print(f"[{index}/{len(selected_items)}] skip id={feed_id} specs={count} title={title}")
+                products_count = find_aprop_node(item, "products").attrib.get("count", "0")  # type: ignore[union-attr]
+                images_count = find_aprop_node(item, "gallery").attrib.get("count", "0")  # type: ignore[union-attr]
+                print(
+                    f"[{index}/{len(selected_items)}] skip id={feed_id} "
+                    f"specs={count} products={products_count} images={images_count} title={title}"
+                )
                 continue
 
             if not link:
                 add_specs_to_item(item, [], "")
+                add_products_to_item(item, [], "")
+                add_gallery_to_item(item, [], "")
                 write_xml(root, output)
                 processed += 1
                 print(f"[{index}/{len(selected_items)}] id={feed_id} missing link")
                 continue
 
             source_url = cache_key_for_product_url(link)
-            specs = None if args.force else specs_from_cache(cache.get(source_url))
+            page_data = None if args.force else page_data_from_cache(cache.get(source_url))
 
-            if specs is None:
+            if page_data is None:
                 last_error = None
                 for attempt in range(1, max(args.retries, 0) + 2):
                     try:
                         if driver is None:
                             driver = create_driver(args)
-                        specs = scrape_specs_with_selenium(driver, source_url, args.timeout)
+                        page_data = scrape_page_data_with_selenium(driver, source_url, args.timeout)
                         last_error = None
                         break
                     except Exception as exc:
@@ -501,28 +957,40 @@ def main() -> int:
                         driver = None
                         time.sleep(min(2 * attempt, 10))
 
-                if specs is None:
+                if page_data is None:
                     print(
                         f"[{index}/{len(selected_items)}] giving up id={feed_id} "
                         f"after Selenium error={last_error}",
                         flush=True,
                     )
-                    specs = []
+                    page_data = {"specs": [], "products": [], "images": []}
 
                 cache[source_url] = {
                     "source_url": source_url,
                     "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-                    "count": len(specs),
-                    "specs": specs,
+                    "count": len(page_data["specs"]),
+                    "products_count": len(page_data["products"]),
+                    "images_count": len(page_data["images"]),
+                    "specs": page_data["specs"],
+                    "products": page_data["products"],
+                    "images": page_data["images"],
                 }
                 save_cache(cache_path, cache)
                 fetched_pages += 1
                 time.sleep(max(args.delay, 0))
 
+            specs = page_data["specs"]
+            products = page_data["products"]
+            images = page_data["images"]
             add_specs_to_item(item, specs, source_url)
+            add_products_to_item(item, products, source_url)
+            add_gallery_to_item(item, images, source_url)
             write_xml(root, output)
             processed += 1
-            print(f"[{index}/{len(selected_items)}] id={feed_id} specs={len(specs)} title={title}")
+            print(
+                f"[{index}/{len(selected_items)}] id={feed_id} specs={len(specs)} "
+                f"products={len(products)} images={len(images)} title={title}"
+            )
     finally:
         quit_driver(driver)
 

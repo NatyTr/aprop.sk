@@ -645,17 +645,35 @@ function aprop_show_enterra_product_specifications() {
     if ( empty( $rows ) ) {
         return;
     }
+
+    $grouped_rows = array();
+
+    foreach ( $rows as $row ) {
+        $section = ! empty( $row['section'] ) ? (string) $row['section'] : __( 'Technické parametre', 'aprop' );
+        $grouped_rows[ $section ][] = $row;
+    }
     ?>
     <section class="aprop-product-specifications" aria-labelledby="aprop-product-specifications-title">
         <h2 id="aprop-product-specifications-title"><?php echo esc_html__( 'Technické parametre', 'aprop' ); ?></h2>
-        <dl class="aprop-product-specifications__list">
-            <?php foreach ( $rows as $row ) : ?>
-                <div class="aprop-product-specifications__row">
-                    <dt><?php echo esc_html( $row['name'] ); ?></dt>
-                    <dd><?php echo esc_html( $row['value'] ); ?></dd>
-                </div>
+        <div class="aprop-product-specifications__groups">
+            <?php $section_index = 0; ?>
+            <?php foreach ( $grouped_rows as $section => $section_rows ) : ?>
+                <details class="aprop-product-specifications__group" <?php echo $section_index === 0 ? 'open' : ''; ?>>
+                    <summary>
+                        <span><?php echo esc_html( $section ); ?></span>
+                    </summary>
+                    <dl class="aprop-product-specifications__list">
+                        <?php foreach ( $section_rows as $row ) : ?>
+                            <div class="aprop-product-specifications__row">
+                                <dt><?php echo esc_html( $row['name'] ); ?></dt>
+                                <dd><?php echo esc_html( $row['value'] ); ?></dd>
+                            </div>
+                        <?php endforeach; ?>
+                    </dl>
+                </details>
+                <?php $section_index++; ?>
             <?php endforeach; ?>
-        </dl>
+        </div>
     </section>
     <?php
 }

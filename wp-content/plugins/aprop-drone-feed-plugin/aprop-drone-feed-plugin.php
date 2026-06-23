@@ -27,6 +27,9 @@ final class Aprop_Drone_Feed_Sync {
     private const PRODUCT_META_SPECS_COUNT = '_aprop_enterra_specifications_count';
     private const PRODUCT_META_SPECS_SOURCE = '_aprop_enterra_specifications_source_url';
     private const PRODUCT_META_SPECS_KEYS = '_aprop_enterra_specification_meta_keys';
+    private const PRODUCT_META_INCLUDED_PRODUCTS_JSON = '_aprop_enterra_included_products_json';
+    private const PRODUCT_META_GALLERY_JSON = '_aprop_enterra_gallery_json';
+    private const PRODUCT_META_GALLERY_COUNT = '_aprop_enterra_gallery_count';
     private const SOURCE_SLUG = 'enterra_mergado_feed';
 
     public function __construct() {
@@ -344,6 +347,9 @@ final class Aprop_Drone_Feed_Sync {
         }
 
         $product['specifications'] = $this->parse_feed_specifications($item);
+        $product['included_products'] = $this->parse_feed_included_products($item);
+        $product['gallery_images'] = $this->parse_feed_gallery_images($item);
+        $product['web_categories'] = $this->parse_feed_web_categories($item);
 
         return $product;
     }
@@ -379,6 +385,108 @@ final class Aprop_Drone_Feed_Sync {
             'count' => count($rows),
             'source_url' => esc_url_raw((string) ($specs_node['source_url'] ?? '')),
             'fetched_at' => $this->normalize_feed_value((string) ($specs_node['fetched_at'] ?? '')),
+            'rows' => $rows,
+        ];
+    }
+
+    private function parse_feed_included_products(SimpleXMLElement $item): array {
+        $nodes = $item->xpath('./*[local-name()="products"]');
+        if (!is_array($nodes) || empty($nodes[0])) {
+            return [
+                'count' => 0,
+                'source_url' => '',
+                'fetched_at' => '',
+                'rows' => [],
+            ];
+        }
+
+        $products_node = $nodes[0];
+        $rows = [];
+
+        foreach ($products_node->xpath('./*[local-name()="product"]') ?: [] as $product) {
+            $name_nodes = $product->xpath('./*[local-name()="name"]');
+            $quantity_nodes = $product->xpath('./*[local-name()="quantity"]');
+            $rows[] = [
+                'name' => $this->normalize_feed_value(!empty($name_nodes[0]) ? (string) $name_nodes[0] : ''),
+                'quantity' => $this->normalize_feed_value(!empty($quantity_nodes[0]) ? (string) $quantity_nodes[0] : ''),
+            ];
+        }
+
+        return [
+            'count' => count($rows),
+            'source_url' => esc_url_raw((string) ($products_node['source_url'] ?? '')),
+            'fetched_at' => $this->normalize_feed_value((string) ($products_node['fetched_at'] ?? '')),
+            'rows' => $rows,
+        ];
+    }
+
+    private function parse_feed_gallery_images(SimpleXMLElement $item): array {
+        $nodes = $item->xpath('./*[local-name()="gallery"]');
+        if (!is_array($nodes) || empty($nodes[0])) {
+            return [
+                'count' => 0,
+                'source_url' => '',
+                'fetched_at' => '',
+                'images' => [],
+            ];
+        }
+
+        $gallery_node = $nodes[0];
+        $images = [];
+
+        foreach ($gallery_node->xpath('./*[local-name()="image"]') ?: [] as $image) {
+            $url = esc_url_raw((string) ($image['url'] ?? ''));
+            if ($url === '') {
+                continue;
+            }
+
+            $images[] = [
+                'url' => $url,
+                'alt' => $this->normalize_feed_value((string) ($image['alt'] ?? '')),
+                'title' => $this->normalize_feed_value((string) ($image['title'] ?? '')),
+            ];
+        }
+
+        return [
+            'count' => count($images),
+            'source_url' => esc_url_raw((string) ($gallery_node['source_url'] ?? '')),
+            'fetched_at' => $this->normalize_feed_value((string) ($gallery_node['fetched_at'] ?? '')),
+            'images' => $images,
+        ];
+    }
+
+    private function parse_feed_web_categories(SimpleXMLElement $item): array {
+        $nodes = $item->xpath('./*[local-name()="web_categories"]');
+        if (!is_array($nodes) || empty($nodes[0])) {
+            return [
+                'count' => 0,
+                'source_url' => '',
+                'fetched_at' => '',
+                'rows' => [],
+            ];
+        }
+
+        $categories_node = $nodes[0];
+        $rows = [];
+
+        foreach ($categories_node->xpath('./*[local-name()="category"]') ?: [] as $category) {
+            $path = $this->normalize_feed_value((string) ($category['path'] ?? ''));
+            if ($path === '') {
+                continue;
+            }
+
+            $rows[] = [
+                'name' => $this->normalize_feed_value((string) ($category['name'] ?? '')),
+                'path' => $path,
+                'url' => esc_url_raw((string) ($category['url'] ?? '')),
+                'product_title' => $this->normalize_feed_value((string) ($category['product_title'] ?? '')),
+            ];
+        }
+
+        return [
+            'count' => count($rows),
+            'source_url' => $this->normalize_feed_value((string) ($categories_node['source_url'] ?? '')),
+            'fetched_at' => $this->normalize_feed_value((string) ($categories_node['fetched_at'] ?? '')),
             'rows' => $rows,
         ];
     }
@@ -442,7 +550,7 @@ final class Aprop_Drone_Feed_Sync {
             return new WP_Error('product_set_failed', $exception->getMessage());
         }
 
-        $category_ids = $this->ensure_category_path($feed_product['product_type'] ?? '');
+        $category_ids = $this->ensure_category_paths($this->category_paths_for_product($feed_product));
         if (is_wp_error($category_ids)) {
             return $category_ids;
         }
@@ -462,6 +570,7 @@ final class Aprop_Drone_Feed_Sync {
         update_post_meta($product_id, self::PRODUCT_META_FEED_HASH, md5(wp_json_encode($feed_product)));
         update_post_meta($product_id, '_aprop_enterra_feed_url', self::LOCAL_FEED_FILE);
         $this->store_product_specifications($product_id, $feed_product['specifications'] ?? []);
+        $this->store_included_products($product_id, $feed_product['included_products'] ?? []);
 
         if (!empty($feed_product['link'])) {
             update_post_meta($product_id, '_aprop_enterra_source_url', esc_url_raw($feed_product['link']));
@@ -470,6 +579,8 @@ final class Aprop_Drone_Feed_Sync {
         if (!empty($feed_product['image_link'])) {
             $this->set_product_image($product_id, $feed_product['image_link'], $title);
         }
+
+        $this->set_product_gallery($product_id, $feed_product['gallery_images'] ?? [], $feed_product['image_link'] ?? '', $title);
 
         return [
             'product_id' => $product_id,
@@ -622,12 +733,64 @@ final class Aprop_Drone_Feed_Sync {
         update_post_meta($product_id, self::PRODUCT_META_SPECS_KEYS, wp_json_encode($meta_keys, JSON_UNESCAPED_UNICODE));
     }
 
+    private function store_included_products(int $product_id, array $included_products): void {
+        $rows = isset($included_products['rows']) && is_array($included_products['rows'])
+            ? array_values(array_filter($included_products['rows'], 'is_array'))
+            : [];
+
+        update_post_meta($product_id, self::PRODUCT_META_INCLUDED_PRODUCTS_JSON, wp_json_encode([
+            'count' => count($rows),
+            'source_url' => $included_products['source_url'] ?? '',
+            'fetched_at' => $included_products['fetched_at'] ?? '',
+            'rows' => $rows,
+        ], JSON_UNESCAPED_UNICODE));
+    }
+
     private function delete_generated_spec_meta(int $product_id): void {
         foreach (get_post_meta($product_id) as $key => $values) {
             if (strpos((string) $key, 'aprop_spec_') === 0 || strpos((string) $key, '_aprop_spec_') === 0) {
                 delete_post_meta($product_id, $key);
             }
         }
+    }
+
+    private function category_paths_for_product(array $feed_product): array {
+        $web_categories = $feed_product['web_categories']['rows'] ?? [];
+        if (is_array($web_categories) && $web_categories) {
+            $paths = [];
+            foreach ($web_categories as $category) {
+                if (!is_array($category)) {
+                    continue;
+                }
+
+                $path = $this->normalize_feed_value((string) ($category['path'] ?? ''));
+                if ($path !== '') {
+                    $paths[] = $path;
+                }
+            }
+
+            $paths = array_values(array_unique($paths));
+            if ($paths) {
+                return $paths;
+            }
+        }
+
+        return [$feed_product['product_type'] ?? ''];
+    }
+
+    private function ensure_category_paths(array $category_paths) {
+        $category_ids = [];
+
+        foreach ($category_paths as $category_path) {
+            $path_ids = $this->ensure_category_path((string) $category_path);
+            if (is_wp_error($path_ids)) {
+                return $path_ids;
+            }
+
+            $category_ids = array_merge($category_ids, $path_ids);
+        }
+
+        return array_values(array_unique(array_filter(array_map('intval', $category_ids))));
     }
 
     private function ensure_category_path(string $product_type) {
@@ -670,19 +833,82 @@ final class Aprop_Drone_Feed_Sync {
     }
 
     private function set_product_image(int $product_id, string $image_url, string $title): void {
-        $existing_attachment_id = $this->find_attachment_id_by_image_url($image_url);
         $current_image_id = (int) get_post_thumbnail_id($product_id);
-        $current_source = $current_image_id ? get_post_meta($current_image_id, '_aprop_enterra_image_url', true) : '';
 
-        if ($current_image_id && $current_source === $image_url) {
+        if ($current_image_id) {
             return;
         }
 
-        if ($existing_attachment_id) {
-            set_post_thumbnail($product_id, $existing_attachment_id);
-            $this->delete_unused_imported_attachment($current_image_id);
-            delete_post_meta($product_id, '_aprop_enterra_image_error');
+        $attachment_id = $this->sideload_product_image($product_id, $image_url, $title);
+        if (is_wp_error($attachment_id)) {
+            update_post_meta($product_id, '_aprop_enterra_image_error', $attachment_id->get_error_message());
             return;
+        }
+
+        set_post_thumbnail($product_id, (int) $attachment_id);
+        $this->delete_unused_imported_attachment($current_image_id);
+        delete_post_meta($product_id, '_aprop_enterra_image_error');
+    }
+
+    private function set_product_gallery(int $product_id, array $gallery, string $featured_image_url, string $product_title): void {
+        $images = isset($gallery['images']) && is_array($gallery['images']) ? $gallery['images'] : [];
+        $featured_image_url = esc_url_raw($featured_image_url);
+        $attachment_ids = [];
+        $seen_urls = [];
+        $errors = [];
+
+        foreach ($images as $image) {
+            if (!is_array($image)) {
+                continue;
+            }
+
+            $image_url = esc_url_raw((string) ($image['url'] ?? ''));
+            if ($image_url === '' || $image_url === $featured_image_url || isset($seen_urls[$image_url])) {
+                continue;
+            }
+
+            $seen_urls[$image_url] = true;
+            $attachment_id = $this->sideload_product_image(
+                $product_id,
+                $image_url,
+                $this->normalize_feed_value((string) ($image['title'] ?? '')) ?: $product_title,
+                $this->normalize_feed_value((string) ($image['alt'] ?? ''))
+            );
+
+            if (is_wp_error($attachment_id)) {
+                $errors[] = $attachment_id->get_error_message();
+                continue;
+            }
+
+            $attachment_ids[] = (int) $attachment_id;
+        }
+
+        $product = wc_get_product($product_id);
+        if ($product) {
+            $product->set_gallery_image_ids($attachment_ids);
+            $product->save();
+        }
+
+        update_post_meta($product_id, self::PRODUCT_META_GALLERY_COUNT, count($attachment_ids));
+        update_post_meta($product_id, self::PRODUCT_META_GALLERY_JSON, wp_json_encode([
+            'count' => count($attachment_ids),
+            'source_url' => $gallery['source_url'] ?? '',
+            'fetched_at' => $gallery['fetched_at'] ?? '',
+            'images' => array_values(array_filter($images, 'is_array')),
+            'attachment_ids' => $attachment_ids,
+        ], JSON_UNESCAPED_UNICODE));
+
+        if ($errors) {
+            update_post_meta($product_id, '_aprop_enterra_gallery_error', implode("\n", $errors));
+        } else {
+            delete_post_meta($product_id, '_aprop_enterra_gallery_error');
+        }
+    }
+
+    private function sideload_product_image(int $product_id, string $image_url, string $title, string $alt = '') {
+        $existing_attachment_id = $this->find_attachment_id_by_image_url($image_url);
+        if ($existing_attachment_id) {
+            return $existing_attachment_id;
         }
 
         require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -691,16 +917,19 @@ final class Aprop_Drone_Feed_Sync {
 
         $attachment_id = media_sideload_image($image_url, $product_id, $title, 'id');
         if (is_wp_error($attachment_id)) {
-            update_post_meta($product_id, '_aprop_enterra_image_error', $attachment_id->get_error_message());
-            return;
+            return $attachment_id;
         }
 
-        update_post_meta((int) $attachment_id, '_aprop_enterra_image_url', esc_url_raw($image_url));
-        update_post_meta((int) $attachment_id, self::PRODUCT_META_SOURCE, self::SOURCE_SLUG);
-        update_post_meta((int) $attachment_id, self::PRODUCT_META_IS_IMPORTED, '1');
-        set_post_thumbnail($product_id, (int) $attachment_id);
-        $this->delete_unused_imported_attachment($current_image_id);
-        delete_post_meta($product_id, '_aprop_enterra_image_error');
+        $attachment_id = (int) $attachment_id;
+        update_post_meta($attachment_id, '_aprop_enterra_image_url', esc_url_raw($image_url));
+        update_post_meta($attachment_id, self::PRODUCT_META_SOURCE, self::SOURCE_SLUG);
+        update_post_meta($attachment_id, self::PRODUCT_META_IS_IMPORTED, '1');
+
+        if ($alt !== '') {
+            update_post_meta($attachment_id, '_wp_attachment_image_alt', $alt);
+        }
+
+        return $attachment_id;
     }
 
     private function find_attachment_id_by_image_url(string $image_url): int {
