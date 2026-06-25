@@ -1,6 +1,6 @@
 # Aprop Drone Feed Sync
 
-WordPress/WooCommerce plugin for importing all products from the configured Enterra/Mergado XML feed.
+WordPress/WooCommerce plugin for importing products from the bundled Enterra XML feed.
 
 ## Behavior
 
@@ -11,8 +11,9 @@ WordPress/WooCommerce plugin for importing all products from the configured Ente
 - Existing products are matched by feed id stored in `_aprop_enterra_feed_id`, then by SKU, and updated with the latest title, description, price, stock, category, source URL, featured image, and specifications.
 - Imported products are marked with `_aprop_is_feed_imported=1` and `_aprop_import_source=enterra_mergado_feed`.
 - Product title strips the trailing `| Enterra.sk`.
-- Product image is sideloaded from `image_link` and set as featured image. On resync, changed feed images replace the old featured image.
-- `product_type` is parsed as a category path.
+- Product image is sideloaded from `image_link` and set as featured image only when the product has no existing featured image.
+- Product gallery images are sideloaded from `aprop:gallery`.
+- `aprop:web_categories` is preferred for category paths when present; otherwise `product_type` is parsed as a category path.
 - Feed root category `Home` is removed and all parsed categories are created below WooCommerce product category id `211`.
 - Feed stock values are mapped to WooCommerce:
   - `in_stock` => `instock`
@@ -31,6 +32,18 @@ WordPress/WooCommerce plugin for importing all products from the configured Ente
 ```text
 https://feeds.mergado.com/enterra-sk-google-nakupy-sk-70a3cb5ee9479a6525566d5af13a3fe6.xml
 ```
+
+## Local Site Feed Builder
+
+Build the bundled feed directly from current Enterra product pages:
+
+```bash
+python3 scripts/build_site_feed_xml.py --output enterra-feed-with-specifications.xml
+```
+
+This reads current SK product URLs from Enterra product sitemaps, fetches each product page, and writes the same XML fields the plugin imports: id, title, description, price, stock, product category, featured image, gallery, specifications, in-box products, and website-derived drone categories.
+
+Use this when the Mergado feed is stale. After generating `enterra-feed-with-specifications.xml`, run `WooCommerce > Aprop Drone Feed > Sync / resync products`.
 
 ## Local Selenium Specification XML Builder
 
