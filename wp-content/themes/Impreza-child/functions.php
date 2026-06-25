@@ -275,7 +275,6 @@ add_filter( 'woocommerce_after_add_to_cart_button', 'variableProd', 2 );
 //Adam Gluch (adamgluch.sk)
 ////////////////////////////
 
-
 //
 // Disable Guttenberg
 //

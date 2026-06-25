@@ -207,6 +207,254 @@ function enable_excerpt_for_products() {
 }
 add_action( 'init', 'enable_excerpt_for_products' );
 
+function aprop_odstupenie_form_shortcode( $atts ) {
+    $atts = shortcode_atts(
+        array(
+            'form_id' => '',
+            'form_title' => '',
+            'heading' => 'Odstúpenie od zmluvy',
+        ),
+        $atts,
+        'odstupenie_form'
+    );
+
+    if ( empty( $atts['form_id'] ) ) {
+        return '';
+    }
+
+    $form_shortcode = sprintf(
+        '[contact-form-7 id="%s" title="%s"]',
+        esc_attr( $atts['form_id'] ),
+        esc_attr( $atts['form_title'] )
+    );
+
+    ob_start();
+    ?>
+    <div class="kontakt-section kontakt-section--odstupenie odstupenie-form-wrap">
+        <h2 class="odstupenie-form-heading"><?php echo esc_html( $atts['heading'] ); ?></h2>
+        <p class="odstupenie-form-intro">
+            Vyplnením a odoslaním formulára uplatňujete právo na odstúpenie od zmluvy uzavretej na diaľku.
+        </p>
+
+        <div class="kontakt-form odstupenie-form-box">
+            <?php echo do_shortcode( $form_shortcode ); ?>
+        </div>
+    </div>
+    <?php
+
+    return ob_get_clean();
+}
+add_shortcode( 'odstupenie_form', 'aprop_odstupenie_form_shortcode' );
+
+function aprop_odstupenie_form_styles() {
+    ?>
+    <style>
+        .kontakt-section--odstupenie {
+            max-width: 576px;
+            width: 100%;
+            margin: 0 auto;
+            padding-top: 100px;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-heading {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-intro {
+            text-align: center;
+            max-width: none;
+            margin-bottom: 24px;
+            padding: 0;
+            font-size: clamp(16px, 1.041vw, 20px);
+            line-height: clamp(24px, 1.562vw, 30px);
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .cf7-form-row {
+            margin-bottom: 16px;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .cf7-form-row.two-cols {
+            display: block;
+        }
+
+        .kontakt-section--odstupenie form p {
+            text-align: left;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .kontakt-section--odstupenie form p label {
+            display: block;
+            font-size: 18px;
+            line-height: 20px;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            color: #000;
+            text-align: left;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"]),
+        .kontakt-section--odstupenie .odstupenie-form-box textarea {
+            width: 100%;
+            margin-top: 10px;
+            background: #f3f3f3;
+            border: 1px solid #f3f3f3;
+            border-radius: 16px;
+            color: #000;
+            padding: 18px;
+            font-size: 16px;
+            line-height: 17px;
+            box-shadow: none;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .cf7-form-field + .cf7-form-field {
+            margin-top: 16px;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-form-control-wrap {
+            display: block;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .cf7-form-field p > br {
+            display: none;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"])::placeholder,
+        .kontakt-section--odstupenie .odstupenie-form-box textarea::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+            opacity: 1;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"]):focus,
+        .kontakt-section--odstupenie .odstupenie-form-box textarea:focus {
+            border-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box textarea {
+            min-height: 208px;
+            resize: vertical;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-acceptance .wpcf7-list-item {
+            margin: 0;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-acceptance label {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            text-align: left;
+            font-size: 18px;
+            line-height: 19px;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.5);
+            letter-spacing: 0;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-acceptance input {
+            width: 12px;
+            height: 12px;
+            min-height: 12px;
+            margin: 2px 4px 0 0;
+            border: 1px solid #000;
+            border-radius: 3px;
+            background: #fff;
+            flex-shrink: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-list-item-label a:hover {
+            text-decoration: underline;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-submit {
+            width: 100%;
+            margin-top: 6px;
+            border-radius: 1000px;
+            font-size: 18px;
+            line-height: normal;
+            font-weight: 600;
+            border: 1px solid #000;
+            background: #000;
+            color: #fff;
+            padding: 16px 24px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-submit:hover {
+            background: transparent;
+            color: #000;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-spinner {
+            margin: 14px 0 0;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-response-output {
+            margin: 20px 0 0 !important;
+            padding: 14px 16px !important;
+            border-radius: 16px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-not-valid-tip {
+            margin-top: 8px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 767px) {
+            .kontakt-section--odstupenie {
+                padding-top: 60px;
+            }
+
+            .kontakt-section--odstupenie .odstupenie-form-heading {
+                margin-bottom: 12px;
+            }
+
+            .kontakt-section--odstupenie .odstupenie-form-intro {
+                margin-bottom: 20px;
+                font-size: 14px;
+                line-height: 20px;
+            }
+
+            .kontakt-section--odstupenie .odstupenie-form-box .cf7-form-row.two-cols {
+                display: block;
+            }
+
+            .kontakt-section--odstupenie form p label {
+                font-size: 14px;
+                line-height: 15px;
+            }
+
+            .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"]),
+            .kontakt-section--odstupenie .odstupenie-form-box textarea {
+                border-radius: 8px;
+                padding: 11px 9px;
+                font-size: 12px;
+                line-height: 13px;
+            }
+
+            .kontakt-section--odstupenie .odstupenie-form-box .cf7-form-field + .cf7-form-field {
+                margin-top: 12px;
+            }
+
+            .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-acceptance label {
+                font-size: 14px;
+                line-height: 18px;
+            }
+        }
+    </style>
+    <?php
+}
+add_action( 'wp_head', 'aprop_odstupenie_form_styles' );
+
 function aprop_product_category_uses_hover_background( $term_id ) {
     $enabled = get_term_meta( $term_id, 'aprop_use_hover_background', true );
 
@@ -1032,6 +1280,52 @@ function custom_tel_validation( $result, $tag ) {
     }
 
     return $result;
+}
+
+add_filter( 'wpcf7_mail_components', 'aprop_add_submission_time_to_cf7_mail', 10, 3 );
+function aprop_add_submission_time_to_cf7_mail( $components, $contact_form, $mail ) {
+    if ( ! $contact_form instanceof WPCF7_ContactForm || ! $mail instanceof WPCF7_Mail ) {
+        return $components;
+    }
+
+    if ( 'formulár - odstúpenie od zmluvy' !== $contact_form->title() ) {
+        return $components;
+    }
+
+    $template_name = $mail->name();
+    $template = $contact_form->prop( $template_name );
+    $template_body = isset( $template['body'] ) ? (string) $template['body'] : '';
+
+    if (
+        false !== strpos( $template_body, '[_date]' ) ||
+        false !== strpos( $template_body, '[_time]' ) ||
+        false !== strpos( $template_body, 'Čas odoslania:' )
+    ) {
+        return $components;
+    }
+
+    $submission = WPCF7_Submission::get_instance();
+
+    if ( ! $submission ) {
+        return $components;
+    }
+
+    $timestamp = $submission->get_meta( 'timestamp' );
+
+    if ( ! $timestamp ) {
+        return $components;
+    }
+
+    $submitted_date = wp_date( get_option( 'date_format' ), $timestamp );
+    $submitted_time = wp_date( get_option( 'time_format' ), $timestamp );
+
+    $components['body'] .= sprintf(
+        "\n\nDátum odoslania: %s\nČas odoslania: %s",
+        $submitted_date,
+        $submitted_time
+    );
+
+    return $components;
 }
 
 add_action( 'acf/include_fields', 'aprop_product_card_acf_fields' );
