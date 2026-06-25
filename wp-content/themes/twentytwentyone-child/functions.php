@@ -253,7 +253,7 @@ function aprop_odstupenie_form_styles() {
             max-width: 576px;
             width: 100%;
             margin: 0 auto;
-            padding-top: 100px;
+            padding-top: 0;
         }
 
         .kontakt-section--odstupenie .odstupenie-form-heading {
@@ -294,7 +294,7 @@ function aprop_odstupenie_form_styles() {
             text-align: left;
         }
 
-        .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"]),
+        .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"]):not([type="checkbox"]),
         .kontakt-section--odstupenie .odstupenie-form-box textarea {
             width: 100%;
             margin-top: 10px;
@@ -323,13 +323,13 @@ function aprop_odstupenie_form_styles() {
             display: none;
         }
 
-        .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"])::placeholder,
+        .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"]):not([type="checkbox"])::placeholder,
         .kontakt-section--odstupenie .odstupenie-form-box textarea::placeholder {
             color: rgba(0, 0, 0, 0.5);
             opacity: 1;
         }
 
-        .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"]):focus,
+        .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"]):not([type="checkbox"]):focus,
         .kontakt-section--odstupenie .odstupenie-form-box textarea:focus {
             border-color: rgba(0, 0, 0, 0.5);
         }
@@ -347,25 +347,32 @@ function aprop_odstupenie_form_styles() {
             display: flex;
             align-items: flex-start;
             gap: 8px;
+            width: 100%;
             text-align: left;
-            font-size: 18px;
-            line-height: 19px;
+            font-size: 16px;
+            line-height: 1.35;
             font-weight: 400;
             color: rgba(0, 0, 0, 0.5);
             letter-spacing: 0;
         }
 
         .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-acceptance input {
-            width: 12px;
-            height: 12px;
-            min-height: 12px;
-            margin: 2px 4px 0 0;
+            width: 20px !important;
+            height: 20px !important;
+            min-width: 20px;
+            min-height: 20px !important;
+            margin: 5px 0 0 0 !important;
             border: 1px solid #000;
             border-radius: 3px;
             background: #fff;
             flex-shrink: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-acceptance .wpcf7-list-item-label {
+            display: block;
+            flex: 1;
         }
 
         .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-list-item-label a:hover {
@@ -411,7 +418,7 @@ function aprop_odstupenie_form_styles() {
 
         @media (max-width: 767px) {
             .kontakt-section--odstupenie {
-                padding-top: 60px;
+                padding-top: 0;
             }
 
             .kontakt-section--odstupenie .odstupenie-form-heading {
@@ -433,7 +440,7 @@ function aprop_odstupenie_form_styles() {
                 line-height: 15px;
             }
 
-            .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"]),
+            .kontakt-section--odstupenie .odstupenie-form-box input:not([type="submit"]):not([type="checkbox"]),
             .kontakt-section--odstupenie .odstupenie-form-box textarea {
                 border-radius: 8px;
                 padding: 11px 9px;
@@ -443,6 +450,11 @@ function aprop_odstupenie_form_styles() {
 
             .kontakt-section--odstupenie .odstupenie-form-box .cf7-form-field + .cf7-form-field {
                 margin-top: 12px;
+            }
+
+            .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-submit {
+                font-size: 15px;
+                line-height: 1.2;
             }
 
             .kontakt-section--odstupenie .odstupenie-form-box .wpcf7-acceptance label {

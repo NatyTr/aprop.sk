@@ -1072,6 +1072,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 }
 
 .wp-singular.page-kontakt header .container,
+.page-odstupenie-od-kupnej-zmluvy header .container,
 .post-type-archive-product header .container,
 .page-drony header .container,
 .single-product header .container,
@@ -1085,6 +1086,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   padding: 0px 18px;
 }
 .wp-singular.page-kontakt header .container .top-header,
+.page-odstupenie-od-kupnej-zmluvy header .container .top-header,
 .post-type-archive-product header .container .top-header,
 .page-drony header .container .top-header,
 .single-product header .container .top-header,
@@ -1099,6 +1101,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   border-radius: 59px;
 }
 .wp-singular.page-kontakt header .container .btn-icon,
+.page-odstupenie-od-kupnej-zmluvy header .container .btn-icon,
 .post-type-archive-product header .container .btn-icon,
 .page-drony header .container .btn-icon,
 .single-product header .container .btn-icon,
@@ -1112,6 +1115,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   top: 0px !important;
 }
 .wp-singular.page-kontakt .site-content,
+.page-odstupenie-od-kupnej-zmluvy .site-content,
 .post-type-archive-product .site-content,
 .page-drony .site-content,
 .single-product .site-content,
@@ -1126,6 +1130,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 }
 @media (max-width: 1099px) {
   .wp-singular.page-kontakt header .container .top-header,
+  .page-odstupenie-od-kupnej-zmluvy header .container .top-header,
   .post-type-archive-product header .container .top-header,
   .page-drony header .container .top-header,
   .single-product header .container .top-header,
@@ -1139,6 +1144,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
     background-color: transparent;
   }
   .wp-singular.page-kontakt .site-content,
+  .page-odstupenie-od-kupnej-zmluvy .site-content,
   .post-type-archive-product .site-content,
   .page-drony .site-content,
   .single-product .site-content,
@@ -4203,6 +4209,33 @@ footer .footer-meta .footer_socials li a {
 }
 footer .footer-meta .footer_socials li a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+  footer .footer-meta {
+    flex-wrap: wrap;
+    row-gap: 14px;
+  }
+  footer .footer-meta .footer-meta-left,
+  footer .footer-meta .footer-meta-center {
+    width: 50%;
+  }
+  footer .footer-meta .footer-meta-right {
+    width: 100%;
+  }
+  footer .footer-meta .footer_socials {
+    flex-wrap: wrap;
+    column-gap: 16px;
+    row-gap: 8px;
+    justify-content: flex-start;
+  }
+  footer .footer-meta .footer_socials li {
+    width: auto;
+  }
+  footer .footer-meta .footer_socials li a {
+    display: inline-block;
+    white-space: normal;
+  }
 }
 
 .faq-answer {
