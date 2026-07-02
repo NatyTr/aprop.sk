@@ -311,6 +311,15 @@ function aprop_render_drone_category_tree_options( $category_tree, $current_filt
         $selected_in_branch = aprop_drone_tree_has_selected_term( $node, $current_filters['category'] );
         $branch_id = 'drone-category-branch-' . (int) $term->term_id;
         $input_id = 'drone-category-' . (int) $term->term_id;
+        $count = aprop_drone_filter_count(
+            $current_filters,
+            'category',
+            array( 'category' => (string) $term->term_id )
+        );
+
+        if ( $count <= 0 && ! $selected_in_branch ) {
+            continue;
+        }
 
         ?><div class="drone-products-filter__tree-item<?php echo $has_children ? ' drone-products-filter__tree-item--has-children' : ''; ?>" style="--drone-filter-level: <?php echo esc_attr( (int) $level ); ?>;">
             <div class="drone-products-filter__tree-row">
@@ -341,15 +350,7 @@ function aprop_render_drone_category_tree_options( $category_tree, $current_filt
                 <?php endif; ?>
 
                 <span class="drone-products-filter__tree-count">
-                    <?php
-                        echo esc_html(
-                            aprop_drone_filter_count(
-                                $current_filters,
-                                'category',
-                                array( 'category' => (string) $term->term_id )
-                            )
-                        );
-                    ?>
+                    <?php echo esc_html( $count ); ?>
                 </span>
             </div>
 
