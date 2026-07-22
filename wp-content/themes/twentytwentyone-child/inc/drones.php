@@ -4,15 +4,76 @@ function aprop_drone_category_id() {
     return 211;
 }
 
+function aprop_drone_excluded_category_identifiers() {
+    return array(
+        'slugs' => array(
+            'package',
+            'balicek',
+            'baliceky',
+            'uncategorized',
+            'nezaradene',
+        ),
+        'names' => array(
+            'balicek',
+            'baliceky',
+            'nezaradene',
+        ),
+    );
+}
+
+function aprop_drone_is_excluded_category( $term ) {
+    if ( ! ( $term instanceof WP_Term ) ) {
+        return false;
+    }
+
+    $excluded = aprop_drone_excluded_category_identifiers();
+    $normalized_slug = sanitize_title( $term->slug );
+    $normalized_name = sanitize_title( remove_accents( $term->name ) );
+
+    return in_array( $normalized_slug, $excluded['slugs'], true ) || in_array( $normalized_name, $excluded['names'], true );
+}
+
+function aprop_drone_excluded_category_ids() {
+    static $excluded_ids = null;
+
+    if ( null !== $excluded_ids ) {
+        return $excluded_ids;
+    }
+
+    $excluded_ids = array();
+    $terms = get_terms(
+        array(
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => false,
+        )
+    );
+
+    if ( is_wp_error( $terms ) ) {
+        return $excluded_ids;
+    }
+
+    foreach ( $terms as $term ) {
+        if ( aprop_drone_is_excluded_category( $term ) ) {
+            $excluded_ids[] = (int) $term->term_id;
+        }
+    }
+
+    return $excluded_ids;
+}
+
 function aprop_default_drone_filter_category_id() {
     $term = get_term_by( 'slug', 'drony', 'product_cat' );
 
-    return $term instanceof WP_Term ? (int) $term->term_id : 0;
+    if ( ! ( $term instanceof WP_Term ) || aprop_drone_is_excluded_category( $term ) ) {
+        return 0;
+    }
+
+    return (int) $term->term_id;
 }
 
 function aprop_drone_category_tree( $parent_id = null ) {
     if ( null === $parent_id ) {
-        $parent_id = aprop_drone_category_id();
+        $parent_id = 0;
     }
 
     $terms = get_terms(
@@ -32,6 +93,10 @@ function aprop_drone_category_tree( $parent_id = null ) {
     $tree = array();
 
     foreach ( $terms as $term ) {
+        if ( aprop_drone_is_excluded_category( $term ) ) {
+            continue;
+        }
+
         $tree[] = array(
             'term'     => $term,
             'children' => aprop_drone_category_tree( $term->term_id ),
@@ -113,15 +178,18 @@ function aprop_drone_sort_options() {
 
 function aprop_drone_tax_query_from_filters( $filters, $exclude = '', $override = array() ) {
     $filters = array_merge( $filters, $override );
-    $tax_query = array(
-        array(
+    $tax_query = array();
+    $excluded_category_ids = aprop_drone_excluded_category_ids();
+
+    if ( ! empty( $excluded_category_ids ) ) {
+        $tax_query[] = array(
             'taxonomy'         => 'product_cat',
             'field'            => 'term_id',
-            'terms'            => array( aprop_drone_category_id() ),
-            'operator'         => 'IN',
+            'terms'            => $excluded_category_ids,
+            'operator'         => 'NOT IN',
             'include_children' => true,
-        ),
-    );
+        );
+    }
 
     if (
         ( 'category' !== $exclude || array_key_exists( 'category', $override ) )
