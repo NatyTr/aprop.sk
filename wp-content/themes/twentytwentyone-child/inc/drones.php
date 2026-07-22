@@ -310,11 +310,13 @@ function aprop_render_drone_category_tree_options( $category_tree, $current_filt
         $has_children = ! empty( $node['children'] );
         $selected_in_branch = aprop_drone_tree_has_selected_term( $node, $current_filters['category'] );
         $branch_id = 'drone-category-branch-' . (int) $term->term_id;
+        $input_id = 'drone-category-' . (int) $term->term_id;
 
         ?><div class="drone-products-filter__tree-item<?php echo $has_children ? ' drone-products-filter__tree-item--has-children' : ''; ?>" style="--drone-filter-level: <?php echo esc_attr( (int) $level ); ?>;">
             <div class="drone-products-filter__tree-row">
                 <label class="drone-products-filter__tree-select">
                     <input
+                        id="<?php echo esc_attr( $input_id ); ?>"
                         type="radio"
                         name="drone_category"
                         value="<?php echo esc_attr( (string) $term->term_id ); ?>"
@@ -335,7 +337,7 @@ function aprop_render_drone_category_tree_options( $category_tree, $current_filt
                         <span class="drone-products-filter__tree-label"><?php echo esc_html( $term->name ); ?></span>
                     </button>
                 <?php else : ?>
-                    <span class="drone-products-filter__tree-label drone-products-filter__tree-label--static"><?php echo esc_html( $term->name ); ?></span>
+                    <label for="<?php echo esc_attr( $input_id ); ?>" class="drone-products-filter__tree-label drone-products-filter__tree-label--static"><?php echo esc_html( $term->name ); ?></label>
                 <?php endif; ?>
 
                 <span class="drone-products-filter__tree-count">

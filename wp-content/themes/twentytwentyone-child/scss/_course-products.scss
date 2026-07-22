@@ -5,6 +5,7 @@
 .course-product-card__link {
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-height: 100%;
   color: $black;
   text-decoration: none;
@@ -29,10 +30,15 @@
   aspect-ratio: 1 / 0.9;
   overflow: hidden;
   background: #eef1f4;
+
+  img {
+    max-width: none !important;
+  }
 }
 
 .course-product-card__image {
   width: 100%;
+  max-width: none;
   height: 100% !important;
   object-fit: cover;
   object-position: center center;
@@ -42,6 +48,11 @@
 .course-product-card__link:hover .course-product-card__image,
 .course-product-card__link:focus .course-product-card__image {
   transform: scale(1.03);
+}
+
+.course-product-card__link:focus,
+.course-product-card__link:focus * {
+  text-decoration: none !important;
 }
 
 .course-product-card__content {
@@ -55,7 +66,7 @@
 
 .course-product-card__title {
   margin: 0;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 500;
   line-height: 1.08;
   letter-spacing: -0.02em;

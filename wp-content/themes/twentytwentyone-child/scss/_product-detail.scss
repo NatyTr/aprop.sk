@@ -54,10 +54,23 @@
       line-height: 36px;
       font-weight: 600;
       margin-bottom: 40px;
+      .aprop-price-primary{
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: 8px;
+        row-gap: 4px;
+      }
       .aprop-price-tax-note{
         color: rgba(21, 21, 21, 0.62);
-        font-size: 14px;
-        line-height: 18px;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 500;
+      }
+      .aprop-price-tax-secondary{
+        color: rgba(21, 21, 21, 0.72);
+        font-size: 17px;
+        line-height: 22px;
         font-weight: 500;
       }
     }
@@ -107,12 +120,14 @@
         width: 100%;
         border-radius: 1000px;
         padding: 8px;
-        border: 1px solid $black;
-        background: transparent;
+        border: 1px solid $primary;
+        background: $primary;
         color: $black;
         position: relative;
         padding: 0px 34px 0px 0px;
         margin-bottom: 56px;
+        box-shadow: 0 16px 32px rgba(118, 218, 67, 0.22);
+        transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
         &:before{
           content: "";
           background-image: url('./images/cart.svg');
@@ -126,14 +141,18 @@
           background-size: contain;
         }
         &:hover{
-          background: black;
-          color: white;
+          background: $green-accent;
+          border-color: $green-accent;
+          color: $black;
+          box-shadow: 0 18px 36px rgba(89, 195, 120, 0.26);
+          transform: translateY(-1px);
           &:before{
-            background-image: url('./images/cart-white.svg');
+            background-image: url('./images/cart.svg');
           }
         }
         &:focus{
           outline: none;
+          box-shadow: 0 0 0 4px rgba(118, 218, 67, 0.22), 0 16px 32px rgba(118, 218, 67, 0.22);
         }
       }
     }
@@ -222,9 +241,16 @@
         font-size: 24px;
         line-height: 24px;
         font-weight: 700;
+        .aprop-price-primary{
+          column-gap: 6px;
+        }
         .aprop-price-tax-note{
-          font-size: 13px;
-          line-height: 17px;
+          font-size: 14px;
+          line-height: 18px;
+        }
+        .aprop-price-tax-secondary{
+          font-size: 15px;
+          line-height: 18px;
         }
       }
       margin-bottom: 40px;
@@ -308,27 +334,45 @@
   padding: 0px 50px;
 
   h2 {
-    margin-bottom: 32px;
+    margin-bottom: 28px;
   }
 
   &__groups {
-    display: flex;
-    flex-direction: column;
-    row-gap: 36px;
+    display: grid;
+    gap: 18px;
   }
 
   &__group {
+    overflow: hidden;
+    border: 1px solid rgba(21, 21, 21, 0.08);
+    border-radius: 28px;
+    background: linear-gradient(180deg, #ffffff 0%, #f7f8f4 100%);
+    box-shadow: 0 20px 48px rgba(21, 21, 21, 0.06);
+    transition: box-shadow 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
+
+    &:hover {
+      border-color: rgba(118, 218, 67, 0.22);
+      box-shadow: 0 24px 52px rgba(21, 21, 21, 0.08);
+      transform: translateY(-1px);
+    }
+
     summary {
       display: flex;
       align-items: center;
       justify-content: space-between;
       column-gap: 24px;
-      margin: 0px 0px 16px;
+      margin: 0;
+      padding: 22px 26px;
       cursor: pointer;
-      font-size: 24px;
-      line-height: 30px;
+      font-size: 22px;
+      line-height: 28px;
       font-weight: 500;
       list-style: none;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background: rgba(118, 218, 67, 0.06);
+      }
 
       &::-webkit-details-marker {
         display: none;
@@ -339,16 +383,17 @@
         width: 12px;
         height: 12px;
         flex: 0 0 12px;
-        border-right: 1px solid $black;
-        border-bottom: 1px solid $black;
-        transform: translateY(-3px) rotate(45deg);
-        transition: transform 0.2s ease;
+        margin-left: auto;
+        border-right: 1.5px solid $black;
+        border-bottom: 1.5px solid $black;
+        transform: translateY(-2px) rotate(45deg);
+        transition: transform 0.2s ease, border-color 0.2s ease;
       }
     }
 
     &[open] {
       summary:after {
-        transform: translateY(3px) rotate(225deg);
+        transform: translateY(2px) rotate(225deg);
       }
     }
   }
@@ -356,67 +401,78 @@
   &__list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0px 64px;
+    gap: 12px 18px;
     margin: 0px;
-    border-top: 1px solid #E5E5E5;
+    padding: 0 26px 26px;
   }
 
   &__row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-    gap: 24px;
-    padding: 14px 0px;
-    border-bottom: 1px solid #E5E5E5;
+    gap: 18px;
+    padding: 16px 18px;
+    border: 1px solid rgba(21, 21, 21, 0.06);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(6px);
 
     dt,
     dd {
       margin: 0px;
-      font-size: 16px;
-      line-height: 24px;
+      font-size: 15px;
+      line-height: 22px;
     }
 
     dt {
-      color: #000000A6;
-      font-weight: 400;
+      color: rgba(21, 21, 21, 0.58);
+      font-weight: 500;
+      letter-spacing: 0.01em;
     }
 
     dd {
       color: $black;
-      font-weight: 500;
+      font-weight: 600;
     }
   }
 
   @media(max-width: 1199px) {
     &__list {
       grid-template-columns: 1fr;
-      gap: 0px;
+      gap: 12px;
     }
   }
 
   @media(max-width: 767px) {
     margin: 40px auto;
-    padding: 0px 24px;
+    padding: 0;
 
     h2 {
       margin-bottom: 24px;
     }
 
     &__groups {
-      row-gap: 28px;
+      gap: 14px;
     }
 
     &__group {
+      border-radius: 22px;
+
       summary {
-        margin-bottom: 12px;
-        font-size: 20px;
-        line-height: 26px;
+        padding: 16px 14px 14px;
+        font-size: 18px;
+        line-height: 24px;
       }
+    }
+
+    &__list {
+      gap: 10px;
+      padding: 0 14px 14px;
     }
 
     &__row {
       grid-template-columns: 1fr;
-      gap: 4px;
-      padding: 12px 0px;
+      gap: 6px;
+      padding: 14px;
 
       dt,
       dd {
@@ -448,6 +504,29 @@
     margin-bottom: 40px;
   }
 
+
+  .all-related-products{
+    margin: 0 -4px;
+
+    .slick-track {
+      display: flex;
+      margin-bottom: fluid(28, 70);
+    }
+
+    .slick-slide {
+      height: auto;
+
+      > div {
+        height: 100%;
+      }
+    }
+
+    .course-product-card {
+      display: flex !important;
+      height: inherit !important;
+      margin: 0 4px;
+    }
+  }
 
   .all-related-products{
     .products-grid{

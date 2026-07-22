@@ -800,10 +800,27 @@ add_filter(
             return $price_html;
         }
 
-        return $price_html . '<span class="aprop-price-tax-note">Vrátane DPH</span>';
+        $price_excluding_tax = wc_get_price_excluding_tax( $product );
+
+        return '<span class="aprop-price-primary">'
+            . $price_html
+            . ' <span class="aprop-price-tax-note">s DPH</span>'
+            . '</span>'
+            . '<span class="aprop-price-tax-secondary">' . wp_kses_post( wc_price( $price_excluding_tax ) ) . ' bez DPH</span>';
     },
     20,
     2
+);
+
+add_filter(
+    'woocommerce_gallery_image_size',
+    function( $size ) {
+        if ( is_singular( 'product' ) ) {
+            return 'full';
+        }
+
+        return $size;
+    }
 );
 
 // posunúť tlačidlo
