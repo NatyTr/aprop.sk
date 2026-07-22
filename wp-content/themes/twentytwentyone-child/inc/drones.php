@@ -363,6 +363,25 @@ function aprop_render_drone_category_tree_options( $category_tree, $current_filt
     return ob_get_clean();
 }
 
+function aprop_render_drone_filter_category_options( $category_tree, $current_filters ) {
+    ob_start();
+
+    foreach ( $category_tree as $node ) {
+        if ( empty( $node['term'] ) || ! ( $node['term'] instanceof WP_Term ) ) {
+            continue;
+        }
+
+        if ( ! empty( $node['children'] ) ) {
+            echo aprop_render_drone_category_tree_options( $node['children'], $current_filters );
+            continue;
+        }
+
+        echo aprop_render_drone_category_tree_options( array( $node ), $current_filters );
+    }
+
+    return ob_get_clean();
+}
+
 function aprop_render_drone_filters( $current_filters ) {
     $options = aprop_drone_filter_options();
     $category_tree = aprop_drone_category_tree();
@@ -397,7 +416,7 @@ function aprop_render_drone_filters( $current_filters ) {
                     </div>
                 </div>
 
-                <?php echo aprop_render_drone_category_tree_options( $category_tree, $current_filters ); ?>
+                <?php echo aprop_render_drone_filter_category_options( $category_tree, $current_filters ); ?>
             </div>
 
             <div class="drone-products-filter__group">
