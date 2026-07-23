@@ -402,6 +402,7 @@ function aprop_render_drone_filters( $current_filters ) {
                     <div class="drone-products-filter__tree-row">
                         <label class="drone-products-filter__tree-select">
                             <input
+                                id="drone-category-all"
                                 type="radio"
                                 name="drone_category"
                                 value=""
@@ -412,7 +413,7 @@ function aprop_render_drone_filters( $current_filters ) {
                             <span class="screen-reader-text">Vybrať všetky kategórie</span>
                         </label>
 
-                        <span class="drone-products-filter__tree-label drone-products-filter__tree-label--static">Všetky kategórie</span>
+                        <label for="drone-category-all" class="drone-products-filter__tree-label drone-products-filter__tree-label--static">Všetky kategórie</label>
                         <span class="drone-products-filter__tree-count">
                             <?php echo esc_html( aprop_drone_filter_count( $current_filters, 'category', array( 'category' => '' ) ) ); ?>
                         </span>

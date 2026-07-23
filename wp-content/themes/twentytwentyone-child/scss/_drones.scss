@@ -99,17 +99,21 @@
 
 .drone-products-sort__dropdown {
   position: relative;
+  display: inline-block;
+  width: 248px;
+  max-width: 100%;
 }
 
 .drone-products-sort__summary {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  width: 174px;
+  width: 100%;
   min-height: 48px;
   padding: 0 54px 0 20px;
   cursor: pointer;
   list-style: none;
+  box-sizing: border-box;
 
   &::-webkit-details-marker {
     display: none;
@@ -157,36 +161,65 @@
 
 .drone-products-sort__menu {
   position: absolute;
-  z-index: 20;
-  top: calc(100% + 8px);
+  z-index: 30;
+  top: calc(100% + 10px);
+  left: 0;
   right: 0;
-  min-width: 230px;
-  padding: 8px;
-  border-radius: 18px;
-  background: white;
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid rgba(21, 21, 21, 0.08);
+  border-radius: 20px;
+  background: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 18px 40px rgba(21, 21, 21, 0.12);
 }
 
 .drone-products-sort__option {
-  display: block;
-  width: 100%;
-  padding: 10px 14px;
-  border: 0;
-  border-radius: 12px;
-  background: transparent;
-  color: $black;
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 40px;
+  margin: 0 !important;
+  padding: 8px 12px !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: $black !important;
   cursor: pointer;
-  font-size: 15px;
-  line-height: 19px;
-  text-align: left;
-  text-decoration: none;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em;
+  text-align: left !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background-color 0.18s ease, color 0.18s ease;
 
   &:hover,
-  &:focus,
+  &:focus {
+    background: #f5f5f3 !important;
+    color: $black !important;
+    outline: none !important;
+    text-decoration: none !important;
+  }
+
   &.is-active {
-    background: $gray-background2;
-    color: $black;
-    text-decoration: none;
+    background: $black !important;
+    color: #fff !important;
   }
 }
 
@@ -1059,7 +1092,7 @@
   }
 
   .drone-products-sort__summary {
-    width: auto;
+    width: 100%;
     min-width: unset;
     padding: 0 48px 0 16px;
 
@@ -1118,6 +1151,6 @@
   }
 
   .drone-products-sort__summary {
-    width: fit-content;
+    width: 100%;
   }
 }

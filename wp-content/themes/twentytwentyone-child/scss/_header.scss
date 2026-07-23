@@ -7,7 +7,7 @@ header{
     padding: 0px 32px;
     margin: 11px auto 0px auto;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: visible;
     .top-header{
       width: 100%;
       position: absolute;
@@ -15,6 +15,7 @@ header{
       left: 0px;
       z-index: 9;
       height: 84px;
+      overflow: hidden;
       @media(max-width: 1600px){
         height: fit-content;
       }
@@ -161,6 +162,8 @@ header{
         column-gap: 8px;
         flex-direction: row;
         align-items: center;
+        overflow: visible;
+        position: relative;
         .header-quick-links{
           display: flex;
           align-items: center;
@@ -174,7 +177,6 @@ header{
           font-weight: 500;
           letter-spacing: -0.36px;
           padding: 14px 36px;
-          min-height: 52px;
           box-sizing: border-box;
           border: 1px solid white;
           border-radius: 1000px;
@@ -194,25 +196,26 @@ header{
             padding: 8px 22px;
             font-size: 16px;
             line-height: 22px;
-            min-height: 40px;
           }
         }
         @media(max-width: 1600px){
           .header-pill-link{
-            padding: 8px 21px;
+            padding: 7px 11px;
             font-size: 16px;
             line-height: 18px;
-            min-height: 36px;
           }
         }
         .header-actions{
           display: flex;
           align-items: center;
           column-gap: 8px;
+          position: static;
+          overflow: visible;
         }
         .header-search-form{
-          position: relative;
+          position: static;
           flex-shrink: 0;
+          z-index: 30;
         }
         .btn-green-icon{
           display: flex;
@@ -307,16 +310,20 @@ header{
         }
         .header-search-panel{
           position: absolute;
-          top: calc(100% + 10px);
+          top: calc(100% + 12px);
           right: 0;
+          left: auto;
+          z-index: 40;
           display: flex;
           align-items: center;
           gap: 8px;
-          min-width: 260px;
+          width: min(640px, 100%);
+          min-width: 0;
           padding: 6px;
-          border: 1px solid white;
+          border: 1px solid rgba(255, 255, 255, 0.28);
           border-radius: 1000px;
-          background: rgba(21, 21, 21, 0.92);
+          background: rgba(21, 21, 21, 0.96);
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
           opacity: 0;
           visibility: hidden;
           pointer-events: none;
@@ -349,8 +356,15 @@ header{
           font-weight: 500;
           padding: 11px 16px;
           cursor: pointer;
+          flex-shrink: 0;
         }
         .header-search-form.is-open{
+          .header-search{
+            background: white;
+            img{
+              filter: invert(1);
+            }
+          }
           .header-search-panel{
             opacity: 1;
             visibility: visible;
@@ -365,7 +379,7 @@ header{
             height: 40px;
           }
           .header-search-panel{
-            min-width: 220px;
+            width: min(560px, 100%);
           }
         }
         @media(max-width: 1600px){
@@ -379,7 +393,7 @@ header{
             width: 16px;
           }
           .header-search-panel{
-            min-width: 210px;
+            width: min(480px, 100%);
             input{
               font-size: 14px;
             }
@@ -427,7 +441,7 @@ header{
               display: none;
             }
             .header-search-form{
-              position: relative;
+              position: static;
             }
             .header-search{
               width: 24px;
@@ -454,11 +468,14 @@ header{
               top: calc(100% + 12px);
               right: 0;
               position: absolute;
-              z-index: 20;
-              min-width: min(280px, calc(100vw - 48px));
+              z-index: 40;
+              width: min(420px, calc(100vw - 48px));
+              min-width: 0;
               padding: 6px;
-              border-color: #151515;
+              border: 1px solid rgba(21, 21, 21, 0.12);
+              border-color: rgba(21, 21, 21, 0.12);
               background: white;
+              box-shadow: 0 14px 32px rgba(21, 21, 21, 0.16);
               input{
                 color: #151515;
                 font-size: 14px;
@@ -618,11 +635,16 @@ header{
 .page-balicky,
 .search{
   header{
+    z-index: 20;
     .container{
       padding: 0px 18px;
+      overflow: visible;
       .top-header{
         background-color: #151515;
         border-radius: 59px;
+      }
+      .header-container{
+        overflow: visible;
       }
       .btn-icon{
         top: 0px !important;

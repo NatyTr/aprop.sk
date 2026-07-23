@@ -800,6 +800,12 @@ add_filter(
             return $price_html;
         }
 
+        // Full tax breakdown only on the main product detail price — not in listings/cards.
+        $is_main_product = (int) $product->get_id() === (int) get_queried_object_id();
+        if ( ! $is_main_product ) {
+            return $price_html;
+        }
+
         $price_excluding_tax = wc_get_price_excluding_tax( $product );
 
         return '<span class="aprop-price-primary">'
@@ -833,13 +839,73 @@ function move_add_to_cart_button_above_excerpt() {
 }
 add_action( 'woocommerce_before_single_product', 'move_add_to_cart_button_above_excerpt' );
 
+// Linked products (upsells) under buy box — compact list instead of bottom grid.
+remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
+
+function aprop_render_compact_linked_products() {
+	if ( ! is_singular( 'product' ) ) {
+		return;
+	}
+
+	global $product;
+	if ( ! $product instanceof WC_Product ) {
+		return;
+	}
+
+	$linked_ids = array_values(
+		array_unique(
+			array_filter(
+				array_map( 'absint', array_merge( $product->get_upsell_ids(), $product->get_cross_sell_ids() ) )
+			)
+		)
+	);
+
+	if ( empty( $linked_ids ) ) {
+		return;
+	}
+
+	$linked_products = array_filter(
+		array_map( 'wc_get_product', $linked_ids ),
+		function ( $linked_product ) {
+			return $linked_product instanceof WC_Product && $linked_product->is_visible();
+		}
+	);
+
+	if ( empty( $linked_products ) ) {
+		return;
+	}
+	?>
+	<section class="aprop-linked-products" aria-labelledby="aprop-linked-products-title">
+		<h3 id="aprop-linked-products-title" class="aprop-linked-products__title">
+			<?php echo esc_html__( 'Odporúčané príslušenstvo', 'aprop' ); ?>
+		</h3>
+		<ul class="aprop-linked-products__list">
+			<?php foreach ( $linked_products as $linked_product ) : ?>
+				<li class="aprop-linked-products__item">
+					<a class="aprop-linked-products__link" href="<?php echo esc_url( $linked_product->get_permalink() ); ?>">
+						<span class="aprop-linked-products__thumb">
+							<?php echo $linked_product->get_image( 'woocommerce_gallery_thumbnail' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						</span>
+						<span class="aprop-linked-products__meta">
+							<span class="aprop-linked-products__name"><?php echo esc_html( $linked_product->get_name() ); ?></span>
+							<span class="aprop-linked-products__price"><?php echo wp_kses_post( $linked_product->get_price_html() ); ?></span>
+						</span>
+					</a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+	</section>
+	<?php
+}
+add_action( 'woocommerce_single_product_summary', 'aprop_render_compact_linked_products', 21 );
+
 
 function insert_faqs_below_excerpt() {
 	if ( is_singular( 'product' ) ) {
 		echo do_shortcode('[product_faqs]');
 	}
 }
-add_action( 'woocommerce_single_product_summary', 'insert_faqs_below_excerpt', 21 );
+add_action( 'woocommerce_single_product_summary', 'insert_faqs_below_excerpt', 22 );
 
 
 function insert_note_and_slider_after_product() {
