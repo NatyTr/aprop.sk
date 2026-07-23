@@ -1,0 +1,5360 @@
+# Translation of Plugins - Form Maker by 10Web &#8211; Mobile-Friendly Drag &amp; Drop Contact Form Builder - Stable (latest release) in Hungarian
+# This file is distributed under the same license as the Plugins - Form Maker by 10Web &#8211; Mobile-Friendly Drag &amp; Drop Contact Form Builder - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-01-06 11:09:41+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-alpha.4\n"
+"Language: hu\n"
+"Project-Id-Version: Plugins - Form Maker by 10Web &#8211; Mobile-Friendly Drag &amp; Drop Contact Form Builder - Stable (latest release)\n"
+
+#: booster/view.php:413
+msgid "By signing up, you agree to 10Web’s. %s and %s"
+msgstr "A regisztrációval Ön elfogadja a 10Web következő dokumentumait: %s és %s"
+
+#: booster/view.php:406
+msgid "Complete the sign up process to optimize your images for better website performance."
+msgstr "Fejezze be a regisztrációs folyamatot, hogy optimalizálja képeit a jobb webhelyteljesítmény érdekében."
+
+#: booster/view.php:405
+msgid "Image optimization is not active"
+msgstr "A képoptimalizálás nem aktív"
+
+#: booster/view.php:357
+msgid "Add pages"
+msgstr "Oldalak hozzáadása"
+
+#: booster/view.php:351
+msgid "Add pages with images you’d like to optimize."
+msgstr "Adja hozzá azokat az oldalakat, amelyeken szeretné optimalizálni a képeket."
+
+#: booster/view.php:349
+msgid "Optimize pages with photo galleries"
+msgstr "Fényképgalériát tartalmazó oldalak optimalizálása"
+
+#: booster/view.php:348
+msgid "Specify the most image-heavy pages"
+msgstr "Adja meg a legtöbb képpel rendelkező oldalakat"
+
+#: booster/view.php:333
+msgid "%d image"
+msgid_plural "%d images"
+msgstr[0] "%d kép"
+msgstr[1] "%d kép"
+
+#: booster/view.php:304
+msgid "%d of 6"
+msgstr "6-ból %d"
+
+#: booster/view.php:303
+msgid "Optimized pages"
+msgstr "Optimalizált oldalak"
+
+#: booster/view.php:301
+msgid "Image optimization is performed only on 6 pages included in Free plan."
+msgstr "A képek csak az ingyenes csomagban szereplő 6 oldalon lesznek optimalizálva."
+
+#: booster/view.php:299
+msgid "Optimized for free"
+msgstr "Ingyen optimalizálva"
+
+#: booster/view.php:279 booster/view.php:354
+msgid "Total size:"
+msgstr "Teljes méret:"
+
+#: booster/view.php:278
+msgid "Reduce image size by up to 40% without compromising the quality."
+msgstr "A képméret akár 40%-kal csökkenthető a minőség romlása nélkül."
+
+#: booster/view.php:272
+msgid "Speed up website and reduce load time"
+msgstr "A weboldal felgyorsítása és a betöltési idő csökkentése"
+
+#: booster/view.php:271
+msgid "Serve Images in WebP format"
+msgstr "Képek kiszolgálása WebP formátumban"
+
+#: booster/view.php:270
+msgid "Optimize all uploaded images"
+msgstr "Az összes feltöltött kép optimalizálása."
+
+#: booster/view.php:268 booster/view.php:300 booster/view.php:346
+msgid "%d <span>image</span>"
+msgid_plural "%d <span>images</span>"
+msgstr[0] "%d <span>kép</span>"
+msgstr[1] "%d <span>kép</span>"
+
+#: booster/view.php:267 booster/view.php:345
+msgid "Not Optimized"
+msgstr "Nincs optimalizálva"
+
+#: booster/view.php:247
+msgid "Configure WebP format conversion"
+msgstr "WebP formátumú konverzió beállítása"
+
+#: booster/view.php:246
+msgid "Auto-optimize all uploaded images."
+msgstr "Az összes feltöltött kép automatikus optimalizálása."
+
+#: booster/view.php:244
+msgid "All images in media library are optimized."
+msgstr "A médiatárban lévő összes kép optimalizálva van."
+
+#: booster/view.php:243
+msgid "You’re all set!"
+msgstr "Készen van!"
+
+#: booster/view.php:219
+msgid "Start the optimization process"
+msgstr "Az optimalizálási folyamat elindítása"
+
+#: booster/view.php:218
+msgid "Sign up and connect"
+msgstr "Regisztráció és kapcsolódás"
+
+#: booster/view.php:215
+msgid "Activate plugin on the website"
+msgstr "A bővítmény aktiválása a weboldalon"
+
+#: booster/view.php:214
+msgid "Install 10Web Booster"
+msgstr "A 10Web Booster telepítése"
+
+#: booster/view.php:202
+msgid "Site is connected"
+msgstr "Az oldal csatlakozott"
+
+#: booster/view.php:192 booster/view.php:252
+msgid "Manage"
+msgstr "Kezelés"
+
+#: booster/view.php:187
+msgid "Manage optimization settings from the 10Web dashboard."
+msgstr "Az optimalizálási beállításokat a 10Web irányítópultján kezelheti."
+
+#: booster/view.php:186
+msgid "Our plugin is now optimizing your website."
+msgstr "A bővítményünk most optimalizálja weboldalát."
+
+#: booster/view.php:185
+msgid "10Web Booster is active"
+msgstr "A 10Web Booster aktív"
+
+#: booster/view.php:172
+msgid "Connect to 10Web dashboard to activate 10Web Booster on your website and start optimization process. Optimization will start automatically."
+msgstr "Csatlakozzon a 10Web irányítópultjához, hogy a 10Web Boostert aktiválja a weboldalán, és elindíthassa az optimalizálási folyamatot. Az optimalizálás automatikusan elindul."
+
+#: booster/view.php:161
+msgid "By signing up, you agree to 10Web’s %s and %s"
+msgstr "A regisztrációval Ön elfogadja a 10Web következő dokumentumait: %s és %s"
+
+#: booster/view.php:159 booster/view.php:414
+msgid "Terms of Services"
+msgstr "általános szerződési feltételek"
+
+#: booster/view.php:146 booster/view.php:171
+msgid "10Web Booster plugin is installed!"
+msgstr "A 10Web Booster bővítmény telepítve!"
+
+#: booster/view.php:136
+msgid "Installing from WordPress repository"
+msgstr "Telepítés a WordPress tárolóból"
+
+#: booster/view.php:135
+msgid "%s 10Web Booster plugin"
+msgstr "%s 10Web Booster bővítmény"
+
+#: booster/view.php:114
+msgid "Last analyzed:"
+msgstr "Legutóbbi elemzés:"
+
+#: booster/view.php:111
+msgid "Analyzed page:"
+msgstr "Elemzett oldal:"
+
+#: booster/view.php:109
+msgid "Google PageSpeed Insights"
+msgstr "Google PageSpeed Insights"
+
+#: booster/view.php:109
+msgid "Check your score with %s"
+msgstr "Ellenőrizze pontszámát: %s"
+
+#: booster/view.php:105
+msgid "(slow)"
+msgstr "(lassú)"
+
+#: booster/view.php:104
+msgid "(average)"
+msgstr "(átlagos)"
+
+#: booster/view.php:103
+msgid "(fast)"
+msgstr "(gyors)"
+
+#: booster/view.php:102
+msgid "Scale:"
+msgstr "Skála:"
+
+#: booster/view.php:97
+msgid "Desktop Score"
+msgstr "Asztali nézet pontszáma"
+
+#: booster/view.php:91 booster/view.php:98
+msgid "Load Time:"
+msgstr "Betöltési idő:"
+
+#: booster/view.php:90
+msgid "Mobile Score"
+msgstr "Mobil nézet pontszáma"
+
+#: booster/view.php:77
+msgid "Page URL"
+msgstr "Oldal URL-je"
+
+#: booster/view.php:74
+msgid "PageSpeed optimization"
+msgstr "PageSpeed optimalizálás"
+
+#: booster/view.php:61
+msgid "Show all PageSpeeds score elements in WordPress admin."
+msgstr "Az összes PageSpeed pontszámelem megjelenítése a WordPress admin felületen."
+
+#: booster/TWBLibrary.php:245 booster/assets/js/gutenberg.js:52
+#: booster/assets/js/gutenberg/gutenberg-compiled.js:154
+#: booster/assets/js/gutenberg/gutenberg-compiled.js:102
+msgid "settings"
+msgstr "beállítások"
+
+#: booster/TWBLibrary.php:245
+msgid "You can hide this element from the %s"
+msgstr "Ezt az elemet elrejtheti innen: %s"
+
+#: booster/TWBLibrary.php:220
+msgid "Desktop score"
+msgstr "Asztali nézet pontszáma"
+
+#: booster/TWBLibrary.php:203 booster/TWBLibrary.php:221
+msgid "Load time: "
+msgstr "Betöltési idő: "
+
+#: booster/TWBLibrary.php:202
+msgid "Mobile score"
+msgstr "Mobil nézet pontszáma"
+
+#: booster/TWBLibrary.php:190
+msgid "PageSpeed score %s"
+msgstr "PageSpeed pontszám: %s"
+
+#: booster/TWBLibrary.php:17 booster/view.php:282
+msgid "Optimize Now"
+msgstr "Optimalizálás most"
+
+#: booster/main.php:375
+msgid "Something went wrong, please try again."
+msgstr "Valami hiba történt, kérjük, próbálja meg újra."
+
+#: booster/main.php:374 booster/view.php:81
+msgid "Analyze"
+msgstr "Elemzés"
+
+#: booster/main.php:371 booster/view.php:176
+msgid "Connect"
+msgstr "Kapcsolódás"
+
+#: booster/main.php:370 booster/view.php:156 booster/view.php:409
+msgid "Sign up"
+msgstr "Regisztráció"
+
+#: booster/main.php:368
+msgid "Please enter a Page URL."
+msgstr "Kérjük, adja meg egy oldal URL-jét."
+
+#: booster/main.php:367
+msgid "Please enter correct URL."
+msgstr "Kérjük, helyes URL-t adjon meg."
+
+#: booster/main.php:366
+msgid "Please enter a URL from your domain."
+msgstr "Kérjük, adjon meg egy URL-t a domainjéből."
+
+#: booster/main.php:365
+msgid "Email field should not be empty."
+msgstr "Az e-mail mező nem lehet üres."
+
+#: booster/main.php:364
+msgid "Please enter a valid email address."
+msgstr "Kérjük, érvényes e-mail-címet adjon meg."
+
+#: booster/main.php:363
+msgid "Activate 10Web Booster plugin"
+msgstr "10Web Booster bővítmény bekapcsolása"
+
+#: booster/main.php:362
+msgid "Install 10Web Booster plugin"
+msgstr "10Web Booster bővítmény telepítése"
+
+#: booster/List.php:75
+msgid "Got it"
+msgstr "Értem"
+
+#: booster/List.php:74
+msgid "We are checking the PageSpeed score of a different page, please wait until the process is complete to run PageSpeed check on another page."
+msgstr "Éppen egy másik oldal PageSpeed pontszámát ellenőrizzük, kérjük, várjon, amíg a folyamat befejeződik, hogy a PageSpeed ellenőrzést egy másik oldalon is lefuttathassa."
+
+#: booster/List.php:73
+msgid "Checking PageSpeed score"
+msgstr "PageSpeed pontszám ellenőrzése"
+
+#: booster/List.php:65
+msgid "Check score"
+msgstr "Pontszám ellenőrzése"
+
+#: booster/List.php:62
+msgid "Optimize images and speed"
+msgstr "Képek és sebesség optimalizálása"
+
+#: booster/List.php:40
+msgid "PageSpeed score"
+msgstr "PageSpeed pontszám"
+
+#: booster/Elementor.php:85
+msgid "PageSpeed Score"
+msgstr "PageSpeed pontszám"
+
+#: booster/controller.php:556 booster/main.php:369 booster/view.php:79
+msgid "This page is not public. Please publish the page to check the score."
+msgstr "Ez az oldal nem nyilvános. Kérjük, tegye közzé az oldalt a pontszám ellenőrzéséhez."
+
+#: booster/controller.php:334 booster/TWBLibrary.php:232
+msgid "Optimize now"
+msgstr "Optimalizálás most"
+
+#: booster/controller.php:331
+msgid "Heavy images negatively affect your website load time and PageSpeed optimization."
+msgstr "A súlyos képek negatívan befolyásolják (lassítják) a weboldal betöltődési idejét és a PageSpeed optimalizálást."
+
+#: booster/controller.php:328
+msgid "Improve PageSpeed optimization by optimizing your website."
+msgstr "Javítsa a PageSpeed optimalizálást webhelye optimalizálásával."
+
+#: booster/controller.php:323
+msgid "%s images can be optimized"
+msgstr "%s kép optimalizálható"
+
+#: booster/controller.php:322
+msgid "%s image can be optimized"
+msgstr "%s kép optimalizálható"
+
+#: booster/controller.php:309
+msgid "Automatically optimize the entire website with all images."
+msgstr "Automatikusan optimalizálja a teljes webhelyet az összes képpel együtt."
+
+#: booster/controller.php:306
+msgid "Get 10Web Booster Pro"
+msgstr "10Web Booster Pro beszerzése"
+
+#: booster/AdminBar.php:325
+msgid "Checking…"
+msgstr "Ellenőrzés…"
+
+#: booster/AdminBar.php:217 booster/AdminBar.php:242 booster/AdminBar.php:310
+#: booster/Elementor.php:145 booster/Elementor.php:172
+msgid "%s page"
+msgstr "%s oldal"
+
+#: booster/AdminBar.php:176 booster/AdminBar.php:326 booster/Elementor.php:234
+msgid "We are checking the PageSpeed score of your %s page."
+msgstr "Éppen ellenőrizzük a %s oldal PageSpeed pontszámát."
+
+#: booster/AdminBar.php:175 booster/Elementor.php:44 booster/Elementor.php:91
+#: booster/List.php:68
+msgid "Checking..."
+msgstr "Ellenőrzés…"
+
+#: booster/AdminBar.php:149 booster/Elementor.php:198
+msgid "PageSpeed score is an essential attribute to your website’s performance. It affects both the user experience and SEO rankings."
+msgstr "A PageSpeed pontszám a webhely teljesítményének egyik alapvető jellemzője. Mind a felhasználói élményt, mind a SEO-rangsorolást befolyásolja."
+
+#: booster/AdminBar.php:148
+msgid "Check the PageSpeed score"
+msgstr "Ellenőrizze a PageSpeed pontszámot"
+
+#: booster/AdminBar.php:79 booster/AdminBar.php:85 booster/AdminBar.php:88
+#: booster/Elementor.php:45 booster/Elementor.php:81 booster/Elementor.php:88
+msgid "Not optimized"
+msgstr "Nincs optimalizálva"
+
+#: booster/AdminBar.php:78 booster/AdminBar.php:84 booster/AdminBar.php:153
+#: booster/Elementor.php:202
+msgid "Check PageSpeed Score"
+msgstr "PageSpeed pontszám ellenőrzése"
+
+#: admin/views/Manage_fm.php:805
+msgid "Send payment information after payment has been successfully completed"
+msgstr "Fizetési információk elküldése a fizetés sikeres lezárása után"
+
+#: frontend/models/form_maker.php:1196
+msgid "Error: Something went wrong, please try again."
+msgstr "Hiba: Valami félresikerült, kérjük, próbálja újra."
+
+#: form-maker.php:1689
+msgid "Please install %s plugin version %s and higher to start using add-on."
+msgstr "Kérjük, telepítse %s bővítmény %s vagy magasabb verzióját a kiterjesztés használatának megkezdéséhez."
+
+#: admin/views/Manage_fm.php:3427
+msgid "Set -1 for show only after show_popup_form_"
+msgstr "Állítson be -1 értéket, hogy csak a show_popup_form_ után jelenjék meg"
+
+#: admin/views/FMPaypalInfo.php:41
+msgid "Transaction ID"
+msgstr "Tranzakcióazonosító"
+
+#: form-maker.php:739
+msgid "Already succeeded"
+msgstr "Már sikerült"
+
+#: frontend/views/form_maker.php:4098
+msgid "Clear"
+msgstr "Törlés"
+
+#: form-maker.php:726 form-maker.php:738
+msgid "Succeeded"
+msgstr "Sikeres"
+
+#: admin/views/Submissions_fm.php:771
+msgid "Capture"
+msgstr "Rögzítés"
+
+#: admin/views/Manage_fm.php:1381
+msgid "Do not save"
+msgstr "Ne mentse"
+
+#: admin/views/Manage_fm.php:1378
+msgid "After payment has been successfully completed."
+msgstr "A fizetés sikeres befejezése után."
+
+#: admin/views/Manage_fm.php:1375
+msgid "Before completion of payment."
+msgstr "A fizetés befejezése előtt."
+
+#: admin/views/Manage_fm.php:1155
+msgid "Signature"
+msgstr "Aláírás"
+
+#: form-maker.php:783
+msgid "Min Value of Date: Use the date format dd/m/yy, e.g. 05/07/2020\". The range of Year field from 1901 to the current year."
+msgstr "A dátum minimális értéke: NN/HH/ÉÉÉÉ dátumformátumot használjon, pl. 05/07/2020. Az Év mező értéke 1901-től a jelenlegi évig terjedhet."
+
+#: admin/views/Manage_fm.php:800 admin/views/Manage_fm.php:988
+msgid "After payment has been successfully completed"
+msgstr "A fizetés sikeres befejezése után"
+
+#: admin/views/Manage_fm.php:796 admin/views/Manage_fm.php:984
+msgid "Before completion of payment"
+msgstr "A fizetés befejezése előtt"
+
+#: admin/views/Manage_fm.php:793 admin/views/Manage_fm.php:981
+msgid "Send Email"
+msgstr "E-mail elküldése"
+
+#: framework/WDW_FM_Library.php:4238
+msgid "Your score should be less than %f"
+msgstr "A pontszámnak kisebbnek kell lennie, mint %f"
+
+#: framework/WDW_FM_Library.php:3591
+msgid "The %s value must be between %f - %f"
+msgstr "A(z) %s értéknek ezek között kell lennie: %f - %f"
+
+#: admin/views/Manage_fm.php:1405
+msgid "Text to displays when submission limit has been reached."
+msgstr "Az a szöveg, amely megjelenik, ha a benyújtási határértéket elérték."
+
+#: admin/views/Manage_fm.php:1403
+msgid "Submission Limit notification text"
+msgstr "Beküldési határértékről értesítő szöveg"
+
+#: admin/views/Manage_fm.php:1400
+msgid "Limit number of submissions for form. In the case of a 0 (zero), submissions will be unlimited."
+msgstr "Az űrlappal történő beküldések legnagyobb száma. 0 (nulla) esetén az űrlap bárhányszor beküldhető."
+
+#: admin/views/Manage_fm.php:1398
+msgid "Submission Limit"
+msgstr "Beküldési korlát"
+
+#: admin/views/Options_fm.php:198
+msgid "Dynamically created file cannot be read"
+msgstr "A dinamikusan létrehozott fájl nem olvasható"
+
+#: admin/views/Options_fm.php:179
+msgid "Enable spam protection by limiting submissions from a single IP address within 20 seconds."
+msgstr "Engedélyezi a spam elleni védelmet azáltal, hogy 20 másodpercen belül korlátozza az egy IP-címről történő beküldéseket."
+
+#: admin/views/Options_fm.php:174
+msgid "Limit Single IP Submissions"
+msgstr "Az egy IP-címről történő beküldések korlátozása"
+
+#: admin/views/Options_fm.php:171
+msgid "Enable nonce protection against junk submissions in your forms."
+msgstr "Engedélyezi az űrlapokban a kéretlen beküldések elleni nonce védelmet."
+
+#: admin/views/Options_fm.php:166
+msgid "Nonce Anti-Spam Protection"
+msgstr "Nonce Spam elleni védelem"
+
+#: admin/views/Options_fm.php:163
+msgid "Enable protection against submissions from bots in your forms."
+msgstr "Engedélyezi az űrlapokban a (ro)botbeküldések elleni védelmet."
+
+#: admin/views/Options_fm.php:158
+msgid "Anti-Bot Protection"
+msgstr "Anti-Bot védelem"
+
+#: admin/views/Options_fm.php:155
+msgid "Enable protection against referrer spam submissions in your forms."
+msgstr "Engedélyezi az űrlapokban a hivatkozóspam-beküldések elleni védelmet."
+
+#: admin/views/Options_fm.php:150
+msgid "Referrer Spam Protection"
+msgstr "Hivatkozó spam elleni védelem"
+
+#: admin/controllers/Manage_fm.php:1356 admin/controllers/Manage_fm.php:1524
+#: admin/models/Manage_fm.php:124 admin/models/Manage_fm.php:219
+msgid "The limit of submissions for this form has been reached."
+msgstr "Elértük az űrlap beküldéseinek korlátját."
+
+#: form-maker.php:806
+msgid "Your upload_max_filesize directive in php.ini is "
+msgstr "A php.ini-ben az upload_max_filesize értéke: "
+
+#: admin/controllers/Themes_fm.php:2862
+msgid "Shake effect"
+msgstr "Rázó hatás"
+
+#: frontend/models/form_maker.php:1580 frontend/models/form_maker.php:3607
+#: frontend/models/form_maker.php:3608 frontend/models/form_maker.php:3609
+msgid "Your chosen password."
+msgstr "A választott jelszó."
+
+#: framework/WDW_FM_Library.php:5199
+msgid "South Sudan"
+msgstr "Dél-Szudán"
+
+#: admin/views/Submissions_fm.php:599
+msgid "Resend"
+msgstr "Újraküldés"
+
+#: admin/views/Submissions_fm.php:588
+msgid "Successfully Sent"
+msgstr "Sikeresen elküldve"
+
+#: admin/views/Submissions_fm.php:320 admin/views/Submissions_fm.php:585
+#: admin/views/Submissions_fm.php:991
+msgid "Webhook Status"
+msgstr "Webhook állapota"
+
+#: admin/views/view.php:427 form-maker.php:531 form-maker.php:1824
+msgid "Ask a question"
+msgstr "Kérdezzen"
+
+#: form-maker.php:342
+msgid "Help"
+msgstr "Súgó"
+
+#: admin/views/Options_fm.php:195
+msgid "Enable AJAX submit to submit forms without reloading the page."
+msgstr "Az AJAX-beküldés engedélyezésével az oldal újratöltése nélkül küldhet be űrlapokat."
+
+#: admin/views/Options_fm.php:190
+msgid "Ajax submit"
+msgstr "Ajax beküldés"
+
+#: admin/views/Options_fm.php:187
+msgid "Do not use minified JS and CSS files. Enable this option if You need to debug JS or CSS issues."
+msgstr "Ne használjon aprított JS és CSS fájlokat. Akkor engedélyezze ezt a beállítást, ha JS vagy CSS problémáknál hibakeresésre van szüksége."
+
+#: frontend/models/form_maker.php:1696
+msgid "This functionality is disabled in demo."
+msgstr "Ez a funkció le van tiltva a demo változatban."
+
+#: frontend/models/form_maker.php:1550
+msgid "%s Submission failed. Your consent to collect personal data is required."
+msgstr "%s: A beküldés sikertelen. Hozzá kell járulnia a személyes adatok gyűjtéséhez."
+
+#: admin/views/Options_fm.php:97
+msgid "ReCaptcha v3 returns a score based on the user interactions with your forms. Scores range from 0.0 to 1.0, with 0.0 indicating abusive traffic and 1.0 indicating good traffic. %sVisit%s ReCaptcha admin to review verification statistics."
+msgstr "A ReCaptcha v3 visszaküld egy pontszámot, amely a felhasználó és az űrlapok közötti interakciókon alapul. A pontszámok 0.0 és 1.0 között változnak, ahol a 0.0 a visszaélésszerű forgalmat (robot) jelzi, az 1.0 pedig a jó forgalom. Az ellenőrzési statisztikák áttekintéséhez %sLátogasson el%s a ReCaptcha admin-oldalára."
+
+#: admin/views/Options_fm.php:94
+msgid "Minimum ReCaptcha v3 Score to allow submission"
+msgstr "A beküldés engedélyezéséhez szükséges legkisebb ReCaptcha v3 pontszám"
+
+#: admin/views/LibSubscribe.php:78
+msgid "Keep in mind that submitting this form will allow 10Web to store your name, email, and site URL. Being GDPR-compliant, we won’t ever share your info with third parties..."
+msgstr "Ne feledje, hogy ennek az űrlapnak a benyújtásával a 10Web tárolhatja a nevét, e-mail címét és a webhely URL-jét. Mivel betartjuk a GDPR-t, harmadik féllel soha nem osztjuk meg adatait…"
+
+#: admin/views/LibSubscribe.php:74
+msgid "EMAIL ADDRESS"
+msgstr "E-MAIL CÍM"
+
+#: admin/views/LibSubscribe.php:69
+msgid "NAME"
+msgstr "NÉV"
+
+#: admin/views/LibSubscribe.php:62
+msgid "So, I handcrafted a step-by-step ebook to make it super easy for you. Enjoy "
+msgstr "Hogy megkönnyítsem az Ön számára, készítettem egy lépésről lépésre haladó e-könyvet. Jó szórakozást! "
+
+#: admin/views/LibSubscribe.php:20
+msgid "Please enter a valid email."
+msgstr "Kérjük, érvényes e-mail címet adjon meg."
+
+#: admin/views/LibSubscribe.php:19
+msgid "Name is required."
+msgstr "Név megadása kötelező."
+
+#: admin/views/LibSubscribe.php:12
+msgid "Hey! I know how hard and time-consuming creating a well-structured form can be."
+msgstr "Hé! Tudom, hogy egy jól strukturált űrlap létrehozása milyen nehéz és időigényes tud lenni."
+
+#: frontend/models/form_maker.php:1289 frontend/models/form_maker.php:1295
+msgid "Submission has failed due to the unsuccessful ReCaptcha verification. Please try to submit the form again."
+msgstr "A ReCaptcha sikertelen ellenőrzése miatt a beküldés meghiúsult. Próbálja meg újra beküldeni az űrlapot."
+
+#. Author URI of the plugin
+msgid "https://10web.io/plugins/?utm_source=form_maker&utm_medium=free_plugin"
+msgstr "https://10web.io/plugins/?utm_source=form_maker&utm_medium=free_plugin"
+
+#. Plugin URI of the plugin
+msgid "https://10web.io/plugins/wordpress-form-maker/?utm_source=form_maker&utm_medium=free_plugin"
+msgstr "https://10web.io/plugins/wordpress-form-maker/?utm_source=form_maker&utm_medium=free_plugin"
+
+#: admin/views/Submissions_fm.php:215
+msgid "Form maker Export will not work correctly, as XML PHP extension is disabled on your website. Please contact your hosting provider and ask them to enable it."
+msgstr "A Form Maker exportálása nem fog megfelelően működni, mivel az XML PHP kiterjesztés le van tiltva az Ön webhelyén. Vegye fel a kapcsolatot tárhelyszolgáltatójával, és kérje meg, hogy engedélyezze."
+
+#: admin/views/Options_fm.php:182
+msgid "Developer mode"
+msgstr "Fejlesztői mód"
+
+#: framework/WDW_FM_Library.php:5323
+msgid "Yukon"
+msgstr "Yukon"
+
+#: framework/WDW_FM_Library.php:5322
+msgid "Saskatchewan"
+msgstr "Saskatchewan"
+
+#: framework/WDW_FM_Library.php:5321
+msgid "Quebec"
+msgstr "Quebec"
+
+#: framework/WDW_FM_Library.php:5320
+msgid "Prince Edward Island"
+msgstr "Prince Edward-sziget"
+
+#: framework/WDW_FM_Library.php:5319
+msgid "Ontario"
+msgstr "Ontario"
+
+#: framework/WDW_FM_Library.php:5318
+msgid "Nunavut"
+msgstr "Nunavut"
+
+#: framework/WDW_FM_Library.php:5317
+msgid "Nova Scotia"
+msgstr "Új-Skócia"
+
+#: framework/WDW_FM_Library.php:5316
+msgid "Northwest Territories"
+msgstr "Északnyugati Területek"
+
+#: framework/WDW_FM_Library.php:5315
+msgid "Newfoundland and Labrador"
+msgstr "Új-Fundland és Labrador"
+
+#: framework/WDW_FM_Library.php:5314
+msgid "New Brunswick"
+msgstr "Új-Brunswick"
+
+#: framework/WDW_FM_Library.php:5313
+msgid "Manitoba"
+msgstr "Manitoba"
+
+#: framework/WDW_FM_Library.php:5312
+msgid "British Columbia"
+msgstr "Brit Columbia"
+
+#: framework/WDW_FM_Library.php:5311
+msgid "Alberta"
+msgstr "Alberta"
+
+#: framework/WDW_FM_Library.php:5204
+msgid "Eswatini"
+msgstr "Szváziföld (Eswatini)"
+
+#: framework/WDW_FM_Library.php:5190
+msgid "Montenegro"
+msgstr "Montenegró"
+
+#: framework/WDW_FM_Library.php:5189
+msgid "Serbia"
+msgstr "Szerbia"
+
+#: framework/WDW_FM_Library.php:5138
+msgid "North Macedonia"
+msgstr "Észak-Macedónia"
+
+#: wd/wd.php:53 wd/wd.php:57
+msgid "Premium"
+msgstr "Prémium"
+
+#: wd/templates/display_overview.php:103
+msgid "Checkout how it works"
+msgstr "Nézze meg, hogyan működik"
+
+#: wd/templates/display_overview.php:94
+msgid "More great features of the plugin"
+msgstr "A bővítmény további remek funkciói"
+
+#: wd/templates/display_overview.php:81
+msgid " features you get!"
+msgstr " funkciókat kap!"
+
+#: wd/templates/display_overview.php:73 wd/templates/display_overview.php:121
+msgid "Get free for 14 days"
+msgstr "Ingyenes 14 napig"
+
+#: wd/templates/display_overview.php:69
+msgid "We’ll soon be offering affordable hosting solution with WordPress-friendly features and great customer support."
+msgstr "Hamarosan megfizethető tárhely-szolgáltatási megoldást kínálunk WordPress-barát funkciókkal és kitűnő ügyfélszolgálattal."
+
+#: wd/templates/display_overview.php:68
+msgid "Hosting"
+msgstr "Tárhelyszolgáltatás"
+
+#: wd/templates/display_overview.php:63
+msgid "Automatically resize and compress all images on your website to save space and improve site speed."
+msgstr "A helymegtakarítás és a webhely sebességének javítása érdekében automatikusan átméretezi és tömöríti a webhely összes képét."
+
+#: wd/templates/display_overview.php:62
+msgid "Image optimization"
+msgstr "Képoptimalizálás"
+
+#: wd/templates/display_overview.php:57
+msgid "Protect your WordPress site from security issues and threats with a powerful security service coming soon to 10Web."
+msgstr "Védje WordPress-webhelyét a biztonsági problémáktól és fenyegetésektől egy erős biztonsági szolgáltatással, amely hamarosan megjelenik a 10Web-en."
+
+#: wd/templates/display_overview.php:56
+msgid "Security"
+msgstr "Biztonság"
+
+#: wd/templates/display_overview.php:51
+msgid "Improve search rankings of your WordPress site with a comprehensive search engine optimization solution."
+msgstr "Javítsa WordPress-webhelyének keresési rangsorolását egy átfogó keresőmotor-optimalizáló megoldással."
+
+#: wd/templates/display_overview.php:50
+msgid "SEO"
+msgstr "SEO"
+
+#: wd/templates/display_overview.php:44
+msgid "10Web cloud storage space. Easily and securely backup your website in our storage."
+msgstr "10Web felhőtárhely. Tárhelyünkön könnyen és biztonságosan készíthet biztonsági másolatot webhelyéről."
+
+#: wd/templates/display_overview.php:43
+msgid "Backup"
+msgstr "Biztonsági mentés"
+
+#: wd/templates/display_overview.php:38
+msgid "Professionally designed, responsive themes for your website. Build fully-functional, elegant websites effortlessly."
+msgstr "Professzionálisan kialakított, reszponszív témák az Ön webhelyéhez. Készítsen könnyedén teljesen funkcionális, elegáns webhelyeket."
+
+#: wd/templates/display_overview.php:37
+msgid "Premium WordPress themes"
+msgstr "Prémium WordPress témák"
+
+#: wd/templates/display_overview.php:33
+msgid "Manage your WordPress websites all in one place within a single dashboard. No need to switch between sites."
+msgstr "Kezelje WordPress-webhelyeit egy helyen egyetlen irányítópultról. Nem kell váltani a webhelyek között."
+
+#: wd/templates/display_overview.php:32
+msgid "Unified dashboard"
+msgstr "Egyesített irányítópult"
+
+#: wd/templates/display_overview.php:28
+msgid "Access 60+ plugins and extensions, including key plugins, such as gallery, form, slider, social plugins and more."
+msgstr "Hozzáférés a 60+ beépülő modulhoz és kiterjesztéshez, köztük kulcsfontosságúakhoz, pl. galéria, űrlap, slider, közösségi bővítmények s a többi."
+
+#: wd/templates/display_overview.php:27
+msgid "60+ pro plugins/Extensions"
+msgstr "Több mint 60 pro bővítmény/kiterjesztés"
+
+#: wd/templates/display_overview.php:21 wd/templates/display_overview.php:81
+msgid "Premium "
+msgstr "Prémium "
+
+#: wd/templates/display_overview.php:13
+msgid "Try Free"
+msgstr "Próbálja ki ingyen"
+
+#: wd/templates/display_overview.php:10 wd/templates/display_overview.php:119
+msgid "Get Premium %s and Other Solutions Essential for Your WordPress Site."
+msgstr "Szerezzen be a Prémium változatot (%s) és a WordPress-webhelyéhez való egyéb alapvető fontosságú megoldásokat."
+
+#: wd/templates/display_subscribe.php:33
+msgid "We will not sell, share, or distribute your personal information to third parties."
+msgstr "Az Ön személyes adatait nem adjuk el, nem osztjuk meg és nem terjesztjük harmadik fél számára."
+
+#: admin/views/LibSubscribe.php:83 wd/templates/display_subscribe.php:29
+msgid "Skip"
+msgstr "Kihagyás"
+
+#: wd/templates/display_subscribe.php:27
+msgid "Allow & Continue"
+msgstr "Engedélyezés és folytatás"
+
+#: wd/templates/display_subscribe.php:19
+msgid "Site URL, Wordpress version"
+msgstr "Webhely URL-je, WordPress verzió"
+
+#: wd/templates/display_subscribe.php:15
+msgid "Your name & Email address"
+msgstr "Az Ön neve és e-mail címe"
+
+#: wd/templates/display_subscribe.php:8
+msgid "This will allow you to get more out of your plugin experience - get awesome customer support, receive exclusive deals and discounts on premium products and more. You can choose to skip this step, %s will still work just fine."
+msgstr "Ezzel még többet kihasználhat a bővítményélményből - fantasztikus ügyfélszolgálat, exkluzív ajánlatok és kedvezmények prémium termékekhez és még sok minden más. Dönthet úgy, hogy kihagyja ezt a lépést: a %s továbbra is tökéletesen fog működni."
+
+#: wd/templates/display_subscribe.php:6
+msgid "Allow 10Web to collect some usage data"
+msgstr "Hagyja, hogy a 10Web felhasználási adatokat gyűjtsön"
+
+#: admin/views/view.php:447
+msgid "Extensions"
+msgstr "Kiterjesztések"
+
+#: admin/views/Manage_fm.php:1235 admin/views/Manage_fm.php:1657
+msgid "Requires STRIPE extension."
+msgstr "STRIPE kiterjesztést igényel."
+
+#: admin/views/Manage_fm.php:1083
+msgid "Activate this option, in case you would like the users to verify their email addresses. After enabling, please add {verificationlink} into the content of Custom Text in Email to User option."
+msgstr "Ezt a lehetőséget akkor aktiválja, ha azt akarja, hogy a felhasználók igazolják e-mail címüket. Az engedélyezést követően kérjük, a felhasználóknak küldendő egyéni e-mail beállításainál adja meg az igazoló linket ({verificationlink})."
+
+#: admin/controllers/Manage_fm.php:284 admin/controllers/Themes_fm.php:184
+msgid "Copy"
+msgstr "Másolat"
+
+#. Author of the plugin
+msgid "10Web Form Builder Team"
+msgstr "10Web Form Builder Team"
+
+#: framework/WDW_FM_Library.php:5168
+msgid "Palestine"
+msgstr "Palesztína"
+
+#: admin/views/Manage_fm.php:3356
+msgid "Edit Theme"
+msgstr "Téma"
+
+#: admin/views/Manage_fm.php:558
+msgid "Show header"
+msgstr "Fejléc megjelenítése"
+
+#: admin/views/Manage_fm.php:547
+msgid "Add Page"
+msgstr "Oldal hozzáadása"
+
+#: admin/views/Manage_fm.php:474 admin/views/Manage_fm.php:498
+msgid "Current"
+msgstr "Jelenlegi"
+
+#: admin/views/Manage_fm.php:471
+msgid "Go Back"
+msgstr "Vissza"
+
+#: admin/views/Manage_fm.php:460 admin/views/Manage_fm.php:493
+msgid "Unknown date"
+msgstr "Ismeretlen dátum"
+
+#: admin/views/Manage_fm.php:459
+msgid "Last saved:"
+msgstr "Utoljára mentve:"
+
+#: admin/views/Manage_fm.php:433
+msgid "Delete column and the fields"
+msgstr "Oszlop és a mezők törlése"
+
+#: admin/views/Manage_fm.php:432
+msgid "Delete column and preserve the fields"
+msgstr "Oszlop törlése és a mezők megtartása"
+
+#: admin/views/Manage_fm.php:429
+msgid "If you decide to preserve the fields, they will be moved to the previous column."
+msgstr "Ha a mezők megőrzése mellett dönt, azok átkerülnek az előző oszlopba."
+
+#: admin/views/Manage_fm.php:428
+msgid "Do you want to also Remove all the fields in that column?"
+msgstr "Szeretné az oszlopban lévő összes mezőt is törölni?"
+
+#: admin/views/Manage_fm.php:427
+msgid "You are about to delete a column from your form."
+msgstr "Éppen törölni készül egy oszlopot az űrlapról."
+
+#: admin/views/Manage_fm.php:415
+msgid "Are you sure you want to delete this column?"
+msgstr "Biztosan törölni szeretné ezt az oszlopot?"
+
+#: admin/views/Manage_fm.php:403
+msgid "Are you sure you want to delete this field?"
+msgstr "Biztosan törölni szeretné ezt a mezőt?"
+
+#: admin/views/Manage_fm.php:393
+msgid "Delete page and the fields"
+msgstr "Oldal és a mezők törlése"
+
+#: admin/views/Manage_fm.php:392
+msgid "Delete page and preserve the fields"
+msgstr "Oldal törlése és a mezők megőrzése"
+
+#: admin/views/Manage_fm.php:389
+msgid "If you decide to preserve the fields, they will be moved to the previous page."
+msgstr "Ha úgy dönt, hogy a mezőket megtartja, akkor azok átkerülnek az előző oldalra."
+
+#: admin/views/Manage_fm.php:388
+msgid "Do you want to also Remove all the fields on that page?"
+msgstr "Szeretné-e eltávolítani az ezen az oldalon található mezőket is?"
+
+#: admin/views/Manage_fm.php:387
+msgid "You are about to delete a page from your form."
+msgstr "Éppen törölni készül egy oldalt az űrlapból."
+
+#: admin/views/Manage_fm.php:373
+msgid "Settings"
+msgstr "Beállítások"
+
+#: admin/views/Manage_fm.php:369
+msgid "Layout"
+msgstr "Elrendezés"
+
+#: admin/views/Manage_fm.php:361
+msgid "Fields"
+msgstr "Mezők"
+
+#: admin/views/Manage_fm.php:345
+msgid "Restore this revision"
+msgstr "Ennek a változatnak a visszaállítása"
+
+#: admin/views/Manage_fm.php:335 admin/views/Manage_fm.php:443
+msgid "Revisions"
+msgstr "Változatok"
+
+#: admin/views/Manage_fm.php:318
+msgid "You need to click the \"Restore this revision\" button to save the changes. Revision number %u %s"
+msgstr "A módosítások mentéséhez kattintson az „Ennek a változatnak a visszaállítása” gombra. Változat száma: %u %s"
+
+#: admin/views/Manage_fm.php:669 admin/views/Manage_fm.php:674
+msgid "Loading..."
+msgstr "Töltés…"
+
+#: form-maker.php:722
+msgid "Add Column"
+msgstr "Oszlop hozzáadása"
+
+#: form-maker.php:370
+msgid "10WEB Plugins"
+msgstr "10WEB bővítmények"
+
+#: admin/views/Manage_fm.php:540
+msgid "Drag icon to the form or click here to add a field."
+msgstr "Mező hozzáadásához húzza az ikont az űrlapra vagy kattintson ide."
+
+#: admin/views/Manage_fm.php:526
+msgid "Edit page navigation."
+msgstr "Oldalnavigáció szerkesztése."
+
+#: admin/views/Manage_fm.php:394 admin/views/Manage_fm.php:407
+#: admin/views/Manage_fm.php:419 admin/views/Manage_fm.php:434
+msgid "Cancel"
+msgstr "Kilépés"
+
+#: admin/views/Uninstall_fm.php:101
+msgid "You are About to Uninstall %s from WordPress. This Action Is Not Reversible."
+msgstr "Éppen el kívánja távolítani a WordPressből ezt: %s. Ezt a műveletet nem lehet visszavonni."
+
+#: admin/views/Uninstall_fm.php:99
+msgid "UNINSTALL"
+msgstr "ELTÁVOLÍTÁS"
+
+#: admin/views/Uninstall_fm.php:89
+msgid "Do you really want to uninstall %s?"
+msgstr "Biztosan szeretné eltávolítani ezt: %s?"
+
+#: admin/views/Uninstall_fm.php:68
+msgid "The following Database Tables will be deleted:"
+msgstr "A következő adatbázistáblák törlődni fognak:"
+
+#: admin/views/Uninstall_fm.php:61
+msgid "Deactivating %s plugin does not remove any data that may have been created. To completely remove this plugin, you can uninstall it here."
+msgstr "A %s bővítmény kikapcsolása nem jár adatok törlésével. Ha teljesen szeretné eltávolítani ezt a bővítményt, itt megteheti."
+
+#: admin/views/Uninstall_fm.php:57
+msgid ""
+"Before uninstalling the plugin, please Contact our %s. We'll do our best to help you out with your issue. We value each and every user and value what's right for our users in everything we do.<br />\n"
+"      However, if anyway you have made a decision to uninstall the plugin, please take a minute to %s and tell what you didn't like for our plugins further improvement and development. Thank you !!!"
+msgstr ""
+"A bővítmény eltávolítása előtt kérjük, lépjen kapcsolatba velünk: %s. Mindent megteszünk, hogy megoldjuk a problémát. Minden egyes felhasználónkat megbecsüljük, és a felhasználóink érdekét tartjuk szem előtt mindenben, amit teszünk.<br />\n"
+" Ha azonban végérvényesen a bővítmény eltávolítása mellett döntött, kérjük, szánjon egy percet erre: %s. Mondja el, mit nem kedvelt a bővítményeinkben, hogy tovább tudjuk őket javítani és fejleszteni. Köszönjük!"
+
+#: admin/views/Uninstall_fm.php:55
+msgid "support team"
+msgstr "ügyfélszolgálat"
+
+#: admin/views/Manage_fm.php:2169
+msgid "here"
+msgstr "itt"
+
+#: admin/views/Manage_fm.php:2169
+msgid "You can manage your privacy settings %s."
+msgstr "Adatvédelmi beállításait itt kezelheti: %s."
+
+#: frontend/models/form_maker.php:26
+msgid "There is no form selected or the form was deleted."
+msgstr "Nincs kijelölt űrlap vagy az űrlapot törölték."
+
+#: framework/WDW_FM_Library.php:6090
+msgid "Select a form"
+msgstr "Űrlap kijelölése"
+
+#: admin/views/Uninstall_fm.php:73
+msgid "Database Tables"
+msgstr "Adatbázistáblák"
+
+#: admin/views/Uninstall_fm.php:65
+msgid "Once uninstalled, this can't be undone. You should use a Database Backup plugin of WordPress to back up all the data first."
+msgstr "Eltávolítás után ez már nem vonható vissza. Az adatok biztonsági mentéséhez használjon egy adatbázismentő (Database backup) bővítményt."
+
+#: admin/views/Uninstall_fm.php:64
+msgid "WARNING:"
+msgstr "FIGYELEM:"
+
+#: admin/views/Manage_fm.php:2168
+msgid "This text will be used for GDPR compliance checkbox. Place {{privacy_policy}} placeholder to place \"Privacy Policy page\" link."
+msgstr "Ez a szöveg az EU általános adatvédelmi rendeletének (GDPR) megfelelő jelölőnégyzethez használatos. Az „Adatvédelmi irányelvek oldal” linkjének elhelyezéséhez használja a {{privacy_policy}} helyőrzőt."
+
+#: admin/views/Manage_fm.php:2166
+msgid "GDPR compliance text."
+msgstr "GDPR-megfelelőségi szöveg."
+
+#: admin/views/Manage_fm.php:2163
+msgid "Use this setting to enable GDPR compliance checkbox on form."
+msgstr "Ezzel a beállítással elhelyezhet egy GDPR-megfelelőségi jelölőnégyzetet az űrlapon."
+
+#: admin/views/Manage_fm.php:2158
+msgid "Enable GDPR compliance checkbox."
+msgstr "GDPR-megfelelőségi jelölőnégyzet engedélyezése."
+
+#: admin/views/Manage_fm.php:840 admin/views/Manage_fm.php:999
+msgid "In addition, relaying mail servers may consider the emails as phishing."
+msgstr "Ezen kívül a levélátjátszó e-mail szerverek adathalászatnak is tekinthetik az e-mailt."
+
+#: admin/views/Manage_fm.php:839 admin/views/Manage_fm.php:998
+msgid "If sender email address is not hosted on the same domain as your website, some hosting providers may not send the emails."
+msgstr "Ha a feladó e-mail címe nem ugyanazon a domainen van, mint a weboldal, akkor egyes tárhelyszolgáltatóknál előfordulhat, hogy nem küldik el a levelet."
+
+#: admin/views/Manage_fm.php:837 admin/views/Manage_fm.php:996
+msgid "We recommend you to use an email address belonging to your website domain."
+msgstr "Azt ajánljuk, hogy a website domainjéhez tartozó e-mail címet használjon."
+
+#: admin/controllers/elementorWidget.php:68
+msgid "Edit form"
+msgstr "Űrlap szerkesztése"
+
+#: admin/controllers/elementorWidget.php:68
+msgid "Select the form to display."
+msgstr "Jelölje ki a szerkesztendő űrlapot."
+
+#: admin/controllers/Manage_fm.php:892 admin/models/Manage_fm.php:68
+#: admin/models/Manage_fm.php:75 admin/models/Manage_fm.php:140
+#: admin/models/Manage_fm.php:162 admin/models/Manage_fm.php:169
+#: admin/models/Manage_fm.php:257 frontend/models/form_maker.php:1457
+#: frontend/models/form_maker.php:1464 frontend/views/form_maker.php:258
+msgid "I consent collecting this data and processing it according to {{privacy_policy}} of this website."
+msgstr "Beleegyezem, hogy ezeket az adatokat a weboldalon található {{privacy_policy}} szerint gyűjtsék és dolgozzák fel."
+
+#: frontend/models/form_maker.php:1365
+msgid "Error, something went wrong."
+msgstr "Hiba történt…"
+
+#: form-maker.php:1684
+msgid "The current version of %s extensions are not compatible with Form Maker. Some functions may not work correctly. Please update the extensions to fully use its features."
+msgstr "A(z) %s kiterjesztések jelenlegi verziója nem kompatibilis a Form Makerrel. Előfordulhat, hogy egyes funkciók helytelenül fognak működni. Kérjük, a funkciók teljes körű kihasználása érdekében frissítse a bővítményeket."
+
+#: form-maker.php:1683
+msgid "The current version of %s extension is not compatible with Form Maker. Some functions may not work correctly. Please update the extension to fully use its features."
+msgstr "A(z) %s kiterjesztés jelenlegi verziója nem kompatibilis a Form Makerrel. Előfordulhat, hogy egyes funkciók helytelenül fognak működni. Kérjük, a funkciók teljes körű kihasználása érdekében frissítse a bővítményt."
+
+#: form-maker.php:723
+msgid "Field is required."
+msgstr "Ezt a mezőt kötelező kitölteni."
+
+#: form-maker.php:724
+msgid "Enter a valid value."
+msgstr "Érvényes értéket adjon meg."
+
+#: admin/views/Submissions_fm.php:723
+msgid "Verified"
+msgstr "Ellenőrizve"
+
+#: admin/views/Options_fm.php:147
+msgid "Form Header Description text and Layout fields boxes of Form Maker will use TinyMCE editor, in case this setting is enabled."
+msgstr "Ha ez a beállítás be van kapcsolva, akkor az Űrlapfejléc leírása és a kinézetmezők TinyMCE szerkesztővel fognak működni."
+
+#: admin/views/Options_fm.php:142
+msgid "Enable HTML editor"
+msgstr "HTML-szerkesztő engedélyezése"
+
+#: admin/views/Manage_fm.php:3562
+msgid "All categories"
+msgstr "Minden kategória"
+
+#: wd/templates/display_subscribe.php:45
+msgid "Terms of Use"
+msgstr "Felhasználási feltételek"
+
+#: wd/templates/display_subscribe.php:11
+msgid "What data is being collected?"
+msgstr "Milyen adatokat gyűjtünk?"
+
+#: booster/view.php:160 booster/view.php:415 framework/WDW_FM_Library.php:6053
+#: wd/templates/display_subscribe.php:39
+msgid "Privacy Policy"
+msgstr "Adatvédelmi irányelvek"
+
+#: wd/templates/display_subscribe.php:5
+msgid "Hi there!"
+msgstr "Isten hozta!"
+
+#: wd/templates/display_overview.php:107
+msgid "Demo"
+msgstr "Demo"
+
+#: admin/views/Uninstall_fm.php:56
+msgid "Contact us"
+msgstr "Kapcsolat"
+
+#: wd/templates/display_deactivation_popup.php:23
+msgid "Submit and Deactivate"
+msgstr "Küldés és kikapcsolás"
+
+#: wd/templates/display_deactivation_popup.php:22
+msgid "Skip and Deactivate"
+msgstr "Kilépés és Kikapcsolás"
+
+#: wd/templates/display_deactivation_popup.php:8
+msgid "Please let us know why you are deactivating. Your answer will help us to provide you support or sometimes offer discounts. (Optional)"
+msgstr "Kérjük, mondja el, miért inaktiválja a bővítményt. Válasza segíteni fog abban, hogy jobb támogatást – és néha kedvezményeket – adjunk. (Nem kötelező.)"
+
+#: wd/templates/display_subscribe.php:23
+msgid "List of plugins"
+msgstr "Bővítmények felsorolása"
+
+#: booster/view.php:150
+msgid "Email address"
+msgstr "Email cím"
+
+#: wd/templates/display_overview.php:111
+msgid "User Guide"
+msgstr "Felhasználói útmutató"
+
+#: wd/includes/deactivate.php:34
+msgid "Temporary deactivation"
+msgstr "Ideiglenes kikapcsolás"
+
+#: wd/includes/deactivate.php:30
+msgid "Upgrading to paid version"
+msgstr "Frissítés fizetős verzióra"
+
+#: wd/includes/deactivate.php:26
+msgid "Free version is limited"
+msgstr "Az ingyenes verzió korlátozott"
+
+#: wd/includes/deactivate.php:22
+msgid "Technical problems / hard to use"
+msgstr "Technikai problémák / nehéz használni"
+
+#: frontend/views/form_maker.php:3416
+msgid "PM"
+msgstr "du."
+
+#: frontend/views/form_maker.php:3415
+msgid "AM"
+msgstr "de."
+
+#: frontend/views/form_maker.php:1124
+msgid "The email addresses don't match"
+msgstr "Az e-mail címek nem azonosak"
+
+#: frontend/views/form_maker.php:571
+msgid "Password values don't match"
+msgstr "A jelszóértékek nem egyeznek"
+
+#: frontend/models/form_maker.php:2548 frontend/models/form_maker.php:2702
+#: frontend/models/form_maker.php:2774 frontend/models/form_maker.php:2800
+#: frontend/models/form_maker.php:2904
+msgid "Database error occurred. Please try again."
+msgstr "Hiba történt az adatbázisban. Kérjük, próbálkozzék újra."
+
+#: frontend/models/form_maker.php:2500
+msgid "This field %s requires a unique entry."
+msgstr "Ez a(z) %s mező egyedi bejegyzést igényel."
+
+#: form-maker.php:725 frontend/models/form_maker.php:2471
+msgid "Enter a valid email address."
+msgstr "Érvényes e-mail címet adjon meg."
+
+#: framework/WDW_FM_Library.php:3561 frontend/models/form_maker.php:2467
+msgid "%s field is required."
+msgstr "%s: a mező kitöltése kötelező."
+
+#: frontend/models/form_maker.php:1749
+msgid "Can not upload this type of file."
+msgstr "Ilyen típusú fájl nem tölthető fel."
+
+#: frontend/models/form_maker.php:1604
+msgid "This is not a valid date format."
+msgstr "Érvénytelen dátumformátum."
+
+#: frontend/models/form_maker.php:42
+msgid "The form you are trying to view has been unpublished."
+msgstr "A megtekinteni kívánt űrlap közzétételét visszavonták."
+
+#: frontend/models/form_maker.php:31
+msgid "The form you are trying to view does not have Embedded display type."
+msgstr "A megtekinteni kívánt űrlapnak nincs beágyazott megjelenítési típusa."
+
+#: framework/WDW_FM_Library.php:6005
+msgid "All personal data and submissions of this user found in %s plugin were removed."
+msgstr "A(z) %s bővítményben e felhasználó minden személyes adata és beküldése el lett távolítva."
+
+#: framework/WDW_FM_Library.php:5983
+msgid " Submissions"
+msgstr " Beküldések"
+
+#: framework/WDW_FM_Library.php:5853 framework/WDW_FM_Library.php:5968
+msgid "Submission Date"
+msgstr "Beküldés dátuma"
+
+#: framework/WDW_FM_Library.php:5964
+msgid "Submitter IP"
+msgstr "Beküldő IP-címe"
+
+#: framework/WDW_FM_Library.php:5959
+msgid "Submitter Email"
+msgstr "Beküldő e-mail címe"
+
+#: framework/WDW_FM_Library.php:5955
+msgid "Submitter Name"
+msgstr "Beküldő neve"
+
+#: framework/WDW_FM_Library.php:5858
+msgid "Verification Link"
+msgstr "Ellenőrzőlink"
+
+#: framework/WDW_FM_Library.php:5857
+msgid "Page Url"
+msgstr "Oldal URL-je"
+
+#: framework/WDW_FM_Library.php:5856
+msgid "User Name"
+msgstr "Felhasználó neve"
+
+#: framework/WDW_FM_Library.php:5855
+msgid "User Email"
+msgstr "Felhasználó e-mail címe"
+
+#: framework/WDW_FM_Library.php:5854
+msgid "Admin Email"
+msgstr "Rendszergazda e-mail címe"
+
+#: framework/WDW_FM_Library.php:5852
+msgid "Submission ID"
+msgstr "Beküldés azonosítója"
+
+#: framework/WDW_FM_Library.php:5848
+msgid "Form fields"
+msgstr "Űrlapmezők"
+
+#: framework/WDW_FM_Library.php:5835
+msgid "All fields list"
+msgstr "Minden mező felsorolása"
+
+#: framework/WDW_FM_Library.php:5345
+msgid "Sa"
+msgstr "Szo"
+
+#: framework/WDW_FM_Library.php:5345
+msgid "Fr"
+msgstr "P"
+
+#: framework/WDW_FM_Library.php:5345
+msgid "Th"
+msgstr "Cs"
+
+#: framework/WDW_FM_Library.php:5345
+msgid "We"
+msgstr "Sze"
+
+#: framework/WDW_FM_Library.php:5345
+msgid "Tu"
+msgstr "K"
+
+#: framework/WDW_FM_Library.php:5345
+msgid "Mo"
+msgstr "H"
+
+#: framework/WDW_FM_Library.php:5345
+msgid "Su"
+msgstr "V"
+
+#: framework/WDW_FM_Library.php:5344
+msgid "Sat"
+msgstr "Szo"
+
+#: framework/WDW_FM_Library.php:5344
+msgid "Fri"
+msgstr "Pé"
+
+#: framework/WDW_FM_Library.php:5344
+msgid "Thu"
+msgstr "Csüt"
+
+#: framework/WDW_FM_Library.php:5344
+msgid "Wed"
+msgstr "Sze"
+
+#: framework/WDW_FM_Library.php:5344
+msgid "Tue"
+msgstr "Ke"
+
+#: framework/WDW_FM_Library.php:5344
+msgid "Mon"
+msgstr "Hét"
+
+#: framework/WDW_FM_Library.php:5344
+msgid "Sun"
+msgstr "Vas"
+
+#: framework/WDW_FM_Library.php:5342
+msgid "Dec"
+msgstr "Dec"
+
+#: framework/WDW_FM_Library.php:5342
+msgid "Nov"
+msgstr "Nov"
+
+#: framework/WDW_FM_Library.php:5342
+msgid "Oct"
+msgstr "Okt"
+
+#: framework/WDW_FM_Library.php:5342
+msgid "Sep"
+msgstr "Szep"
+
+#: framework/WDW_FM_Library.php:5342
+msgid "Aug"
+msgstr "Aug"
+
+#: framework/WDW_FM_Library.php:5342
+msgid "Jul"
+msgstr "Júl"
+
+#: framework/WDW_FM_Library.php:5342
+msgid "Jun"
+msgstr "Jún"
+
+#: framework/WDW_FM_Library.php:5342
+msgid "Apr"
+msgstr "Ápr"
+
+#: framework/WDW_FM_Library.php:5342
+msgid "Mar"
+msgstr "Márc"
+
+#: framework/WDW_FM_Library.php:5342
+msgid "Feb"
+msgstr "Febr"
+
+#: framework/WDW_FM_Library.php:5342
+msgid "Jan"
+msgstr "Jan"
+
+#: framework/WDW_FM_Library.php:5340
+msgid "Today"
+msgstr "Ma"
+
+#: framework/WDW_FM_Library.php:5338
+msgid "Prev"
+msgstr "Előző"
+
+#: framework/WDW_FM_Library.php:5297
+msgid "Wyoming"
+msgstr "Wyoming"
+
+#: framework/WDW_FM_Library.php:5296
+msgid "Wisconsin"
+msgstr "Wisconsin"
+
+#: framework/WDW_FM_Library.php:5295
+msgid "West Virginia"
+msgstr "West Virginia"
+
+#: framework/WDW_FM_Library.php:5294
+msgid "Washington"
+msgstr "Washington"
+
+#: framework/WDW_FM_Library.php:5293
+msgid "Virginia"
+msgstr "Virginia"
+
+#: framework/WDW_FM_Library.php:5292
+msgid "Vermont"
+msgstr "Vermont"
+
+#: framework/WDW_FM_Library.php:5291
+msgid "Utah"
+msgstr "Utah"
+
+#: framework/WDW_FM_Library.php:5290
+msgid "Texas"
+msgstr "Texas"
+
+#: framework/WDW_FM_Library.php:5289
+msgid "Tennessee"
+msgstr "Tennessee"
+
+#: framework/WDW_FM_Library.php:5288
+msgid "South Dakota"
+msgstr "South Dakota"
+
+#: framework/WDW_FM_Library.php:5287
+msgid "South Carolina"
+msgstr "South Carolina"
+
+#: framework/WDW_FM_Library.php:5286
+msgid "Rhode Island"
+msgstr "Rhode Island"
+
+#: framework/WDW_FM_Library.php:5285
+msgid "Pennsylvania"
+msgstr "Pennsylvania"
+
+#: framework/WDW_FM_Library.php:5284
+msgid "Oregon"
+msgstr "Oregon"
+
+#: framework/WDW_FM_Library.php:5283
+msgid "Oklahoma"
+msgstr "Oklahoma"
+
+#: framework/WDW_FM_Library.php:5282
+msgid "Ohio"
+msgstr "Ohio"
+
+#: framework/WDW_FM_Library.php:5281
+msgid "North Dakota"
+msgstr "North Dakota"
+
+#: framework/WDW_FM_Library.php:5280
+msgid "North Carolina"
+msgstr "North Carolina"
+
+#: framework/WDW_FM_Library.php:5279
+msgid "New York"
+msgstr "New York"
+
+#: framework/WDW_FM_Library.php:5278
+msgid "New Mexico"
+msgstr "New Mexico"
+
+#: framework/WDW_FM_Library.php:5277
+msgid "New Jersey"
+msgstr "New Jersey"
+
+#: framework/WDW_FM_Library.php:5276
+msgid "New Hampshire"
+msgstr "New Hampshire"
+
+#: framework/WDW_FM_Library.php:5275
+msgid "Nevada"
+msgstr "Nevada"
+
+#: framework/WDW_FM_Library.php:5274
+msgid "Nebraska"
+msgstr "Nebraska"
+
+#: framework/WDW_FM_Library.php:5273
+msgid "Montana"
+msgstr "Montana"
+
+#: framework/WDW_FM_Library.php:5272
+msgid "Missouri"
+msgstr "Missouri"
+
+#: framework/WDW_FM_Library.php:5271
+msgid "Mississippi"
+msgstr "Mississippi"
+
+#: framework/WDW_FM_Library.php:5270
+msgid "Minnesota"
+msgstr "Minnesota"
+
+#: framework/WDW_FM_Library.php:5269
+msgid "Michigan"
+msgstr "Michigan"
+
+#: framework/WDW_FM_Library.php:5268
+msgid "Massachusetts"
+msgstr "Massachusetts"
+
+#: framework/WDW_FM_Library.php:5267
+msgid "Maryland"
+msgstr "Maryland"
+
+#: framework/WDW_FM_Library.php:5266
+msgid "Maine"
+msgstr "Maine"
+
+#: framework/WDW_FM_Library.php:5265
+msgid "Louisiana"
+msgstr "Louisiana"
+
+#: framework/WDW_FM_Library.php:5264
+msgid "Kentucky"
+msgstr "Kentucky"
+
+#: framework/WDW_FM_Library.php:5263
+msgid "Kansas"
+msgstr "Kansas"
+
+#: framework/WDW_FM_Library.php:5262
+msgid "Iowa"
+msgstr "Iowa"
+
+#: framework/WDW_FM_Library.php:5261
+msgid "Indiana"
+msgstr "Indiana"
+
+#: framework/WDW_FM_Library.php:5260
+msgid "Illinois"
+msgstr "Illinois"
+
+#: framework/WDW_FM_Library.php:5259
+msgid "Idaho"
+msgstr "Idaho"
+
+#: framework/WDW_FM_Library.php:5258
+msgid "Hawaii"
+msgstr "Hawaii"
+
+#: framework/WDW_FM_Library.php:5256
+msgid "Florida"
+msgstr "Florida"
+
+#: framework/WDW_FM_Library.php:5255
+msgid "District Of Columbia"
+msgstr "District Of Columbia"
+
+#: framework/WDW_FM_Library.php:5254
+msgid "Delaware"
+msgstr "Delaware"
+
+#: framework/WDW_FM_Library.php:5253
+msgid "Connecticut"
+msgstr "Connecticut"
+
+#: framework/WDW_FM_Library.php:5252
+msgid "Colorado"
+msgstr "Colorado"
+
+#: framework/WDW_FM_Library.php:5251
+msgid "California"
+msgstr "California"
+
+#: framework/WDW_FM_Library.php:5250
+msgid "Arkansas"
+msgstr "Arkansas"
+
+#: framework/WDW_FM_Library.php:5249
+msgid "Arizona"
+msgstr "Arizona"
+
+#: framework/WDW_FM_Library.php:5248
+msgid "Alaska"
+msgstr "Alaska"
+
+#: framework/WDW_FM_Library.php:5247
+msgid "Alabama"
+msgstr "Alabama"
+
+#: framework/WDW_FM_Library.php:5233
+msgid "Zimbabwe"
+msgstr "Zimbabwe"
+
+#: framework/WDW_FM_Library.php:5232
+msgid "Zambia"
+msgstr "Zambia"
+
+#: framework/WDW_FM_Library.php:5231
+msgid "Yemen"
+msgstr "Jemen"
+
+#: framework/WDW_FM_Library.php:5230
+msgid "Wales"
+msgstr "Wales"
+
+#: framework/WDW_FM_Library.php:5229
+msgid "Vietnam"
+msgstr "Vietnám"
+
+#: framework/WDW_FM_Library.php:5228
+msgid "Venezuela"
+msgstr "Venezuela"
+
+#: framework/WDW_FM_Library.php:5227
+msgid "Vatican City"
+msgstr "Vatikán"
+
+#: framework/WDW_FM_Library.php:5226
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+#: framework/WDW_FM_Library.php:5225
+msgid "Uzbekistan"
+msgstr "Üzbegisztán"
+
+#: framework/WDW_FM_Library.php:5224
+msgid "Uruguay"
+msgstr "Uruguay"
+
+#: framework/WDW_FM_Library.php:5223
+msgid "United States"
+msgstr "USA"
+
+#: framework/WDW_FM_Library.php:5222
+msgid "United Kingdom"
+msgstr "Egyesült Királyság"
+
+#: framework/WDW_FM_Library.php:5221
+msgid "United Arab Emirates"
+msgstr "Egyesült Arab Emírségek"
+
+#: framework/WDW_FM_Library.php:5220
+msgid "Ukraine"
+msgstr "Ukrajna"
+
+#: framework/WDW_FM_Library.php:5219
+msgid "Uganda"
+msgstr "Uganda"
+
+#: framework/WDW_FM_Library.php:5218
+msgid "Tuvalu"
+msgstr "Tuvalu"
+
+#: framework/WDW_FM_Library.php:5217
+msgid "Turkmenistan"
+msgstr "Türkmenisztán"
+
+#: framework/WDW_FM_Library.php:5216
+msgid "Turkey"
+msgstr "Törökország"
+
+#: framework/WDW_FM_Library.php:5215
+msgid "Tunisia"
+msgstr "Tunézia"
+
+#: framework/WDW_FM_Library.php:5214
+msgid "Trinidad and Tobago"
+msgstr "Trinidad és Tobago"
+
+#: framework/WDW_FM_Library.php:5213
+msgid "Tonga"
+msgstr "Tonga"
+
+#: framework/WDW_FM_Library.php:5212
+msgid "Togo"
+msgstr "Togo"
+
+#: framework/WDW_FM_Library.php:5211
+msgid "Thailand"
+msgstr "Thaiföld"
+
+#: framework/WDW_FM_Library.php:5210
+msgid "Tanzania"
+msgstr "Tanzánia"
+
+#: framework/WDW_FM_Library.php:5209
+msgid "Tajikistan"
+msgstr "Tádzsikisztán"
+
+#: framework/WDW_FM_Library.php:5208
+msgid "Taiwan"
+msgstr "Tajvan"
+
+#: framework/WDW_FM_Library.php:5207
+msgid "Syria"
+msgstr "Szíria"
+
+#: framework/WDW_FM_Library.php:5206
+msgid "Switzerland"
+msgstr "Svájc"
+
+#: framework/WDW_FM_Library.php:5205
+msgid "Sweden"
+msgstr "Svédország"
+
+#: framework/WDW_FM_Library.php:5203
+msgid "Suriname"
+msgstr "Suriname"
+
+#: framework/WDW_FM_Library.php:5202
+msgid "Sudan"
+msgstr "Szudán"
+
+#: framework/WDW_FM_Library.php:5201
+msgid "Sri Lanka"
+msgstr "Srí Lanka"
+
+#: framework/WDW_FM_Library.php:5200
+msgid "Spain"
+msgstr "Spanyolország"
+
+#: framework/WDW_FM_Library.php:5198
+msgid "South Africa"
+msgstr "Dél-Afrika"
+
+#: framework/WDW_FM_Library.php:5197
+msgid "Somalia"
+msgstr "Szomália"
+
+#: framework/WDW_FM_Library.php:5196
+msgid "Solomon Islands"
+msgstr "Salamon-szigetek"
+
+#: framework/WDW_FM_Library.php:5195
+msgid "Slovenia"
+msgstr "Szlovénia"
+
+#: framework/WDW_FM_Library.php:5194
+msgid "Slovakia"
+msgstr "Szlovákia"
+
+#: framework/WDW_FM_Library.php:5193
+msgid "Singapore"
+msgstr "Szingapúr"
+
+#: framework/WDW_FM_Library.php:5192
+msgid "Sierra Leone"
+msgstr "Sierra Leone"
+
+#: framework/WDW_FM_Library.php:5191
+msgid "Seychelles"
+msgstr "Seychelles-szigetek"
+
+#: framework/WDW_FM_Library.php:5188
+msgid "Senegal"
+msgstr "Szenegál"
+
+#: framework/WDW_FM_Library.php:5187
+msgid "Saudi Arabia"
+msgstr "Szaúd-Arábia"
+
+#: framework/WDW_FM_Library.php:5186
+msgid "Sao Tome and Principe"
+msgstr "São Tomé és Príncipe"
+
+#: framework/WDW_FM_Library.php:5185
+msgid "San Marino"
+msgstr "San Marino"
+
+#: framework/WDW_FM_Library.php:5184
+msgid "Samoa"
+msgstr "Szamoa"
+
+#: framework/WDW_FM_Library.php:5183
+msgid "Saint Vincent"
+msgstr "Saint Vincent"
+
+#: framework/WDW_FM_Library.php:5182
+msgid "Saint Lucia"
+msgstr "Saint Lucia"
+
+#: framework/WDW_FM_Library.php:5181
+msgid "Saint Kitts and Nevis"
+msgstr "Saint Kitts and Nevis"
+
+#: framework/WDW_FM_Library.php:5180
+msgid "Rwanda"
+msgstr "Ruanda"
+
+#: framework/WDW_FM_Library.php:5179
+msgid "Russia"
+msgstr "Oroszország"
+
+#: framework/WDW_FM_Library.php:5178
+msgid "Romania"
+msgstr "Románia"
+
+#: framework/WDW_FM_Library.php:5177
+msgid "Qatar"
+msgstr "Katar"
+
+#: framework/WDW_FM_Library.php:5176
+msgid "Puerto Rico"
+msgstr "Puerto Rico"
+
+#: framework/WDW_FM_Library.php:5175
+msgid "Portugal"
+msgstr "Portugália"
+
+#: framework/WDW_FM_Library.php:5174
+msgid "Poland"
+msgstr "Lengyelország"
+
+#: framework/WDW_FM_Library.php:5173
+msgid "Philippines"
+msgstr "Fülöp-szigetek"
+
+#: framework/WDW_FM_Library.php:5172
+msgid "Peru"
+msgstr "Peru"
+
+#: framework/WDW_FM_Library.php:5171
+msgid "Paraguay"
+msgstr "Paraguay"
+
+#: framework/WDW_FM_Library.php:5170
+msgid "Papua New Guinea"
+msgstr "Pápua Új-Guinea"
+
+#: framework/WDW_FM_Library.php:5169
+msgid "Panama"
+msgstr "Panama"
+
+#: framework/WDW_FM_Library.php:5167
+msgid "Palau"
+msgstr "Palau"
+
+#: framework/WDW_FM_Library.php:5166
+msgid "Pakistan"
+msgstr "Pakisztán"
+
+#: framework/WDW_FM_Library.php:5165
+msgid "Oman"
+msgstr "Omán"
+
+#: framework/WDW_FM_Library.php:5164
+msgid "Norway"
+msgstr "Norvégia"
+
+#: framework/WDW_FM_Library.php:5163
+msgid "Nigeria"
+msgstr "Nigéria"
+
+#: framework/WDW_FM_Library.php:5162
+msgid "Niger"
+msgstr "Niger"
+
+#: framework/WDW_FM_Library.php:5161
+msgid "Nicaragua"
+msgstr "Nicaragua"
+
+#: framework/WDW_FM_Library.php:5160
+msgid "New Zealand"
+msgstr "Új-Zéland"
+
+#: framework/WDW_FM_Library.php:5159
+msgid "Netherlands"
+msgstr "Hollandia"
+
+#: framework/WDW_FM_Library.php:5158
+msgid "Nepal"
+msgstr "Nepál"
+
+#: framework/WDW_FM_Library.php:5157
+msgid "Nauru"
+msgstr "Nauru"
+
+#: framework/WDW_FM_Library.php:5156
+msgid "Namibia"
+msgstr "Namíbia"
+
+#: framework/WDW_FM_Library.php:5155
+msgid "Myanmar"
+msgstr "Burma"
+
+#: framework/WDW_FM_Library.php:5154
+msgid "Mozambique"
+msgstr "Mozambik"
+
+#: framework/WDW_FM_Library.php:5153
+msgid "Morocco"
+msgstr "Marokkó"
+
+#: framework/WDW_FM_Library.php:5152
+msgid "Mongolia"
+msgstr "Mongólia"
+
+#: framework/WDW_FM_Library.php:5151
+msgid "Monaco"
+msgstr "Monaco"
+
+#: framework/WDW_FM_Library.php:5150
+msgid "Moldova"
+msgstr "Moldova"
+
+#: framework/WDW_FM_Library.php:5149
+msgid "Micronesia"
+msgstr "Mikronézia"
+
+#: framework/WDW_FM_Library.php:5148
+msgid "Mexico"
+msgstr "Mexikó"
+
+#: framework/WDW_FM_Library.php:5147
+msgid "Mauritius"
+msgstr "Mauritius"
+
+#: framework/WDW_FM_Library.php:5146
+msgid "Mauritania"
+msgstr "Mauritánia"
+
+#: framework/WDW_FM_Library.php:5145
+msgid "Marshall Islands"
+msgstr "Marshall-szigetek"
+
+#: framework/WDW_FM_Library.php:5144
+msgid "Malta"
+msgstr "Málta"
+
+#: framework/WDW_FM_Library.php:5143
+msgid "Mali"
+msgstr "Mali"
+
+#: framework/WDW_FM_Library.php:5142
+msgid "Maldives"
+msgstr "Maldív-szigetek"
+
+#: framework/WDW_FM_Library.php:5141
+msgid "Malaysia"
+msgstr "Malajzia"
+
+#: framework/WDW_FM_Library.php:5140
+msgid "Malawi"
+msgstr "Malawi"
+
+#: framework/WDW_FM_Library.php:5139
+msgid "Madagascar"
+msgstr "Madagaszkár"
+
+#: framework/WDW_FM_Library.php:5137
+msgid "Luxembourg"
+msgstr "Luxemburg"
+
+#: framework/WDW_FM_Library.php:5136
+msgid "Lithuania"
+msgstr "Litvánia"
+
+#: framework/WDW_FM_Library.php:5135
+msgid "Liechtenstein"
+msgstr "Liechtenstein"
+
+#: framework/WDW_FM_Library.php:5134
+msgid "Libya"
+msgstr "Líbia"
+
+#: framework/WDW_FM_Library.php:5133
+msgid "Liberia"
+msgstr "Libéria"
+
+#: framework/WDW_FM_Library.php:5132
+msgid "Lesotho"
+msgstr "Lesotho"
+
+#: framework/WDW_FM_Library.php:5131
+msgid "Lebanon"
+msgstr "Libanon"
+
+#: framework/WDW_FM_Library.php:5130
+msgid "Latvia"
+msgstr "Lettország"
+
+#: framework/WDW_FM_Library.php:5129
+msgid "Laos"
+msgstr "Laosz"
+
+#: framework/WDW_FM_Library.php:5128
+msgid "Kyrgyzstan"
+msgstr "Kirgizisztán"
+
+#: framework/WDW_FM_Library.php:5127
+msgid "Kuwait"
+msgstr "Kuvait"
+
+#: framework/WDW_FM_Library.php:5126
+msgid "Korea, South"
+msgstr "Dél-Korea"
+
+#: framework/WDW_FM_Library.php:5125
+msgid "Korea, North"
+msgstr "Észak-Korea"
+
+#: framework/WDW_FM_Library.php:5124
+msgid "Kiribati"
+msgstr "Kiribati"
+
+#: framework/WDW_FM_Library.php:5123
+msgid "Kenya"
+msgstr "Kenya"
+
+#: framework/WDW_FM_Library.php:5122
+msgid "Kazakhstan"
+msgstr "Kazahsztán"
+
+#: framework/WDW_FM_Library.php:5121
+msgid "Jordan"
+msgstr "Jordánia"
+
+#: framework/WDW_FM_Library.php:5120
+msgid "Japan"
+msgstr "Japán"
+
+#: framework/WDW_FM_Library.php:5119
+msgid "Jamaica"
+msgstr "Jamaica"
+
+#: framework/WDW_FM_Library.php:5118
+msgid "Italy"
+msgstr "Olaszország"
+
+#: framework/WDW_FM_Library.php:5117
+msgid "Israel"
+msgstr "Izrael"
+
+#: framework/WDW_FM_Library.php:5116
+msgid "Ireland"
+msgstr "Írország"
+
+#: framework/WDW_FM_Library.php:5115
+msgid "Iraq"
+msgstr "Irak"
+
+#: framework/WDW_FM_Library.php:5114
+msgid "Iran"
+msgstr "Irán"
+
+#: framework/WDW_FM_Library.php:5113
+msgid "Indonesia"
+msgstr "Indonézia"
+
+#: framework/WDW_FM_Library.php:5112
+msgid "India"
+msgstr "India"
+
+#: framework/WDW_FM_Library.php:5111
+msgid "Iceland"
+msgstr "Izland"
+
+#: framework/WDW_FM_Library.php:5110
+msgid "Hungary"
+msgstr "Magyarország"
+
+#: framework/WDW_FM_Library.php:5109
+msgid "Hong Kong"
+msgstr "Hong Kong"
+
+#: framework/WDW_FM_Library.php:5108
+msgid "Honduras"
+msgstr "Honduras"
+
+#: framework/WDW_FM_Library.php:5107
+msgid "Haiti"
+msgstr "Haiti"
+
+#: framework/WDW_FM_Library.php:5106
+msgid "Guyana"
+msgstr "Guyana"
+
+#: framework/WDW_FM_Library.php:5105
+msgid "Guinea-Bissau"
+msgstr "Bissau-Guinea"
+
+#: framework/WDW_FM_Library.php:5104
+msgid "Guinea"
+msgstr "Guinea"
+
+#: framework/WDW_FM_Library.php:5103
+msgid "Guatemala"
+msgstr "Guatemala"
+
+#: framework/WDW_FM_Library.php:5102
+msgid "Grenada"
+msgstr "Grenada"
+
+#: framework/WDW_FM_Library.php:5101
+msgid "Greece"
+msgstr "Görögország"
+
+#: framework/WDW_FM_Library.php:5100
+msgid "Ghana"
+msgstr "Ghána"
+
+#: framework/WDW_FM_Library.php:5099
+msgid "Germany"
+msgstr "Németország"
+
+#: framework/WDW_FM_Library.php:5098 framework/WDW_FM_Library.php:5257
+msgid "Georgia"
+msgstr "Grúzia"
+
+#: framework/WDW_FM_Library.php:5097
+msgid "Gambia, The"
+msgstr "Gambia"
+
+#: framework/WDW_FM_Library.php:5096
+msgid "Gabon"
+msgstr "Gabon"
+
+#: framework/WDW_FM_Library.php:5095
+msgid "France"
+msgstr "Franciaország"
+
+#: framework/WDW_FM_Library.php:5094
+msgid "Finland"
+msgstr "Finnország"
+
+#: framework/WDW_FM_Library.php:5093
+msgid "Fiji"
+msgstr "Fidzsi-szigetek"
+
+#: framework/WDW_FM_Library.php:5092
+msgid "Ethiopia"
+msgstr "Etiópia"
+
+#: framework/WDW_FM_Library.php:5091
+msgid "Estonia"
+msgstr "Észtország"
+
+#: framework/WDW_FM_Library.php:5090
+msgid "Eritrea"
+msgstr "Eritrea"
+
+#: framework/WDW_FM_Library.php:5089
+msgid "Equatorial Guinea"
+msgstr "Egyenlitői Guinea"
+
+#: framework/WDW_FM_Library.php:5088
+msgid "El Salvador"
+msgstr "Salvador"
+
+#: framework/WDW_FM_Library.php:5087
+msgid "Egypt"
+msgstr "Egyiptom"
+
+#: framework/WDW_FM_Library.php:5086
+msgid "Ecuador"
+msgstr "Ecuador"
+
+#: framework/WDW_FM_Library.php:5085
+msgid "East Timor (Timor Timur)"
+msgstr "Kelet-Timor"
+
+#: framework/WDW_FM_Library.php:5084
+msgid "Dominican Republic"
+msgstr "Dominikai Köztársaság"
+
+#: framework/WDW_FM_Library.php:5083
+msgid "Dominica"
+msgstr "Dominikai Közösség"
+
+#: framework/WDW_FM_Library.php:5082
+msgid "Djibouti"
+msgstr "Dzsibuti"
+
+#: framework/WDW_FM_Library.php:5081
+msgid "Denmark"
+msgstr "Dánia"
+
+#: framework/WDW_FM_Library.php:5080
+msgid "Czech Republic"
+msgstr "Cseh Köztársaság"
+
+#: framework/WDW_FM_Library.php:5079
+msgid "Cyprus"
+msgstr "Ciprus"
+
+#: framework/WDW_FM_Library.php:5078
+msgid "Curacao"
+msgstr "Curaçao"
+
+#: framework/WDW_FM_Library.php:5077
+msgid "Cuba"
+msgstr "Kuba"
+
+#: framework/WDW_FM_Library.php:5076
+msgid "Croatia"
+msgstr "Horvátország"
+
+#: framework/WDW_FM_Library.php:5075
+msgid "Cote d'Ivoire"
+msgstr "Elefántcsontpart"
+
+#: framework/WDW_FM_Library.php:5074
+msgid "Costa Rica"
+msgstr "Costa Rica"
+
+#: framework/WDW_FM_Library.php:5073
+msgid "Congo"
+msgstr "Kongó"
+
+#: framework/WDW_FM_Library.php:5072
+msgid "Congo (Brazzaville)"
+msgstr "Kongó (Brazzaville)"
+
+#: framework/WDW_FM_Library.php:5071
+msgid "Comoros"
+msgstr "Comore-szigetek"
+
+#: framework/WDW_FM_Library.php:5070
+msgid "Colombia"
+msgstr "Kolumbia"
+
+#: framework/WDW_FM_Library.php:5069
+msgid "China"
+msgstr "Kína"
+
+#: framework/WDW_FM_Library.php:5068
+msgid "Chile"
+msgstr "Chile"
+
+#: framework/WDW_FM_Library.php:5067
+msgid "Chad"
+msgstr "Csád"
+
+#: framework/WDW_FM_Library.php:5066
+msgid "Central African Republic"
+msgstr "Közép-Afrikai Köztársaság"
+
+#: framework/WDW_FM_Library.php:5065
+msgid "Cape Verde"
+msgstr "Zöld-foki Köztársaság"
+
+#: framework/WDW_FM_Library.php:5064
+msgid "Canada"
+msgstr "Kanada"
+
+#: framework/WDW_FM_Library.php:5063
+msgid "Cameroon"
+msgstr "Kamerun"
+
+#: framework/WDW_FM_Library.php:5062
+msgid "Cambodia"
+msgstr "Kambodzsa"
+
+#: framework/WDW_FM_Library.php:5061
+msgid "Burundi"
+msgstr "Burundi"
+
+#: framework/WDW_FM_Library.php:5060
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+#: framework/WDW_FM_Library.php:5059
+msgid "Bulgaria"
+msgstr "Bulgária"
+
+#: framework/WDW_FM_Library.php:5058
+msgid "Brunei"
+msgstr "Brunei"
+
+#: framework/WDW_FM_Library.php:5057
+msgid "Brazil"
+msgstr "Brazília"
+
+#: framework/WDW_FM_Library.php:5056
+msgid "Botswana"
+msgstr "Botswana"
+
+#: framework/WDW_FM_Library.php:5055
+msgid "Bosnia and Herzegovina"
+msgstr "Bosznia és Hercegovina"
+
+#: framework/WDW_FM_Library.php:5054
+msgid "Bolivia"
+msgstr "Bolívia"
+
+#: framework/WDW_FM_Library.php:5053
+msgid "Bhutan"
+msgstr "Bhután"
+
+#: framework/WDW_FM_Library.php:5052
+msgid "Benin"
+msgstr "Benin"
+
+#: framework/WDW_FM_Library.php:5051
+msgid "Belize"
+msgstr "Belize"
+
+#: framework/WDW_FM_Library.php:5050
+msgid "Belgium"
+msgstr "Belgium"
+
+#: framework/WDW_FM_Library.php:5049
+msgid "Belarus"
+msgstr "Fehéroroszország (Belarusz)"
+
+#: framework/WDW_FM_Library.php:5048
+msgid "Barbados"
+msgstr "Barbados"
+
+#: framework/WDW_FM_Library.php:5047
+msgid "Bangladesh"
+msgstr "Banglades"
+
+#: framework/WDW_FM_Library.php:5046
+msgid "Bahrain"
+msgstr "Bahrein"
+
+#: framework/WDW_FM_Library.php:5045
+msgid "Bahamas"
+msgstr "Bahama-szigetek"
+
+#: framework/WDW_FM_Library.php:5044
+msgid "Azerbaijan"
+msgstr "Azerbajdzsán"
+
+#: framework/WDW_FM_Library.php:5043
+msgid "Austria"
+msgstr "Ausztria"
+
+#: framework/WDW_FM_Library.php:5042
+msgid "Australia"
+msgstr "Ausztrália"
+
+#: framework/WDW_FM_Library.php:5040
+msgid "Argentina"
+msgstr "Argentína"
+
+#: framework/WDW_FM_Library.php:5039
+msgid "Antigua and Barbuda"
+msgstr "Antigua és Barbuda"
+
+#: framework/WDW_FM_Library.php:5038
+msgid "Angola"
+msgstr "Angola"
+
+#: framework/WDW_FM_Library.php:5037
+msgid "Andorra"
+msgstr "Andorra"
+
+#: framework/WDW_FM_Library.php:5036
+msgid "Algeria"
+msgstr "Algéria"
+
+#: framework/WDW_FM_Library.php:5035
+msgid "Albania"
+msgstr "Albánia"
+
+#: framework/WDW_FM_Library.php:5034
+msgid "Afghanistan"
+msgstr "Afganisztán"
+
+#: framework/WDW_FM_Library.php:4962
+msgid "No %s found."
+msgstr "%s nem található."
+
+#: framework/WDW_FM_Library.php:631
+msgid "Click to sort by this item"
+msgstr "Kattintson ide az elem szerinti sorba rendezéshez"
+
+#: form-maker.php:1825
+msgid "Rate"
+msgstr "Értékelés"
+
+#: booster/view.php:135
+msgid "Install"
+msgstr "Telepítés"
+
+#: form-maker.php:1563
+msgid "Add Submissions"
+msgstr "Beküldések hozzáadása"
+
+#: form-maker.php:1561
+msgid "Insert submissions"
+msgstr "Beküldések beszúrása"
+
+#: form-maker.php:1556
+msgid "Add Form"
+msgstr "Űrlap hozzáadása"
+
+#: form-maker.php:1554
+msgid "Insert Form"
+msgstr "Űrlap beszúrása"
+
+#: form-maker.php:1517
+msgid "Publishing Submissions"
+msgstr "Beküldések közzététele"
+
+#: form-maker.php:1512
+msgid "Managing Submissions"
+msgstr "Beküldések kezelése"
+
+#: form-maker.php:1507
+msgid "Blocking IPs"
+msgstr "IP-címek blokkolása"
+
+#: form-maker.php:1502
+msgid "Publishing the Created Form"
+msgstr "Létrehozott űrlap közzététele"
+
+#: form-maker.php:1496
+msgid "Selecting Options from Database"
+msgstr "Opciók kijelölése az adatbázisból"
+
+#: form-maker.php:1492
+msgid "Description of The Form Fields"
+msgstr "Az űrlap mezőinek leírása"
+
+#: form-maker.php:1487
+msgid "Configuring Form Options"
+msgstr "Űrlap beállításai"
+
+#: form-maker.php:1482
+msgid "Creating a new Form"
+msgstr "Új űrlap létrehozása"
+
+#: form-maker.php:1477
+msgid "Installing"
+msgstr "Telepítés"
+
+#: form-maker.php:1472
+msgid "The WordPress Form Maker plugin comes with a wide range of customizable themes. You can choose from a list of existing themes or simply create the one that better fits your brand and website."
+msgstr "A WordPress Form Maker bővítmény testreszabható témák széles választékával érkezik. Választhat a meglévő témák listájából, vagy egyszerűen létrehozhat egyet, amely jobban megfelel a márkájának és a webhelyének."
+
+#: form-maker.php:1468
+msgid "With the form builder plugin you can create muilti-page forms. Simply use the page break field to separate the pages in your forms."
+msgstr "Az űrlapkészítő bővítménnyel többoldalas űrlapokat hozhat létre. Egyszerűen használja az oldaltörés mezőt az űrlapok oldalainak elválasztásához."
+
+#: form-maker.php:1464
+msgid "You can view the submissions for each form you have. The plugin allows to view submissions statistics, filter submission data and export in csv or xml formats."
+msgstr "Megnézheti az összes űrlap beküldéseit. A bővítménnyel megtekintheti a beküldési statisztikákat, szűrheti a beküldött adatokat és exportálhatja őket csv vagy xml formátumban."
+
+#: form-maker.php:1460
+msgid "All the fields of Form Maker plugin are highly customizable, which allows you to change almost every detail in the form and make it look exactly like you want it to be."
+msgstr "A Form Maker bővítmény minden mezője nagymértékben testreszabható, ami által az űrlap szinte minden részletének megváltoztatható, és pontosan úgy nézhet ki, ahogy Ön szeretné."
+
+#: form-maker.php:1459
+msgid "Customizable Fields"
+msgstr "Testreszabható mezők"
+
+#: form-maker.php:1456
+msgid "This responsive form maker plugin is one of the most easy-to-use form builder solutions available on the market. Simple, yet powerful plugin allows you to quickly and easily build any complex forms."
+msgstr "Ez az reszponszív űrlapkészítő bővítmény a piacon elérhető egyik legkönnyebben használható űrlapkészítő megoldás. Az egyszerű, mégis erőteljes bővítménnyel bármilyen összetett űrlap gyorsan és könnyen létrehozható."
+
+#: form-maker.php:1455
+msgid "Easy to Use"
+msgstr "Könnyen kezelhető"
+
+#: form-maker.php:1452
+msgid "Form Maker plugin is a modern and advanced tool for easy and fast creating of a WordPress Form. The backend interface is intuitive and user friendly which allows users far from scripting and programming to create WordPress Forms."
+msgstr "A Form Maker bővítmény korszerű és fejlett eszköz, amellyel könnyedén és gyorsan hozhat létre WordPress űrlapokat. Az intuitív és felhasználóbarát háttérfelületen kódolás és programozás nélkül lehet űrlapokat összeállítani."
+
+#: form-maker.php:1452
+msgid "WordPress Contact Form Maker is a simple contact form builder, which allows the user with almost no knowledge of programming to create and edit different type of contact forms."
+msgstr "A WordPress Contact Form Maker egy egyszerű kapcsolatiűrlap-készítő, amellyel a programozási ismeretekkel nem rendelkező felhasználó is létrehozhat és szerkeszthet különféle típusú kapcsolattartási űrlapokat."
+
+#: form-maker.php:1349
+msgid "Oops! Seems like you installed the update over a quite old version of Form Maker. Unfortunately, this version is deprecated.<br />Please contact 10Web support team at support@10web.io. We will take care of this issue as soon as possible."
+msgstr "Ajjaj, úgy tűnik, a Form Maker egy meglehetősen régi változatára telepítette a frissítést. Ez a verzió sajnos elavult.<br />Kérjük, lépjen kapcsolatba a 10Web támogató csapatával a support@10web.io e-mail címen. A lehető leggyorsabban igyekszünk megoldani a problémát."
+
+#: form-maker.php:1228
+msgid "The year must be between %s and %s"
+msgstr "Az évnek %s és %s között kell lennie"
+
+#: form-maker.php:1227
+msgid "This is not a valid date value."
+msgstr "Érvénytelen dátumérték."
+
+#: form-maker.php:1226
+msgid "This is not a valid number value."
+msgstr "Érvénytelen számérték."
+
+#: form-maker.php:1225
+msgid "This is not a valid time value."
+msgstr "Érvénytelen időérték."
+
+#: form-maker.php:1223
+msgid "Are you sure you want to clear saved data?"
+msgstr "Biztosan törli a mentett adatokat?"
+
+#: form-maker.php:1222
+msgid "Value must be between "
+msgstr "Az értéknek ezek közé kell esnie: "
+
+#: form-maker.php:1221
+msgid " value must be between "
+msgstr " értéknek ezek között kell lennie: "
+
+#: form-maker.php:1220
+msgid "The "
+msgstr "A(z) "
+
+#: form-maker.php:1219
+msgid "Field is required"
+msgstr "A mező kitöltése kötelező"
+
+#: form-maker.php:1217
+msgid "Can not upload this type of file"
+msgstr "Ilyen típusú fájl nem tölthető fel"
+
+#: form-maker.php:1006
+msgid "Sorry, you are not allowed to access this page."
+msgstr "Sajnáljuk, Önnek nincs engedélye az oldal megtekintéséhez."
+
+#: form-maker.php:866
+msgid "You must select a form"
+msgstr "Ki kell jelölnie egy űrlapot"
+
+#: form-maker.php:734
+msgid "Add placeholder"
+msgstr "Helyőrző hozzáadása"
+
+#: form-maker.php:733
+msgid "You must select at least one item."
+msgstr "Legalább egy elemet ki kell jelölnie."
+
+#: form-maker.php:732
+msgid "Do you want to delete selected items?"
+msgstr "Törli a kijelölt elemeket?"
+
+#: form-maker.php:805
+msgid "This field adds the credit card details inputs (card number, expiration date, etc.) and allows you to accept direct payments made by credit cards."
+msgstr "Ez a mező hozzáadja a hitelkártya adatait (kártya száma, lejárati dátuma stb.), és lehetővé teszi a hitelkártyákkal történő közvetlen kifizetések elfogadását."
+
+#: form-maker.php:804
+msgid "Please Total field to your payment form to sum up the values of Payment fields. "
+msgstr "Kérjük, adjon meg egy Összesen mezőt is a fizetési űrlaphoz a Fizetés mezők értékének összegzéséhez. "
+
+#: form-maker.php:803
+msgid "Shipping allows you to configure shipping types, set price for each of them and display them on your form as radio buttons."
+msgstr "A Szállítással beállíthatja a szállítási típusokat, mindegyiknek megadhatja az árát, és az űrlapon rádiógombokként megjelenítheti őket."
+
+#: form-maker.php:802
+msgid "Payment Multiple Choice field lets you create lists of products, which the submitter can choose to buy through your form. Add or edit list items using Options setting of the fields."
+msgstr "A Fizetés többszörös választás mezővel olyan terméklistákat hozhat létre, amelyekről a beküldő több terméket is választhat az űrlapon keresztüli vásárláshoz. A Beállításokkal adhat hozzá vagy szerkeszthet mezőket."
+
+#: form-maker.php:801
+msgid "Payment Single Choice field lets you create lists of products, one of which the submitter can choose to buy through your form. Add or edit list items using Options setting of the fields."
+msgstr "A Fizetés egyszeri választás mezővel olyan terméklistákat hozhat létre, amelyekről a beküldő egy terméket választhat az űrlapon keresztüli vásárláshoz. A Beállításokkal adhat hozzá vagy szerkeszthet mezőket."
+
+#: form-maker.php:800 form-maker.php:801 form-maker.php:802
+msgid "Also, you can configure custom or built-in Product Properties for your products, such as Color, T-Shirt Size or Print Size."
+msgstr "Emellett konfigurálhatja a termékek egyedi vagy beépített tulajdonságait is, például szín, pólóméret vagy nyomtatási méret."
+
+#: form-maker.php:800 form-maker.php:801 form-maker.php:802
+msgid "Enable Quantity property from Advanced Options, in case you would like the users to mention the quantity of items they purchase."
+msgstr "Engedélyezze a Mennyiség tulajdonságot a Speciális beállításonál, ha szeretné, hogy a felhasználók megadhassák a megvásárolandó árucikkek mennyiségét."
+
+#: form-maker.php:800
+msgid "Payment Select field lets you create lists of products, one of which the submitter can choose to buy through your form. Add or edit list items using Options setting of the fields."
+msgstr "A Fizetésválasztás mezőben elkészítheti a termékek listáját, amelyek közül a beküldő kiválaszthatja, hogy mit kíván megvásárolni az űrlapon keresztül. A Beállításokkal adhat hozzá vagy szerkeszthet mezőket."
+
+#: form-maker.php:799 form-maker.php:800 form-maker.php:801 form-maker.php:802
+msgid "Note: Make sure to configure Form Options > Payment Options of your form."
+msgstr "Megjegyzés: Ügyeljen arra, hogy megfelelően legyenek konfigurálva az Űrlapbeállítások > Fizetési beállítások."
+
+#: form-maker.php:799
+msgid "Additionally, you can activate Readonly attribute. This way, users will not be able to edit the value of Price."
+msgstr "Ezen kívül aktiválhatja az írásvédett attribútumot. Ily módon a felhasználók nem tudják módosítani az ár értékét."
+
+#: form-maker.php:799
+msgid "Users can set a payment amount of their choice with Price field. Assigns minimum and maximum limits on its value using Range option."
+msgstr "A felhasználók az Ár mezőben beállíthatják a választott fizetési összeget. A Tartomány opcióval megadhatják a legkisebb és a legnagyobb értéket."
+
+#: form-maker.php:798
+msgid "Make sure to separate the operations with commas."
+msgstr "Ne felejtse el a műveleteket vesszővel elválasztani."
+
+#: form-maker.php:798
+msgid "You can set the operations using Operations option. The field can use addition (+), subtraction (-), multiplication (*) and division (/)."
+msgstr "A műveleteket a Műveletek opcióval állíthatja be. A mezőben összeadás (+), kivonás (-), szorzás (*) és osztás (/) használható."
+
+#: form-maker.php:798
+msgid "Arithmetic Captcha is quite similar to Simple Captcha. However, instead of showing random symbols, it displays arithmetic operations."
+msgstr "A számtani CAPTCHA eléggé hasonlít az egyszerű CAPTCHÁ-hoz, csak véletlenszerű szimbólumok helyett számtani műveleteket jelenít meg."
+
+#: form-maker.php:797
+msgid "Phone-Area Code is a Phone type field, which allows users to write Area Code and Phone Number into separate inputs."
+msgstr "A Telefon körzetszám egy Telefon típusú mező, amellyel a felhasználók külön-külön írhatják be a körzetszámot és a telefonszámot."
+
+#: form-maker.php:796
+msgid "You can activate Password Confirmation option to ask users to repeat the password."
+msgstr "A Jelszó megerősítése opció aktiválásával megkérheti a felhasználókat a jelszó megismételésére."
+
+#: form-maker.php:796
+msgid "Password input can be used to allow users provide secret text, such as passwords. All symbols written in this field are replaced with dots."
+msgstr "A jelszóbevitellel a felhasználók titkos szöveget, például jelszavakat adhatnak meg. A mezőbe írt szimbólum helyén pontok jelennek meg."
+
+#: form-maker.php:795
+msgid "You can write the custom Javascript code using the editor on Form Options > Javascript page."
+msgstr "Az egyedi Javascript-kódot az Űrlapbeállítások> Javascript oldal szerkesztőjével írhatja meg."
+
+#: form-maker.php:795
+msgid "In case you wish to run custom Javascript on your form, you can place Custom Button on your form. Its lets you call the script with its OnClick function."
+msgstr "Ha egyéni Javascriptet szeretne futtatni az űrlapon, akkor tegyen egy Egyedi gombot az űrlapjára. Ez az OnClick funkcióval lehetővé teszi a szkript meghívását."
+
+#: form-maker.php:794
+msgid "Name option of this field is mandatory. Note: we highly recommend you to avoid using spaces or special characters in Hidden Input name. You can write the custom Javascript code using the editor on Form Options > Javascript page."
+msgstr "Ennél a mezőnél mindenképpen meg kell adni nevet. Erősen ajánljuk, hogy a rejtett bevitel mező nevében kerülje a szóközt és a különleges karaktereket. Az egyéni JavaScript kódot megírhatja az Űrlapbeállítások > JavaScript oldalon található szerkesztővel."
+
+#: form-maker.php:794
+msgid "Hidden Input field is similar to Single Line Text field, but it is not visible to users. Hidden Fields are handy, in case you need to run a custom Javascript and submit the result with the info on your form."
+msgstr "A rejtett bevitel mező hasonlít az egysoros szöveg mezőhöz, csak a felhasználók számára láthatatlan. A rejtett mező akkor praktikus, ha egy egyéni JavaScriptet szeretne lefuttatni, és az eredményt szeretné az űrlappal beküldeni."
+
+#: form-maker.php:793
+msgid "It allows you to configure the matrix with radio buttons, checkboxes, text boxes or drop-downs. Use Input Type option to set this."
+msgstr "Ez lehetővé teszi a táblázat beállítását rádiógombokkal, jelölőnégyzetekkel, szövegmezőkkel vagy legördülő listákkal. Használja a Beviteltípus beállítást."
+
+#: form-maker.php:793
+msgid "Table of Fields lets you place a matrix on your form, which will let the submitter to answer a few questions with one field."
+msgstr "A Mezőtáblázat segítségével elhelyezhet egy táblázatot az űrlapon, amelynek segítségével a beküldő egyetlen mezővel válaszolhat több kérdésre."
+
+#: form-maker.php:792
+msgid "Items option allows you to add multiple options to your Grades field."
+msgstr "Az Elemek beállítással több lehetőséget is felvehet az Osztályok mezőbe."
+
+#: form-maker.php:792
+msgid "Users will be able to grade specified items with this field. The sum of all values will appear below the field with Total parameter."
+msgstr "A felhasználók adott elemeket osztályozhatnak ezzel a mezővel. Az összes érték összege a Összesen paraméter mező alatt jelenik meg."
+
+#: form-maker.php:791
+msgid "You can use this field to let users choose a numeric range by providing values for 2 number inputs. Its Step option allows to set the increment/decrement of spinners’ values, when users click on up or down arrows."
+msgstr "Ezzel a mezővel a felhasználók két szám bevitelével kiválaszthatnak egy számtartományt. A Lépés beállítással azt lehet megadni, hogy a léptető mennyivel növelje/csökkentse az értéket, amikor a felhasználó a fel vagy le mutató nyílra kattint."
+
+#: form-maker.php:790
+msgid "Slider field lets users specify the field value by dragging its handle from Min Value to Max Value."
+msgstr "A csúszkamezővel a felhasználók, hogy a legkisebbtől a legnagyobb értékig történő húzással határozhatják meg a mező értékét."
+
+#: form-maker.php:789
+msgid "Place Rating field on your form to have radio buttons, which indicate rating from worst to best. You can set many radio buttons to display using Scale Range option."
+msgstr "Helyezzen el az űrlapon egy Értékelés mezőt olyan rádiógombokkal, amelyek a legrosszabbtól a legjobbig terjedő értékelést jelentik. A Skálatartomány beállítással több rádiógombot is beállíthat."
+
+#: form-maker.php:788
+msgid "Add Star rating field to your form with this field. You can display as many stars, as you will need, set the number using Number of Stars option."
+msgstr "Ezzel a mezővel egy csillagos értékelőmezőt adhat az űrlaphoz. A csillagok száma beállítással annyi csillagot jeleníthet meg, amennyire csak szüksége van."
+
+#: form-maker.php:787
+msgid "Note: Make sure to configure Form Options > Email Options of your form."
+msgstr "Megjegyzés: Ügyeljen arra, hogy az űrlapon megfelelően konfigurálja az Űrlapbeállítások > E-mail beállításokat."
+
+#: form-maker.php:787
+msgid "When users fill in an email address using Email Field, this checkbox will allow them to choose if they wish to receive a copy of the submission email."
+msgstr "Amikor a felhasználók az E-mail mező használatával töltenek ki egy e-mail címet, ezzel a jelölőnégyzettel eldönthetik, hogy szeretnének-e kapni egy példányt a beküldési e-mailből."
+
+#: form-maker.php:786
+msgid "Time field of Form Maker plugin will allow users to specify time value. Set the time format of the field to 24-hour or 12-hour using Time Format option."
+msgstr "A Form Maker bővítmény időmezőjével a felhasználók megadhatnak egy időértéket. Az Időformátum opcióval 12 vagy 24 órásra állíthatja a mező időformátumát."
+
+#: form-maker.php:785
+msgid "Press the small Plus icon to add a location pin."
+msgstr "Helymeghatározó gombostű hozzáadásához nyomja meg a kis Plusz ikont."
+
+#: form-maker.php:785
+msgid "Map field can be used for pinning one or more locations on Google Map and displaying them on your form."
+msgstr "A Térkép mező használható egy vagy több helynek a Google Térképen való rögzítéséhez, és ezek űrlapon történő megjelenítéséhez."
+
+#: form-maker.php:784
+msgid "Mark Allow Uploading Multiple Files option in Advanced Options to allow users to select and upload multiple files."
+msgstr "Jelölje be a Több fájl feltöltésének engedélyezése lehetőséget az Speciális beállításoknál, hogy a felhasználók több fájlt is kijelölhessenek és feltölthessenek."
+
+#: form-maker.php:784
+msgid "Use Allowed file extensions option to specify all acceptable file formats. Make sure to separate them with commas."
+msgstr "Használja az Engedélyezett fájlkiterjesztések lehetőséget az összes elfogadható fájlformátum megadásához. Ne felejtse el vesszővel elválasztani őket."
+
+#: form-maker.php:784
+msgid "You can allow users to upload single or multiple documents, images and various files through your form."
+msgstr "Engedélyezheti, hogy a felhasználók az űrlapon keresztül egy vagy több dokumentumot, képet és különféle fájlokat töltsenek fel."
+
+#: form-maker.php:783
+msgid "In addition, you can specify the width of day, month and year fields using Day field size(px), Month field size(px) and Year field size(px) settings."
+msgstr "Ezenkívül a nap, a hónap és az év mezők szélességét is megadhatja a „Nap mező mérete (px)”, a „Hónap mező mérete (px)” és az „Év mező mérete (px)” beállításokkal."
+
+#: form-maker.php:783
+msgid "You can set the fields to be text inputs or select boxes using Day field type, Month field type and Year field type options."
+msgstr "A mezőket beállíthatja szöveges bevitelre, vagy beállíthat kijelölődobozokat a „Nap mező típusa”, a „Hónap mező típusa” és az „Év mező típusa” segítségével."
+
+#: form-maker.php:783
+msgid "Use Fields separator setting in Advanced options to change the divider between day, month and year boxes."
+msgstr "A nap, a hónap és az év dobozok közötti elválasztó módosításához használja a Speciális beállításoknál Mezőelválasztó beállítását."
+
+#: form-maker.php:783
+msgid "Users can specify their birthday or any date with this field."
+msgstr "A mezővel a felhasználók megadhatják születésnapjukat vagy bármilyen dátumot."
+
+#: form-maker.php:782
+msgid "You can include/exclude specific countries from the list using the Edit country list setting in Advanced Options."
+msgstr "Az egyes országokat felveheti / kizárhatja a listából a Speciális beállítások részben az Országlista szerkesztésénél."
+
+#: form-maker.php:782
+msgid "Country List is a select box which provides a list of all countries in alphabetical order."
+msgstr "Az országlista egy jelölődoboz, amely felsorolja az összes országot ábécésorrendben."
+
+#: form-maker.php:781
+msgid "In addition, Marker Info setting allows you to provide additional details about the location. It will appear after users click on the location pin."
+msgstr "Ezenkívül a Jelölőinformáció beállítással további információk is megadhatók a helyről. Ez akkor jelenik meg, amikor a felhasználók rákattintanak a helyet jelző gombostűre."
+
+#: form-maker.php:781
+msgid "Mark on Map field lets users to drag the map pin and drop it on their selected location. You can specify a default address for the location pin with Address option."
+msgstr "A Megjelölés térképen mező segítségével a felhasználók elhúzhatják a térképet és egy gombostűvel megjelölhetik a kiválasztott helyet. A Cím beállítással megadhat egy alapértelmezett címet a térkép helyéül."
+
+#: form-maker.php:780
+msgid "You can turn State/Province/Region field into a list of US states by activating Use list for US states setting from Advanced Options. Note: This only works in case United States is selected for Country select box."
+msgstr "Az Állam/tartomány/régió mezőt a Speciális beállításoknál átalakíthatja egy az USA szövetségi államait tartalmazó felsorolássá. Ez azonban csak akkor működik, ha az országválasztó mezőben az Egyesült Államok van kijelölve."
+
+#: form-maker.php:780
+msgid "You can enable or disable elements of Address field using Disable Field(s) setting in Advanced Options."
+msgstr "A Speciális beállítások Mező(k) letiltása opciójának használatával engedélyezheti vagy tilthatja a Cím mező elemeit."
+
+#: form-maker.php:780
+msgid "This field lets you skip a few steps and quickly add one set for requesting the address of the submitter. Use Overall size(px) option to set the width of Address field."
+msgstr "Ezzel a mezővel megtakaríthat néhány lépést, és könnyedén hozzáadhat egy mezőkészletet, amellyel bekérhető az űrlap elküldőjének címe. A Teljes méret (pixel) beállítással adhatja meg a Cím mező szélességét."
+
+#: form-maker.php:779
+msgid "In case you do not wish to receive the same data for the same Phone field more than once, activate Allow only unique values setting from Advanced options."
+msgstr "Ha nem szeretné ugyanazt az adatot ugyanazon Telefonszám mezőnél kétszer megkapni, aktiválja a Csak egyedi értékek engedélyezése lehetőséget a Speciális beállításoknál."
+
+#: form-maker.php:779
+msgid "This field is an input for a phone number. It provides a list of country flags, which users can select and have their country code automatically added to the phone number."
+msgstr "Ez a mező egy telefonszám bevitele. A felhasználó kiválaszthatja az ország zászlóját, és a ország hívószáma automatikusan hozzáadódik a telefonszámhoz."
+
+#: form-maker.php:778
+msgid "Upon successful submission of the Form, you have the option to send the submitted data (or just a confirmation message) to the email address entered here. To do this you need to set the corresponding options on Form Options > Email Options page."
+msgstr "Az űrlap sikeres beküldése után beállíthatja, hogy az ide beírt e-mail címre elküldje a beérkezett adatokat (vagy egy megerősítő üzenetet). Ehhez be kell állítania a megfelelő opciókat az Űrlapbeállítások > E-mail beállítások oldalon."
+
+#: form-maker.php:778
+msgid "Autofill with user email will autofill Email field with the email address of the logged in user."
+msgstr "Az Automatikus kitöltés felhasználói e-maillel automatikusan kitölti az E-mail mezőt a bejelentkezett felhasználó e-mail címével."
+
+#: form-maker.php:778
+msgid "Using Confirmation Email setting in Advanced Options you can require the submitter to re-type their email address."
+msgstr "A Speciális beállításoknál a Megerősítő e-mail beállításával megkövetelheti a beküldőtől, hogy újra írja be az e-mail címét."
+
+#: form-maker.php:778
+msgid "This field is an input field that accepts an email address."
+msgstr "Ez a mező egy beviteli mező, amely e-mail címet fogad el."
+
+#: form-maker.php:777
+msgid "In case you do not wish to receive the same data for the same Name field twice, activate Allow only unique values option."
+msgstr "Ha nem szeretné ugyanazt az adatot ugyanazon Név mezőnél kétszer megkapni, aktiválja a Csak egyedi értékek engedélyezése lehetőséget."
+
+#: form-maker.php:777
+msgid "Enabling Autofill with user name setting will automatically fill in Name field with the name of the logged in user."
+msgstr "A felhasználónév-beállításoknál az automatikus kitöltés engedélyezése automatikusan kitölti a Név mezőt a bejelentkezett felhasználó nevével."
+
+#: form-maker.php:777
+msgid "This field lets the user write their name."
+msgstr "Ez a mező lehetővé teszi a felhasználónak a nevük beírását."
+
+#: form-maker.php:776
+msgid "You can specify the number of symbols in Simple Captcha using Symbols (3 - 9) option."
+msgstr "A szimbólumbeállításokat tartalmazó egyszerű CAPTCHA-nál meghatározhatja a szimbólumok számát (3–9)."
+
+#: form-maker.php:776
+msgid "You can use this field as an alternative to ReCaptcha to protect your forms against spambots. It’s a random combination of numbers and letters, and users need to type them in correctly to submit the form."
+msgstr "Ezt a mezőt a ReCaptcha alternatívájaként használhatja az űrlapok spamrobotok elleni védelmére. Számok és betűk véletlenszerű kombinációja, és a felhasználóknak az űrlap beküldéséhez helyesen kell beírniuk őket."
+
+#: form-maker.php:775
+msgid "The Submit button validates all form field values, saves them on MySQL database of your website, sends emails and performs other actions configured in Form Options. You can have more than one submit button in your form."
+msgstr "Az elküldés gomb érvényesíti az űrlap összes mezőjébe beírt értékeket, elmenti őket a weboldal MySQL adatbázisába, elküldi a megfelelő e-maileket és végrehajtja az Űrlapbeállításokban megadott további műveleteket. Az űrlapon több elküldés gomb is elhelyezhető."
+
+#: form-maker.php:774
+msgid "After registering and creating the keys, copy them to Form Maker > Options page."
+msgstr "A kulcsok regisztrálása és létrehozása után másolja át őket az Form Maker > Beállítások oldalra."
+
+#: form-maker.php:774
+msgid "Google ReCaptcha website"
+msgstr "Google ReCaptcha weboldal"
+
+#: form-maker.php:774
+msgid "Form Maker is integrated with Google ReCaptcha, which protects your forms from spam bots. Before adding ReCaptcha to your form, you need to configure Site and Secret Keys by registering your website on %s"
+msgstr "A Form Maker integrálva van a Google ReCaptcha-ba, amely megvédi űrlapjait a spam-robotoktól. Mielőtt hozzáadná a ReCaptcha-t az űrlaphoz, be kell állítania a webhelykulcsot és a titkos kulcsot, ehhez pedig regisztrálnia kell a webhelyet itt: %s"
+
+#: form-maker.php:773
+msgid "Just click (+) Option button and fill in all options you will need or click  (+) From Database to fill the options from a database table."
+msgstr "Csak kattintson a (+) Opció gombra, és töltse ki az összes szükséges beállítást, vagy kattintson az (+) Adatbázisból elemre, és a lehetőségeket átveheti egy adatbázistáblából."
+
+#: form-maker.php:773
+msgid "Multiple Choice field lets you have a list of Checkboxes. This field allows the submitter to choose more than one values."
+msgstr "A Többszörös választás mezővel egy jelölőnégyzetekből álló listát kap. Ezzel a mezővel a beküldő egynél több értéket is kiválaszthat."
+
+#: form-maker.php:772 form-maker.php:773
+msgid "And by enabling Allow other, you can let the user to write their own specific value."
+msgstr "És ha bejelöli az „Egyéb engedélyezésé”-t, akkor a felhasználó saját egyedi értéket is megadhat."
+
+#: form-maker.php:772 form-maker.php:773
+msgid "Relative Position lets you choose the position of options in relation to each other. Whereas Option Label Position lets you select the position of radio button label."
+msgstr "A Relatív pozíció segítségével kiválaszthatja az opciók egymáshoz viszonyított helyzetét. az Opciófelirat pozíciójával pedig a rádiógomb feliratának helyzetét jelölheti ki."
+
+#: form-maker.php:772
+msgid "Using this field you can add a list of Radio buttons to your form. Just click (+) Option button and fill in all options you will need or click  (+) From Database to fill the options from a database table."
+msgstr "E mező használatával egy rádiógombokból álló listát adhat az űrlaphoz. Csak kattintson a (+) Opció gombra, és töltse ki az összes szükséges beállítást, vagy kattintson az (+) Adatbázisból elemre, és a lehetőségeket átveheti egy adatbázistáblából."
+
+#: form-maker.php:771 form-maker.php:772 form-maker.php:773
+msgid "In case you need to have option values to be different from option names, mark Enable option's value from Advanced options as checked."
+msgstr "Ha az opció értékeinek különbözniük kell az opciónevektől, a Speciális beállításoknál jelölje be az Opció értékének engedélyezését."
+
+#: form-maker.php:771
+msgid "This field allows the submitter to choose values from select box. Just click (+) Option button and fill in all options you will need or click  (+) From Database to fill the options from a database table."
+msgstr "Ezzel a mezővel a beküldő kiválaszthat egy értéket a legördülő kijelölődobozból. Csak kattintson a (+) Opció gombra, és töltse ki az összes szükséges beállítást, vagy kattintson az (+) Adatbázisból elemre, és a lehetőségeket átveheti egy adatbázistáblából."
+
+#: form-maker.php:770
+msgid "Use Min Value and Max Value options to set lower and upper limitation for the value of this Number field."
+msgstr "A Szám mező alsó és felső korlátjának beállításához használja a Legkisebb érték (Min Value) és Legnagyobb érték (Max ValueI beállítást."
+
+#: form-maker.php:770
+msgid "Step option defines the number to increment/decrement the spinner value, when the users press up or down arrows."
+msgstr "A Lépés beállítással azt lehet meghatározni, hogy a léptető mennyivel növelje/csökkentse az értéket, amikor a felhasználó a fel vagy le mutató nyílra kattint."
+
+#: form-maker.php:770
+msgid "This is an input text that accepts only numbers. Users can type a number directly, or use the spinner arrows to specify it."
+msgstr "Ez egy olyan beviteli szöveg, amely csak számokat fogad el. A felhasználók közvetlenül beírhatnak egy számot, vagy a kis léptető nyilak segítségével megadhatják azt."
+
+#: form-maker.php:769
+msgid "Set the width and height of the textarea box using Size(px) option."
+msgstr "A Méret (px) beállítással megadhatja a szövegterület-doboz szélességét és magasságát."
+
+#: form-maker.php:769
+msgid "This field adds a textarea box to your form. Users can write alphanumeric text, special characters and line breaks."
+msgstr "Ez a mező egy szövegterület-dobozt ad az űrlaphoz. A felhasználók alfanumerikus szöveget, speciális karaktereket és sortöréseket írhatnak."
+
+#: form-maker.php:768
+msgid "Additionally, you can add HTML attributes to your form fields with Additional Attributes."
+msgstr "Ezenkívül – a További attribútumok segítségével – HTML-attribútumokat is adhat az űrlapmezőkhöz."
+
+#: form-maker.php:768
+msgid "Validation (RegExp.) option in Advanced options lets you configure Regular Expression for your Single Line Text field. Use Common Regular Expressions select box to use built-in validation patterns. For instance, in case you can add a validation for decimal number, IP address or zip code by selecting corresponding options of Common Regular Expressions drop-down."
+msgstr "A Speciális beállítások között található Érvényesítés (RegEx) beállítással reguláris kifejezést állíthat be egy egysoros szövegmezőhöz. A beépített érvényesítő mintázatok alkalmazásához használja a Közönséges reguláris kifejezések jelölőnégyzetet. Például létrehozhat érvényesítőt tizedes törtekhez, IP címekhez vagy irányítószámokhoz oly módon, hogy a Közönséges reguláris kifejezések legördülő menüből kijelöli a megfelelő beállítást."
+
+#: form-maker.php:768 form-maker.php:769
+msgid "You can set the text input as Required, making sure the submitter provides a value for it."
+msgstr "Kötelezővé is teheti a szövegbevitelt, így biztosítva, hogy a benyújtó mindenképpen kitöltse."
+
+#: form-maker.php:768 form-maker.php:770 form-maker.php:777 form-maker.php:778
+#: form-maker.php:799
+msgid "To set a default value, just fill the field above."
+msgstr "Alapértelmezett érték beállításához töltse ki a fenti mezőt."
+
+#: form-maker.php:768
+msgid "This field is a single line text input."
+msgstr "Ez a mező egy egysoros szövegbevitel."
+
+#: form-maker.php:767
+msgid "Invisible reCAPTCHA"
+msgstr "Láthatatlan reCAPTCHA"
+
+#: form-maker.php:767
+msgid "Note:"
+msgstr "Megjegyzés:"
+
+#: form-maker.php:767
+msgid "%s Old reCAPTCHA keys will not work for %s. Please make sure to enable the API keys for Invisible reCAPTCHA."
+msgstr "%s: A régi reCAPTCHA kulcsok %s alatt nem fognak működni. Győződjék meg arról, hogy engedélyezte az API kulcsokat az Invisible reCAPTCHA alkalmazáshoz."
+
+#: form-maker.php:765
+msgid "The free version is limited up to 7 fields to add. If you need this functionality, you need to buy the commercial version."
+msgstr "Az ingyenes verzió legfeljebb 7 mezőre korlátozódik. Ha szüksége van erre a funkcióra, akkor meg kell vásárolnia a kereskedelmi verziót."
+
+#: form-maker.php:763
+msgid "Leave empty to set the width to 100%."
+msgstr "100%-os szélességhez hagyja üresen."
+
+#: form-maker.php:762 framework/WDW_FM_Library.php:5343
+msgid "Saturday"
+msgstr "Szombat"
+
+#: form-maker.php:761 framework/WDW_FM_Library.php:5343
+msgid "Friday"
+msgstr "Péntek"
+
+#: form-maker.php:760 framework/WDW_FM_Library.php:5343
+msgid "Thursday"
+msgstr "Csütörtök"
+
+#: form-maker.php:759 framework/WDW_FM_Library.php:5343
+msgid "Wednesday"
+msgstr "Szerda"
+
+#: form-maker.php:758 framework/WDW_FM_Library.php:5343
+msgid "Tuesday"
+msgstr "Kedd"
+
+#: form-maker.php:757 framework/WDW_FM_Library.php:5343
+msgid "Monday"
+msgstr "Hétfő"
+
+#: form-maker.php:756 framework/WDW_FM_Library.php:5343
+msgid "Sunday"
+msgstr "Vasárnap"
+
+#: form-maker.php:755
+msgid "To use this feature, please go to Settings > Payment Options and select \"Stripe\" as the Payment Method."
+msgstr "A funkció használatához menjen a Beállítások > Fizetési beállítások oldalra, és fizetési módnak jelölje ki a „Stripe”-ot."
+
+#: form-maker.php:754
+msgid "Edit Field"
+msgstr "Mező szerkesztése"
+
+#: form-maker.php:721 form-maker.php:741 form-maker.php:753
+msgid "Add Field"
+msgstr "Mező hozzáadása"
+
+#: form-maker.php:750
+msgid "The captcha already has been created."
+msgstr "A CAPTCHA már létrejött."
+
+#: form-maker.php:749
+msgid "Nothing found."
+msgstr "Nem található semmi."
+
+#: form-maker.php:585
+msgid "Number of items per page:"
+msgstr "Elemek száma oldalanként:"
+
+#: form-maker.php:471
+msgid "Nothing selected."
+msgstr "Semmi sincs kijelölve."
+
+#: form-maker.php:436 form-maker.php:444
+msgid "Select %s"
+msgstr "%s kijelölése"
+
+#: form-maker.php:380
+msgid ""
+"When you leave a comment on this site, we send your name, email\n"
+"        address, IP address and comment text to example.com. Example.com does\n"
+"        not retain your personal data."
+msgstr ""
+"Amikor hozzászól ezen a webhelyen, nevét, e-mail címét, IP-címét\n"
+"        és a megjegyzés szövegét elküldjük az example.com webhelynek. Az example.com\n"
+"        nem őrzi meg személyes adatait."
+
+#: admin/views/view.php:569
+msgid "Front-end Submissions"
+msgstr "Weboldal felőli beküldések"
+
+#: admin/views/view.php:568
+msgid "Google Maps API Integration"
+msgstr "Google Maps API integráció"
+
+#: admin/views/view.php:567
+msgid "File upload field"
+msgstr "Fájlfelöltési mező"
+
+#: admin/views/view.php:566
+msgid "Payment integration fields"
+msgstr "Fizetési integrációs mezők"
+
+#: admin/views/view.php:563
+msgid "Premium Plan also includes:"
+msgstr "A prémium csomag tartalmazza a következőket is:"
+
+#: admin/views/view.php:559
+msgid "Upgrade to Premium version to add unlimited fields."
+msgstr "Korlátlan számú mező hozzáadásához frissítsen prémium verzióra."
+
+#: admin/views/view.php:556
+msgid "The free version is limited up to 7 fields."
+msgstr "Az ingyenes verzió legfeljebb 7 mezőt tartalmazhat."
+
+#: admin/views/view.php:452
+msgid "Premium Version"
+msgstr "Prémium verzió"
+
+#: admin/views/view.php:412
+msgid "User guide"
+msgstr "Felhasználói útmutató"
+
+#: admin/views/view.php:400 admin/views/view.php:452 admin/views/view.php:491
+#: admin/views/view.php:526 admin/views/view.php:573 booster/controller.php:315
+msgid "Upgrade"
+msgstr "Upgrade"
+
+#: admin/views/view.php:396
+msgid "Add unlimited fields, create multi-page forms with fully customizable themes and much more."
+msgstr "Adjon hozzá korlátlan számú mezőt, hozzon létre többoldalas űrlapokat teljesen testreszabható témákkal és még sok minden mást."
+
+#: admin/views/view.php:286
+msgid "Apply"
+msgstr "Alkalmazás"
+
+#: admin/views/view.php:277
+msgid "Bulk Actions"
+msgstr "Tömeges műveletek"
+
+#: admin/views/view.php:275
+msgid "Select bulk action"
+msgstr "Tömeges művelet kijelölése"
+
+#: admin/views/view.php:251
+msgid "Last page"
+msgstr "Utolsó oldal"
+
+#: admin/views/view.php:250
+msgid "Next page"
+msgstr "Következő oldal"
+
+#: admin/views/view.php:237
+msgid "of"
+msgstr "ennyiből:"
+
+#: admin/views/view.php:234
+msgid "Current Page"
+msgstr "Jelenlegi oldal"
+
+#: admin/views/view.php:229
+msgid "Previous page"
+msgstr "Előző oldal"
+
+#: admin/views/view.php:228
+msgid "First page"
+msgstr "Első oldal"
+
+#: admin/views/view.php:213
+msgid "%s item"
+msgid_plural "%s items"
+msgstr[0] "%s elem"
+msgstr[1] "%s elem"
+
+#: admin/views/view.php:96
+msgid "Add New"
+msgstr "Új hozzáadása"
+
+#: admin/views/Themes_fm.php:491
+msgid "Subscribe to our newsletter"
+msgstr "Iratkozzék fel hírlevelünkre"
+
+#: admin/views/Themes_fm.php:476 framework/WDW_FM_Library.php:5339
+msgid "Next"
+msgstr "Következő"
+
+#: admin/views/Themes_fm.php:470
+msgid "Previous"
+msgstr "Előző"
+
+#: admin/views/Themes_fm.php:434
+msgid "Checkbox:"
+msgstr "Jelölőnégyzet:"
+
+#: admin/views/Themes_fm.php:423 admin/views/Themes_fm.php:441
+msgid "option 1"
+msgstr "1. beállítás"
+
+#: admin/views/Themes_fm.php:415
+msgid "Radio:"
+msgstr "Rádió:"
+
+#: admin/views/Themes_fm.php:406 framework/WDW_FM_Library.php:5041
+msgid "Armenia"
+msgstr "Örményország"
+
+#: admin/views/Themes_fm.php:402
+msgid "Country:"
+msgstr "Ország:"
+
+#: admin/views/Themes_fm.php:392
+msgid "E-mail:"
+msgstr "E-mail:"
+
+#: admin/views/Themes_fm.php:379 admin/views/Themes_fm.php:492
+msgid "Join our mailing list to receive the latest news from our team."
+msgstr "Csatlakozzék a levelezőlistához, hogy csapatunktól megkapja a legfrissebb híreket."
+
+#: admin/views/Themes_fm.php:378
+msgid "Subscribe to our newsletter "
+msgstr "Iratkozzék fel hírlevelünkre "
+
+#: admin/views/Themes_fm.php:343
+msgid "Step"
+msgstr "Lépés"
+
+#: admin/views/Themes_fm.php:340
+msgid "Pagination Type: "
+msgstr "Oldalakra tördelés típusa: "
+
+#: admin/views/Themes_fm.php:243
+msgid "This theme is outdated. Theme Options are only available in new themes provided by Form Maker. You can use Custom CSS panel to edit form styling, or alternatively select a new theme for your form."
+msgstr "Ez a téma elavult. A témabeállítások csak a Form Maker által biztosított az új témáknál érhetők el. Az űrlapstílus szerkesztéséhez használhatja az Egyedi CSS panelt is, vagy választhat egy új témát az űrlaphoz."
+
+#: admin/views/Themes_fm.php:159
+msgid "Title: "
+msgstr "Cím: "
+
+#: admin/views/Submissions_fm.php:1578
+msgid "- Select a form -"
+msgstr "- Űrlap kijelölése -"
+
+#: admin/views/Submissions_fm.php:1397
+msgid "Unclaimed"
+msgstr "Gazdátlan"
+
+#: admin/views/Submissions_fm.php:1395
+msgid "Temporary hold"
+msgstr "Ideiglenesen tartva"
+
+#: admin/views/Submissions_fm.php:1393
+msgid "Reversed"
+msgstr "Visszafordítva"
+
+#: admin/views/Submissions_fm.php:1391
+msgid "Returned"
+msgstr "Visszaküldve"
+
+#: admin/views/Submissions_fm.php:1389
+msgid "Removed"
+msgstr "Eltávolítva"
+
+#: admin/views/Submissions_fm.php:1387
+msgid "Refused"
+msgstr "Elutasítva"
+
+#: admin/views/Submissions_fm.php:1385
+msgid "Refunded"
+msgstr "Visszatérítve"
+
+#: admin/views/Submissions_fm.php:1383
+msgid "Processing"
+msgstr "Feldolgozás alatt"
+
+#: admin/views/Submissions_fm.php:1381
+msgid "Placed"
+msgstr "Leadva"
+
+#: admin/views/Submissions_fm.php:1379
+msgid "Pending verification"
+msgstr "Az ellenőrzés függőben van"
+
+#: admin/views/Submissions_fm.php:1377
+msgid "Partially refunded"
+msgstr "Részben visszatérítve"
+
+#: admin/views/Submissions_fm.php:1375
+msgid "Paid"
+msgstr "Kifizetve"
+
+#: admin/views/Submissions_fm.php:1374
+msgid "On hold"
+msgstr "Visszatartva"
+
+#: admin/views/Submissions_fm.php:1372
+msgid "In progress"
+msgstr "Folyamatban"
+
+#: admin/views/Submissions_fm.php:1370
+msgid "Held"
+msgstr "Megtartva"
+
+#: admin/views/Submissions_fm.php:595 admin/views/Submissions_fm.php:1369
+#: form-maker.php:727 form-maker.php:740
+msgid "Failed"
+msgstr "Meghiúsult"
+
+#: admin/views/Submissions_fm.php:1367
+msgid "Denied"
+msgstr "Elutasítva"
+
+#: admin/views/Submissions_fm.php:1365
+msgid "Completed"
+msgstr "Kész"
+
+#: admin/views/Submissions_fm.php:1363
+msgid "Cleared by payment review"
+msgstr "Fizetési felülvizsgálattal törölve"
+
+#: admin/views/Submissions_fm.php:1361
+msgid "Cleared"
+msgstr "Törölve"
+
+#: admin/views/Submissions_fm.php:1359
+msgid "Canceled"
+msgstr "Megszakítva"
+
+#: admin/controllers/elementorWidget.php:52 admin/views/Submissions_fm.php:1300
+msgid "Form"
+msgstr "Űrlap"
+
+#: admin/views/Submissions_fm.php:1290
+msgid "Edit Submission"
+msgstr "Beküldés szerkesztése"
+
+#: admin/views/Submissions_fm.php:1247
+msgid "Unanswered"
+msgstr "Megválaszolatlan"
+
+#: admin/views/Submissions_fm.php:1207
+msgid "Count"
+msgstr "Szám"
+
+#: admin/views/Submissions_fm.php:999 framework/WDW_FM_Library.php:5337
+msgid "Done"
+msgstr "Kész"
+
+#: admin/views/Submissions_fm.php:950
+msgid "All"
+msgstr "Összes"
+
+#: admin/views/Submissions_fm.php:947
+msgid "Select columns"
+msgstr "Oszlopok kijelölése"
+
+#: admin/views/Submissions_fm.php:864
+msgid "To:"
+msgstr "Eddig:"
+
+#: admin/views/Submissions_fm.php:860
+msgid "Date From:"
+msgstr "Dátum ettől:"
+
+#: admin/views/Submissions_fm.php:855
+msgid "Please select the field!"
+msgstr "Jelölje ki a mezőt"
+
+#: admin/views/Submissions_fm.php:844 form-maker.php:472
+msgid "- Select -"
+msgstr "- Kijelölés -"
+
+#: admin/views/Submissions_fm.php:681
+msgid "Show Matrix"
+msgstr "Táblázat megjelenítése"
+
+#: admin/views/Submissions_fm.php:673
+msgid "Matrix"
+msgstr "Táblázat"
+
+#: admin/views/Submissions_fm.php:668
+msgid "Star rating"
+msgstr "Csillagos értékelés"
+
+#: admin/views/Submissions_fm.php:627 admin/views/Submissions_fm.php:636
+msgid "Show on Map"
+msgstr "Megjelenítés térképen"
+
+#: admin/views/Submissions_fm.php:571
+msgid "Unblock IP"
+msgstr "IP-cím blokkolásának visszavonása"
+
+#: admin/views/Submissions_fm.php:571
+msgid "Unblock IP "
+msgstr "IP-cím blokkolásának visszavonása "
+
+#: admin/views/Submissions_fm.php:569
+msgid "Block IP"
+msgstr "IP-cím blokkolása"
+
+#: admin/views/Submissions_fm.php:564 admin/views/Submissions_fm.php:566
+msgid "Show submitter information"
+msgstr "Beküldő adatainak megjelenítése"
+
+#: admin/views/Submissions_fm.php:558
+msgid "Download PDF"
+msgstr "PDF letöltése"
+
+#: admin/views/Submissions_fm.php:556 admin/views/Submissions_fm.php:560
+msgid "Edit submission"
+msgstr "Beküldés szerkesztése"
+
+#: admin/views/Manage_fm.php:504 admin/views/Submissions_fm.php:555
+msgid "View"
+msgstr "Megtekintés"
+
+#: admin/views/Submissions_fm.php:555
+msgid "View submission"
+msgstr "Beküldés megtekintése"
+
+#: admin/views/Submissions_fm.php:282 admin/views/Submissions_fm.php:286
+msgid "Submitter's IP"
+msgstr "Beküldő IP-címe"
+
+#: admin/views/Submissions_fm.php:269 admin/views/Submissions_fm.php:273
+#: admin/views/Submissions_fm.php:526
+msgid "Submit date"
+msgstr "Beküldés dátuma"
+
+#: admin/views/Submissions_fm.php:256 admin/views/Submissions_fm.php:260
+#: admin/views/Submissions_fm.php:523 admin/views/Submissions_fm.php:1304
+msgid "ID"
+msgstr "Azonosító"
+
+#: admin/views/Submissions_fm.php:230
+msgid "Hide Filters"
+msgstr "Szűrők elrejtése"
+
+#: admin/views/Submissions_fm.php:230
+msgid "Show Filters"
+msgstr "Szűrők megjelenítése"
+
+#: admin/views/Submissions_fm.php:228
+msgid "Add/Remove Columns"
+msgstr "Oszlopok hozzáadása/eltávolítása"
+
+#: admin/views/Submissions_fm.php:220
+msgid "Export to XML"
+msgstr "Exportálás XML-formátumba"
+
+#: admin/views/Submissions_fm.php:219
+msgid "Export to CSV"
+msgstr "Exportálás CSV-formátumba"
+
+#: admin/views/Submissions_fm.php:106
+msgid "An unexpected error occurred while exporting data. %s Please contact 10Web Customer Care. %s"
+msgstr "Váratlan hiba történt az adatok exportálásakor. %s Kérjük, forduljon a 10Web ügyfélszolgálathoz. %s"
+
+#: admin/views/Submissions_fm.php:84
+msgid "Please select a form to view submissions"
+msgstr "A beküldések megtekintéséhez jelöljön ki egy űrlapot"
+
+#: admin/views/view.php:393
+msgid "Form Maker Premium"
+msgstr "Form Maker Premium"
+
+#: form-maker.php:1467
+msgid "Multi-Page Forms"
+msgstr "Többoldalas űrlapok"
+
+#: admin/views/Options_fm.php:204 form-maker.php:524
+msgid "Uninstall"
+msgstr "Eltávolítás"
+
+#: admin/controllers/Uninstall_fm.php:53 admin/views/Options_fm.php:203
+msgid "Uninstall %s"
+msgstr "%s eltávolítása"
+
+#: admin/views/Options_fm.php:139
+msgid "If you wish to build your form with HTML, instead of using Form Maker’s user-friendly interface, you can enable Advanced Layout. It can be accessed from the form editor."
+msgstr "Ha – az űrlapkészítő felhasználóbarát felületének használata helyett – az űrlapot HTML-formátumban szeretné létrehozni, engedélyezheti a Speciális elrendezés funkciót, amely az űrlapszerkesztőből érhető el."
+
+#: admin/views/Options_fm.php:134
+msgid "Enable Advanced Layout"
+msgstr "Speciális elrendezés engedélyezése"
+
+#: admin/views/Options_fm.php:131
+msgid "This option sets the symbol, which will be used to separate the values in CSV file of form submissions."
+msgstr "Ez az opció beállítja azt a szimbólumot, amely az űrlapbeküldések CSV-fájljában szereplő értékeket fogja egymástól elválasztani."
+
+#: admin/views/Options_fm.php:129
+msgid "CSV Delimiter"
+msgstr "CSV elválasztó"
+
+#: admin/views/Options_fm.php:116
+msgid " and copy them to this input. Make sure the key does not have restrictions."
+msgstr " és másolja át erre a beviteli területre. Győződjék meg arról, hogy a kulcsnak nincs korlátozása."
+
+#: admin/views/Options_fm.php:115
+msgid "Google Map API key"
+msgstr "Google Map API kulcs"
+
+#: admin/views/Options_fm.php:114
+msgid "Get"
+msgstr "Beszerzés"
+
+#: admin/views/Options_fm.php:111
+msgid "Map API Key"
+msgstr "Térkép API kulcs"
+
+#: admin/views/Options_fm.php:107
+msgid "Google Maps"
+msgstr "Google Maps"
+
+#: admin/views/Options_fm.php:90
+msgid "Get ReCaptcha Site and Secret Keys"
+msgstr "ReCaptcha webhely és titkos kulcsok beszerzése"
+
+#: admin/views/Options_fm.php:90
+msgid "%s for your site from ReCaptcha website and copy the provided here."
+msgstr "%s az Ön webhelyére a ReCaptcha webhelyről, és másolja át a megadott értéket ide."
+
+#: admin/views/Options_fm.php:87
+msgid "Secret key"
+msgstr "Titkos kulcs"
+
+#: admin/views/Options_fm.php:83
+msgid "Site key"
+msgstr "Oldal kulcsa"
+
+#: admin/views/Options_fm.php:30 form-maker.php:523
+msgid "Options"
+msgstr "Beállítások"
+
+#: admin/views/Manage_fm.php:3634
+msgid "Hide on Mobile"
+msgstr "Elrejtés mobilon"
+
+#: admin/views/Manage_fm.php:3610
+msgid "If left empty the form will appear on all pages."
+msgstr "Ha üres, az űrlap minden oldalon megjelenik."
+
+#: admin/views/Manage_fm.php:3609
+msgid "Click on input area to view the list of pages. "
+msgstr "Az oldalak listájának megtekintéséhez kattintson a beviteli területre. "
+
+#: admin/views/Manage_fm.php:3607
+msgid "Display on these pages"
+msgstr "Megjelenítés ezeken az oldalakon"
+
+#: admin/views/Manage_fm.php:3581
+msgid "If left empty the form will appear on all posts."
+msgstr "Ha üres marad, az űrlap az összes bejegyzésben meg fog jelenni."
+
+#: admin/views/Manage_fm.php:3580
+msgid "Click on input area to view the list of posts."
+msgstr "A hozzászólások listájának megtekintéséhez kattintson a beviteli területre."
+
+#: admin/views/Manage_fm.php:3578
+msgid "Display on these posts"
+msgstr "Megjelenítés ezeknél a bejegyzéseknél"
+
+#: admin/views/Manage_fm.php:3552
+msgid "Display on these categories' posts"
+msgstr "Megjelenítés az ilyen kategóriájú bejegyzéseknél"
+
+#: admin/views/Manage_fm.php:3535
+msgid "Display on"
+msgstr "Megjelenítés"
+
+#: admin/views/Manage_fm.php:3531
+msgid "Hide the scrollbox form again when visitor scrolls back up."
+msgstr "Ismét rejtse el a görgetődobozt, ha a látogató visszafelé felgörget."
+
+#: admin/views/Manage_fm.php:3525
+msgid "Auto Hide"
+msgstr "Automatikus elrejtés"
+
+#: admin/views/Manage_fm.php:3514
+msgid "Allow Minimize"
+msgstr "Kis méret engedélyezése"
+
+#: admin/views/Manage_fm.php:3503
+msgid "Set the percentage of the page height, where the scrollbox form will appear after scrolling down."
+msgstr "Állítsa be az oldalmagasságnak azt a százalékát, ahol a görgetődoboz a lefelé görgetés során megjelenjék."
+
+#: admin/views/Manage_fm.php:3500
+msgid "Trigger Point"
+msgstr "Megjelenés kiváltódásának pontja"
+
+#: admin/views/Manage_fm.php:3496
+msgid "If this option is enabled, website admins will always see the form."
+msgstr "Ha ez a lehetőség engedélyezve van, a webhely rendszergazdái mindig látni fogják az űrlapot."
+
+#: admin/views/Manage_fm.php:3490
+msgid "Always show for administrator"
+msgstr "Rendszergazdának mindig jelenjék meg"
+
+#: admin/views/Manage_fm.php:3485
+msgid "Display the scrollbox to the same visitor (who has closed the popup/submitted the form) after this period."
+msgstr "Ugyanazon látogató (aki bezárta az előugró ablakot / beküldte az űrlapot) számára ennyi idő után mutassa meg a görgetődobozt."
+
+#: admin/views/Manage_fm.php:3478
+msgid "Define the amount of time before the form scrollbox appears after the page loads. Set 0 for no delay."
+msgstr "Adja meg, hogy az oldal betöltése után mennyi idővel jelenjék meg az űrlap görgetődoboza. Azonnali értékhez adjon meg 0-t."
+
+#: admin/views/Manage_fm.php:3463
+msgid "Display the topbar to the same visitor (who has closed the popup/submitted the form) after this period."
+msgstr "Ugyanazon látogató (aki bezárta az előugró ablakot / beküldte az űrlapot) számára ennyi idő után mutassa meg a felső sávot."
+
+#: admin/views/Manage_fm.php:3453 admin/views/Manage_fm.php:3507
+msgid "Allow Closing the bar"
+msgstr "A sáv bezárásának engedélyezése"
+
+#: admin/views/Manage_fm.php:3446
+msgid "Remain at top when scrolling"
+msgstr "Görgetésnél maradjon a tetején"
+
+#: admin/views/Manage_fm.php:3435 admin/views/Manage_fm.php:3464
+#: admin/views/Manage_fm.php:3486
+msgid "Set the value to 0 to always show."
+msgstr "0, ha mindig legyen látható."
+
+#: admin/views/Manage_fm.php:3434
+msgid "Display the popup to the same visitor (who has closed the popup/submitted the form) after this period."
+msgstr "Ugyanazon látogató (aki bezárta az előugró ablakot / beküldte az űrlapot) számára ennyi idő után mutassa meg az előugró ablakot."
+
+#: admin/views/Manage_fm.php:3431 admin/views/Manage_fm.php:3460
+#: admin/views/Manage_fm.php:3482
+msgid "Frequency"
+msgstr "Gyakoriság"
+
+#: admin/views/Manage_fm.php:3426
+msgid "Set 0 for no delay."
+msgstr "0, ha nincs késleltetés."
+
+#: admin/views/Manage_fm.php:3425
+msgid "Define the amount of time before the form popup appears after the page loads."
+msgstr "Határozza meg, hogy az oldal betöltése után mennyi idővel jelenjék meg az előugró ablak."
+
+#: admin/views/Manage_fm.php:3422 admin/views/Manage_fm.php:3475
+msgid "Loading Delay"
+msgstr "Betöltés késleltetése"
+
+#: admin/views/Manage_fm.php:3411
+msgid "Animation Effect"
+msgstr "Animációs hatás"
+
+#: admin/views/Manage_fm.php:3407
+msgid "shortcode to display the form."
+msgstr "az űrlap megjelenítéséhez használható rövid kód."
+
+#: admin/views/Manage_fm.php:3405
+msgid "Use"
+msgstr "Felhasználás"
+
+#: admin/views/Manage_fm.php:3403
+msgid "Form Placement"
+msgstr "Űrlapelhelyezése"
+
+#: admin/views/Manage_fm.php:3390
+msgid "Scrollbox"
+msgstr "Görgetődoboz"
+
+#: admin/views/Manage_fm.php:3385
+msgid "Topbar"
+msgstr "Fejléc"
+
+#: admin/views/Manage_fm.php:3379
+msgid "Popup"
+msgstr "Előugró"
+
+#: admin/views/Manage_fm.php:3373
+msgid "Embedded"
+msgstr "Beágyazott"
+
+#: admin/views/Manage_fm.php:3368
+msgid "Form Type"
+msgstr "Űrlap típusa"
+
+#: admin/views/Manage_fm.php:3284
+msgid "ctrl-enter"
+msgstr "Ctrl-Enter"
+
+#: admin/views/Manage_fm.php:3284
+msgid "Apply Source Formatting"
+msgstr "Forrásformázás alkalmazása"
+
+#: admin/views/Manage_fm.php:3269
+msgid "Auto Generate Layout?"
+msgstr "Elrendezés automatikus létrehozása?"
+
+#: admin/views/Manage_fm.php:3266
+msgid "Make sure not to publish the same field twice. This will cause malfunctioning of the form."
+msgstr "Ügyeljen arra, hogy ne tegye közzé ugyanazt a mezőt kétszer. Ez az űrlap hibás működését okozza."
+
+#: admin/views/Manage_fm.php:3265
+msgid "Notice"
+msgstr "Megjegyzés"
+
+#: admin/views/Manage_fm.php:3263
+msgid "is used to set a row."
+msgstr "egy sor beállításához használható."
+
+#: admin/views/Manage_fm.php:3262
+msgid "This will add the following line:"
+msgstr "Ez hozzáadja a következő sort:"
+
+#: admin/views/Manage_fm.php:3261
+msgid "You can change positioning, add in-line styles and etc. Click on the provided buttons to add the corresponding field."
+msgstr "Meg lehet változtatni az elhelyezést, beilleszthet stílusokat stb. A megfelelő mező hozzáadásához kattintson a megadott gombokra."
+
+#: admin/views/Manage_fm.php:3260
+msgid "To customize the layout of the form fields uncheck the Auto-Generate Layout box and edit the HTML."
+msgstr "Az űrlapmezők elrendezésének testreszabásához törölje a jelet az Elrendezés automatikus generálása jelölőnégyzetből, és szerkessze a HTML-t."
+
+#: admin/views/Manage_fm.php:3201 framework/WDW_FM_Library.php:5849
+#: framework/WDW_FM_Library.php:5860
+msgid "Misc"
+msgstr "Egyebek"
+
+#: admin/views/Manage_fm.php:3194
+msgid "Filtered placeholders"
+msgstr "Szűrt helyőrzők"
+
+#: admin/views/Manage_fm.php:3188
+msgid "Select a field, the value of which will be used as the placeholder."
+msgstr "Válasszon ki egy mezőt, amelynek értékét helyőrzőként lesz felhasználva."
+
+#: admin/views/Manage_fm.php:2185
+msgid "Disable this option to stop saving logged in username and email address to the database of your website."
+msgstr "Letiltja ezt az opciót, ha webhelye adatbázisába nem akarja elmenteni a bejelentkezett felhasználóneveket és e-mail címeket."
+
+#: admin/views/Manage_fm.php:2180
+msgid "Save User Data to Database"
+msgstr "Felhasználó adatainak mentése az adatbázisba"
+
+#: admin/views/Manage_fm.php:2177
+msgid "Use this setting to disable storing submitter IP address to the database of your website."
+msgstr "Ezzel a beállítással letilthatja, hogy a beküldő IP címe eltároltassék a weboldala adatbázisában."
+
+#: admin/views/Manage_fm.php:2172
+msgid "Save User IP Address to Database"
+msgstr "A felhasználó IP-címének mentése az adatbázisba"
+
+#: admin/views/Manage_fm.php:2102
+msgid "Query"
+msgstr "Lekérdezés"
+
+#: admin/views/Manage_fm.php:2096
+msgid "Add Query"
+msgstr "Lekérdezés hozzáadása"
+
+#: admin/views/Manage_fm.php:2086
+msgid "WordPress Form Maker stores the submitted information into [prefix]_formmaker_submits MySQL database table of your website by default. With MySQL Mapping functionality of Form Maker you can insert this data into any local or remote table of your choice, or perform other queries based on submitted values. Press Add Query button to configure the first query for this form."
+msgstr "A WordPress Form Maker alapértelmezésben az oldal [prefix]_formmaker_submits MySQL adatbázistáblájában tárolja a beküldött adatokat. A Form Maker MySQL Mapping funkciójával ezeket az adatokat bármilyen helyi vagy távoli táblába beillesztheti, vagy a beküldött adatok alapján bármilyen lekérdezést lefuttathat. Az űrlap első lekérdezésének beállításához kattintson a Lekérdezés hozzáadása gombra."
+
+#: admin/views/Manage_fm.php:1917
+msgid "of the following match:"
+msgstr "igaz a következők közül:"
+
+#: admin/views/Manage_fm.php:1915
+msgid "any"
+msgstr "valamelyik"
+
+#: admin/views/Manage_fm.php:1912
+msgid "all"
+msgstr "mindegyik"
+
+#: admin/views/Manage_fm.php:1895
+msgid "Hide"
+msgstr "Elrejtés"
+
+#: admin/views/Manage_fm.php:1882
+msgid "Add Condition"
+msgstr "Feltétel hozzáadása"
+
+#: admin/views/Manage_fm.php:1879
+msgid "Press Add Condition button to configure the first condition of your form. Show/Hide select box represents the action which will be completed, if all or any of the condition statements are fulfilled. Use the second drop-down menu to select the field which will be shown or hidden. Click the little Plus (+) icon to add the statement of your form condition."
+msgstr "Az űrlap első feltételének beállításához nyomja meg a Feltétel hozzáadása gombot. A Megjelenítés/elrejtés jelölőnégyzet mutatja meg, hogy milyen művelet fog bekövetkezni, amikor teljesül a feltételek egyike vagy mindegyike. A második legördülő menü segítségével jelölheti ki azt a mezőt, amely megjelenik vagy eltűnik. További utasítás hozzáadásához kattintson a kis plusz (+) ikonra."
+
+#: admin/views/Manage_fm.php:1642
+msgid "Provide the email address of a valid PayPal account. It will receive the payments made through your form."
+msgstr "Egy érvényes PayPal fiókhoz tartozó e-mail címet adjon meg. Ide fognak érkezni az űrlappal létrehozott fizetési kérelmek."
+
+#: admin/views/Manage_fm.php:1640
+msgid "Paypal email"
+msgstr "PayPal e-mail"
+
+#: admin/views/Manage_fm.php:1637
+msgid "Testmode"
+msgstr "Tesztelő mód"
+
+#: admin/views/Manage_fm.php:1633
+msgid "Checkout Mode"
+msgstr "Megrendelési mód"
+
+#: admin/views/Manage_fm.php:1630
+msgid "Specify the percentage of the tax. It will be calculated from the total payment amount of your form."
+msgstr "Az adókulcs meghatározása (százalék). Az űrlapon látható teljes befizetendő összegből lesz kiszámítva."
+
+#: admin/views/Manage_fm.php:1625
+msgid "Choose the currency to be used for the payments made through your form."
+msgstr "Annak a pénznemnek a kiválasztása, amellyel az űrlapon keresztül fizetni lehet."
+
+#: admin/views/Manage_fm.php:1590
+msgid "Payment Currency"
+msgstr "Fizetés pénzneme"
+
+#: admin/views/Manage_fm.php:1586
+msgid "PAYPAL is available in Premium version"
+msgstr "A PayPal csak a Prémium verzióban érhető el"
+
+#: admin/views/Manage_fm.php:1579
+msgid "Paypal"
+msgstr "PayPal"
+
+#: admin/views/Manage_fm.php:1577 admin/views/Themes_fm.php:347
+msgid "None"
+msgstr "Nincs"
+
+#: admin/views/Manage_fm.php:1575
+msgid "Payment Method"
+msgstr "Fizetési mód"
+
+#: admin/views/Manage_fm.php:1497 admin/views/Manage_fm.php:1559
+#: admin/views/Submissions_fm.php:642
+msgid "URL"
+msgstr "URL"
+
+#: admin/views/Manage_fm.php:1495
+msgid "Custom Text"
+msgstr "Egyedi szöveg"
+
+#: admin/views/Manage_fm.php:1491 admin/views/Manage_fm.php:1500
+msgid "Post"
+msgstr "Bejegyzés"
+
+#: admin/views/Manage_fm.php:1489
+msgid "Stay on Form"
+msgstr "Maradás az űrlapon"
+
+#: admin/views/Manage_fm.php:1487
+msgid "Action type"
+msgstr "Művelet típusa"
+
+#: admin/views/Manage_fm.php:1094
+msgid "Use this option to specify a time period (hours), during which the user will be able to verify their email address."
+msgstr "Ezzel a beállítással meghatározhat egy időtartamot (órák), amelyen belül a felhasználó igazolhatja az e-mail címét."
+
+#: admin/views/Manage_fm.php:1093
+msgid "Edit post"
+msgstr "Bejegyzés szerkesztése"
+
+#: admin/views/Manage_fm.php:1088
+msgid " -- hours (0 - never expires)."
+msgstr " -- óra (0 = soha sem jár le)."
+
+#: admin/views/Manage_fm.php:1086
+msgid "Verification link expires in"
+msgstr "Az ellenőrzési link ennyi idő múlva lejár:"
+
+#: admin/views/Manage_fm.php:1078
+msgid "Email verification"
+msgstr "E-mail ellenőrzése"
+
+#: admin/views/Manage_fm.php:1049
+msgid "Specify an alternative email address, to which the submitter will be able to reply upon receiving the message."
+msgstr "Adjon meg egy másik e-mail címet, amelyre a beküldő az üzenet megkapása után választ küldhet."
+
+#: admin/views/Manage_fm.php:995
+msgid "Specify the email address from which the submitter will receive the email."
+msgstr "Adja meg, hogy a beküldő milyen e-mail címről kapja meg az üzenetet."
+
+#: admin/views/Manage_fm.php:1034
+msgid "Write custom content to the email message which is sent to submitter. Include All Fields List to forward all submitted information, or click on fields buttons to use individual field values in the content."
+msgstr "Írjon egyedi tartalmat a beküldőnek küldendő e-mailbe. Minden beküldött információ továbbításához választhatja az összes mező listáját vagy kattintson a mezők gombjaira, és így foglalja bele az egyes mezők értékeit a tartalomba."
+
+#: admin/views/Manage_fm.php:1015
+msgid "Custom Text in Email For User"
+msgstr "Egyedi szöveg a felhasználónak küldött e-mailben"
+
+#: admin/views/Manage_fm.php:977
+msgid "Use this setting to select the email field of your form, to which the submissions will be sent."
+msgstr "Ezzel a beállítással kijelölheti az űrlapon azt az e-mail címet tartalmazó mezőt, amelyre a beküldések elmenjenek."
+
+#: admin/views/Manage_fm.php:964
+msgid "There is no email field"
+msgstr "Nincs e-mail mező"
+
+#: admin/views/Manage_fm.php:959
+msgid "Send to"
+msgstr "Címzett"
+
+#: admin/views/Manage_fm.php:955
+msgid "Email to User"
+msgstr "E-mail a felhasználónak"
+
+#: admin/views/Manage_fm.php:947
+msgid "Disable this setting, in case you do not want to include form fields, which are left empty by the submitter."
+msgstr "Kapcsolja ki ezt a beállítást, ha nem szeretné elküldeni azokat az űrlapmezőket, amelyeket a beküldő üresen hagyott."
+
+#: admin/views/Manage_fm.php:942
+msgid "Email empty fields"
+msgstr "Üres mezők az e-mailben"
+
+#: admin/views/Manage_fm.php:939 admin/views/Manage_fm.php:1075
+msgid "If you have File Upload fields on your form, enable this setting to attach uploaded files to submission or confirmation email."
+msgstr "Ha az űrlapon van fájlfeltöltési mező, akkor ennek a beállításnak a bekapcsolásával a feltöltött fájlok csatoltatnak a beküldési vagy megerősítő e-mailhez."
+
+#: admin/views/Manage_fm.php:934 admin/views/Manage_fm.php:1070
+msgid "Attach File"
+msgstr "Fájl csatolása"
+
+#: admin/views/Manage_fm.php:931 admin/views/Manage_fm.php:1067
+msgid "Select the layout of the submission email, Text or HTML."
+msgstr "Jelölje ki a beküldési e-mail elrendezését: szöveg vagy HTML."
+
+#: admin/views/Manage_fm.php:930 admin/views/Manage_fm.php:1066
+#: admin/views/Manage_fm.php:1534
+msgid "Text"
+msgstr "Szöveg"
+
+#: admin/views/Manage_fm.php:926 admin/views/Manage_fm.php:1062
+msgid "Mode"
+msgstr "Mód"
+
+#: admin/views/Manage_fm.php:923 admin/views/Manage_fm.php:1059
+msgid "Write additional email addresses to send the submission or confirmation email to. The receiver will not be able to view other recipients."
+msgstr "Megadhat további e-mail címeket is, amelyekre a beküldési vagy a megerősítő üzenetek elküldessenek. A címzett nem fog más címzetteket látni."
+
+#: admin/views/Manage_fm.php:921 admin/views/Manage_fm.php:1057
+msgid "BCC"
+msgstr "Titkos másolat (Bcc)"
+
+#: admin/views/Manage_fm.php:918 admin/views/Manage_fm.php:1054
+msgid "Provide additional email addresses to send the submission or confirmation email to. The receiver will be able to view all other recipients."
+msgstr "Megadhat további e-mail címeket is, amelyekre a beküldési vagy a megerősítő üzenetek elküldessenek. A címzett látni fogja az összes többi címzettet."
+
+#: admin/views/Manage_fm.php:916 admin/views/Manage_fm.php:1052
+msgid "CC"
+msgstr "Másolat (Cc)"
+
+#: admin/views/Manage_fm.php:913
+msgid "Specify an alternative email address, to which the administrator will be able to reply upon receiving the message."
+msgstr "Megadhat egy másik e-mail címet, amelyre a rendszergazda az üzenet megkapása után választ küldhet."
+
+#: admin/views/Manage_fm.php:887 admin/views/Manage_fm.php:1046
+msgid "Reply to (if different from \"Email From\")"
+msgstr "Válasz ide (ha különbözi a feladótól)"
+
+#: admin/views/Manage_fm.php:847 admin/views/Manage_fm.php:1006
+msgid "Set the name or search for a form field which is shown as the sender’s name in submission or confirmation emails."
+msgstr "Adjon meg egy nevet vagy keressen egy űrlapmezőt, amely a beküldési vagy megerősítő e-mailekben a feladó neveként fog megjelenni."
+
+#: admin/views/Manage_fm.php:844 admin/views/Manage_fm.php:1003
+msgid "From Name"
+msgstr "Feladó neve"
+
+#: admin/views/Manage_fm.php:836
+msgid "Specify the email address from which the administrator will receive the email."
+msgstr "Adja meg, hogy a rendszergazda milyen e-mail címről kapja meg az üzenetet."
+
+#: admin/views/Manage_fm.php:811 admin/views/Manage_fm.php:993
+msgid "Email From"
+msgstr "E-mail feladója"
+
+#: admin/views/Manage_fm.php:883 admin/views/Manage_fm.php:1042
+msgid "Advanced"
+msgstr "Speciális"
+
+#: admin/views/Manage_fm.php:875
+msgid "Write custom content to the email message which is sent to administrator. Include All Fields List to forward all submitted information, or click on fields buttons to use individual field values in the content."
+msgstr "Írjon egyedi tartalmat a rendszergazdának küldendő e-mail üzenetbe. Az összes beküldött adat továbbításához válassza az összes mező listáját vagy kattintson a mezők gombjaira, és így használja fel az egyes mezők értékeit a tartalomban."
+
+#: admin/views/Manage_fm.php:856
+msgid "Custom Text in Email For Administrator"
+msgstr "Egyedi szöveg a rendszergazdának küldött e-mailben"
+
+#: admin/views/Manage_fm.php:853 admin/views/Manage_fm.php:1012
+msgid "Add a custom subject or search for a form field for the submission email. In case it’s left blank, Form Title will be set as the subject of submission emails."
+msgstr "Adjon a beküldési e-mailhez egyéni tárgyat vagy keressen egy űrlapmezőt. Ha üresen marad, akkor az űrlap címe lesz a beküldési e-mailek tárgya."
+
+#: admin/views/Manage_fm.php:850 admin/views/Manage_fm.php:1009
+msgid "Subject"
+msgstr "Tárgy"
+
+#: admin/views/Manage_fm.php:788
+msgid "Specify the email address(es), to which submitted form information will be sent. For multiple email addresses separate with commas."
+msgstr "Adja meg az(oka)t az e-mail cím(ek)et, ahová a beküldött űrlap adatai elküldessenek. Több e-mail cím esetén vesszővel válassza el őket."
+
+#: admin/views/Manage_fm.php:785
+msgid "Email to send submissions to"
+msgstr "Beküldött űrlapok elküldése erre az e-mail címre:"
+
+#: admin/views/Manage_fm.php:781
+msgid "Email to Administrator"
+msgstr "E-mail küldése a rendszergazdának"
+
+#: admin/views/Manage_fm.php:771
+msgid "In case you cannot find the submission email in your Inbox, make sure to check the Spam folder as well."
+msgstr "Ha a beküldésről szóló e-mailt nem találja meg a beérkezett üzenetek között, nézze meg a levélszemét (Spam) mappában is."
+
+#: admin/views/Manage_fm.php:770
+msgid "Enable this setting to send submitted information to administrators and/or the submitter."
+msgstr "Engedélyezze ezt a beállítást, ha a beküldött adatokat szeretné elküldeni a rendszergazdáknak és/vagy a beküldőnek."
+
+#: admin/views/Manage_fm.php:765
+msgid "Send E-mail"
+msgstr "E-mail küldése"
+
+#: admin/views/Manage_fm.php:1458
+msgid "Stats fields:"
+msgstr "Statisztikai mezők:"
+
+#: admin/views/Manage_fm.php:1454 admin/views/Manage_fm.php:1472
+msgid "Select fields of the form and Stats Fields which will not to be displayed within front-end submissions, when you publish them."
+msgstr "Jelölje ki azokat az űrlap- és statisztikai mezőket, amelyek nem fognak megjelenni a weboldali beküldéseknél, amikor közzéteszi őket."
+
+#: admin/views/Manage_fm.php:1440 admin/views/Manage_fm.php:1462
+msgid "Select All"
+msgstr "Összes kijelölése"
+
+#: admin/views/Manage_fm.php:1436
+msgid "Fields to hide in frontend submissions"
+msgstr "A weboldali beküldésnél elrejtendő mezők"
+
+#: admin/views/Manage_fm.php:1432
+msgid "Mark all user roles which will be able to view front-end submissions, when you publish them on a post or page."
+msgstr "Jelölje meg azokat a felhasználói szerepeket, amelyek láthatják a weboldali beküldéseket, amikor egy bejegyzésben vagy oldalon közzéteszi őket."
+
+#: admin/views/Manage_fm.php:1417
+msgid "Allow User to see submissions"
+msgstr "A felhasználó láthatja a beküldéseit"
+
+#: admin/views/Manage_fm.php:1413
+msgid "This functionality is available in Premium version"
+msgstr "Ez a funkcionalitás csak a Prémium változatban érhető el"
+
+#: admin/views/Manage_fm.php:1395
+msgid "IMPORTANT! If you disable this option, the files uploaded through your form will not be saved on your site. The files will still be sent to emails and saved in Google Drive or Dropbox, if configured."
+msgstr "FIGYELMEZTETÉS! Ha ezt a beállítást kikapcsolja, akkor az űrlappal feltöltött fájlok nem mentődnek el az oldalon. A fájlok azonban továbbra is el fognak küldetni e-mailen és el lesznek mentre a Google Drive-ra vagy a Dropboxba, ha ez be van állítva."
+
+#: admin/views/Manage_fm.php:1390
+msgid "Save Uploads"
+msgstr "Feltöltések mentése"
+
+#: admin/views/Manage_fm.php:1387
+msgid "Use this option to change the mark for required fields of your form."
+msgstr "Ezzel a beállítással változtathatja meg az űrlap kötelező mezőinek jelölését."
+
+#: admin/views/Manage_fm.php:1385
+msgid "Required fields mark"
+msgstr "Kötelező mezők jelölése"
+
+#: admin/views/Manage_fm.php:3333
+msgid "The appearance of your forms is controlled by the theme you select with this option. Press Edit button to open and modify your form theme."
+msgstr "Az űrlapok megjelenését az ezzel a beállítással kijelölt téma határozza meg. Az űrlaptéma megnyitásához és módosításához nyomja meg a Szerkesztés gombot."
+
+#: admin/views/Manage_fm.php:3347
+msgid "Outdated Themes"
+msgstr "Elavult témák"
+
+#: admin/views/Manage_fm.php:3339
+msgid "Inherit From Website Theme"
+msgstr "Weboldal témájának átvétele"
+
+#: admin/views/Manage_fm.php:3338
+msgid "New Themes"
+msgstr "Új témák"
+
+#: admin/views/Manage_fm.php:1382
+msgid "IMPORTANT! If you disable this option, the information submitted through this form will not be saved in the database and will not be displayed on the Submissions page."
+msgstr "FIGYELMEZTETÉS! Ha ezt az beállítást kikapcsolja, akkor az űrlappal beküldött adatok nem mentődnek el az adatbázisba, és nem jelennek meg az Elküldések oldalon sem."
+
+#: admin/views/Manage_fm.php:1373
+msgid "Save data(to database)"
+msgstr "Adatok mentése (az adatbázisba)"
+
+#: admin/controllers/Themes_fm.php:2867 admin/views/Manage_fm.php:562
+#: admin/views/Manage_fm.php:769 admin/views/Manage_fm.php:938
+#: admin/views/Manage_fm.php:946 admin/views/Manage_fm.php:1074
+#: admin/views/Manage_fm.php:1082 admin/views/Manage_fm.php:1370
+#: admin/views/Manage_fm.php:1381 admin/views/Manage_fm.php:1394
+#: admin/views/Manage_fm.php:2162 admin/views/Manage_fm.php:2176
+#: admin/views/Manage_fm.php:2184 admin/views/Manage_fm.php:3450
+#: admin/views/Manage_fm.php:3457 admin/views/Manage_fm.php:3494
+#: admin/views/Manage_fm.php:3511 admin/views/Manage_fm.php:3518
+#: admin/views/Manage_fm.php:3529 admin/views/Manage_fm.php:3638
+#: admin/views/Options_fm.php:138 admin/views/Options_fm.php:146
+#: admin/views/Options_fm.php:154 admin/views/Options_fm.php:162
+#: admin/views/Options_fm.php:170 admin/views/Options_fm.php:178
+#: admin/views/Options_fm.php:186 admin/views/Options_fm.php:194
+#: admin/views/Themes_fm.php:306
+msgid "No"
+msgstr "Nem"
+
+#: admin/controllers/Themes_fm.php:2866 admin/views/Manage_fm.php:560
+#: admin/views/Manage_fm.php:767 admin/views/Manage_fm.php:936
+#: admin/views/Manage_fm.php:944 admin/views/Manage_fm.php:1072
+#: admin/views/Manage_fm.php:1080 admin/views/Manage_fm.php:1368
+#: admin/views/Manage_fm.php:1375 admin/views/Manage_fm.php:1392
+#: admin/views/Manage_fm.php:2160 admin/views/Manage_fm.php:2174
+#: admin/views/Manage_fm.php:2182 admin/views/Manage_fm.php:3448
+#: admin/views/Manage_fm.php:3455 admin/views/Manage_fm.php:3492
+#: admin/views/Manage_fm.php:3509 admin/views/Manage_fm.php:3516
+#: admin/views/Manage_fm.php:3527 admin/views/Manage_fm.php:3636
+#: admin/views/Options_fm.php:136 admin/views/Options_fm.php:144
+#: admin/views/Options_fm.php:152 admin/views/Options_fm.php:160
+#: admin/views/Options_fm.php:168 admin/views/Options_fm.php:176
+#: admin/views/Options_fm.php:184 admin/views/Options_fm.php:192
+#: admin/views/Themes_fm.php:304 admin/views/Uninstall_fm.php:93
+msgid "Yes"
+msgstr "Igen"
+
+#: admin/views/Manage_fm.php:1366
+msgid "Published"
+msgstr "Közzétéve"
+
+#: admin/views/Manage_fm.php:1344
+msgid "Privacy"
+msgstr "Adatvédelem"
+
+#: admin/views/Manage_fm.php:1341
+msgid "MySQL Mapping"
+msgstr "MySQL térképezés"
+
+#: admin/views/Manage_fm.php:1338
+msgid "Conditional Fields"
+msgstr "Feltételes mezők"
+
+#: admin/views/Manage_fm.php:1335
+msgid "JavaScript"
+msgstr "JavaScript"
+
+#: admin/views/Manage_fm.php:1332
+msgid "Payment Options"
+msgstr "Fizetési beállítások"
+
+#: admin/views/Manage_fm.php:1329
+msgid "Actions after Submission"
+msgstr "Beküldés utáni műveletek"
+
+#: admin/views/Manage_fm.php:366
+msgid "Email Options"
+msgstr "E-mail beállítások"
+
+#: admin/views/Manage_fm.php:1326
+msgid "General Options"
+msgstr "Általános beállítások"
+
+#: admin/views/Manage_fm.php:1248 form-maker.php:752
+msgid "Add"
+msgstr "Hozzáadás"
+
+#: admin/views/Manage_fm.php:1238 admin/views/Manage_fm.php:1660
+#: admin/views/view.php:535
+msgid "Buy"
+msgstr "Vásárlás"
+
+#: admin/views/Manage_fm.php:1238 admin/views/Manage_fm.php:1660
+msgid "This feature requires STRIPE extension"
+msgstr "Ehhez a funkcióhoz szükség van a STRIPE kiterjesztésre"
+
+#: admin/views/Manage_fm.php:1235 admin/views/Manage_fm.php:1657
+msgid "This feature is available only in the Premium version"
+msgstr "Ez a funkció csak a Prémium verzióban érhető el"
+
+#: admin/views/Manage_fm.php:1230 admin/views/Manage_fm.php:1649
+msgid "STRIPE extension compatible with Premium version only"
+msgstr "A STRIPE kiterjesztés csak a Prémium verzióval kompatibilis"
+
+#: admin/views/Manage_fm.php:1225
+msgid "This field type is available in Premium version"
+msgstr "Ez a mezőtípus csak a Prémium verzióban érhető el"
+
+#: admin/views/Manage_fm.php:879 admin/views/Manage_fm.php:1038
+#: admin/views/Manage_fm.php:1198 admin/views/Manage_fm.php:3203
+msgid "Toggle panel:"
+msgstr "Panel ki-/bekapcsolása:"
+
+#: admin/views/Manage_fm.php:1189
+msgid "Filtered fields"
+msgstr "Szűrt mezők"
+
+#: admin/views/Manage_fm.php:1181 admin/views/Manage_fm.php:3190
+msgid "Filter"
+msgstr "Szűrő"
+
+#: admin/views/Manage_fm.php:1179
+msgid "FIELD TYPES"
+msgstr "MEZŐTÍPUSOK"
+
+#: admin/views/Manage_fm.php:1174
+msgid "Close"
+msgstr "Bezárás"
+
+#: admin/views/Manage_fm.php:1172
+msgid "Add field"
+msgstr "Mező hozzáadása"
+
+#: admin/views/Manage_fm.php:1161
+msgid "Payment Multiple Choice"
+msgstr "Fizetés – többszörös választás"
+
+#: admin/views/Manage_fm.php:1160
+msgid "Payment Single Choice"
+msgstr "Fizetés – egyszeres választás"
+
+#: admin/views/Manage_fm.php:1159
+msgid "Payment Select"
+msgstr "Fizetés – kiválasztás"
+
+#: admin/views/Manage_fm.php:1158
+msgid "Price"
+msgstr "Ár"
+
+#: admin/views/Manage_fm.php:1157
+msgid "PAYMENT"
+msgstr "FIZETÉS"
+
+#: admin/views/Manage_fm.php:1154
+msgid "Arithmetic Captcha"
+msgstr "Számtani CAPTCHA"
+
+#: admin/views/Manage_fm.php:1153
+msgid "Phone-Area Code"
+msgstr "Telefon- és körzetszám"
+
+#: admin/views/Manage_fm.php:1152
+msgid "Password"
+msgstr "Jelszó"
+
+#: admin/views/Manage_fm.php:1151
+msgid "Custom Button"
+msgstr "Egyedi gomb"
+
+#: admin/views/Manage_fm.php:1150
+msgid "Hidden Input"
+msgstr "Rejtett bevitel"
+
+#: admin/views/Manage_fm.php:1149
+msgid "Table of Fields"
+msgstr "Mezőrács"
+
+#: admin/views/Manage_fm.php:1148
+msgid "Grades"
+msgstr "Fokozatok"
+
+#: admin/views/Manage_fm.php:1147
+msgid "Range"
+msgstr "Tartomány"
+
+#: admin/views/Manage_fm.php:1146
+msgid "Slider"
+msgstr "Diavetítés"
+
+#: admin/views/Manage_fm.php:1145
+msgid "Rating"
+msgstr "Értékelés"
+
+#: admin/views/Manage_fm.php:1144
+msgid "Stars"
+msgstr "Csillagok"
+
+#: admin/views/Manage_fm.php:1143
+msgid "Date Range"
+msgstr "Dátumtartomány"
+
+#: admin/views/Manage_fm.php:1142
+msgid "Receive Copy"
+msgstr "Másolat fogadása"
+
+#: admin/views/Manage_fm.php:483 admin/views/Manage_fm.php:1141
+msgid "Time"
+msgstr "Idő"
+
+#: admin/views/Manage_fm.php:1140
+msgid "Map"
+msgstr "Térkép"
+
+#: admin/views/Manage_fm.php:1137
+msgid "ADVANCED"
+msgstr "SPECIÁLIS"
+
+#: admin/views/Manage_fm.php:1493 admin/views/Manage_fm.php:1517
+msgid "Page"
+msgstr "Oldal"
+
+#: admin/views/Manage_fm.php:928 admin/views/Manage_fm.php:1064
+#: admin/views/Manage_fm.php:1138
+msgid "HTML"
+msgstr "HTML"
+
+#: admin/views/Manage_fm.php:1135
+msgid "Date of Birth"
+msgstr "Születési dátum"
+
+#: admin/views/Manage_fm.php:1134
+msgid "Country List"
+msgstr "Országlista"
+
+#: admin/views/Manage_fm.php:1133
+msgid "Mark on Map"
+msgstr "Megjelölés térképen"
+
+#: admin/views/Manage_fm.php:1129
+msgid "Name"
+msgstr "Név"
+
+#: admin/views/Manage_fm.php:1128
+msgid "USER INFO FIELDS"
+msgstr "FELHASZNÁLÓRÓL INFORMÁCIÓT ADÓ MEZŐK"
+
+#: admin/views/Manage_fm.php:1126
+msgid "Simple Captcha"
+msgstr "Egyszerű CAPTCHA"
+
+#: admin/views/Manage_fm.php:1124 admin/views/Options_fm.php:79
+msgid "Recaptcha"
+msgstr "reCAPTCHA"
+
+#: admin/views/Manage_fm.php:1121
+msgid "Select"
+msgstr "Kijelölés"
+
+#: admin/views/Manage_fm.php:481 admin/views/Manage_fm.php:1119
+msgid "Number"
+msgstr "Szám"
+
+#: admin/views/Manage_fm.php:1118
+msgid "Paragraph Text"
+msgstr "Bekezdésnyi szöveg"
+
+#: admin/views/Manage_fm.php:1117
+msgid "Single Line Text"
+msgstr "Egysoros szöveg"
+
+#: admin/views/Manage_fm.php:1116 admin/views/Manage_fm.php:1196
+msgid "BASIC FIELDS"
+msgstr "ALAPVETŐ MEZŐK"
+
+#: admin/views/Manage_fm.php:542
+msgid "New Field"
+msgstr "Új mező"
+
+#: admin/views/Manage_fm.php:536
+msgid "Drag icon to the form to add a field."
+msgstr "Mező hozzáadásához húzza az ikont az űrlapra."
+
+#: admin/views/Manage_fm.php:611
+msgid "Hide Image on Mobile"
+msgstr "Kép elrejtése mobilon"
+
+#: admin/views/Manage_fm.php:600
+msgid "Image Animation"
+msgstr "Képanimáció"
+
+#: admin/views/Manage_fm.php:591
+msgid "Add Image"
+msgstr "Kép hozzáadása"
+
+#: admin/views/Manage_fm.php:589
+msgid "Image"
+msgstr "Kép"
+
+#: admin/views/Manage_fm.php:577
+msgid "Description"
+msgstr "Leírás"
+
+#: admin/views/Manage_fm.php:363
+msgid "Form Header"
+msgstr "Űrlap fejléce"
+
+#: admin/views/Manage_fm.php:3332
+msgid "The theme you have selected is outdated. Please choose one from New Themes section."
+msgstr "Az Ön által kiválasztott téma elavult. Kérjük, válasszon egy másikat az új sablonok szakaszban."
+
+#: admin/views/Manage_fm.php:343 form-maker.php:751 form-maker.php:867
+msgid "Update"
+msgstr "Frissítés"
+
+#: admin/views/Manage_fm.php:329 admin/views/Manage_fm.php:340
+#: framework/WDW_FM_Library.php:5850 framework/WDW_FM_Library.php:5948
+msgid "Form Title"
+msgstr "Űrlap címe"
+
+#: admin/views/Manage_fm.php:182
+msgid "View sumbissions"
+msgstr "Beküldött űrlapok megtekintése"
+
+#: admin/views/Manage_fm.php:174
+msgid "Set display options"
+msgstr "Megjelenítési beállítások"
+
+#: admin/views/Manage_fm.php:167 admin/views/Submissions_fm.php:562
+#: admin/views/Themes_fm.php:107
+msgid "Show more details"
+msgstr "További részletek megjelenítése"
+
+#: admin/views/Manage_fm.php:163 admin/views/Manage_fm.php:352
+#: admin/views/Themes_fm.php:338
+msgid "Preview"
+msgstr "Előnézet"
+
+#: admin/views/Manage_fm.php:96 admin/views/Manage_fm.php:200
+msgid "PHP function"
+msgstr "PHP-funkció"
+
+#: admin/views/Manage_fm.php:95 admin/views/Manage_fm.php:197
+msgid "Shortcode"
+msgstr "Rövid kód"
+
+#: admin/views/Manage_fm.php:68 admin/views/view.php:442 form-maker.php:517
+msgid "Forms"
+msgstr "Űrlapok"
+
+#: admin/views/FMSqlMapping.php:847 admin/views/FMSqlMapping.php:1833
+msgid "Extra"
+msgstr "Extra"
+
+#: admin/views/FMSqlMapping.php:844 admin/views/FMSqlMapping.php:1830
+#: admin/views/Themes_fm.php:79 admin/views/Themes_fm.php:110
+msgid "Default"
+msgstr "Alapértelmezett"
+
+#: admin/views/FMSqlMapping.php:841 admin/views/FMSqlMapping.php:1827
+msgid "Key"
+msgstr "Kulcs"
+
+#: admin/views/FMSqlMapping.php:838 admin/views/FMSqlMapping.php:1824
+msgid "Null"
+msgstr "Null"
+
+#: admin/views/FMShortocde.php:188 admin/views/Submissions_fm.php:839
+msgid "Statistics"
+msgstr "Statisztika"
+
+#: admin/views/FMShortocde.php:180 admin/views/Submissions_fm.php:201
+msgid "Conversion Rate"
+msgstr "Konverziós arány"
+
+#: admin/views/FMShortocde.php:176 admin/views/Submissions_fm.php:205
+msgid "Views"
+msgstr "Megtekintések"
+
+#: admin/views/FMShortocde.php:172 admin/views/Submissions_fm.php:197
+msgid "Entries"
+msgstr "Bejegyzések"
+
+#: admin/views/FMShortocde.php:168
+msgid "Ordering"
+msgstr "Rendezés"
+
+#: admin/views/FMShortocde.php:164 admin/views/Submissions_fm.php:232
+#: admin/views/view.php:165
+msgid "Search"
+msgstr "Keresés"
+
+#: admin/views/FMShortocde.php:156 admin/views/Manage_fm.php:1892
+#: admin/views/Submissions_fm.php:869
+msgid "Show"
+msgstr "Megjelenítés"
+
+#: admin/views/FMShortocde.php:147
+msgid "XML"
+msgstr "XML"
+
+#: admin/views/FMShortocde.php:143
+msgid "CSV"
+msgstr "CSV"
+
+#: admin/views/FMShortocde.php:139
+msgid "Export to"
+msgstr "Exportálás ide:"
+
+#: admin/views/FMShortocde.php:134
+msgid "You can hide specific form fields from Form General Options."
+msgstr "Az űrlap általános beállításainál rejthet el adott űrlapmezőket."
+
+#: admin/views/FMShortocde.php:131
+msgid "Form Fields"
+msgstr "Űrlapmezők"
+
+#: admin/views/FMShortocde.php:127 admin/views/Submissions_fm.php:308
+#: admin/views/Submissions_fm.php:312 admin/views/Submissions_fm.php:579
+#: admin/views/Submissions_fm.php:1320
+msgid "Submitter's Email Address"
+msgstr "Beküldő e-mail címe"
+
+#: admin/views/FMShortocde.php:123 admin/views/Submissions_fm.php:295
+#: admin/views/Submissions_fm.php:299 admin/views/Submissions_fm.php:576
+#: admin/views/Submissions_fm.php:1316
+msgid "Submitter's Username"
+msgstr "Beküldő felhasználóneve"
+
+#: admin/views/FMShortocde.php:119
+msgid "Submitter's IP Address"
+msgstr "Beküldő IP-címe"
+
+#: admin/views/FMShortocde.php:115
+msgid "Submit Date"
+msgstr "Beküldés dátuma"
+
+#: admin/views/FMShortocde.php:111
+msgid "Select fields"
+msgstr "Mezők kijelölés"
+
+#: admin/views/FMShortocde.php:98
+msgid "Select Date Range"
+msgstr "Dátumtartomány kijelölése"
+
+#: admin/views/FMShortocde.php:74
+msgid "Front end submissions are available in Premium version"
+msgstr "A weboldal felőli beküldés csak a Prémium verzióban érhető el"
+
+#: admin/views/FMShortocde.php:54 admin/views/FMShortocde.php:199
+msgid "Insert"
+msgstr "Beszúrás"
+
+#: admin/views/FMShortocde.php:46 admin/views/FMShortocde.php:90
+#: admin/views/Manage_fm.php:134 admin/views/Submissions_fm.php:590
+#: framework/WDW_FM_Library.php:5874 framework/WDW_FM_Library.php:6093
+msgid "Unpublished"
+msgstr "Közzététel visszavonva"
+
+#: admin/views/FMShortocde.php:41 admin/views/FMShortocde.php:85
+msgid "-Select a Form-"
+msgstr "-Válasszon űrlapot-"
+
+#: admin/views/FMPaypalInfo.php:189
+msgid "Read"
+msgstr "Olvasás"
+
+#: admin/views/FMPaypalInfo.php:179 admin/views/Manage_fm.php:1162
+msgid "Shipping"
+msgstr "Szállítás"
+
+#: admin/views/FMPaypalInfo.php:149
+msgid "Info"
+msgstr "Információ"
+
+#: admin/views/FMPaypalInfo.php:59
+msgid "Last modified"
+msgstr "Utolsó módosítás"
+
+#: admin/views/FMPaypalInfo.php:35 admin/views/Submissions_fm.php:371
+msgid "Payment Info"
+msgstr "Fizetési információ"
+
+#: admin/views/FMPaypalInfo.php:17
+msgid "No information yet"
+msgstr "Még nincs róla információ"
+
+#: admin/views/FMMapEditinPopup.php:28
+msgid "Latitude:"
+msgstr "Szélesség:"
+
+#: admin/views/FMMapEditinPopup.php:24
+msgid "Longitude:"
+msgstr "Hosszúság:"
+
+#: admin/views/FMMapEditinPopup.php:20
+msgid "Address:"
+msgstr "Cím:"
+
+#: admin/views/FMIpinfoinPopup.php:67
+msgid "Longitude"
+msgstr "Hosszúság"
+
+#: admin/views/FMIpinfoinPopup.php:63
+msgid "Latitude"
+msgstr "Szélesség"
+
+#: admin/views/FMIpinfoinPopup.php:59
+msgid "Timezone"
+msgstr "Időzóna"
+
+#: admin/views/FMIpinfoinPopup.php:55
+msgid "CountryCode"
+msgstr "Országkód"
+
+#: admin/views/FMEditCountryinPopup.php:63 admin/views/Options_fm.php:36
+#: admin/views/Submissions_fm.php:1293 admin/views/Themes_fm.php:151
+msgid "Save"
+msgstr "Mentés"
+
+#: admin/views/FMEditCountryinPopup.php:58
+msgid "Remove all"
+msgstr "Összes eltávolítása"
+
+#: admin/views/Checkpaypal.php:92 admin/views/FMPaypalInfo.php:199
+#: admin/views/Manage_fm.php:1163 admin/views/Submissions_fm.php:1254
+#: frontend/views/form_maker.php:3936
+msgid "Total"
+msgstr "Összesen"
+
+#: admin/views/Checkpaypal.php:88
+msgid "Shipping and handling"
+msgstr "Szállítás és kezelés"
+
+#: admin/views/Checkpaypal.php:84 admin/views/FMPaypalInfo.php:169
+#: admin/views/Manage_fm.php:1628
+msgid "Tax"
+msgstr "Adó"
+
+#: admin/views/Checkpaypal.php:80
+msgid "Item total"
+msgstr "Tétel összesen"
+
+#: admin/views/Checkpaypal.php:76
+msgid "read"
+msgstr "olvasás"
+
+#: admin/views/Checkpaypal.php:72
+msgid "shipping"
+msgstr "szállítás"
+
+#: admin/views/Checkpaypal.php:68
+msgid "tax"
+msgstr "adó"
+
+#: admin/views/Checkpaypal.php:64 admin/views/FMPaypalInfo.php:159
+msgid "IPN"
+msgstr "Azonnali fizetési értesítés (IPN)"
+
+#: admin/views/Checkpaypal.php:60 admin/views/Submissions_fm.php:983
+msgid "Payment info"
+msgstr "Fizetési információ"
+
+#: admin/views/Checkpaypal.php:56 admin/views/FMPaypalInfo.php:139
+#: admin/views/Manage_fm.php:1132
+msgid "Address"
+msgstr "Cím"
+
+#: admin/views/Checkpaypal.php:52 admin/views/FMPaypalInfo.php:129
+msgid "Fax"
+msgstr "Fax"
+
+#: admin/views/Checkpaypal.php:48 admin/views/FMPaypalInfo.php:119
+msgid "Mobile phone"
+msgstr "Mobiltelefon"
+
+#: admin/views/Checkpaypal.php:44 admin/views/FMPaypalInfo.php:109
+#: admin/views/Manage_fm.php:1131
+msgid "Phone"
+msgstr "Telefon"
+
+#: admin/views/Checkpaypal.php:40 admin/views/FMPaypalInfo.php:99
+#: admin/views/Manage_fm.php:1130
+msgid "Email"
+msgstr "E-mail cím"
+
+#: admin/views/Checkpaypal.php:36 admin/views/FMPaypalInfo.php:89
+msgid "Full name"
+msgstr "Teljes név"
+
+#: admin/views/Checkpaypal.php:32 admin/views/FMPaypalInfo.php:69
+msgid "Status"
+msgstr "Állapot"
+
+#: admin/views/Checkpaypal.php:28 admin/views/FormMakerSubmits.php:51
+#: admin/views/Manage_fm.php:482 admin/views/Manage_fm.php:1120
+#: admin/views/Submissions_fm.php:1308
+msgid "Date"
+msgstr "Dátum"
+
+#: admin/views/Checkpaypal.php:24
+msgid "Currency"
+msgstr "Pénznem"
+
+#: admin/views/Blocked_ips_fm.php:120 admin/views/Manage_fm.php:159
+#: admin/views/Submissions_fm.php:560 admin/views/Themes_fm.php:104
+msgid "Do you want to delete selected item?"
+msgstr "Törli a kijelölt elemet?"
+
+#: admin/views/Blocked_ips_fm.php:115 admin/views/Manage_fm.php:144
+#: admin/views/Submissions_fm.php:556 admin/views/Themes_fm.php:102
+msgid "Edit"
+msgstr "Szerkesztés"
+
+#: admin/views/Blocked_ips_fm.php:87
+msgid "Add IP"
+msgstr "IP-cím hozzáadása"
+
+#: admin/views/Blocked_ips_fm.php:80 admin/views/Blocked_ips_fm.php:87
+#: admin/views/Blocked_ips_fm.php:104 admin/views/FMIpinfoinPopup.php:43
+#: admin/views/Submissions_fm.php:1312 framework/WDW_FM_Library.php:5851
+msgid "IP"
+msgstr "IP-cím"
+
+#: admin/views/Blocked_ips_fm.php:77 admin/views/FMEditCountryinPopup.php:55
+#: admin/views/Manage_fm.php:89 admin/views/Submissions_fm.php:248
+#: admin/views/Themes_fm.php:75
+msgid "Select all"
+msgstr "Összes kijelölése"
+
+#: admin/views/Blocked_ips_fm.php:59 admin/views/Submissions_fm.php:77
+#: admin/views/Submissions_fm.php:218 form-maker.php:521
+msgid "Blocked IPs"
+msgstr "Blokkolt IP-címek"
+
+#: wd/templates/display_overview.php:75 wd/templates/display_overview.php:96
+msgid "Learn More"
+msgstr "Tudjon meg többet"
+
+#: booster/view.php:135
+msgid "Activate"
+msgstr "Aktiválás"
+
+#: admin/models/Manage_fm.php:2374 form-maker.php:766
+#: frontend/views/form_maker.php:1357
+msgid "No preview available for reCAPTCHA."
+msgstr "Nem áll rendelkezésre reCAPTCHA előnézet."
+
+#: admin/models/Manage_fm.php:413
+msgid "Custom HTML"
+msgstr "Egyedi HTML"
+
+#: admin/models/Manage_fm.php:402
+msgid "Section Break"
+msgstr "Szakasztörés"
+
+#: admin/controllers/Widget.php:18
+msgid "Add %s widget."
+msgstr "%s widget hozzáadása."
+
+#: admin/controllers/Themes_fm.php:2917
+msgid "Text Width"
+msgstr "Szöveg szélessége"
+
+#: admin/controllers/Themes_fm.php:2911 admin/views/Submissions_fm.php:696
+msgid "Grading"
+msgstr "Árnyalás"
+
+#: admin/controllers/Themes_fm.php:2874 admin/views/Manage_fm.php:1139
+msgid "File Upload"
+msgstr "Fájl feltöltése"
+
+#: admin/controllers/Themes_fm.php:2848
+msgid "Required"
+msgstr "Kötelező"
+
+#: admin/controllers/Themes_fm.php:2840
+msgid "Font Style"
+msgstr "Betűstílus"
+
+#: admin/controllers/Themes_fm.php:2824
+msgid "Inactive Text"
+msgstr "Inaktív szöveg"
+
+#: admin/controllers/Themes_fm.php:2454 admin/views/Manage_fm.php:3439
+#: admin/views/Manage_fm.php:3468
+msgid "Position"
+msgstr "Helyzet"
+
+#: admin/controllers/Themes_fm.php:2269
+msgid "Previous Button Parameters"
+msgstr "„Előző” gomb paraméterei"
+
+#: admin/controllers/Themes_fm.php:2093
+msgid "Next Button Parameters"
+msgstr "„Következő” gomb paraméterei"
+
+#: admin/controllers/Themes_fm.php:2051 admin/views/Submissions_fm.php:1206
+#: admin/views/Themes_fm.php:345
+msgid "Percentage"
+msgstr "Százalék"
+
+#: admin/controllers/Themes_fm.php:2027
+msgid "Steps"
+msgstr "Lépések"
+
+#: admin/controllers/Themes_fm.php:1909
+msgid "Inactive"
+msgstr "Inaktív"
+
+#: admin/controllers/Themes_fm.php:1841 admin/controllers/Themes_fm.php:1959
+#: admin/controllers/Themes_fm.php:2125 admin/controllers/Themes_fm.php:2301
+msgid "Line Height"
+msgstr "Vonalmagasság"
+
+#: admin/controllers/Themes_fm.php:1791
+msgid "Active"
+msgstr "Aktív"
+
+#: admin/controllers/Themes_fm.php:1604 admin/views/Submissions_fm.php:233
+#: admin/views/Themes_fm.php:453
+msgid "Reset"
+msgstr "Alaphelyzetbe állítás"
+
+#: admin/controllers/Themes_fm.php:1546 admin/controllers/Themes_fm.php:1731
+#: admin/controllers/Themes_fm.php:2211 admin/controllers/Themes_fm.php:2387
+#: admin/controllers/Themes_fm.php:2594 admin/controllers/Themes_fm.php:2765
+msgid "Hover Parameters"
+msgstr "Rámutatáskor megjelenő paraméterek"
+
+#: admin/controllers/Themes_fm.php:1419 admin/views/Manage_fm.php:1125
+#: admin/views/Themes_fm.php:452
+msgid "Submit"
+msgstr "Küldés"
+
+#: admin/controllers/Themes_fm.php:1229 admin/views/Manage_fm.php:1123
+msgid "Multiple Choice"
+msgstr "Többszörös választás"
+
+#: admin/controllers/Themes_fm.php:1182 admin/controllers/Themes_fm.php:1322
+msgid "Checked Parameters"
+msgstr "Bejelölt paraméterek"
+
+#: admin/controllers/Themes_fm.php:1090 admin/views/Manage_fm.php:1122
+msgid "Single Choice"
+msgstr "Egyszeres választás"
+
+#: admin/controllers/Themes_fm.php:1055 admin/views/Manage_fm.php:367
+msgid "Appearance"
+msgstr "Megjelenés"
+
+#: admin/controllers/Themes_fm.php:1048
+msgid "Dropdown additional"
+msgstr "Legördülő kiegészítő"
+
+#: admin/controllers/Themes_fm.php:895
+msgid "Footer Parameters"
+msgstr "Lábléc paraméterei"
+
+#: admin/controllers/Themes_fm.php:871
+msgid "Section Column Parameters"
+msgstr "Szakaszoszlop paraméterei"
+
+#: admin/controllers/Themes_fm.php:838
+msgid "Section Parameters"
+msgstr "Szakasz paraméterei"
+
+#: admin/controllers/Themes_fm.php:787
+msgid "Mini labels (name, phone, address, checkbox, radio) Parameters"
+msgstr "Minicímkék (név, telefonszám, cím, jelölőnégyzet, rádiógomb) paraméterei"
+
+#: admin/controllers/Themes_fm.php:707
+msgid "Background Size"
+msgstr "Háttér mérete"
+
+#: admin/controllers/Themes_fm.php:694 admin/controllers/Themes_fm.php:1355
+#: admin/controllers/Themes_fm.php:2898
+msgid "Background Position"
+msgstr "Háttér helyzete"
+
+#: admin/controllers/Themes_fm.php:685 admin/controllers/Themes_fm.php:1073
+#: admin/controllers/Themes_fm.php:1346 admin/controllers/Themes_fm.php:2889
+msgid "Background Repeat"
+msgstr "Háttér ismétlődése"
+
+#: admin/controllers/Themes_fm.php:676 admin/controllers/Themes_fm.php:1064
+#: admin/controllers/Themes_fm.php:1337 admin/controllers/Themes_fm.php:2880
+msgid "Background URL"
+msgstr "Háttér URL"
+
+#: admin/controllers/Themes_fm.php:608 admin/controllers/Themes_fm.php:936
+#: admin/controllers/Themes_fm.php:1114 admin/controllers/Themes_fm.php:1205
+#: admin/controllers/Themes_fm.php:1253 admin/controllers/Themes_fm.php:1376
+#: admin/controllers/Themes_fm.php:1443 admin/controllers/Themes_fm.php:1628
+#: admin/controllers/Themes_fm.php:1833 admin/controllers/Themes_fm.php:1951
+#: admin/controllers/Themes_fm.php:2117 admin/controllers/Themes_fm.php:2293
+msgid "Height"
+msgstr "Magasság"
+
+#: admin/controllers/Themes_fm.php:585
+msgid "Image Parameters"
+msgstr "Kép paraméterei"
+
+#: admin/controllers/Themes_fm.php:562
+msgid "Description Parameters"
+msgstr "Leíró paraméterek"
+
+#: admin/controllers/Themes_fm.php:553 admin/controllers/Themes_fm.php:576
+#: admin/controllers/Themes_fm.php:720 admin/controllers/Themes_fm.php:811
+#: admin/controllers/Themes_fm.php:970 admin/controllers/Themes_fm.php:1468
+#: admin/controllers/Themes_fm.php:1561 admin/controllers/Themes_fm.php:1653
+#: admin/controllers/Themes_fm.php:1746 admin/controllers/Themes_fm.php:1824
+#: admin/controllers/Themes_fm.php:1942 admin/controllers/Themes_fm.php:2133
+#: admin/controllers/Themes_fm.php:2226 admin/controllers/Themes_fm.php:2309
+#: admin/controllers/Themes_fm.php:2402 admin/controllers/Themes_fm.php:2525
+#: admin/controllers/Themes_fm.php:2609 admin/controllers/Themes_fm.php:2687
+#: admin/controllers/Themes_fm.php:2780 admin/controllers/Themes_fm.php:2831
+#: admin/controllers/Themes_fm.php:2854
+msgid "Color"
+msgstr "Szín"
+
+#: admin/controllers/Themes_fm.php:544 admin/controllers/Themes_fm.php:642
+#: admin/controllers/Themes_fm.php:802 admin/controllers/Themes_fm.php:952
+#: admin/controllers/Themes_fm.php:1459 admin/controllers/Themes_fm.php:1644
+#: admin/controllers/Themes_fm.php:1815 admin/controllers/Themes_fm.php:1933
+#: admin/controllers/Themes_fm.php:2084 admin/controllers/Themes_fm.php:2516
+#: admin/controllers/Themes_fm.php:2678
+msgid "Font Weight"
+msgstr "Betűvastagság"
+
+#: admin/controllers/Themes_fm.php:536 admin/controllers/Themes_fm.php:568
+#: admin/controllers/Themes_fm.php:634 admin/controllers/Themes_fm.php:794
+#: admin/controllers/Themes_fm.php:944 admin/controllers/Themes_fm.php:1451
+#: admin/controllers/Themes_fm.php:1636 admin/controllers/Themes_fm.php:1807
+#: admin/controllers/Themes_fm.php:1925 admin/controllers/Themes_fm.php:2076
+#: admin/controllers/Themes_fm.php:2508 admin/controllers/Themes_fm.php:2670
+msgid "Font Size"
+msgstr "Betűméret"
+
+#: admin/controllers/Themes_fm.php:529
+msgid "Title Parameters"
+msgstr "Cím paraméterei"
+
+#: admin/controllers/Themes_fm.php:478 admin/controllers/Themes_fm.php:2696
+msgid "Text Align"
+msgstr "Szöveg igazítása"
+
+#: admin/controllers/Themes_fm.php:452 admin/controllers/Themes_fm.php:659
+msgid "Width (for topbar form type)"
+msgstr "Szélesség (felső sáv típusú űrlapnál)"
+
+#: admin/controllers/Themes_fm.php:435 admin/controllers/Themes_fm.php:625
+#: admin/controllers/Themes_fm.php:844 admin/controllers/Themes_fm.php:961
+#: admin/controllers/Themes_fm.php:1097 admin/controllers/Themes_fm.php:1188
+#: admin/controllers/Themes_fm.php:1236 admin/controllers/Themes_fm.php:1328
+#: admin/controllers/Themes_fm.php:1426 admin/controllers/Themes_fm.php:1552
+#: admin/controllers/Themes_fm.php:1611 admin/controllers/Themes_fm.php:1737
+#: admin/controllers/Themes_fm.php:1798 admin/controllers/Themes_fm.php:1916
+#: admin/controllers/Themes_fm.php:2100 admin/controllers/Themes_fm.php:2217
+#: admin/controllers/Themes_fm.php:2276 admin/controllers/Themes_fm.php:2393
+#: admin/controllers/Themes_fm.php:2499 admin/controllers/Themes_fm.php:2600
+#: admin/controllers/Themes_fm.php:2661 admin/controllers/Themes_fm.php:2771
+msgid "Background Color"
+msgstr "Háttér színe"
+
+#: admin/controllers/Themes_fm.php:426 admin/controllers/Themes_fm.php:591
+#: admin/controllers/Themes_fm.php:667 admin/controllers/Themes_fm.php:1410
+#: admin/controllers/Themes_fm.php:2034
+msgid "Alignment"
+msgstr "Igazítás"
+
+#: admin/controllers/Themes_fm.php:419 admin/controllers/Themes_fm.php:618
+msgid "General Parameters"
+msgstr "Általános paraméterek"
+
+#: admin/controllers/Themes_fm.php:408 admin/controllers/Themes_fm.php:1039
+#: admin/controllers/Themes_fm.php:1173 admin/controllers/Themes_fm.php:1313
+#: admin/controllers/Themes_fm.php:1537 admin/controllers/Themes_fm.php:1722
+#: admin/controllers/Themes_fm.php:2202 admin/controllers/Themes_fm.php:2378
+msgid "Box Shadow"
+msgstr "Mező árnyéka"
+
+#: admin/controllers/Themes_fm.php:400 admin/controllers/Themes_fm.php:521
+#: admin/controllers/Themes_fm.php:779 admin/controllers/Themes_fm.php:1031
+#: admin/controllers/Themes_fm.php:1165 admin/controllers/Themes_fm.php:1221
+#: admin/controllers/Themes_fm.php:1305 admin/controllers/Themes_fm.php:1393
+#: admin/controllers/Themes_fm.php:1529 admin/controllers/Themes_fm.php:1714
+#: admin/controllers/Themes_fm.php:1901 admin/controllers/Themes_fm.php:2019
+#: admin/controllers/Themes_fm.php:2194 admin/controllers/Themes_fm.php:2370
+#: admin/controllers/Themes_fm.php:2586 admin/controllers/Themes_fm.php:2757
+msgid "Border Radius"
+msgstr "Szegély sugara"
+
+#: admin/controllers/Themes_fm.php:392 admin/controllers/Themes_fm.php:513
+#: admin/controllers/Themes_fm.php:771 admin/controllers/Themes_fm.php:1023
+#: admin/controllers/Themes_fm.php:1157 admin/controllers/Themes_fm.php:1296
+#: admin/controllers/Themes_fm.php:1521 admin/controllers/Themes_fm.php:1596
+#: admin/controllers/Themes_fm.php:1706 admin/controllers/Themes_fm.php:1781
+#: admin/controllers/Themes_fm.php:1893 admin/controllers/Themes_fm.php:2011
+#: admin/controllers/Themes_fm.php:2186 admin/controllers/Themes_fm.php:2261
+#: admin/controllers/Themes_fm.php:2362 admin/controllers/Themes_fm.php:2437
+#: admin/controllers/Themes_fm.php:2578 admin/controllers/Themes_fm.php:2644
+#: admin/controllers/Themes_fm.php:2749 admin/controllers/Themes_fm.php:2814
+msgid "Border Width"
+msgstr "Szegély szélessége"
+
+#: admin/controllers/Themes_fm.php:383 admin/controllers/Themes_fm.php:504
+#: admin/controllers/Themes_fm.php:762 admin/controllers/Themes_fm.php:1014
+#: admin/controllers/Themes_fm.php:1148 admin/controllers/Themes_fm.php:1287
+#: admin/controllers/Themes_fm.php:1512 admin/controllers/Themes_fm.php:1587
+#: admin/controllers/Themes_fm.php:1697 admin/controllers/Themes_fm.php:1772
+#: admin/controllers/Themes_fm.php:1884 admin/controllers/Themes_fm.php:2002
+#: admin/controllers/Themes_fm.php:2177 admin/controllers/Themes_fm.php:2252
+#: admin/controllers/Themes_fm.php:2353 admin/controllers/Themes_fm.php:2428
+#: admin/controllers/Themes_fm.php:2569 admin/controllers/Themes_fm.php:2635
+#: admin/controllers/Themes_fm.php:2740 admin/controllers/Themes_fm.php:2805
+msgid "Border Type"
+msgstr "Szegély típusa"
+
+#: admin/controllers/Themes_fm.php:378 admin/controllers/Themes_fm.php:413
+#: admin/controllers/Themes_fm.php:439 admin/controllers/Themes_fm.php:464
+#: admin/controllers/Themes_fm.php:474 admin/controllers/Themes_fm.php:499
+#: admin/controllers/Themes_fm.php:557 admin/controllers/Themes_fm.php:580
+#: admin/controllers/Themes_fm.php:629 admin/controllers/Themes_fm.php:699
+#: admin/controllers/Themes_fm.php:712 admin/controllers/Themes_fm.php:732
+#: admin/controllers/Themes_fm.php:742 admin/controllers/Themes_fm.php:815
+#: admin/controllers/Themes_fm.php:824 admin/controllers/Themes_fm.php:833
+#: admin/controllers/Themes_fm.php:848 admin/controllers/Themes_fm.php:857
+#: admin/controllers/Themes_fm.php:866 admin/controllers/Themes_fm.php:881
+#: admin/controllers/Themes_fm.php:890 admin/controllers/Themes_fm.php:913
+#: admin/controllers/Themes_fm.php:922 admin/controllers/Themes_fm.php:965
+#: admin/controllers/Themes_fm.php:974 admin/controllers/Themes_fm.php:983
+#: admin/controllers/Themes_fm.php:992 admin/controllers/Themes_fm.php:1009
+#: admin/controllers/Themes_fm.php:1044 admin/controllers/Themes_fm.php:1059
+#: admin/controllers/Themes_fm.php:1101 admin/controllers/Themes_fm.php:1126
+#: admin/controllers/Themes_fm.php:1143 admin/controllers/Themes_fm.php:1177
+#: admin/controllers/Themes_fm.php:1192 admin/controllers/Themes_fm.php:1240
+#: admin/controllers/Themes_fm.php:1265 admin/controllers/Themes_fm.php:1282
+#: admin/controllers/Themes_fm.php:1317 admin/controllers/Themes_fm.php:1332
+#: admin/controllers/Themes_fm.php:1360 admin/controllers/Themes_fm.php:1388
+#: admin/controllers/Themes_fm.php:1430 admin/controllers/Themes_fm.php:1472
+#: admin/controllers/Themes_fm.php:1481 admin/controllers/Themes_fm.php:1490
+#: admin/controllers/Themes_fm.php:1507 admin/controllers/Themes_fm.php:1541
+#: admin/controllers/Themes_fm.php:1556 admin/controllers/Themes_fm.php:1565
+#: admin/controllers/Themes_fm.php:1582 admin/controllers/Themes_fm.php:1615
+#: admin/controllers/Themes_fm.php:1657 admin/controllers/Themes_fm.php:1666
+#: admin/controllers/Themes_fm.php:1675 admin/controllers/Themes_fm.php:1692
+#: admin/controllers/Themes_fm.php:1726 admin/controllers/Themes_fm.php:1741
+#: admin/controllers/Themes_fm.php:1750 admin/controllers/Themes_fm.php:1767
+#: admin/controllers/Themes_fm.php:1802 admin/controllers/Themes_fm.php:1828
+#: admin/controllers/Themes_fm.php:1853 admin/controllers/Themes_fm.php:1862
+#: admin/controllers/Themes_fm.php:1879 admin/controllers/Themes_fm.php:1920
+#: admin/controllers/Themes_fm.php:1946 admin/controllers/Themes_fm.php:1971
+#: admin/controllers/Themes_fm.php:1980 admin/controllers/Themes_fm.php:1997
+#: admin/controllers/Themes_fm.php:2062 admin/controllers/Themes_fm.php:2104
+#: admin/controllers/Themes_fm.php:2137 admin/controllers/Themes_fm.php:2146
+#: admin/controllers/Themes_fm.php:2155 admin/controllers/Themes_fm.php:2172
+#: admin/controllers/Themes_fm.php:2206 admin/controllers/Themes_fm.php:2221
+#: admin/controllers/Themes_fm.php:2230 admin/controllers/Themes_fm.php:2247
+#: admin/controllers/Themes_fm.php:2280 admin/controllers/Themes_fm.php:2313
+#: admin/controllers/Themes_fm.php:2322 admin/controllers/Themes_fm.php:2331
+#: admin/controllers/Themes_fm.php:2348 admin/controllers/Themes_fm.php:2382
+#: admin/controllers/Themes_fm.php:2397 admin/controllers/Themes_fm.php:2406
+#: admin/controllers/Themes_fm.php:2423 admin/controllers/Themes_fm.php:2467
+#: admin/controllers/Themes_fm.php:2476 admin/controllers/Themes_fm.php:2485
+#: admin/controllers/Themes_fm.php:2494 admin/controllers/Themes_fm.php:2503
+#: admin/controllers/Themes_fm.php:2529 admin/controllers/Themes_fm.php:2538
+#: admin/controllers/Themes_fm.php:2547 admin/controllers/Themes_fm.php:2564
+#: admin/controllers/Themes_fm.php:2604 admin/controllers/Themes_fm.php:2613
+#: admin/controllers/Themes_fm.php:2630 admin/controllers/Themes_fm.php:2665
+#: admin/controllers/Themes_fm.php:2691 admin/controllers/Themes_fm.php:2709
+#: admin/controllers/Themes_fm.php:2718 admin/controllers/Themes_fm.php:2735
+#: admin/controllers/Themes_fm.php:2775 admin/controllers/Themes_fm.php:2784
+#: admin/controllers/Themes_fm.php:2835 admin/controllers/Themes_fm.php:2903
+msgid "e.g."
+msgstr "pl."
+
+#: admin/controllers/Themes_fm.php:374 admin/controllers/Themes_fm.php:495
+#: admin/controllers/Themes_fm.php:754 admin/controllers/Themes_fm.php:1005
+#: admin/controllers/Themes_fm.php:1139 admin/controllers/Themes_fm.php:1278
+#: admin/controllers/Themes_fm.php:1503 admin/controllers/Themes_fm.php:1578
+#: admin/controllers/Themes_fm.php:1688 admin/controllers/Themes_fm.php:1763
+#: admin/controllers/Themes_fm.php:1875 admin/controllers/Themes_fm.php:1993
+#: admin/controllers/Themes_fm.php:2168 admin/controllers/Themes_fm.php:2243
+#: admin/controllers/Themes_fm.php:2344 admin/controllers/Themes_fm.php:2419
+#: admin/controllers/Themes_fm.php:2560 admin/controllers/Themes_fm.php:2626
+#: admin/controllers/Themes_fm.php:2731 admin/controllers/Themes_fm.php:2797
+msgid "Border Color"
+msgstr "Szegély színe"
+
+#: admin/controllers/Themes_fm.php:366 admin/controllers/Themes_fm.php:487
+#: admin/controllers/Themes_fm.php:746 admin/controllers/Themes_fm.php:997
+#: admin/controllers/Themes_fm.php:1131 admin/controllers/Themes_fm.php:1270
+#: admin/controllers/Themes_fm.php:1495 admin/controllers/Themes_fm.php:1570
+#: admin/controllers/Themes_fm.php:1680 admin/controllers/Themes_fm.php:1755
+#: admin/controllers/Themes_fm.php:1867 admin/controllers/Themes_fm.php:1985
+#: admin/controllers/Themes_fm.php:2160 admin/controllers/Themes_fm.php:2235
+#: admin/controllers/Themes_fm.php:2336 admin/controllers/Themes_fm.php:2411
+#: admin/controllers/Themes_fm.php:2552 admin/controllers/Themes_fm.php:2618
+#: admin/controllers/Themes_fm.php:2723 admin/controllers/Themes_fm.php:2789
+msgid "Border"
+msgstr "Szegély"
+
+#: admin/controllers/Themes_fm.php:362
+msgid "e.g. 5px 10px or 5% 10%"
+msgstr "pl. 5px 10px vagy 5% 10%"
+
+#: admin/controllers/Themes_fm.php:357 admin/controllers/Themes_fm.php:469
+#: admin/controllers/Themes_fm.php:737 admin/controllers/Themes_fm.php:829
+#: admin/controllers/Themes_fm.php:862 admin/controllers/Themes_fm.php:886
+#: admin/controllers/Themes_fm.php:918 admin/controllers/Themes_fm.php:988
+#: admin/controllers/Themes_fm.php:1122 admin/controllers/Themes_fm.php:1213
+#: admin/controllers/Themes_fm.php:1261 admin/controllers/Themes_fm.php:1384
+#: admin/controllers/Themes_fm.php:1486 admin/controllers/Themes_fm.php:1671
+#: admin/controllers/Themes_fm.php:1858 admin/controllers/Themes_fm.php:1976
+#: admin/controllers/Themes_fm.php:2151 admin/controllers/Themes_fm.php:2327
+#: admin/controllers/Themes_fm.php:2543 admin/controllers/Themes_fm.php:2714
+msgid "Margin"
+msgstr "Margó"
+
+#: admin/controllers/Themes_fm.php:352
+msgid "e.g. 3px 5px or 3% 5%"
+msgstr "pl. 3px 5px vagy 3% 5%"
+
+#: admin/controllers/Themes_fm.php:348 admin/controllers/Themes_fm.php:460
+#: admin/controllers/Themes_fm.php:728 admin/controllers/Themes_fm.php:820
+#: admin/controllers/Themes_fm.php:853 admin/controllers/Themes_fm.php:877
+#: admin/controllers/Themes_fm.php:909 admin/controllers/Themes_fm.php:979
+#: admin/controllers/Themes_fm.php:1477 admin/controllers/Themes_fm.php:1662
+#: admin/controllers/Themes_fm.php:1849 admin/controllers/Themes_fm.php:1967
+#: admin/controllers/Themes_fm.php:2142 admin/controllers/Themes_fm.php:2318
+#: admin/controllers/Themes_fm.php:2534 admin/controllers/Themes_fm.php:2705
+msgid "Padding"
+msgstr "Belső margók"
+
+#: admin/controllers/Themes_fm.php:340
+msgid "Width (for scrollbox, popup form types)"
+msgstr "Szélesség (görgetődoboznál, előugróűrlap-típusnál)"
+
+#: admin/controllers/Themes_fm.php:332 admin/controllers/Themes_fm.php:444
+#: admin/controllers/Themes_fm.php:600 admin/controllers/Themes_fm.php:651
+#: admin/controllers/Themes_fm.php:901 admin/controllers/Themes_fm.php:1106
+#: admin/controllers/Themes_fm.php:1197 admin/controllers/Themes_fm.php:1245
+#: admin/controllers/Themes_fm.php:1368 admin/controllers/Themes_fm.php:1435
+#: admin/controllers/Themes_fm.php:1620 admin/controllers/Themes_fm.php:2043
+#: admin/controllers/Themes_fm.php:2058 admin/controllers/Themes_fm.php:2109
+#: admin/controllers/Themes_fm.php:2285
+msgid "Width"
+msgstr "Szélesség"
+
+#: admin/controllers/Themes_fm.php:323
+msgid "Font Family"
+msgstr "Betűtípuscsalád"
+
+#: admin/controllers/Themes_fm.php:268
+msgid "Center"
+msgstr "Közép"
+
+#: admin/controllers/Themes_fm.php:251 admin/controllers/Themes_fm.php:268
+#: admin/controllers/Themes_fm.php:2490 admin/views/Manage_fm.php:3470
+msgid "Left"
+msgstr "Bal"
+
+#: admin/controllers/Themes_fm.php:250 admin/controllers/Themes_fm.php:2481
+#: admin/views/Manage_fm.php:3443
+msgid "Bottom"
+msgstr "Alul"
+
+#: admin/controllers/Themes_fm.php:249 admin/controllers/Themes_fm.php:268
+#: admin/controllers/Themes_fm.php:2472 admin/views/Manage_fm.php:3472
+msgid "Right"
+msgstr "Jobb"
+
+#: admin/controllers/Themes_fm.php:248 admin/controllers/Themes_fm.php:2463
+#: admin/views/Manage_fm.php:3441
+msgid "Top"
+msgstr "Felül"
+
+#: admin/controllers/Themes_fm.php:229 admin/controllers/Themes_fm.php:2934
+msgid "Custom CSS"
+msgstr "Egyéni CSS"
+
+#: admin/controllers/Themes_fm.php:228 admin/views/Manage_fm.php:832
+#: admin/views/Manage_fm.php:908 admin/views/Options_fm.php:125
+msgid "Other"
+msgstr "Egyéb"
+
+#: admin/controllers/Themes_fm.php:227 admin/views/Manage_fm.php:3521
+msgid "Minimize Text"
+msgstr "Szöveg kicsinyítése"
+
+#: admin/controllers/Themes_fm.php:226
+msgid "Close(Minimize) Button"
+msgstr "Bezárás (kis méret) gomb"
+
+#: admin/controllers/Themes_fm.php:225
+msgid "Buttons"
+msgstr "Gombok"
+
+#: admin/controllers/Themes_fm.php:224 admin/views/FMShortocde.php:184
+msgid "Pagination"
+msgstr "Oldalakra tördelés"
+
+#: admin/controllers/Themes_fm.php:223
+msgid "General Buttons"
+msgstr "Általános gombok"
+
+#: admin/controllers/Themes_fm.php:222 admin/views/Submissions_fm.php:1205
+msgid "Choices"
+msgstr "Választások"
+
+#: admin/controllers/Themes_fm.php:221
+msgid "Inputbox"
+msgstr "Beviteli mező"
+
+#: admin/controllers/Themes_fm.php:220
+msgid "Content"
+msgstr "Tartalom"
+
+#: admin/controllers/Themes_fm.php:219
+msgid "Header"
+msgstr "Fejléc"
+
+#: admin/controllers/Themes_fm.php:218 admin/controllers/Themes_fm.php:1403
+#: admin/controllers/Themes_fm.php:2069
+msgid "Global Parameters"
+msgstr "Globális paraméterek"
+
+#: admin/controllers/Themes_fm.php:83 admin/views/Manage_fm.php:3331
+#: form-maker.php:522 form-maker.php:1471
+msgid "Themes"
+msgstr "Témák"
+
+#: admin/controllers/Submissions_fm.php:150
+#: admin/controllers/Submissions_fm.php:168 admin/views/Manage_fm.php:94
+#: admin/views/Manage_fm.php:178 form-maker.php:429 form-maker.php:518
+#: form-maker.php:1463
+msgid "Submissions"
+msgstr "Beküldések"
+
+#: admin/controllers/Submissions_fm.php:62
+msgid "Deleted"
+msgstr "Törölve"
+
+#: admin/controllers/Submissions_fm.php:58
+msgid "Unblocked"
+msgstr "Blokkolás visszavonva"
+
+#: admin/controllers/Submissions_fm.php:57
+msgid "Unblock IPs"
+msgstr "IP-cím blokkolásának visszavonása"
+
+#: admin/controllers/Submissions_fm.php:54
+msgid "Blocked"
+msgstr "Blokkolva"
+
+#: admin/controllers/Submissions_fm.php:53
+msgid "Block IPs"
+msgstr "IP-cím blokkolása"
+
+#: admin/controllers/Manage_fm.php:1619
+msgid "No results found"
+msgstr "Nincs találat"
+
+#: admin/controllers/Manage_fm.php:1031
+msgid "display options"
+msgstr "megjelenítési beállítások"
+
+#: admin/controllers/Manage_fm.php:978
+msgid "layout"
+msgstr "elrendezés"
+
+#: admin/controllers/Manage_fm.php:543
+msgid "options"
+msgstr "beállítások"
+
+#: admin/controllers/Manage_fm.php:377
+msgid "Create new form"
+msgstr "Új űrlap létrehozása"
+
+#: admin/controllers/Manage_fm.php:38 admin/controllers/Themes_fm.php:43
+msgid "duplicated"
+msgstr "duplikálva"
+
+#: admin/controllers/Manage_fm.php:37 admin/controllers/Themes_fm.php:42
+#: admin/views/Manage_fm.php:151 admin/views/Themes_fm.php:103
+msgid "Duplicate"
+msgstr "Másolat készítése"
+
+#: admin/controllers/Manage_fm.php:34
+msgid "unpublished"
+msgstr "közzététel visszavonva"
+
+#: admin/controllers/Manage_fm.php:33 admin/views/Manage_fm.php:155
+msgid "Unpublish"
+msgstr "Közzététel visszavonása"
+
+#: admin/controllers/Manage_fm.php:30
+msgid "published"
+msgstr "közzétéve"
+
+#: admin/controllers/Manage_fm.php:29 admin/views/Manage_fm.php:155
+#: admin/views/Manage_fm.php:347
+msgid "Publish"
+msgstr "Közzététel"
+
+#: admin/controllers/Checkpaypal.php:186 admin/views/Submissions_fm.php:794
+#: admin/views/Submissions_fm.php:803
+msgid "Payment information"
+msgstr "Fizetési információ"
+
+#: admin/controllers/Blocked_ips_fm.php:89 admin/controllers/Manage_fm.php:152
+#: admin/controllers/Submissions_fm.php:123 admin/controllers/Themes_fm.php:122
+msgid "%s item successfully %s."
+msgid_plural "%s items successfully %s."
+msgstr[0] "%s elem sikeresen %s."
+msgstr[1] "%s elem sikeresen %s."
+
+#: admin/controllers/Blocked_ips_fm.php:23 admin/controllers/Manage_fm.php:42
+#: admin/controllers/Themes_fm.php:47
+msgid "deleted"
+msgstr "törölve"
+
+#: admin/controllers/Blocked_ips_fm.php:22 admin/controllers/Manage_fm.php:41
+#: admin/controllers/Submissions_fm.php:61 admin/controllers/Themes_fm.php:46
+#: admin/views/Blocked_ips_fm.php:120 admin/views/Manage_fm.php:159
+#: admin/views/Manage_fm.php:406 admin/views/Manage_fm.php:418
+#: admin/views/Manage_fm.php:2103 admin/views/Submissions_fm.php:560
+#: admin/views/Themes_fm.php:104
+msgid "Delete"
+msgstr "Törlés"
+
+#: admin/views/Manage_fm.php:1164 admin/views/Manage_fm.php:1581
+msgid "Stripe"
+msgstr "Stripe"
+
+#. Description of the plugin
+msgid "This plugin is a modern and advanced tool for easy and fast creating of a WordPress Form. The backend interface is intuitive and user friendly which allows users far from scripting and programming to create WordPress Forms."
+msgstr "Ez a bővítmény korszerű és fejlett eszköz, amellyel könnyedén és gyorsan hozhat létre WordPress űrlapokat. Az intuitív és felhasználóbarát háttérfelületen kódolás és programozás nélkül lehet űrlapokat összeállítani."
+
+#. Plugin Name of the plugin
+#: admin/controllers/elementorWidget.php:24
+msgid "Form Maker"
+msgstr "Form Maker"
+
+#: admin/views/FMShortocde.php:101
+msgid "To"
+msgstr "Eddig:"
+
+#: admin/views/FMShortocde.php:99
+msgid "From"
+msgstr "Ettől:"
+
+#: admin/views/FMShortocde.php:160 admin/views/Manage_fm.php:92
+#: admin/views/Manage_fm.php:116 admin/views/Manage_fm.php:573
+#: admin/views/Themes_fm.php:78 admin/views/Themes_fm.php:97
+#: admin/views/Themes_fm.php:153
+msgid "Title"
+msgstr "Cím"
+
+#: form-maker.php:1224
+msgid "Your score should be less than"
+msgstr "A pontszámnak kisebbnek kell lennie, mint"
+
+#: framework/WDW_FM_Library.php:3728 framework/WDW_FM_Library.php:3808
+#: framework/WDW_FM_Library.php:3887
+msgid "Quantity"
+msgstr "Mennyiség"
+
+#: framework/WDW_FM_Library.php:2950
+msgid "You cannot select former dates. Choose a date starting from the current one."
+msgstr "Múltbeli dátumot nem lehet kijelölni. Mai vagy jövőbeli dátumot válasszon."
+
+#: frontend/views/form_maker.php:1125
+msgid "This is not a valid email address."
+msgstr "Érvénytelen e-mail cím."
+
+#: frontend/models/verify_email.php:66
+msgid "Verification link is invalid."
+msgstr "Érvénytelen ellenőrző link."
+
+#: frontend/models/verify_email.php:46
+msgid "Your email verification has timed out."
+msgstr "Az e-mail címének ellenőrzése lejárt."
+
+#: frontend/models/verify_email.php:61
+msgid "Your email has been successfully verified."
+msgstr "Az Ön e-mail címe sikeresen ellenőrizve."
+
+#: frontend/models/verify_email.php:32
+msgid "Your email address is already verified."
+msgstr "Az Ön e-mail címe már ellenőriztetett."
+
+#: frontend/models/form_maker.php:4519 frontend/views/form_maker.php:101
+msgid "Error, email was not sent."
+msgstr "Hiba, az e-mail nem lett elküldve."
+
+#: frontend/models/form_maker.php:4513 frontend/views/form_maker.php:104
+#: frontend/views/form_maker.php:1876
+msgid "Your form was successfully submitted."
+msgstr "Űrlap sikeresen elküldve."
+
+#: frontend/models/form_maker.php:2806
+msgid "Nothing was submitted."
+msgstr "Semmi sem lett elküldve."
+
+#: frontend/models/form_maker.php:1857 frontend/models/form_maker.php:3498
+msgid "Error, file cannot be moved."
+msgstr "Hiba, a fájl nem helyezhető át."
+
+#: form-maker.php:1218 frontend/models/form_maker.php:1735
+msgid "The file exceeds the allowed size of %s KB."
+msgstr "A fájl nagyobb, mint a megengedett méret (%s kB)."
+
+#: frontend/models/form_maker.php:1398
+msgid "Your ip is blacklisted. Please contact the website administrator."
+msgstr "Az IP-címe feketelistán van. Lépjen kapcsolatba a webhely adminisztrátorával."
+
+#: frontend/models/form_maker.php:1225 frontend/models/form_maker.php:1238
+#: frontend/models/form_maker.php:1302
+msgid "Error, incorrect Security code."
+msgstr "Hiba, helytelen biztonsági kód."
+
+#: wd/includes/notices.php:213
+msgid "Never show again"
+msgstr "Ne jelenjen meg újra"
+
+#: wd/includes/notices.php:212
+msgid "Maybe Later"
+msgstr "Talán majd később"
+
+#: wd/includes/notices.php:211
+msgid "I've already left a review"
+msgstr "Már írtam értékelést"
+
+#: wd/includes/notices.php:210
+msgid "Sure! I'd love to!"
+msgstr "Persze, örömmel!"
+
+#: wd/includes/notices.php:209
+msgid "We hope you've enjoyed using WordPress %s! Would you consider leaving us a review on WordPress.org?"
+msgstr "Reméljük, élvezi a WordPress %s használatát! Lenne-e esetleg kedve értékelni minket a WordPress.org-on?"
+
+#: wd/includes/notices.php:208
+msgid "Leave A Review?"
+msgstr "Ír véleményt?"
+
+#: framework/WDW_FM_Library.php:5341 frontend/views/form_maker.php:3126
+msgid "December"
+msgstr "December"
+
+#: framework/WDW_FM_Library.php:5341 frontend/views/form_maker.php:3126
+msgid "November"
+msgstr "November"
+
+#: framework/WDW_FM_Library.php:5341 frontend/views/form_maker.php:3126
+msgid "October"
+msgstr "Október"
+
+#: framework/WDW_FM_Library.php:5341 frontend/views/form_maker.php:3126
+msgid "September"
+msgstr "Szeptember"
+
+#: framework/WDW_FM_Library.php:5341 frontend/views/form_maker.php:3126
+msgid "August"
+msgstr "Augusztus"
+
+#: framework/WDW_FM_Library.php:5341 frontend/views/form_maker.php:3126
+msgid "July"
+msgstr "Július"
+
+#: framework/WDW_FM_Library.php:5341 frontend/views/form_maker.php:3126
+msgid "June"
+msgstr "Június"
+
+#: framework/WDW_FM_Library.php:5341 framework/WDW_FM_Library.php:5342
+#: frontend/views/form_maker.php:3126
+msgid "May"
+msgstr "Május"
+
+#: framework/WDW_FM_Library.php:5341 frontend/views/form_maker.php:3126
+msgid "April"
+msgstr "Április"
+
+#: framework/WDW_FM_Library.php:5341 frontend/views/form_maker.php:3126
+msgid "March"
+msgstr "Március"
+
+#: framework/WDW_FM_Library.php:5341 frontend/views/form_maker.php:3126
+msgid "February"
+msgstr "Február"
+
+#: framework/WDW_FM_Library.php:5341 frontend/views/form_maker.php:3126
+msgid "January"
+msgstr "Január"
+
+#: admin/views/FMSqlMapping.php:835 admin/views/FMSqlMapping.php:1821
+#: admin/views/Manage_fm.php:93 admin/views/Manage_fm.php:170
+msgid "Type"
+msgstr "Típus"
+
+#: admin/views/FMSelectDataFromDb.php:166
+msgid "Connection type"
+msgstr "Kapcsolat típusa"
+
+#: admin/models/Submissions_fm.php:393 admin/views/FMIpinfoinPopup.php:51
+msgid "Country"
+msgstr "Ország"
+
+#: admin/models/Submissions_fm.php:390
+msgid "Postal / Zip Code"
+msgstr "Irányítószám"
+
+#: admin/models/Submissions_fm.php:387
+msgid "State / Province / Region"
+msgstr "Állam / Tartomány / Régió"
+
+#: admin/models/Submissions_fm.php:384 admin/views/FMIpinfoinPopup.php:47
+msgid "City"
+msgstr "Város"
+
+#: admin/models/Submissions_fm.php:381
+msgid "Street Address Line 2"
+msgstr "Utca, házszám, 2. sor"
+
+#: admin/models/Submissions_fm.php:378
+msgid "Street Address"
+msgstr "Utca, házszám"

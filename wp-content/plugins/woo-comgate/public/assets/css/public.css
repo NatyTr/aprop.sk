@@ -1,0 +1,20 @@
+.comgate_select{
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 1px dashed #B9B8B8;
+  width: 100%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.comgate_select:hover{background-color:#dddddd;}
+.comgate_select .comgate_select_input{
+  padding:9px;
+}  
+.comgate_select img{
+  height:30px;
+}
+.comgate_select span{
+  font-weight:bold;
+  padding-left:10px
+}

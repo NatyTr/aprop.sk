@@ -1,0 +1,78 @@
+# Translation of Plugins - WP Mail SMTP by WPForms &#8211; The Most Popular SMTP and Email Log Plugin - Stable (latest release) in Slovak
+# This file is distributed under the same license as the Plugins - WP Mail SMTP by WPForms &#8211; The Most Popular SMTP and Email Log Plugin - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-10-25 19:06:27+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n >= 2 && n <= 4) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: sk\n"
+"Project-Id-Version: Plugins - WP Mail SMTP by WPForms &#8211; The Most Popular SMTP and Email Log Plugin - Stable (latest release)\n"
+
+#: src/Admin/Area.php:318 src/Admin/Area.php:319 src/Admin/Area.php:1278
+msgid "Settings"
+msgstr "Nastavenia"
+
+#: src/Admin/DashboardWidget.php:570
+msgid "Save Changes"
+msgstr "Uložiť nastavenia"
+
+#: assets/languages/wp-mail-smtp-vue.php:524 src/Admin/Pages/TestTab.php:253
+#: src/SiteHealth.php:352
+msgid "Send a Test Email"
+msgstr "Odoslať testovací email"
+
+#: assets/languages/wp-mail-smtp-vue.php:591
+#: src/Providers/OptionsAbstract.php:329
+msgid "Authentication"
+msgstr "Autentifikácia"
+
+#: assets/languages/wp-mail-smtp-vue.php:576
+#: src/Providers/OptionsAbstract.php:253
+msgid "Encryption"
+msgstr "Šifrovanie"
+
+#: assets/languages/wp-mail-smtp-vue.php:579
+#: src/Providers/OptionsAbstract.php:293
+msgid "SMTP Port"
+msgstr "SMTP Port"
+
+#: src/Admin/ConnectionSettings.php:177
+msgid "Return Path"
+msgstr "Návratová cesta"
+
+#: assets/languages/wp-mail-smtp-vue.php:642
+#: src/Admin/ConnectionSettings.php:202 src/Admin/Pages/ExportTab.php:125
+msgid "Mailer"
+msgstr "Mailer"
+
+#: assets/languages/wp-mail-smtp-vue.php:240
+#: src/Admin/ConnectionSettings.php:127 src/Admin/Pages/ExportTab.php:111
+msgid "From Name"
+msgstr "Meno odosielateľa"
+
+#: assets/languages/wp-mail-smtp-vue.php:247
+#: src/Admin/ConnectionSettings.php:70 src/Admin/Pages/SmartRoutingTab.php:180
+#: src/Admin/Pages/SmartRoutingTab.php:210
+msgid "From Email"
+msgstr "Email odosielateľa"
+
+#: assets/languages/wp-mail-smtp-vue.php:573
+#: src/Providers/OptionsAbstract.php:239
+msgid "SMTP Host"
+msgstr "Poskytovateľ SMTP"
+
+#. Plugin Name of the plugin
+#. Author of the plugin
+#: wp_mail_smtp.php src/Admin/Area.php:307 src/Admin/Area.php:308
+#: src/Admin/Area.php:365 src/Admin/Area.php:366
+#: src/Admin/DashboardWidget.php:164 src/Admin/DashboardWidget.php:562
+#: src/SiteHealth.php:43
+msgid "WP Mail SMTP"
+msgstr "WP Mail SMTP"
+
+#: src/Admin/Pages/AlertsTab.php:135
+msgid "Email"
+msgstr "E-mail"

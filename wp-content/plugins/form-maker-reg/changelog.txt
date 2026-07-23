@@ -1,0 +1,31 @@
+1.2.7
+*  Fixed: Bug with single quote in field label.
+
+1.2.6
+*  Added: Multisite support.
+*  Added: Placeholders functionality.
+
+1.2.5
+*  Added: Compatibility with Form Maker version 2.13.0.
+*  Fixed: Duplicate add-on data when duplicating a form.
+*  Fixed: Turn off input autocomplete for fields that have placeholder functionality.
+
+1.2.4
+*  Added: Placeholders for custom user fields.
+*  Added: Output from Registration extension.
+
+1.2.3
+*  Added:  Activate tab and field if username field is empty.
+*  Added:  Set a default values for function parameters.
+*  Changed: Field validation.
+
+1.2.2
+Improved: Placeholder functionality.
+Fixed: Compatibility with Form Maker 1.12.23 and 2.12.23
+
+1.2.1
+Fixed: Form validation bug (email field)
+Fixed: JS error in Form Options
+
+1.2.0
+Fixed: Compatibility with Form Maker 1.12.x and 2.12.x
