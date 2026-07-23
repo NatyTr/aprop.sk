@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Aprop Drone Feed Sync
  * Description: Imports products from the Enterra/Mergado XML feed into WooCommerce.
- * Version: 0.1.0
+ * Version: 0.2.2
  * Author: Aprop
  * Requires Plugins: woocommerce
  */
@@ -30,6 +30,12 @@ final class Aprop_Drone_Feed_Sync {
     private const PRODUCT_META_INCLUDED_PRODUCTS_JSON = '_aprop_enterra_included_products_json';
     private const PRODUCT_META_GALLERY_JSON = '_aprop_enterra_gallery_json';
     private const PRODUCT_META_GALLERY_COUNT = '_aprop_enterra_gallery_count';
+    private const PRODUCT_META_SOURCE_SKU = '_aprop_enterra_source_sku';
+    private const PRODUCT_META_CONTENT_JSON = '_aprop_enterra_content_json';
+    private const PRODUCT_META_TAB_KEYS = '_aprop_enterra_tab_meta_keys';
+    private const PRODUCT_META_RELATED_PRODUCTS_JSON = '_aprop_enterra_related_products_json';
+    private const PRODUCT_META_SOURCE_DATA_JSON = '_aprop_enterra_source_data_json';
+    private const PRODUCT_META_GALLERY_VIDEOS_JSON = '_aprop_enterra_gallery_videos_json';
     private const SOURCE_SLUG = 'enterra_mergado_feed';
 
     public function __construct() {
@@ -57,7 +63,7 @@ final class Aprop_Drone_Feed_Sync {
             return;
         }
 
-        wp_register_script('aprop-drone-feed-admin', false, [], '0.1.0', true);
+        wp_register_script('aprop-drone-feed-admin', false, [], '0.2.2', true);
         wp_enqueue_script('aprop-drone-feed-admin');
         wp_add_inline_script('aprop-drone-feed-admin', $this->admin_js());
     }
@@ -166,6 +172,7 @@ final class Aprop_Drone_Feed_Sync {
         if (!isset($products[$index])) {
             delete_transient(self::SYNC_TRANSIENT_PREFIX . $sync_id);
             update_option(self::OPTION_INITIAL_SYNC_DONE, '1', false);
+            $this->resolve_all_related_products();
             wp_send_json_success([
                 'done' => true,
                 'index' => $index,
@@ -187,6 +194,7 @@ final class Aprop_Drone_Feed_Sync {
         if ($next_index >= count($products)) {
             delete_transient(self::SYNC_TRANSIENT_PREFIX . $sync_id);
             update_option(self::OPTION_INITIAL_SYNC_DONE, '1', false);
+            $this->resolve_all_related_products();
         }
 
         wp_send_json_success([
@@ -350,6 +358,9 @@ final class Aprop_Drone_Feed_Sync {
         $product['included_products'] = $this->parse_feed_included_products($item);
         $product['gallery_images'] = $this->parse_feed_gallery_images($item);
         $product['web_categories'] = $this->parse_feed_web_categories($item);
+        $product['content'] = $this->parse_feed_content($item);
+        $product['related_products'] = $this->parse_feed_related_products($item);
+        $product['source_data'] = $this->parse_feed_source_data($item);
 
         return $product;
     }
@@ -428,11 +439,13 @@ final class Aprop_Drone_Feed_Sync {
                 'source_url' => '',
                 'fetched_at' => '',
                 'images' => [],
+                'videos' => [],
             ];
         }
 
         $gallery_node = $nodes[0];
         $images = [];
+        $videos = [];
 
         foreach ($gallery_node->xpath('./*[local-name()="image"]') ?: [] as $image) {
             $url = esc_url_raw((string) ($image['url'] ?? ''));
@@ -447,12 +460,125 @@ final class Aprop_Drone_Feed_Sync {
             ];
         }
 
+        foreach ($gallery_node->xpath('./*[local-name()="video"]') ?: [] as $video) {
+            $url = esc_url_raw((string) ($video['url'] ?? ''));
+            if ($url === '') {
+                continue;
+            }
+
+            $videos[] = [
+                'url' => $url,
+                'type' => sanitize_key((string) ($video['type'] ?? 'video')),
+                'title' => $this->normalize_feed_value((string) ($video['title'] ?? '')),
+            ];
+        }
+
         return [
             'count' => count($images),
             'source_url' => esc_url_raw((string) ($gallery_node['source_url'] ?? '')),
             'fetched_at' => $this->normalize_feed_value((string) ($gallery_node['fetched_at'] ?? '')),
             'images' => $images,
+            'videos' => $videos,
         ];
+    }
+
+    private function parse_feed_content(SimpleXMLElement $item): array {
+        $nodes = $item->xpath('./*[local-name()="content"]');
+        if (!is_array($nodes) || empty($nodes[0])) {
+            return [
+                'source_url' => '',
+                'fetched_at' => '',
+                'short_description_html' => '',
+                'tabs' => [],
+            ];
+        }
+
+        $content_node = $nodes[0];
+        $short_nodes = $content_node->xpath('./*[local-name()="short_description"]');
+        $tabs = [];
+
+        foreach ($content_node->xpath('./*[local-name()="tabs"]/*[local-name()="tab"]') ?: [] as $tab) {
+            $html_nodes = $tab->xpath('./*[local-name()="html"]');
+            $text_nodes = $tab->xpath('./*[local-name()="text"]');
+            $images = [];
+            $videos = [];
+            foreach ($tab->xpath('./*[local-name()="media"]/*[local-name()="image"]') ?: [] as $image) {
+                $url = esc_url_raw((string) ($image['url'] ?? ''));
+                if ($url !== '') {
+                    $images[] = $url;
+                }
+            }
+            foreach ($tab->xpath('./*[local-name()="media"]/*[local-name()="video"]') ?: [] as $video) {
+                $url = esc_url_raw((string) ($video['url'] ?? ''));
+                if ($url !== '') {
+                    $videos[] = $url;
+                }
+            }
+            $tab_id = sanitize_key((string) ($tab['id'] ?? ''));
+            if ($tab_id === '') {
+                continue;
+            }
+
+            $tabs[] = [
+                'id' => $tab_id,
+                'panel_id' => sanitize_html_class((string) ($tab['panel_id'] ?? '')),
+                'title' => $this->normalize_feed_value((string) ($tab['title'] ?? '')),
+                'html' => $this->normalize_feed_html(!empty($html_nodes[0]) ? (string) $html_nodes[0] : ''),
+                'text' => $this->normalize_feed_value(!empty($text_nodes[0]) ? (string) $text_nodes[0] : ''),
+                'image_count' => absint((string) ($tab['image_count'] ?? '0')),
+                'video_count' => absint((string) ($tab['video_count'] ?? '0')),
+                'images' => $images,
+                'videos' => $videos,
+            ];
+        }
+
+        return [
+            'source_url' => esc_url_raw((string) ($content_node['source_url'] ?? '')),
+            'fetched_at' => $this->normalize_feed_value((string) ($content_node['fetched_at'] ?? '')),
+            'short_description_html' => $this->normalize_feed_html(!empty($short_nodes[0]) ? (string) $short_nodes[0] : ''),
+            'tabs' => $tabs,
+        ];
+    }
+
+    private function parse_feed_related_products(SimpleXMLElement $item): array {
+        $nodes = $item->xpath('./*[local-name()="related_products"]');
+        $groups = ['cross_sell' => [], 'upsell' => []];
+        if (!is_array($nodes) || empty($nodes[0])) {
+            return $groups;
+        }
+
+        foreach ($nodes[0]->xpath('./*[local-name()="group"]') ?: [] as $group) {
+            $type = sanitize_key((string) ($group['type'] ?? ''));
+            if (!array_key_exists($type, $groups)) {
+                continue;
+            }
+
+            foreach ($group->xpath('./*[local-name()="product"]') ?: [] as $product) {
+                $sku = $this->normalize_feed_value((string) ($product['sku'] ?? ''));
+                if ($sku === '') {
+                    continue;
+                }
+
+                $groups[$type][] = [
+                    'sku' => $sku,
+                    'source_id' => $this->normalize_feed_value((string) ($product['source_id'] ?? '')),
+                    'title' => $this->normalize_feed_value((string) ($product['title'] ?? '')),
+                    'url' => esc_url_raw((string) ($product['url'] ?? '')),
+                ];
+            }
+        }
+
+        return $groups;
+    }
+
+    private function parse_feed_source_data(SimpleXMLElement $item): array {
+        $nodes = $item->xpath('./*[local-name()="source_data"]/*[local-name()="json"]');
+        if (!is_array($nodes) || empty($nodes[0])) {
+            return [];
+        }
+
+        $decoded = json_decode((string) $nodes[0], true);
+        return is_array($decoded) ? $decoded : [];
     }
 
     private function parse_feed_web_categories(SimpleXMLElement $item): array {
@@ -505,6 +631,15 @@ final class Aprop_Drone_Feed_Sync {
         return trim((string) preg_replace('/\s+/u', ' ', html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8')));
     }
 
+    private function normalize_feed_html(string $value): string {
+        return trim($value);
+    }
+
+    private function update_json_meta(int $post_id, string $meta_key, $value, int $options = 0): void {
+        $json = wp_json_encode($value, $options);
+        update_post_meta($post_id, $meta_key, wp_slash($json === false ? 'null' : $json));
+    }
+
     private function import_product(array $feed_product, string $mode = 'initial') {
         $feed_id = $feed_product['id'] ?? '';
         if ($feed_id === '') {
@@ -528,17 +663,30 @@ final class Aprop_Drone_Feed_Sync {
         }
 
         $title = $this->clean_enterra_suffix($feed_product['title'] ?? '');
-        $description = $this->format_product_description($this->clean_enterra_suffix($feed_product['description'] ?? ''));
+        $content = isset($feed_product['content']) && is_array($feed_product['content']) ? $feed_product['content'] : [];
+        $description_html = $this->content_tab_html($content, 'description');
+        $description = $description_html !== ''
+            ? $this->sanitize_imported_html($description_html)
+            : $this->format_product_description($this->clean_enterra_suffix($feed_product['description'] ?? ''));
+        $short_description = !empty($content['short_description_html'])
+            ? $this->sanitize_imported_html((string) $content['short_description_html'])
+            : wp_trim_words(wp_strip_all_tags($description), 40);
         $price = $this->parse_price($feed_product['price'] ?? '');
         $stock_status = $this->map_stock_status($feed_product['availability'] ?? '');
+        $source_sku = $this->normalize_feed_value((string) ($feed_product['mpn'] ?? ''));
+        $sku_owner_id = $source_sku !== '' ? (int) wc_get_product_id_by_sku($source_sku) : 0;
+        $sku_has_conflict = $sku_owner_id > 0 && $sku_owner_id !== $product_id;
+        $assigned_sku = $source_sku !== '' && !$sku_has_conflict
+            ? $source_sku
+            : ($product->get_sku() ?: $this->sku_from_feed_id($feed_id));
 
         try {
             $product->set_name($title);
             $product->set_status('publish');
             $product->set_catalog_visibility('visible');
             $product->set_description($description);
-            $product->set_short_description(wp_trim_words(wp_strip_all_tags($description), 40));
-            $product->set_sku($this->sku_from_feed_id($feed_id));
+            $product->set_short_description($short_description);
+            $product->set_sku($assigned_sku);
             $product->set_manage_stock(false);
             $product->set_stock_status($stock_status);
             $product->set_backorders($stock_status === 'onbackorder' ? 'yes' : 'no');
@@ -569,8 +717,42 @@ final class Aprop_Drone_Feed_Sync {
         update_post_meta($product_id, self::PRODUCT_META_FEED_ID, $feed_id);
         update_post_meta($product_id, self::PRODUCT_META_FEED_HASH, md5(wp_json_encode($feed_product)));
         update_post_meta($product_id, '_aprop_enterra_feed_url', self::LOCAL_FEED_FILE);
+        update_post_meta($product_id, self::PRODUCT_META_SOURCE_SKU, $source_sku);
+        if ($sku_has_conflict) {
+            update_post_meta($product_id, '_aprop_enterra_sku_conflict_product_id', $sku_owner_id);
+        } else {
+            delete_post_meta($product_id, '_aprop_enterra_sku_conflict_product_id');
+        }
         $this->store_product_specifications($product_id, $feed_product['specifications'] ?? []);
         $this->store_included_products($product_id, $feed_product['included_products'] ?? []);
+        $processed_content = $this->store_product_content($product_id, $content);
+        $this->store_related_products($product_id, $feed_product['related_products'] ?? []);
+        $source_data = array_merge(
+            [
+                'source_id' => $feed_id,
+                'source_url' => $feed_product['link'] ?? '',
+                'source_sku' => $source_sku,
+                'brand' => $feed_product['brand'] ?? '',
+                'condition' => $feed_product['condition'] ?? '',
+                'availability' => $feed_product['availability'] ?? '',
+                'price' => $feed_product['price'] ?? '',
+                'product_type' => $feed_product['product_type'] ?? '',
+                'google_product_category' => $feed_product['google_product_category'] ?? '',
+                'image_link' => $feed_product['image_link'] ?? '',
+            ],
+            isset($feed_product['source_data']) && is_array($feed_product['source_data'])
+                ? $feed_product['source_data']
+                : []
+        );
+        $this->store_source_data($product_id, $source_data);
+
+        if (!empty($processed_content['description_html'])) {
+            $product->set_description($processed_content['description_html']);
+        }
+        if (!empty($processed_content['short_description_html'])) {
+            $product->set_short_description($processed_content['short_description_html']);
+        }
+        $product->save();
 
         if (!empty($feed_product['link'])) {
             update_post_meta($product_id, '_aprop_enterra_source_url', esc_url_raw($feed_product['link']));
@@ -581,6 +763,7 @@ final class Aprop_Drone_Feed_Sync {
         }
 
         $this->set_product_gallery($product_id, $feed_product['gallery_images'] ?? [], $feed_product['image_link'] ?? '', $title);
+        $this->resolve_related_products_for_product($product_id);
 
         return [
             'product_id' => $product_id,
@@ -723,14 +906,14 @@ final class Aprop_Drone_Feed_Sync {
         }
 
         update_post_meta($product_id, self::PRODUCT_META_SPECS_COUNT, count($meta_keys));
-        update_post_meta($product_id, self::PRODUCT_META_SPECS_JSON, wp_json_encode([
+        $this->update_json_meta($product_id, self::PRODUCT_META_SPECS_JSON, [
             'count' => count($meta_keys),
             'source_url' => $specifications['source_url'] ?? '',
             'fetched_at' => $specifications['fetched_at'] ?? '',
             'rows' => array_values(array_filter($rows, 'is_array')),
-        ], JSON_UNESCAPED_UNICODE));
+        ], JSON_UNESCAPED_UNICODE);
         update_post_meta($product_id, self::PRODUCT_META_SPECS_SOURCE, esc_url_raw((string) ($specifications['source_url'] ?? '')));
-        update_post_meta($product_id, self::PRODUCT_META_SPECS_KEYS, wp_json_encode($meta_keys, JSON_UNESCAPED_UNICODE));
+        $this->update_json_meta($product_id, self::PRODUCT_META_SPECS_KEYS, $meta_keys, JSON_UNESCAPED_UNICODE);
     }
 
     private function store_included_products(int $product_id, array $included_products): void {
@@ -738,12 +921,275 @@ final class Aprop_Drone_Feed_Sync {
             ? array_values(array_filter($included_products['rows'], 'is_array'))
             : [];
 
-        update_post_meta($product_id, self::PRODUCT_META_INCLUDED_PRODUCTS_JSON, wp_json_encode([
+        $this->update_json_meta($product_id, self::PRODUCT_META_INCLUDED_PRODUCTS_JSON, [
             'count' => count($rows),
             'source_url' => $included_products['source_url'] ?? '',
             'fetched_at' => $included_products['fetched_at'] ?? '',
             'rows' => $rows,
-        ], JSON_UNESCAPED_UNICODE));
+        ], JSON_UNESCAPED_UNICODE);
+    }
+
+    private function content_tab_html(array $content, string $tab_id): string {
+        $tabs = isset($content['tabs']) && is_array($content['tabs']) ? $content['tabs'] : [];
+        foreach ($tabs as $tab) {
+            if (!is_array($tab) || sanitize_key((string) ($tab['id'] ?? '')) !== sanitize_key($tab_id)) {
+                continue;
+            }
+            return (string) ($tab['html'] ?? '');
+        }
+        return '';
+    }
+
+    private function store_product_content(int $product_id, array $content): array {
+        $tabs = isset($content['tabs']) && is_array($content['tabs']) ? $content['tabs'] : [];
+        $short_description = (string) ($content['short_description_html'] ?? '');
+        if (!$tabs && $short_description === '') {
+            return ['description_html' => '', 'short_description_html' => ''];
+        }
+
+        $old_meta_keys = json_decode((string) get_post_meta($product_id, self::PRODUCT_META_TAB_KEYS, true), true);
+        if (is_array($old_meta_keys)) {
+            foreach ($old_meta_keys as $old_meta_key) {
+                if (is_string($old_meta_key) && strpos($old_meta_key, '_aprop_enterra_tab_') === 0) {
+                    delete_post_meta($product_id, $old_meta_key);
+                }
+            }
+        }
+
+        $processed_tabs = [];
+        $tab_meta_keys = [];
+        $description_html = '';
+        foreach ($tabs as $tab) {
+            if (!is_array($tab)) {
+                continue;
+            }
+
+            $tab_id = sanitize_key((string) ($tab['id'] ?? ''));
+            if ($tab_id === '') {
+                continue;
+            }
+
+            $tab_title = $this->normalize_feed_value((string) ($tab['title'] ?? ''));
+            $processed_html = $this->sanitize_imported_html((string) ($tab['html'] ?? ''));
+            $meta_key = '_aprop_enterra_tab_' . $tab_id . '_html';
+            update_post_meta($product_id, $meta_key, $processed_html);
+            $tab_meta_keys[] = $meta_key;
+
+            $processed_tabs[] = [
+                'id' => $tab_id,
+                'panel_id' => sanitize_html_class((string) ($tab['panel_id'] ?? '')),
+                'title' => $tab_title,
+                'html' => $processed_html,
+                'text' => $this->normalize_feed_value((string) ($tab['text'] ?? '')),
+                'image_count' => absint($tab['image_count'] ?? 0),
+                'video_count' => absint($tab['video_count'] ?? 0),
+                'images' => array_values(array_filter(array_map('esc_url_raw', is_array($tab['images'] ?? null) ? $tab['images'] : []))),
+                'videos' => array_values(array_filter(array_map('esc_url_raw', is_array($tab['videos'] ?? null) ? $tab['videos'] : []))),
+                'meta_key' => $meta_key,
+            ];
+
+            if ($tab_id === 'description') {
+                $description_html = $processed_html;
+            }
+        }
+
+        $processed_short_description = $this->sanitize_imported_html($short_description);
+        update_post_meta($product_id, '_aprop_enterra_short_description_html', $processed_short_description);
+        $this->update_json_meta($product_id, self::PRODUCT_META_TAB_KEYS, $tab_meta_keys);
+        $this->update_json_meta($product_id, self::PRODUCT_META_CONTENT_JSON, [
+            'source_url' => $content['source_url'] ?? '',
+            'fetched_at' => $content['fetched_at'] ?? '',
+            'short_description_html' => $processed_short_description,
+            'tabs' => $processed_tabs,
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        delete_post_meta($product_id, '_aprop_enterra_content_media_error');
+
+        return [
+            'description_html' => $description_html,
+            'short_description_html' => $processed_short_description,
+        ];
+    }
+
+    private function sanitize_imported_html(string $html): string {
+        $allowed = wp_kses_allowed_html('post');
+        $allowed['iframe'] = [
+            'src' => true,
+            'title' => true,
+            'width' => true,
+            'height' => true,
+            'loading' => true,
+            'allow' => true,
+            'allowfullscreen' => true,
+            'frameborder' => true,
+            'referrerpolicy' => true,
+            'class' => true,
+        ];
+        $allowed['video'] = [
+            'src' => true,
+            'poster' => true,
+            'controls' => true,
+            'preload' => true,
+            'playsinline' => true,
+            'autoplay' => true,
+            'loop' => true,
+            'muted' => true,
+            'width' => true,
+            'height' => true,
+            'class' => true,
+        ];
+        $allowed['source'] = ['src' => true, 'type' => true];
+
+        return trim(wp_kses($html, $allowed, wp_allowed_protocols()));
+    }
+
+    private function store_related_products(int $product_id, array $related_products): void {
+        $cleaned = ['cross_sell' => [], 'upsell' => []];
+        foreach (array_keys($cleaned) as $group_name) {
+            $rows = isset($related_products[$group_name]) && is_array($related_products[$group_name])
+                ? $related_products[$group_name]
+                : [];
+            foreach ($rows as $row) {
+                if (!is_array($row)) {
+                    continue;
+                }
+                $sku = $this->normalize_feed_value((string) ($row['sku'] ?? ''));
+                if ($sku === '') {
+                    continue;
+                }
+                $cleaned[$group_name][] = [
+                    'sku' => $sku,
+                    'source_id' => $this->normalize_feed_value((string) ($row['source_id'] ?? '')),
+                    'title' => $this->normalize_feed_value((string) ($row['title'] ?? '')),
+                    'url' => esc_url_raw((string) ($row['url'] ?? '')),
+                ];
+            }
+        }
+
+        $this->update_json_meta(
+            $product_id,
+            self::PRODUCT_META_RELATED_PRODUCTS_JSON,
+            $cleaned,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        );
+        $this->update_json_meta(
+            $product_id,
+            '_aprop_enterra_cross_sell_skus',
+            array_column($cleaned['cross_sell'], 'sku'),
+            JSON_UNESCAPED_UNICODE
+        );
+        $this->update_json_meta(
+            $product_id,
+            '_aprop_enterra_upsell_skus',
+            array_column($cleaned['upsell'], 'sku'),
+            JSON_UNESCAPED_UNICODE
+        );
+    }
+
+    private function store_source_data(int $product_id, array $source_data): void {
+        $cleaned = [];
+        foreach ($source_data as $key => $value) {
+            $clean_key = sanitize_key((string) $key);
+            if ($clean_key === '') {
+                continue;
+            }
+            if (is_array($value)) {
+                $cleaned[$clean_key] = array_values(array_filter(array_map(function ($item): string {
+                    return $this->normalize_feed_value((string) $item);
+                }, $value)));
+            } elseif (is_scalar($value)) {
+                $cleaned[$clean_key] = $this->normalize_feed_value((string) $value);
+            }
+        }
+
+        $this->update_json_meta(
+            $product_id,
+            self::PRODUCT_META_SOURCE_DATA_JSON,
+            $cleaned,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        );
+        foreach ($cleaned as $key => $value) {
+            if ($key === 'source_sku') {
+                $meta_key = self::PRODUCT_META_SOURCE_SKU;
+            } elseif ($key === 'source_url') {
+                $meta_key = '_aprop_enterra_source_url';
+            } elseif ($key === 'source_id') {
+                $meta_key = self::PRODUCT_META_FEED_ID;
+            } else {
+                $meta_key = '_aprop_enterra_source_' . $key;
+            }
+            if (is_array($value)) {
+                $this->update_json_meta($product_id, $meta_key, $value, JSON_UNESCAPED_UNICODE);
+            } else {
+                update_post_meta($product_id, $meta_key, $value);
+            }
+        }
+    }
+
+    private function resolve_all_related_products(): void {
+        foreach ($this->find_imported_product_ids() as $product_id) {
+            $this->resolve_related_products_for_product((int) $product_id);
+        }
+    }
+
+    private function resolve_related_products_for_product(int $product_id): void {
+        $json = get_post_meta($product_id, self::PRODUCT_META_RELATED_PRODUCTS_JSON, true);
+        if ($json === '') {
+            return;
+        }
+
+        $related_products = json_decode((string) $json, true);
+        if (!is_array($related_products)) {
+            return;
+        }
+
+        $product = wc_get_product($product_id);
+        if (!$product) {
+            return;
+        }
+
+        $cross_sell_ids = $this->product_ids_for_related_skus($related_products['cross_sell'] ?? [], $product_id);
+        $upsell_ids = $this->product_ids_for_related_skus($related_products['upsell'] ?? [], $product_id);
+        $product->set_cross_sell_ids($cross_sell_ids);
+        $product->set_upsell_ids($upsell_ids);
+        $product->save();
+    }
+
+    private function product_ids_for_related_skus(array $rows, int $current_product_id): array {
+        $product_ids = [];
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $sku = $this->normalize_feed_value((string) ($row['sku'] ?? ''));
+            if ($sku === '') {
+                continue;
+            }
+
+            $related_product_id = (int) wc_get_product_id_by_sku($sku);
+            if (!$related_product_id) {
+                $related_product_id = $this->find_product_id_by_source_sku($sku);
+            }
+            if ($related_product_id && $related_product_id !== $current_product_id) {
+                $product_ids[] = $related_product_id;
+            }
+        }
+        return array_values(array_unique($product_ids));
+    }
+
+    private function find_product_id_by_source_sku(string $sku): int {
+        $query = new WP_Query([
+            'post_type' => 'product',
+            'post_status' => ['publish', 'draft', 'pending', 'private'],
+            'fields' => 'ids',
+            'posts_per_page' => 1,
+            'meta_query' => [[
+                'key' => self::PRODUCT_META_SOURCE_SKU,
+                'value' => $sku,
+            ]],
+            'no_found_rows' => true,
+        ]);
+        return !empty($query->posts[0]) ? (int) $query->posts[0] : 0;
     }
 
     private function delete_generated_spec_meta(int $product_id): void {
@@ -852,6 +1298,7 @@ final class Aprop_Drone_Feed_Sync {
 
     private function set_product_gallery(int $product_id, array $gallery, string $featured_image_url, string $product_title): void {
         $images = isset($gallery['images']) && is_array($gallery['images']) ? $gallery['images'] : [];
+        $videos = isset($gallery['videos']) && is_array($gallery['videos']) ? $gallery['videos'] : [];
         $featured_image_url = esc_url_raw($featured_image_url);
         $attachment_ids = [];
         $seen_urls = [];
@@ -890,13 +1337,20 @@ final class Aprop_Drone_Feed_Sync {
         }
 
         update_post_meta($product_id, self::PRODUCT_META_GALLERY_COUNT, count($attachment_ids));
-        update_post_meta($product_id, self::PRODUCT_META_GALLERY_JSON, wp_json_encode([
+        $this->update_json_meta($product_id, self::PRODUCT_META_GALLERY_JSON, [
             'count' => count($attachment_ids),
             'source_url' => $gallery['source_url'] ?? '',
             'fetched_at' => $gallery['fetched_at'] ?? '',
             'images' => array_values(array_filter($images, 'is_array')),
+            'videos' => array_values(array_filter($videos, 'is_array')),
             'attachment_ids' => $attachment_ids,
-        ], JSON_UNESCAPED_UNICODE));
+        ], JSON_UNESCAPED_UNICODE);
+        $this->update_json_meta(
+            $product_id,
+            self::PRODUCT_META_GALLERY_VIDEOS_JSON,
+            array_values(array_filter($videos, 'is_array')),
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        );
 
         if ($errors) {
             update_post_meta($product_id, '_aprop_enterra_gallery_error', implode("\n", $errors));

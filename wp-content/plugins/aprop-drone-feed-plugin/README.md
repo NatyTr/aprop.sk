@@ -8,11 +8,18 @@ WordPress/WooCommerce plugin for importing products from the bundled Enterra XML
 - `Sync / resync products` reads the bundled enriched feed file `enterra-feed-with-specifications.xml`.
 - Products are imported one by one through AJAX.
 - The first sync can create products. Later resyncs update existing imported products only and skip new feed products.
-- Existing products are matched by feed id stored in `_aprop_enterra_feed_id`, then by SKU, and updated with the latest title, description, price, stock, category, source URL, featured image, and specifications.
+- Existing products are matched by feed id stored in `_aprop_enterra_feed_id`, then by SKU, and updated with the latest title, formatted descriptions, price, stock, category, source URL, gallery, tab content, related products, and specifications.
+- The Enterra SKU is used as the WooCommerce SKU when it is available. If another product already owns that SKU, the importer keeps the existing/synthetic SKU and records the conflicting product id in `_aprop_enterra_sku_conflict_product_id`.
+- Source SKUs are normalized to their rendered uppercase form and invisible formatting characters such as soft hyphens are removed.
 - Imported products are marked with `_aprop_is_feed_imported=1` and `_aprop_import_source=enterra_mergado_feed`.
 - Product title strips the trailing `| Enterra.sk`.
 - Product image is sideloaded from `image_link` and set as featured image only when the product has no existing featured image.
-- Product gallery images are sideloaded from `aprop:gallery`.
+- Full-size product gallery images are sideloaded from `aprop:gallery` into the standard WooCommerce gallery. Gallery videos are stored in `_aprop_enterra_gallery_videos_json` because WooCommerce core has no native video-gallery field.
+- The Enterra short description keeps its HTML formatting and becomes the WooCommerce short description.
+- Every Enterra product tab is preserved as formatted HTML in `_aprop_enterra_tab_{tab-id}_html`; the `description` tab becomes the WooCommerce long description. Inline image and video URLs remain in the HTML at their original source URLs.
+- The full content payload is stored in `_aprop_enterra_content_json`, including tab titles, plain text, HTML, and inline media URL lists.
+- Cross-sell and upsell SKUs are stored in `_aprop_enterra_related_products_json` and resolved to standard WooCommerce cross-sell/upsell product ids after the sync.
+- Source-page metadata such as availability label, delivery text, displayed prices, flags, source product type, offer expiry, source SKU, and source URL is stored in `_aprop_enterra_source_data_json` and individual `_aprop_enterra_source_*` fields.
 - `aprop:web_categories` is preferred for category paths when present; otherwise `product_type` is parsed as a category path.
 - Feed root category `Home` is removed and all parsed categories are created below WooCommerce product category id `211`.
 - Feed stock values are mapped to WooCommerce:
@@ -35,13 +42,23 @@ https://feeds.mergado.com/enterra-sk-google-nakupy-sk-70a3cb5ee9479a6525566d5af1
 
 ## Local Site Feed Builder
 
-Build the bundled feed directly from current Enterra product pages:
+Install the Python dependency (`beautifulsoup4`) and build the bundled feed directly from current Enterra product pages:
 
 ```bash
 python3 scripts/build_site_feed_xml.py --output enterra-feed-with-specifications.xml
 ```
 
-This reads current SK product URLs from Enterra product sitemaps, fetches each product page, and writes the same XML fields the plugin imports: id, title, description, price, stock, product category, featured image, gallery, specifications, in-box products, and website-derived drone categories.
+This reads current SK product URLs from Enterra product sitemaps, fetches each product page, and writes the fields the plugin imports: id, title, real SKU, formatted short and full descriptions, prices, stock, product category, full-size gallery, gallery videos, every product tab, specifications, in-box products, related-product SKUs, source metadata, and website-derived drone categories.
+
+Test one product without replacing the bundled feed:
+
+```bash
+python3 scripts/build_site_feed_xml.py \
+  --only-url https://www.enterra.sk/produkt/dji-agras-t100-inteligentny-ram/ \
+  --output /tmp/enterra-t100.xml \
+  --previous-feed enterra-feed-with-specifications.xml \
+  --skip-web-categories
+```
 
 Use this when the Mergado feed is stale. After generating `enterra-feed-with-specifications.xml`, run `WooCommerce > Aprop Drone Feed > Sync / resync products`.
 
@@ -85,4 +102,4 @@ Use a specific driver if needed:
 python3 scripts/build_specs_xml.py --driver-path /path/to/chromedriver
 ```
 
-The script adds an `aprop:specifications` subtree to each feed item when specs are found.
+The script adds or refreshes the complete `aprop:*` product-page payload, including specifications, in-box products, gallery media, all tabs, related products, and source metadata.

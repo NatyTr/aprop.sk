@@ -18,6 +18,8 @@ from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
+from bs4 import BeautifulSoup, Tag
+
 
 FEED_URL = (
     "https://feeds.mergado.com/"
@@ -54,6 +56,11 @@ def local_name(tag: str) -> str:
 
 def collapse_space(value: str) -> str:
     return " ".join(html.unescape(value).split())
+
+
+def normalize_source_sku(value: Any) -> str:
+    normalized = re.sub(r"[\u00ad\u200b-\u200d\u2060\ufeff]", "", str(value or ""))
+    return collapse_space(normalized).upper()
 
 
 def child_text(element: ET.Element, name: str) -> str:
@@ -155,162 +162,118 @@ def largest_srcset_url(srcset: str, fallback: str = "") -> str:
     return max(candidates, key=lambda item: item[0])[1]
 
 
-class ProductPageParser(HTMLParser):
-    """Fallback parser for Selenium page_source."""
+def absolute_page_url(value: str, source_url: str) -> str:
+    value = str(value or "").strip()
+    if not value:
+        return ""
+    return urllib.parse.urljoin(source_url, value)
 
-    def __init__(self) -> None:
-        super().__init__(convert_charrefs=True)
-        self.in_specs_panel = False
-        self.specs_panel_depth = 0
-        self.in_products_panel = False
-        self.products_panel_depth = 0
-        self.capture_kind: str | None = None
-        self.capture_depth = 0
-        self.capture_parts: list[str] = []
-        self.current_section = ""
-        self.current_row: dict[str, str] | None = None
-        self.row_depth = 0
-        self.current_product: dict[str, str] | None = None
-        self.product_depth = 0
-        self.specs: list[dict[str, str]] = []
-        self.products: list[dict[str, str]] = []
-        self.images: list[dict[str, str]] = []
-        self.image_urls: set[str] = set()
 
-    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        element_id = attr_value(attrs, "id")
-        if not self.in_specs_panel and not self.in_products_panel and element_id == "tab-specifications":
-            self.in_specs_panel = True
-            self.specs_panel_depth = 1
-            return
+def full_size_image_url(image: Tag, source_url: str) -> str:
+    for attribute in (
+        "data-zoom-image",
+        "data-o_zoom-image",
+        "data-large_image",
+    ):
+        value = image.get(attribute)
+        if value:
+            return absolute_page_url(str(value), source_url)
 
-        if not self.in_specs_panel and not self.in_products_panel and element_id == "tab-products":
-            self.in_products_panel = True
-            self.products_panel_depth = 1
-            return
+    srcset = str(image.get("data-o_srcset") or image.get("data-srcset") or image.get("srcset") or "")
+    largest_srcset = largest_srcset_url(srcset)
+    if largest_srcset:
+        return absolute_page_url(largest_srcset, source_url)
 
-        if tag == "img":
-            classes = attr_value(attrs, "class")
-            if "product_thumbnail_item" in classes or "attachment-woocommerce_gallery_thumbnail" in classes or "wp-post-image" in classes:
-                image_url = largest_srcset_url(attr_value(attrs, "srcset") or attr_value(attrs, "data-o_srcset"), attr_value(attrs, "src"))
-                if image_url and image_url not in self.image_urls and "woocommerce-placeholder" not in image_url:
-                    self.image_urls.add(image_url)
-                    self.images.append(
-                        {
-                            "url": image_url,
-                            "alt": collapse_space(attr_value(attrs, "alt")),
-                            "title": collapse_space(attr_value(attrs, "title")),
-                        }
-                    )
+    return absolute_page_url(str(image.get("data-src") or image.get("data-o_src") or image.get("src") or ""), source_url)
 
-        if not self.in_specs_panel and not self.in_products_panel:
-            return
 
-        if self.in_specs_panel:
-            self.specs_panel_depth += 1
-        if self.in_products_panel:
-            self.products_panel_depth += 1
+def clean_html_fragment(element: Tag | None, source_url: str) -> str:
+    if element is None:
+        return ""
 
-        if self.in_specs_panel and tag == "h2" and class_contains(attrs, "specification__main-title"):
-            self.start_capture("section")
-            return
+    fragment = BeautifulSoup(element.decode_contents(), "html.parser")
+    for removable in fragment.select("script, style, noscript, template"):
+        removable.decompose()
 
-        if self.in_specs_panel and tag == "div" and class_contains(attrs, "specification__content"):
-            self.current_row = {"section": self.current_section, "name": "", "value": ""}
-            self.row_depth = 1
-            return
+    for tag in fragment.find_all(True):
+        for attribute in list(tag.attrs):
+            if attribute.lower().startswith("on") or attribute.lower() == "srcdoc":
+                del tag.attrs[attribute]
 
-        if self.current_row is not None:
-            self.row_depth += 1
+        if tag.name == "img":
+            image_url = full_size_image_url(tag, source_url)
+            if image_url:
+                tag["src"] = image_url
+            for attribute in (
+                "srcset",
+                "sizes",
+                "data-src",
+                "data-srcset",
+                "data-o_src",
+                "data-o_srcset",
+                "data-zoom-image",
+                "data-o_zoom-image",
+                "data-large_image",
+            ):
+                tag.attrs.pop(attribute, None)
 
-            if tag in {"div", "p"} and class_contains(attrs, "specification-content__title"):
-                self.start_capture("name")
-                return
+        if tag.name in {"iframe", "video", "source"} and tag.get("src"):
+            tag["src"] = absolute_page_url(str(tag["src"]), source_url)
 
-            if tag in {"div", "p"} and class_contains(attrs, "specification-content__description"):
-                self.start_capture("value")
-                return
+        if tag.name == "video" and tag.get("poster"):
+            tag["poster"] = absolute_page_url(str(tag["poster"]), source_url)
 
-        if self.in_products_panel and tag == "div" and class_contains(attrs, "specification__content"):
-            self.current_product = {"name": "", "quantity": ""}
-            self.product_depth = 1
-            return
+        if tag.name == "a" and tag.get("href"):
+            tag["href"] = absolute_page_url(str(tag["href"]), source_url)
 
-        if self.current_product is not None:
-            self.product_depth += 1
+    return "".join(str(child) for child in fragment.contents).strip()
 
-            if tag in {"div", "p"} and class_contains(attrs, "specification-content__title"):
-                self.start_capture("product_name")
-                return
 
-            if tag in {"div", "p"} and class_contains(attrs, "specification-content__description"):
-                self.start_capture("product_quantity")
-                return
+def html_media_urls(html_value: str) -> dict[str, list[str]]:
+    fragment = BeautifulSoup(html_value or "", "html.parser")
+    images = []
+    videos = []
 
-        if self.capture_kind:
-            self.capture_depth += 1
+    for image in fragment.select("img[src]"):
+        url = str(image.get("src") or "").strip()
+        if url and url not in images:
+            images.append(url)
 
-    def handle_endtag(self, tag: str) -> None:
-        if not self.in_specs_panel and not self.in_products_panel:
-            return
+    for media in fragment.select("iframe[src], video[src], source[src]"):
+        url = str(media.get("src") or "").strip()
+        if url and url not in videos:
+            videos.append(url)
 
-        if self.capture_kind:
-            self.capture_depth -= 1
-            if self.capture_depth <= 0:
-                self.finish_capture()
+    return {"images": images, "videos": videos}
 
-        if self.current_row is not None:
-            self.row_depth -= 1
-            if self.row_depth <= 0:
-                name = self.current_row.get("name", "")
-                value = self.current_row.get("value", "")
-                if name or value:
-                    self.specs.append(dict(self.current_row))
-                self.current_row = None
 
-        if self.current_product is not None:
-            self.product_depth -= 1
-            if self.product_depth <= 0:
-                name = self.current_product.get("name", "")
-                quantity = self.current_product.get("quantity", "")
-                if name or quantity:
-                    self.products.append(dict(self.current_product))
-                self.current_product = None
+def extract_related_products(soup: BeautifulSoup, selector: str, source_url: str) -> list[dict[str, str]]:
+    root = soup.select_one(selector)
+    if root is None:
+        return []
 
-        if self.in_specs_panel:
-            self.specs_panel_depth -= 1
-            if self.specs_panel_depth <= 0:
-                self.in_specs_panel = False
+    products: list[dict[str, str]] = []
+    seen_skus: set[str] = set()
+    for trigger in root.select("[data-product_sku]"):
+        sku = normalize_source_sku(trigger.get("data-product_sku"))
+        if not sku or sku in seen_skus:
+            continue
 
-        if self.in_products_panel:
-            self.products_panel_depth -= 1
-            if self.products_panel_depth <= 0:
-                self.in_products_panel = False
+        card = trigger.find_parent(class_="cross-sells__product") or trigger.find_parent("li")
+        title_node = card.select_one("h2, h3, h4, .woocommerce-loop-product__title") if isinstance(card, Tag) else None
+        link_node = card.select_one('a[href*="/produkt/"]') if isinstance(card, Tag) else None
 
-    def handle_data(self, data: str) -> None:
-        if self.capture_kind:
-            self.capture_parts.append(data)
+        products.append(
+            {
+                "sku": sku,
+                "source_id": collapse_space(str(trigger.get("data-product_id") or "")),
+                "title": collapse_space(title_node.get_text(" ", strip=True)) if title_node else "",
+                "url": absolute_page_url(str(link_node.get("href") or ""), source_url) if link_node else "",
+            }
+        )
+        seen_skus.add(sku)
 
-    def start_capture(self, kind: str) -> None:
-        self.capture_kind = kind
-        self.capture_depth = 1
-        self.capture_parts = []
-
-    def finish_capture(self) -> None:
-        value = collapse_space(" ".join(self.capture_parts))
-
-        if self.capture_kind == "section":
-            self.current_section = value
-        elif self.current_row is not None and self.capture_kind in {"name", "value"}:
-            self.current_row[self.capture_kind] = value
-        elif self.current_product is not None and self.capture_kind == "product_name":
-            self.current_product["name"] = value
-        elif self.current_product is not None and self.capture_kind == "product_quantity":
-            self.current_product["quantity"] = value
-
-        self.capture_kind = None
-        self.capture_depth = 0
-        self.capture_parts = []
+    return products
 
 
 class DroneCategoryParser(HTMLParser):
@@ -375,13 +338,148 @@ class DroneCategoryParser(HTMLParser):
             self.capture_parts.append(data)
 
 
-def extract_page_data_from_html(page_html: str) -> dict[str, list[dict[str, str]]]:
-    parser = ProductPageParser()
-    parser.feed(page_html)
+def extract_page_data_from_html(page_html: str, source_url: str = "") -> dict[str, Any]:
+    soup = BeautifulSoup(page_html, "html.parser")
+
+    specs: list[dict[str, str]] = []
+    current_section = ""
+    specs_panel = soup.select_one("#tab-specifications")
+    if specs_panel is not None:
+        for element in specs_panel.select(".specification__main-title, .specification__content"):
+            classes = element.get("class") or []
+            if "specification__main-title" in classes:
+                current_section = collapse_space(element.get_text(" ", strip=True))
+                continue
+
+            name_node = element.select_one(".specification-content__title")
+            value_node = element.select_one(".specification-content__description")
+            name = collapse_space(name_node.get_text(" ", strip=True)) if name_node else ""
+            value = collapse_space(value_node.get_text(" ", strip=True)) if value_node else ""
+            if name or value:
+                specs.append({"section": current_section, "name": name, "value": value})
+
+    products: list[dict[str, str]] = []
+    products_panel = soup.select_one("#tab-products")
+    if products_panel is not None:
+        for element in products_panel.select(".specification__content"):
+            name_node = element.select_one(".specification-content__title")
+            quantity_node = element.select_one(".specification-content__description")
+            name = collapse_space(name_node.get_text(" ", strip=True)) if name_node else ""
+            quantity = collapse_space(quantity_node.get_text(" ", strip=True)) if quantity_node else ""
+            if name or quantity:
+                products.append({"name": name, "quantity": quantity})
+
+    images: list[dict[str, str]] = []
+    videos: list[dict[str, str]] = []
+    seen_images: set[str] = set()
+    seen_videos: set[str] = set()
+    gallery_slides = soup.select(".nickx-slider-for .nswiper-slide")
+
+    if gallery_slides:
+        for slide in gallery_slides:
+            image = slide.select_one("img")
+            if image is not None:
+                image_url = full_size_image_url(image, source_url)
+                if image_url and image_url not in seen_images and "woocommerce-placeholder" not in image_url:
+                    images.append(
+                        {
+                            "url": image_url,
+                            "alt": collapse_space(str(image.get("alt") or "")),
+                            "title": collapse_space(str(image.get("title") or "")),
+                        }
+                    )
+                    seen_images.add(image_url)
+
+            media = slide.select_one("iframe[src], video[src], source[src]")
+            if media is not None:
+                media_url = absolute_page_url(str(media.get("src") or ""), source_url)
+                if media_url and media_url not in seen_videos:
+                    videos.append(
+                        {
+                            "url": media_url,
+                            "type": media.name or "video",
+                            "title": collapse_space(str(media.get("title") or "")),
+                        }
+                    )
+                    seen_videos.add(media_url)
+    else:
+        gallery_root = soup.select_one(".woocommerce-product-gallery")
+        if gallery_root is not None:
+            for image in gallery_root.select("img"):
+                image_url = full_size_image_url(image, source_url)
+                if image_url and image_url not in seen_images and "woocommerce-placeholder" not in image_url:
+                    images.append(
+                        {
+                            "url": image_url,
+                            "alt": collapse_space(str(image.get("alt") or "")),
+                            "title": collapse_space(str(image.get("title") or "")),
+                        }
+                    )
+                    seen_images.add(image_url)
+
+    tabs: list[dict[str, Any]] = []
+    seen_tab_ids: set[str] = set()
+    for link in soup.select('.woocommerce-tabs .wc-tabs a[href^="#tab-"]'):
+        tab_id = str(link.get("href") or "").lstrip("#")
+        if not tab_id or tab_id in seen_tab_ids:
+            continue
+
+        panel = soup.find(id=tab_id)
+        if not isinstance(panel, Tag):
+            continue
+
+        tab_html = clean_html_fragment(panel, source_url)
+        media = html_media_urls(tab_html)
+        tabs.append(
+            {
+                "id": tab_id.removeprefix("tab-"),
+                "panel_id": tab_id,
+                "title": collapse_space(link.get_text(" ", strip=True)),
+                "html": tab_html,
+                "text": collapse_space(panel.get_text(" ", strip=True)),
+                "images": media["images"],
+                "videos": media["videos"],
+            }
+        )
+        seen_tab_ids.add(tab_id)
+
+    short_description = soup.select_one(".woocommerce-product-details__short-description")
+    source_product = soup.select_one(".product.type-product")
+    source_classes = [str(value) for value in (source_product.get("class") or [])] if source_product else []
+
+    def selected_text(selector: str) -> str:
+        node = soup.select_one(selector)
+        return collapse_space(node.get_text(" ", strip=True)) if node else ""
+
+    source_data = {
+        "stock_label": selected_text(".summary .product_meta .stock-backorder, .summary .stock-backorder, .summary .stock"),
+        "delivery_text": selected_text("form.cart .cart__description"),
+        "price_including_tax": selected_text(".summary .main-product-item__inc-price"),
+        "price_excluding_tax": selected_text(".summary .main-product-item__ext-price"),
+        "source_tags": [value.removeprefix("product_tag-") for value in source_classes if value.startswith("product_tag-")],
+        "source_flags": [
+            value
+            for value in ("featured", "taxable", "shipping-taxable", "purchasable")
+            if value in source_classes
+        ],
+        "source_product_type": next(
+            (value.removeprefix("product-type-") for value in source_classes if value.startswith("product-type-")),
+            "",
+        ),
+    }
+
     return {
-        "specs": parser.specs,
-        "products": parser.products,
-        "images": parser.images,
+        "specs": specs,
+        "products": products,
+        "images": images,
+        "videos": videos,
+        "tabs": tabs,
+        "short_description_html": clean_html_fragment(short_description, source_url),
+        "related_products": {
+            "cross_sell": extract_related_products(soup, ".cross-sells", source_url),
+            "upsell": extract_related_products(soup, ".up-sells.upsells", source_url),
+        },
+        "source_data": source_data,
     }
 
 
@@ -471,7 +569,7 @@ def remove_driver_from_path(browser: str) -> None:
     )
 
 
-def scrape_page_data_with_selenium(driver: Any, url: str, timeout: int) -> dict[str, list[dict[str, str]]]:
+def scrape_page_data_with_selenium(driver: Any, url: str, timeout: int) -> dict[str, Any]:
     from selenium.common.exceptions import TimeoutException
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support import expected_conditions as EC
@@ -486,108 +584,10 @@ def scrape_page_data_with_selenium(driver: Any, url: str, timeout: int) -> dict[
             EC.presence_of_element_located((By.CSS_SELECTOR, "#tab-specifications"))
         )
     except TimeoutException:
-        return extract_page_data_from_html(driver.page_source)
+        return extract_page_data_from_html(driver.page_source, url)
 
-    page_data = driver.execute_script(
-        """
-        const text = (el) => (el?.textContent || '').trim().replace(/\\s+/g, ' ');
-        const largestSrcsetUrl = (srcset, fallback = '') => {
-            const candidates = String(srcset || '').split(',')
-                .map((candidate) => {
-                    const parts = candidate.trim().split(/\\s+/);
-                    const width = parts[1] && parts[1].endsWith('w') ? parseInt(parts[1], 10) || 0 : 0;
-                    return {url: parts[0] || '', width};
-                })
-                .filter((candidate) => candidate.url);
+    return extract_page_data_from_html(driver.page_source, url)
 
-            if (!candidates.length) return fallback;
-            candidates.sort((a, b) => b.width - a.width);
-            return candidates[0].url;
-        };
-
-        const specs = [];
-        const specsPanel = document.querySelector('#tab-specifications');
-        if (specsPanel) {
-            let section = '';
-            specsPanel.querySelectorAll('.specification__main-title, .specification__content').forEach((el) => {
-                if (el.classList.contains('specification__main-title')) {
-                    section = text(el);
-                    return;
-                }
-
-                const name = text(el.querySelector('.specification-content__title'));
-                const value = text(el.querySelector('.specification-content__description'));
-
-                if (name || value) {
-                    specs.push({section, name, value});
-                }
-            });
-        }
-
-        const products = [];
-        const productsPanel = document.querySelector('#tab-products');
-        if (productsPanel) {
-            productsPanel.querySelectorAll('.specification__content').forEach((el) => {
-                const name = text(el.querySelector('.specification-content__title'));
-                const quantity = text(el.querySelector('.specification-content__description'));
-
-                if (name || quantity) {
-                    products.push({name, quantity});
-                }
-            });
-        }
-
-        const seenImages = new Set();
-        const images = [];
-        document.querySelectorAll('.woocommerce-product-gallery img, .nickx-slider-for img, .nickx-slider-nav img, .product_thumbnail_item img, img.attachment-woocommerce_gallery_thumbnail').forEach((img) => {
-            const url = largestSrcsetUrl(img.getAttribute('srcset') || img.getAttribute('data-o_srcset'), img.currentSrc || img.src || '');
-            if (!url || seenImages.has(url) || url.includes('woocommerce-placeholder')) return;
-
-            seenImages.add(url);
-            images.push({
-                url,
-                alt: text(img.getAttribute('alt') ? {textContent: img.getAttribute('alt')} : null),
-                title: text(img.getAttribute('title') ? {textContent: img.getAttribute('title')} : null),
-            });
-        });
-
-        return {specs, products, images};
-        """
-    )
-
-    cleaned_specs = [
-        {
-            "section": collapse_space(str(spec.get("section", ""))),
-            "name": collapse_space(str(spec.get("name", ""))),
-            "value": collapse_space(str(spec.get("value", ""))),
-        }
-        for spec in (page_data or {}).get("specs", [])
-        if isinstance(spec, dict)
-    ]
-    cleaned_products = [
-        {
-            "name": collapse_space(str(product.get("name", ""))),
-            "quantity": collapse_space(str(product.get("quantity", ""))),
-        }
-        for product in (page_data or {}).get("products", [])
-        if isinstance(product, dict)
-    ]
-    cleaned_images = [
-        {
-            "url": str(image.get("url", "")).strip(),
-            "alt": collapse_space(str(image.get("alt", ""))),
-            "title": collapse_space(str(image.get("title", ""))),
-        }
-        for image in (page_data or {}).get("images", [])
-        if isinstance(image, dict) and str(image.get("url", "")).strip()
-    ]
-
-    fallback = extract_page_data_from_html(driver.page_source)
-    return {
-        "specs": cleaned_specs or fallback["specs"],
-        "products": cleaned_products or fallback["products"],
-        "images": cleaned_images or fallback["images"],
-    }
 
 
 def quit_driver(driver: Any | None) -> None:
@@ -651,7 +651,12 @@ def add_products_to_item(item: ET.Element, products: list[dict[str, str]], sourc
         quantity_el.text = product.get("quantity", "")
 
 
-def add_gallery_to_item(item: ET.Element, images: list[dict[str, str]], source_url: str) -> None:
+def add_gallery_to_item(
+    item: ET.Element,
+    images: list[dict[str, str]],
+    source_url: str,
+    videos: list[dict[str, str]] | None = None,
+) -> None:
     for child in list(item):
         if child.tag == f"{{{APROP_NS}}}gallery":
             item.remove(child)
@@ -663,6 +668,7 @@ def add_gallery_to_item(item: ET.Element, images: list[dict[str, str]], source_u
             "source_url": source_url,
             "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
             "count": str(len(images)),
+            "video_count": str(len(videos or [])),
         },
     )
 
@@ -680,6 +686,124 @@ def add_gallery_to_item(item: ET.Element, images: list[dict[str, str]], source_u
                 "title": image.get("title", ""),
             },
         )
+
+    for video in videos or []:
+        url = video.get("url", "")
+        if not url:
+            continue
+
+        ET.SubElement(
+            root,
+            f"{{{APROP_NS}}}video",
+            {
+                "url": url,
+                "type": video.get("type", "video"),
+                "title": video.get("title", ""),
+            },
+        )
+
+
+def add_content_to_item(item: ET.Element, page_data: dict[str, Any], source_url: str) -> None:
+    for child in list(item):
+        if child.tag == f"{{{APROP_NS}}}content":
+            item.remove(child)
+
+    root = ET.SubElement(
+        item,
+        f"{{{APROP_NS}}}content",
+        {
+            "source_url": source_url,
+            "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        },
+    )
+    short_description = ET.SubElement(root, f"{{{APROP_NS}}}short_description", {"format": "html"})
+    short_description.text = str(page_data.get("short_description_html", ""))
+
+    tabs = page_data.get("tabs", []) if isinstance(page_data.get("tabs"), list) else []
+    tabs_root = ET.SubElement(root, f"{{{APROP_NS}}}tabs", {"count": str(len(tabs))})
+    for tab in tabs:
+        if not isinstance(tab, dict):
+            continue
+
+        tab_root = ET.SubElement(
+            tabs_root,
+            f"{{{APROP_NS}}}tab",
+            {
+                "id": str(tab.get("id", "")),
+                "panel_id": str(tab.get("panel_id", "")),
+                "title": str(tab.get("title", "")),
+                "image_count": str(len(tab.get("images", []))) if isinstance(tab.get("images"), list) else "0",
+                "video_count": str(len(tab.get("videos", []))) if isinstance(tab.get("videos"), list) else "0",
+            },
+        )
+        html_node = ET.SubElement(tab_root, f"{{{APROP_NS}}}html", {"format": "html"})
+        html_node.text = str(tab.get("html", ""))
+        text_node = ET.SubElement(tab_root, f"{{{APROP_NS}}}text")
+        text_node.text = str(tab.get("text", ""))
+
+        media_node = ET.SubElement(tab_root, f"{{{APROP_NS}}}media")
+        for image_url in tab.get("images", []) if isinstance(tab.get("images"), list) else []:
+            ET.SubElement(media_node, f"{{{APROP_NS}}}image", {"url": str(image_url)})
+        for video_url in tab.get("videos", []) if isinstance(tab.get("videos"), list) else []:
+            ET.SubElement(media_node, f"{{{APROP_NS}}}video", {"url": str(video_url)})
+
+
+def add_related_products_to_item(item: ET.Element, related_products: dict[str, Any], source_url: str) -> None:
+    for child in list(item):
+        if child.tag == f"{{{APROP_NS}}}related_products":
+            item.remove(child)
+
+    groups = {
+        "cross_sell": related_products.get("cross_sell", []) if isinstance(related_products, dict) else [],
+        "upsell": related_products.get("upsell", []) if isinstance(related_products, dict) else [],
+    }
+    total = sum(len(products) for products in groups.values() if isinstance(products, list))
+    root = ET.SubElement(
+        item,
+        f"{{{APROP_NS}}}related_products",
+        {
+            "source_url": source_url,
+            "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+            "count": str(total),
+        },
+    )
+
+    for group_name, products in groups.items():
+        group = ET.SubElement(
+            root,
+            f"{{{APROP_NS}}}group",
+            {"type": group_name, "count": str(len(products) if isinstance(products, list) else 0)},
+        )
+        for product in products if isinstance(products, list) else []:
+            if not isinstance(product, dict) or not product.get("sku"):
+                continue
+            ET.SubElement(
+                group,
+                f"{{{APROP_NS}}}product",
+                {
+                    "sku": str(product.get("sku", "")),
+                    "source_id": str(product.get("source_id", "")),
+                    "title": str(product.get("title", "")),
+                    "url": str(product.get("url", "")),
+                },
+            )
+
+
+def add_source_data_to_item(item: ET.Element, source_data: dict[str, Any], source_url: str) -> None:
+    for child in list(item):
+        if child.tag == f"{{{APROP_NS}}}source_data":
+            item.remove(child)
+
+    root = ET.SubElement(
+        item,
+        f"{{{APROP_NS}}}source_data",
+        {
+            "source_url": source_url,
+            "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        },
+    )
+    json_node = ET.SubElement(root, f"{{{APROP_NS}}}json")
+    json_node.text = json.dumps(source_data if isinstance(source_data, dict) else {}, ensure_ascii=False)
 
 
 def add_web_categories_to_item(item: ET.Element, categories: list[dict[str, str]], source_url: str) -> None:
@@ -735,9 +859,8 @@ def has_completed_page_data(item: ET.Element, retry_empty: bool) -> bool:
         return False
     if retry_empty and node.attrib.get("count") == "0":
         return False
-    if find_aprop_node(item, "products") is None or find_aprop_node(item, "gallery") is None:
-        return False
-    return True
+    required_nodes = ("products", "gallery", "content", "related_products", "source_data")
+    return all(find_aprop_node(item, name) is not None for name in required_nodes)
 
 
 def copy_aprop_nodes(source_item: ET.Element, target_item: ET.Element) -> None:
@@ -746,6 +869,9 @@ def copy_aprop_nodes(source_item: ET.Element, target_item: ET.Element) -> None:
         f"{{{APROP_NS}}}products",
         f"{{{APROP_NS}}}gallery",
         f"{{{APROP_NS}}}web_categories",
+        f"{{{APROP_NS}}}content",
+        f"{{{APROP_NS}}}related_products",
+        f"{{{APROP_NS}}}source_data",
     }
 
     for child in list(target_item):
@@ -792,12 +918,17 @@ def save_cache(path: Path, cache: dict[str, Any]) -> None:
     os.replace(tmp_path, path)
 
 
-def page_data_from_cache(cache_entry: Any) -> dict[str, list[dict[str, str]]] | None:
+def page_data_from_cache(cache_entry: Any) -> dict[str, Any] | None:
     if (
         not isinstance(cache_entry, dict)
         or not isinstance(cache_entry.get("specs"), list)
         or not isinstance(cache_entry.get("products"), list)
         or not isinstance(cache_entry.get("images"), list)
+        or not isinstance(cache_entry.get("videos"), list)
+        or not isinstance(cache_entry.get("tabs"), list)
+        or not isinstance(cache_entry.get("related_products"), dict)
+        or not isinstance(cache_entry.get("source_data"), dict)
+        or not isinstance(cache_entry.get("short_description_html"), str)
     ):
         return None
 
@@ -827,8 +958,31 @@ def page_data_from_cache(cache_entry: Any) -> dict[str, list[dict[str, str]]] | 
         for image in cache_entry["images"]
         if isinstance(image, dict) and str(image.get("url", ""))
     ]
+    videos = [dict(video) for video in cache_entry["videos"] if isinstance(video, dict)]
+    tabs = [dict(tab) for tab in cache_entry["tabs"] if isinstance(tab, dict)]
+    related_products = {
+        "cross_sell": [
+            dict(product)
+            for product in cache_entry["related_products"].get("cross_sell", [])
+            if isinstance(product, dict)
+        ],
+        "upsell": [
+            dict(product)
+            for product in cache_entry["related_products"].get("upsell", [])
+            if isinstance(product, dict)
+        ],
+    }
 
-    return {"specs": specs, "products": products, "images": images}
+    return {
+        "specs": specs,
+        "products": products,
+        "images": images,
+        "videos": videos,
+        "tabs": tabs,
+        "short_description_html": cache_entry["short_description_html"],
+        "related_products": related_products,
+        "source_data": dict(cache_entry["source_data"]),
+    }
 
 
 def main() -> int:
@@ -926,9 +1080,22 @@ def main() -> int:
                 continue
 
             if not link:
+                page_data = {
+                    "specs": [],
+                    "products": [],
+                    "images": [],
+                    "videos": [],
+                    "tabs": [],
+                    "short_description_html": "",
+                    "related_products": {"cross_sell": [], "upsell": []},
+                    "source_data": {},
+                }
                 add_specs_to_item(item, [], "")
                 add_products_to_item(item, [], "")
-                add_gallery_to_item(item, [], "")
+                add_gallery_to_item(item, [], "", [])
+                add_content_to_item(item, page_data, "")
+                add_related_products_to_item(item, page_data["related_products"], "")
+                add_source_data_to_item(item, page_data["source_data"], "")
                 write_xml(root, output)
                 processed += 1
                 print(f"[{index}/{len(selected_items)}] id={feed_id} missing link")
@@ -963,7 +1130,16 @@ def main() -> int:
                         f"after Selenium error={last_error}",
                         flush=True,
                     )
-                    page_data = {"specs": [], "products": [], "images": []}
+                    page_data = {
+                        "specs": [],
+                        "products": [],
+                        "images": [],
+                        "videos": [],
+                        "tabs": [],
+                        "short_description_html": "",
+                        "related_products": {"cross_sell": [], "upsell": []},
+                        "source_data": {},
+                    }
 
                 cache[source_url] = {
                     "source_url": source_url,
@@ -971,9 +1147,16 @@ def main() -> int:
                     "count": len(page_data["specs"]),
                     "products_count": len(page_data["products"]),
                     "images_count": len(page_data["images"]),
+                    "videos_count": len(page_data["videos"]),
+                    "tabs_count": len(page_data["tabs"]),
                     "specs": page_data["specs"],
                     "products": page_data["products"],
                     "images": page_data["images"],
+                    "videos": page_data["videos"],
+                    "tabs": page_data["tabs"],
+                    "short_description_html": page_data["short_description_html"],
+                    "related_products": page_data["related_products"],
+                    "source_data": page_data["source_data"],
                 }
                 save_cache(cache_path, cache)
                 fetched_pages += 1
@@ -982,14 +1165,19 @@ def main() -> int:
             specs = page_data["specs"]
             products = page_data["products"]
             images = page_data["images"]
+            videos = page_data["videos"]
             add_specs_to_item(item, specs, source_url)
             add_products_to_item(item, products, source_url)
-            add_gallery_to_item(item, images, source_url)
+            add_gallery_to_item(item, images, source_url, videos)
+            add_content_to_item(item, page_data, source_url)
+            add_related_products_to_item(item, page_data["related_products"], source_url)
+            add_source_data_to_item(item, page_data["source_data"], source_url)
             write_xml(root, output)
             processed += 1
             print(
                 f"[{index}/{len(selected_items)}] id={feed_id} specs={len(specs)} "
-                f"products={len(products)} images={len(images)} title={title}"
+                f"products={len(products)} images={len(images)} videos={len(videos)} "
+                f"tabs={len(page_data['tabs'])} title={title}"
             )
     finally:
         quit_driver(driver)

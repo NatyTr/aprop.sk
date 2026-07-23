@@ -20,8 +20,11 @@ from bs4 import BeautifulSoup
 from build_specs_xml import (
     APROP_NS,
     GOOGLE_NS,
+    add_content_to_item,
     add_gallery_to_item,
     add_products_to_item,
+    add_related_products_to_item,
+    add_source_data_to_item,
     add_specs_to_item,
     add_web_categories_to_item,
     canonical_product_url,
@@ -30,6 +33,7 @@ from build_specs_xml import (
     extract_page_data_from_html,
     fetch_html,
     fetch_url,
+    normalize_source_sku,
     scrape_drone_web_categories,
     write_xml,
 )
@@ -243,6 +247,34 @@ def offer_from_schema(product_schema: dict[str, Any]) -> dict[str, Any]:
     return offers if isinstance(offers, dict) else {}
 
 
+def offer_valid_until(offer: dict[str, Any]) -> str:
+    value = offer.get("priceValidUntil")
+    if value:
+        return collapse_space(str(value))
+
+    specifications = offer.get("priceSpecification")
+    if not isinstance(specifications, list):
+        specifications = [specifications] if isinstance(specifications, dict) else []
+    for specification in specifications:
+        if isinstance(specification, dict) and specification.get("validThrough"):
+            return collapse_space(str(specification["validThrough"]))
+    return ""
+
+
+def brand_from_product(product_schema: dict[str, Any], title: str) -> str:
+    brand = product_schema.get("brand")
+    if isinstance(brand, dict):
+        brand = brand.get("name")
+    if isinstance(brand, str) and collapse_space(brand):
+        return collapse_space(brand)
+
+    normalized_title = title.upper()
+    for known_brand in ("DJI", "AUTEL", "EMLID"):
+        if normalized_title.startswith(known_brand + " ") or normalized_title == known_brand:
+            return known_brand
+    return ""
+
+
 def price_from_offer(offer: dict[str, Any]) -> str:
     currency = str(offer.get("priceCurrency") or "EUR")
     price = offer.get("price")
@@ -347,6 +379,15 @@ def parse_product_page(product_url: str, timeout: int, previous_ids: dict[str, s
     title = collapse_space(str(product_schema.get("name", ""))) or text_from_selector(soup, "h1.product_title")
     product_id = previous_ids.get(canonical_url) or post_id_from_soup(soup)
 
+    page_data = extract_page_data_from_html(page_html, canonical_url)
+    visible_sku = text_from_selector(soup, ".product_meta .sku")
+    page_data["source_data"].update(
+        {
+            "price_valid_until": offer_valid_until(offer),
+            "source_sku": normalize_source_sku(visible_sku or product_schema.get("sku", "")),
+        }
+    )
+
     return {
         "id": product_id,
         "title": title,
@@ -356,8 +397,9 @@ def parse_product_page(product_url: str, timeout: int, previous_ids: dict[str, s
         "availability": availability_from_offer_or_page(offer, soup),
         "price": price_from_offer(offer),
         "product_type": breadcrumb_product_type(soup, title),
-        "sku": collapse_space(str(product_schema.get("sku", ""))) or text_from_selector(soup, ".product_meta .sku"),
-        "page_data": extract_page_data_from_html(page_html),
+        "sku": page_data["source_data"]["source_sku"],
+        "brand": brand_from_product(product_schema, title),
+        "page_data": page_data,
     }
 
 
@@ -381,7 +423,7 @@ def build_item(channel: ET.Element, product: dict[str, Any], web_categories: lis
         "condition": "new",
         "product_type": product_type,
         "google_product_category": product_type,
-        "brand": "DJI" if "dji" in str(product.get("title", "")).lower() else "",
+        "brand": product.get("brand", ""),
         "mpn": product.get("sku", ""),
     }
 
@@ -392,7 +434,10 @@ def build_item(channel: ET.Element, product: dict[str, Any], web_categories: lis
     page_data = product["page_data"]
     add_specs_to_item(item, page_data["specs"], source_url)
     add_products_to_item(item, page_data["products"], source_url)
-    add_gallery_to_item(item, page_data["images"], source_url)
+    add_gallery_to_item(item, page_data["images"], source_url, page_data["videos"])
+    add_content_to_item(item, page_data, source_url)
+    add_related_products_to_item(item, page_data["related_products"], source_url)
+    add_source_data_to_item(item, page_data["source_data"], source_url)
     add_web_categories_to_item(item, web_categories, "https://www.enterra.sk/shop/drones/")
 
 
@@ -417,6 +462,7 @@ def main() -> int:
     parser.add_argument("--source", choices=["sitemap", "shop"], default="sitemap")
     parser.add_argument("--previous-feed", default="enterra-feed-with-specifications.xml")
     parser.add_argument("--max-products", type=int, default=0)
+    parser.add_argument("--only-url", action="append", default=[], help="Only scrape this product URL. Can be repeated.")
     parser.add_argument("--max-pages", type=int, default=80)
     parser.add_argument("--timeout", type=int, default=45)
     parser.add_argument("--delay", type=float, default=0.15)
@@ -426,11 +472,14 @@ def main() -> int:
     output = Path(args.output)
     previous_ids = load_previous_feed_ids(Path(args.previous_feed))
 
-    product_urls = (
-        product_urls_from_sitemaps(PRODUCT_SITEMAPS, args.timeout)
-        if args.source == "sitemap"
-        else product_urls_from_shop_archive(SHOP_URL, args.max_pages, args.timeout)
-    )
+    if args.only_url:
+        product_urls = list(dict.fromkeys(canonical_product_url(url) for url in args.only_url))
+    else:
+        product_urls = (
+            product_urls_from_sitemaps(PRODUCT_SITEMAPS, args.timeout)
+            if args.source == "sitemap"
+            else product_urls_from_shop_archive(SHOP_URL, args.max_pages, args.timeout)
+        )
 
     if args.max_products > 0:
         product_urls = product_urls[: args.max_products]
@@ -452,7 +501,8 @@ def main() -> int:
             page_data = product["page_data"]
             print(
                 f"[{index}/{len(product_urls)}] id={product['id']} specs={len(page_data['specs'])} "
-                f"products={len(page_data['products'])} images={len(page_data['images'])} title={product['title']}",
+                f"products={len(page_data['products'])} images={len(page_data['images'])} "
+                f"videos={len(page_data['videos'])} tabs={len(page_data['tabs'])} title={product['title']}",
                 flush=True,
             )
         except Exception as exc:
