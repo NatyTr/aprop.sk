@@ -1,0 +1,106 @@
+<?php
+/**
+ * Thankyou page
+ *
+ * @see https://docs.woocommerce.com/document/template-structure/
+ * @package WooCommerce\Templates
+ * @version 3.7.0
+ */
+
+defined( 'ABSPATH' ) || exit;
+?>
+
+<div class="woocommerce-order aprop-thankyou">
+
+	<?php
+	if ( $order ) :
+
+		do_action( 'woocommerce_before_thankyou', $order->get_id() );
+		?>
+
+		<?php if ( $order->has_status( 'failed' ) ) : ?>
+
+			<div class="aprop-thankyou__hero aprop-thankyou__hero--error">
+				<p class="woocommerce-notice woocommerce-notice--error woocommerce-thankyou-order-failed"><?php esc_html_e( 'Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction. Please attempt your purchase again.', 'woocommerce' ); ?></p>
+
+				<p class="woocommerce-notice woocommerce-notice--error woocommerce-thankyou-order-failed-actions aprop-thankyou__actions">
+					<a href="<?php echo esc_url( $order->get_checkout_payment_url() ); ?>" class="btn-green-icon"><?php esc_html_e( 'Pay', 'woocommerce' ); ?></a>
+					<?php if ( is_user_logged_in() ) : ?>
+						<a href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" class="btn-primary"><?php esc_html_e( 'My account', 'woocommerce' ); ?></a>
+					<?php endif; ?>
+				</p>
+			</div>
+
+		<?php else : ?>
+
+			<div class="aprop-thankyou__hero">
+				<div class="aprop-thankyou__icon" aria-hidden="true"></div>
+				<p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received aprop-thankyou__title">
+					<?php echo apply_filters( 'woocommerce_thankyou_order_received_text', esc_html__( 'Thank you. Your order has been received.', 'woocommerce' ), $order ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</p>
+				<p class="aprop-thankyou__subtitle">
+					<?php esc_html_e( 'Potvrdenie sme vám poslali e-mailom. Nižšie nájdete prehľad objednávky.', 'aprop' ); ?>
+				</p>
+			</div>
+
+			<ul class="woocommerce-order-overview woocommerce-thankyou-order-details order_details aprop-thankyou__overview">
+
+				<li class="woocommerce-order-overview__order order">
+					<span class="aprop-thankyou__label"><?php esc_html_e( 'Order number:', 'woocommerce' ); ?></span>
+					<strong><?php echo $order->get_order_number(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></strong>
+				</li>
+
+				<li class="woocommerce-order-overview__date date">
+					<span class="aprop-thankyou__label"><?php esc_html_e( 'Date:', 'woocommerce' ); ?></span>
+					<strong><?php echo wc_format_datetime( $order->get_date_created() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></strong>
+				</li>
+
+				<?php if ( is_user_logged_in() && $order->get_user_id() === get_current_user_id() && $order->get_billing_email() ) : ?>
+					<li class="woocommerce-order-overview__email email">
+						<span class="aprop-thankyou__label"><?php esc_html_e( 'Email:', 'woocommerce' ); ?></span>
+						<strong><?php echo $order->get_billing_email(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></strong>
+					</li>
+				<?php endif; ?>
+
+				<li class="woocommerce-order-overview__total total">
+					<span class="aprop-thankyou__label"><?php esc_html_e( 'Total:', 'woocommerce' ); ?></span>
+					<strong><?php echo $order->get_formatted_order_total(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></strong>
+				</li>
+
+				<?php if ( $order->get_payment_method_title() ) : ?>
+					<li class="woocommerce-order-overview__payment-method method">
+						<span class="aprop-thankyou__label"><?php esc_html_e( 'Payment method:', 'woocommerce' ); ?></span>
+						<strong><?php echo wp_kses_post( $order->get_payment_method_title() ); ?></strong>
+					</li>
+				<?php endif; ?>
+
+			</ul>
+
+		<?php endif; ?>
+
+		<div class="aprop-thankyou__body">
+			<?php do_action( 'woocommerce_thankyou_' . $order->get_payment_method(), $order->get_id() ); ?>
+			<?php do_action( 'woocommerce_thankyou', $order->get_id() ); ?>
+		</div>
+
+		<div class="aprop-thankyou__footer">
+			<a class="btn-green-icon" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<?php esc_html_e( 'Späť na úvod', 'aprop' ); ?>
+			</a>
+			<a class="btn-primary" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ?: home_url( '/drony/' ) ); ?>">
+				<?php esc_html_e( 'Pokračovať v nákupe', 'aprop' ); ?>
+			</a>
+		</div>
+
+	<?php else : ?>
+
+		<div class="aprop-thankyou__hero">
+			<div class="aprop-thankyou__icon" aria-hidden="true"></div>
+			<p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received aprop-thankyou__title">
+				<?php echo apply_filters( 'woocommerce_thankyou_order_received_text', esc_html__( 'Thank you. Your order has been received.', 'woocommerce' ), null ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</p>
+		</div>
+
+	<?php endif; ?>
+
+</div>

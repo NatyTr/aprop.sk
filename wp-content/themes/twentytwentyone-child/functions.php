@@ -1319,6 +1319,11 @@ function custom_checkout_payment_heading() {
     echo '<h3 class="checkout-payment-title">Platba</h3>';
 }
 
+// Terms link → open the page (don't expand inline VOP on checkout).
+add_action( 'init', function () {
+	remove_action( 'woocommerce_checkout_terms_and_conditions', 'wc_terms_and_conditions_page_content', 30 );
+} );
+
 add_filter( 'woocommerce_get_availability_text', 'aprop_translate_product_availability_text', 10, 2 );
 function aprop_translate_product_availability_text( $availability, $product ) {
     if ( ! $product instanceof WC_Product ) {
