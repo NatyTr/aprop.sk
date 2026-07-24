@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Aprop Drone Feed Sync
  * Description: Imports products from the Enterra/Mergado XML feed into WooCommerce.
- * Version: 0.2.3
+ * Version: 0.2.4
  * Author: Aprop
  * Requires Plugins: woocommerce
  */
@@ -46,6 +46,8 @@ final class Aprop_Drone_Feed_Sync {
         add_action('add_meta_boxes_product', [$this, 'register_product_specifications_meta_box']);
         add_action('wp_ajax_aprop_drone_feed_prepare_delete', [$this, 'ajax_prepare_delete']);
         add_action('wp_ajax_aprop_drone_feed_delete_product', [$this, 'ajax_delete_product']);
+        add_action('wp', [$this, 'remove_legacy_theme_specifications']);
+        add_filter('woocommerce_product_tabs', [$this, 'add_imported_product_tabs'], 99);
     }
 
     public function register_admin_page(): void {
@@ -64,9 +66,129 @@ final class Aprop_Drone_Feed_Sync {
             return;
         }
 
-        wp_register_script('aprop-drone-feed-admin', false, [], '0.2.3', true);
+        wp_register_script('aprop-drone-feed-admin', false, [], '0.2.4', true);
         wp_enqueue_script('aprop-drone-feed-admin');
         wp_add_inline_script('aprop-drone-feed-admin', $this->admin_js());
+    }
+
+    public function remove_legacy_theme_specifications(): void {
+        if (is_singular('product')) {
+            remove_action(
+                'woocommerce_after_single_product_summary',
+                'aprop_show_enterra_product_specifications',
+                12
+            );
+        }
+    }
+
+    public function add_imported_product_tabs(array $tabs): array {
+        global $product;
+
+        if (!$product instanceof WC_Product) {
+            return $tabs;
+        }
+
+        $product_id = (int) $product->get_id();
+        $content = $this->get_stored_product_content($product_id);
+        $content_tabs = [];
+
+        foreach ($content['tabs'] as $content_tab) {
+            if (!is_array($content_tab) || empty($content_tab['id'])) {
+                continue;
+            }
+            $content_tabs[$content_tab['id']] = $content_tab;
+        }
+
+        if (isset($content_tabs['description'], $tabs['description'])) {
+            $tabs['description']['title'] = $content_tabs['description']['title'] ?: __('Popis', 'aprop-drone-feed');
+            $tabs['description']['priority'] = 10;
+        }
+
+        $priority = 20;
+        $specifications = $this->get_stored_product_specifications($product_id);
+        if ($specifications['rows']) {
+            $tabs['aprop_enterra_specifications'] = [
+                'title' => !empty($content_tabs['specifications']['title'])
+                    ? $content_tabs['specifications']['title']
+                    : __('Špecifikácia', 'aprop-drone-feed'),
+                'priority' => $priority,
+                'callback' => [$this, 'render_imported_product_tab'],
+                'aprop_tab_id' => 'specifications',
+            ];
+            $priority += 10;
+        }
+
+        $included_products = $this->get_stored_included_products($product_id);
+        if ($included_products || !empty($content_tabs['products']['html'])) {
+            $tabs['aprop_enterra_products'] = [
+                'title' => !empty($content_tabs['products']['title'])
+                    ? $content_tabs['products']['title']
+                    : __('V balení', 'aprop-drone-feed'),
+                'priority' => $priority,
+                'callback' => [$this, 'render_imported_product_tab'],
+                'aprop_tab_id' => 'products',
+            ];
+            $priority += 10;
+        }
+
+        foreach ($content_tabs as $tab_id => $content_tab) {
+            if (in_array($tab_id, ['description', 'specifications', 'products'], true)) {
+                continue;
+            }
+            if ($content_tab['html'] === '' && $content_tab['text'] === '') {
+                continue;
+            }
+
+            $tabs['aprop_enterra_' . $tab_id] = [
+                'title' => $content_tab['title'] ?: ucwords(str_replace(['-', '_'], ' ', $tab_id)),
+                'priority' => $priority,
+                'callback' => [$this, 'render_imported_product_tab'],
+                'aprop_tab_id' => $tab_id,
+            ];
+            $priority += 10;
+        }
+
+        return $tabs;
+    }
+
+    public function render_imported_product_tab(string $key, array $tab): void {
+        global $product;
+
+        if (!$product instanceof WC_Product) {
+            return;
+        }
+
+        $product_id = (int) $product->get_id();
+        $tab_id = sanitize_key((string) ($tab['aprop_tab_id'] ?? ''));
+
+        if ($tab_id === 'specifications') {
+            $this->render_frontend_specifications($product_id);
+            return;
+        }
+
+        if ($tab_id === 'products') {
+            $included_products = $this->get_stored_included_products($product_id);
+            if ($included_products) {
+                $this->render_frontend_included_products($included_products);
+                return;
+            }
+        }
+
+        $content = $this->get_stored_product_content($product_id);
+        foreach ($content['tabs'] as $content_tab) {
+            if (!is_array($content_tab) || ($content_tab['id'] ?? '') !== $tab_id) {
+                continue;
+            }
+
+            echo '<div class="aprop-enterra-tab-content">';
+            if ($content_tab['html'] !== '') {
+                echo $this->sanitize_imported_html($content_tab['html']); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            } elseif ($content_tab['text'] !== '') {
+                echo wp_kses_post(wpautop(esc_html($content_tab['text'])));
+            }
+            echo '</div>';
+            return;
+        }
     }
 
     public function register_product_specifications_meta_box($post): void {
@@ -839,6 +961,125 @@ final class Aprop_Drone_Feed_Sync {
                 : esc_url_raw((string) get_post_meta($product_id, self::PRODUCT_META_SPECS_SOURCE, true)),
             'fetched_at' => $this->normalize_feed_value((string) ($stored['fetched_at'] ?? '')),
         ];
+    }
+
+    private function get_stored_product_content(int $product_id): array {
+        $stored = json_decode(
+            (string) get_post_meta($product_id, self::PRODUCT_META_CONTENT_JSON, true),
+            true
+        );
+        $tabs = [];
+
+        foreach (is_array($stored['tabs'] ?? null) ? $stored['tabs'] : [] as $tab) {
+            if (!is_array($tab)) {
+                continue;
+            }
+
+            $tab_id = sanitize_key((string) ($tab['id'] ?? ''));
+            if ($tab_id === '') {
+                continue;
+            }
+
+            $tabs[] = [
+                'id' => $tab_id,
+                'title' => $this->normalize_feed_value((string) ($tab['title'] ?? '')),
+                'html' => trim((string) ($tab['html'] ?? '')),
+                'text' => $this->normalize_feed_value((string) ($tab['text'] ?? '')),
+            ];
+        }
+
+        return [
+            'tabs' => $tabs,
+            'source_url' => esc_url_raw((string) ($stored['source_url'] ?? '')),
+            'fetched_at' => $this->normalize_feed_value((string) ($stored['fetched_at'] ?? '')),
+        ];
+    }
+
+    private function get_stored_included_products(int $product_id): array {
+        $stored = json_decode(
+            (string) get_post_meta($product_id, self::PRODUCT_META_INCLUDED_PRODUCTS_JSON, true),
+            true
+        );
+        $rows = [];
+
+        foreach (is_array($stored['rows'] ?? null) ? $stored['rows'] : [] as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $name = $this->normalize_feed_value((string) ($row['name'] ?? ''));
+            $quantity = $this->normalize_feed_value((string) ($row['quantity'] ?? ''));
+            if ($name === '' && $quantity === '') {
+                continue;
+            }
+
+            $rows[] = [
+                'name' => $name,
+                'quantity' => $quantity,
+            ];
+        }
+
+        return $rows;
+    }
+
+    private function render_frontend_specifications(int $product_id): void {
+        $specifications = $this->get_stored_product_specifications($product_id);
+        if (!$specifications['rows']) {
+            return;
+        }
+
+        $grouped_rows = [];
+        foreach ($specifications['rows'] as $row) {
+            $section = $row['section'] !== ''
+                ? $row['section']
+                : __('Technické parametre', 'aprop-drone-feed');
+            $grouped_rows[$section][] = $row;
+        }
+        ?>
+        <div class="aprop-product-specifications aprop-product-specifications--tab">
+            <div class="aprop-product-specifications__groups">
+                <?php $section_index = 0; ?>
+                <?php foreach ($grouped_rows as $section => $section_rows) : ?>
+                    <details class="aprop-product-specifications__group" <?php echo $section_index === 0 ? 'open' : ''; ?>>
+                        <summary>
+                            <span><?php echo esc_html($section); ?></span>
+                        </summary>
+                        <dl class="aprop-product-specifications__list">
+                            <?php foreach ($section_rows as $row) : ?>
+                                <div class="aprop-product-specifications__row">
+                                    <dt><?php echo esc_html($row['name']); ?></dt>
+                                    <dd><?php echo esc_html($row['value']); ?></dd>
+                                </div>
+                            <?php endforeach; ?>
+                        </dl>
+                    </details>
+                    <?php $section_index++; ?>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    private function render_frontend_included_products(array $rows): void {
+        ?>
+        <div class="aprop-product-specifications aprop-product-specifications--tab">
+            <div class="aprop-product-specifications__groups">
+                <details class="aprop-product-specifications__group" open>
+                    <summary>
+                        <span><?php echo esc_html__('Obsah balenia', 'aprop-drone-feed'); ?></span>
+                    </summary>
+                    <dl class="aprop-product-specifications__list">
+                        <?php foreach ($rows as $row) : ?>
+                            <div class="aprop-product-specifications__row">
+                                <dt><?php echo esc_html($row['name']); ?></dt>
+                                <dd><?php echo esc_html($row['quantity']); ?></dd>
+                            </div>
+                        <?php endforeach; ?>
+                    </dl>
+                </details>
+            </div>
+        </div>
+        <?php
     }
 
     private function format_import_timestamp(string $value): string {

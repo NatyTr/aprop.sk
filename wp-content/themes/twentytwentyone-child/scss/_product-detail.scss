@@ -450,21 +450,59 @@
     .tabs{
       display: flex;
       justify-content: center;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px 32px;
       border: none;
-      margin: 0 0 28px;
+      border-bottom: 1px solid rgba(21, 21, 21, 0.12);
+      margin: 0 0 32px;
       padding: 0;
       text-align: center;
       li{
         float: none;
         margin: 0;
         padding: 0;
+        border: 0;
+        background: transparent;
+
+        &:before,
+        &:after{
+          display: none;
+        }
+
         a{
+          position: relative;
+          display: block;
           background: transparent;
-          color: black;
+          color: rgba(21, 21, 21, 0.58);
           border: none;
-          padding: 0px;
-          font-size: 32px;
-          line-height: 34px;
+          padding: 0 0 13px;
+          font-size: 22px;
+          line-height: 28px;
+          font-weight: 500;
+          white-space: nowrap;
+          transition: color 0.2s ease;
+
+          &:after{
+            content: "";
+            position: absolute;
+            right: 0;
+            bottom: -1px;
+            left: 0;
+            height: 3px;
+            background: transparent;
+            transition: background-color 0.2s ease;
+          }
+        }
+
+        &.active a,
+        a:hover,
+        a:focus{
+          color: $black;
+        }
+
+        &.active a:after{
+          background: $black;
         }
       }
     }
@@ -472,6 +510,37 @@
     .woocommerce-Tabs-panel{
       > h2{
         display: none;
+      }
+
+      .aprop-product-specifications--tab{
+        max-width: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .aprop-enterra-tab-content{
+        color: rgba(21, 21, 21, 0.88);
+        font-size: 17px;
+        line-height: 1.7;
+
+        > *:first-child{
+          margin-top: 0;
+        }
+
+        img,
+        video,
+        iframe{
+          display: block;
+          width: 100%;
+          max-width: 100%;
+          height: auto;
+          margin: 28px 0;
+          border-radius: 24px;
+        }
+
+        iframe{
+          aspect-ratio: 16 / 9;
+        }
       }
 
       ul{
@@ -736,12 +805,31 @@
 
     @media(max-width: 767px){
       .tabs{
-        margin-bottom: 15px;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        gap: 24px;
+        margin-bottom: 24px;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scrollbar-width: thin;
         li{
           a{
-            font-size: 24px;
-            line-height: 26px;
+            padding-bottom: 10px;
+            font-size: 18px;
+            line-height: 24px;
           }
+        }
+      }
+
+      .woocommerce-Tabs-panel .aprop-enterra-tab-content{
+        font-size: 15px;
+        line-height: 1.6;
+
+        img,
+        video,
+        iframe{
+          margin: 20px 0;
+          border-radius: 16px;
         }
       }
     }

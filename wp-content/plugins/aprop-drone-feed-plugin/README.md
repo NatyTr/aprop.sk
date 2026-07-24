@@ -17,6 +17,7 @@ WordPress/WooCommerce plugin for importing products from the bundled Enterra XML
 - Full-size product gallery images are sideloaded from `aprop:gallery` into the standard WooCommerce gallery. Gallery videos are stored in `_aprop_enterra_gallery_videos_json` because WooCommerce core has no native video-gallery field.
 - The Enterra short description keeps its HTML formatting and becomes the WooCommerce short description.
 - Every Enterra product tab is preserved as formatted HTML in `_aprop_enterra_tab_{tab-id}_html`; the `description` tab becomes the WooCommerce long description. Inline image and video URLs remain in the HTML at their original source URLs.
+- Imported tabs are exposed on the product detail as WooCommerce tabs. Specifications use grouped structured rows, included products use the imported package list, and any additional source tabs retain their formatted HTML.
 - The full content payload is stored in `_aprop_enterra_content_json`, including tab titles, plain text, HTML, and inline media URL lists.
 - Cross-sell and upsell SKUs are stored in `_aprop_enterra_related_products_json` and resolved to standard WooCommerce cross-sell/upsell product ids after the sync.
 - Source-page metadata such as availability label, delivery text, displayed prices, flags, source product type, offer expiry, source SKU, and source URL is stored in `_aprop_enterra_source_data_json` and individual `_aprop_enterra_source_*` fields.
