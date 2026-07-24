@@ -33,6 +33,7 @@ WordPress/WooCommerce plugin for importing products from the bundled Enterra XML
   - `_aprop_enterra_specifications_source_url`
   - `_aprop_enterra_specification_meta_keys`
   - public filter-friendly keys like `aprop_spec_parametre-dronu_celkova-hmotnost-bez-baterii`
+- Products with imported specifications show a read-only, grouped `Enterra špecifikácie` panel in the WooCommerce product editor.
 
 ## Feed
 

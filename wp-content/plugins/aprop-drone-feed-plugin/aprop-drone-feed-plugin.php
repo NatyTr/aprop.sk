@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Aprop Drone Feed Sync
  * Description: Imports products from the Enterra/Mergado XML feed into WooCommerce.
- * Version: 0.2.2
+ * Version: 0.2.3
  * Author: Aprop
  * Requires Plugins: woocommerce
  */
@@ -43,6 +43,7 @@ final class Aprop_Drone_Feed_Sync {
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
         add_action('wp_ajax_aprop_drone_feed_prepare_sync', [$this, 'ajax_prepare_sync']);
         add_action('wp_ajax_aprop_drone_feed_sync_product', [$this, 'ajax_sync_product']);
+        add_action('add_meta_boxes_product', [$this, 'register_product_specifications_meta_box']);
         add_action('wp_ajax_aprop_drone_feed_prepare_delete', [$this, 'ajax_prepare_delete']);
         add_action('wp_ajax_aprop_drone_feed_delete_product', [$this, 'ajax_delete_product']);
     }
@@ -63,9 +64,156 @@ final class Aprop_Drone_Feed_Sync {
             return;
         }
 
-        wp_register_script('aprop-drone-feed-admin', false, [], '0.2.2', true);
+        wp_register_script('aprop-drone-feed-admin', false, [], '0.2.3', true);
         wp_enqueue_script('aprop-drone-feed-admin');
         wp_add_inline_script('aprop-drone-feed-admin', $this->admin_js());
+    }
+
+    public function register_product_specifications_meta_box($post): void {
+        if (!$post instanceof WP_Post) {
+            return;
+        }
+
+        $specifications = $this->get_stored_product_specifications((int) $post->ID);
+        if (empty($specifications['rows'])) {
+            return;
+        }
+
+        add_meta_box(
+            'aprop-enterra-product-specifications',
+            sprintf(
+                __('Enterra špecifikácie (%d)', 'aprop-drone-feed'),
+                count($specifications['rows'])
+            ),
+            [$this, 'render_product_specifications_meta_box'],
+            'product',
+            'normal',
+            'default'
+        );
+    }
+
+    public function render_product_specifications_meta_box($post): void {
+        $specifications = $this->get_stored_product_specifications((int) $post->ID);
+        $rows = $specifications['rows'];
+        if (!$rows) {
+            echo '<p>' . esc_html__('Pre tento produkt nie sú uložené Enterra špecifikácie.', 'aprop-drone-feed') . '</p>';
+            return;
+        }
+
+        $grouped_rows = [];
+        foreach ($rows as $row) {
+            $section = $row['section'] !== ''
+                ? $row['section']
+                : __('Technické parametre', 'aprop-drone-feed');
+            $grouped_rows[$section][] = $row;
+        }
+
+        $source_url = esc_url((string) ($specifications['source_url'] ?? ''));
+        $fetched_at = (string) ($specifications['fetched_at'] ?? '');
+        ?>
+        <div class="aprop-admin-specifications">
+            <p class="aprop-admin-specifications__meta">
+                <strong>
+                    <?php
+                    echo esc_html(
+                        sprintf(
+                            _n('%d parameter', '%d parametrov', count($rows), 'aprop-drone-feed'),
+                            count($rows)
+                        )
+                    );
+                    ?>
+                </strong>
+                <?php if ($fetched_at !== '') : ?>
+                    <span>
+                        <?php
+                        echo esc_html(
+                            sprintf(
+                                __('Importované: %s', 'aprop-drone-feed'),
+                                $this->format_import_timestamp($fetched_at)
+                            )
+                        );
+                        ?>
+                    </span>
+                <?php endif; ?>
+                <?php if ($source_url !== '') : ?>
+                    <a href="<?php echo esc_url($source_url); ?>" target="_blank" rel="noopener noreferrer">
+                        <?php echo esc_html__('Otvoriť zdrojovú stránku', 'aprop-drone-feed'); ?>
+                    </a>
+                <?php endif; ?>
+            </p>
+
+            <?php $section_index = 0; ?>
+            <?php foreach ($grouped_rows as $section => $section_rows) : ?>
+                <details class="aprop-admin-specifications__group" <?php echo $section_index === 0 ? 'open' : ''; ?>>
+                    <summary>
+                        <span><?php echo esc_html($section); ?></span>
+                        <span class="aprop-admin-specifications__count"><?php echo esc_html(count($section_rows)); ?></span>
+                    </summary>
+                    <table class="widefat striped">
+                        <tbody>
+                            <?php foreach ($section_rows as $row) : ?>
+                                <tr>
+                                    <th scope="row"><?php echo esc_html($row['name']); ?></th>
+                                    <td><?php echo esc_html($row['value']); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </details>
+                <?php $section_index++; ?>
+            <?php endforeach; ?>
+        </div>
+        <style>
+            #aprop-enterra-product-specifications .inside {
+                margin: 0;
+                padding: 0 12px 12px;
+            }
+            .aprop-admin-specifications__meta {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px 16px;
+                margin: 0;
+                padding: 12px 0;
+            }
+            .aprop-admin-specifications__group {
+                margin: 0;
+                border-top: 1px solid #dcdcde;
+            }
+            .aprop-admin-specifications__group summary {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                padding: 12px 4px;
+                cursor: pointer;
+                font-weight: 600;
+            }
+            .aprop-admin-specifications__count {
+                min-width: 24px;
+                padding: 2px 8px;
+                border-radius: 10px;
+                background: #f0f0f1;
+                color: #50575e;
+                text-align: center;
+                font-size: 12px;
+                line-height: 20px;
+            }
+            .aprop-admin-specifications table {
+                margin: 0 0 12px;
+            }
+            .aprop-admin-specifications th {
+                width: 42%;
+                font-weight: 600;
+            }
+            .aprop-admin-specifications th,
+            .aprop-admin-specifications td {
+                padding: 9px 10px;
+                vertical-align: top;
+                overflow-wrap: anywhere;
+            }
+        </style>
+        <?php
     }
 
     public function render_admin_page(): void {
@@ -629,6 +777,80 @@ final class Aprop_Drone_Feed_Sync {
 
     private function normalize_feed_value(string $value): string {
         return trim((string) preg_replace('/\s+/u', ' ', html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+    }
+
+    private function get_stored_product_specifications(int $product_id): array {
+        $stored = json_decode(
+            (string) get_post_meta($product_id, self::PRODUCT_META_SPECS_JSON, true),
+            true
+        );
+        $rows = [];
+
+        if (is_array($stored['rows'] ?? null)) {
+            foreach ($stored['rows'] as $row) {
+                if (!is_array($row)) {
+                    continue;
+                }
+
+                $name = $this->normalize_feed_value((string) ($row['name'] ?? ''));
+                $value = $this->normalize_feed_value((string) ($row['value'] ?? ''));
+                if ($name === '' || $value === '') {
+                    continue;
+                }
+
+                $rows[] = [
+                    'section' => $this->normalize_feed_value((string) ($row['section'] ?? '')),
+                    'name' => $name,
+                    'value' => $value,
+                ];
+            }
+        }
+
+        if (!$rows) {
+            $meta_keys = json_decode(
+                (string) get_post_meta($product_id, self::PRODUCT_META_SPECS_KEYS, true),
+                true
+            );
+            foreach (is_array($meta_keys) ? $meta_keys : [] as $meta_key) {
+                if (!is_array($meta_key) || empty($meta_key['key'])) {
+                    continue;
+                }
+
+                $name = $this->normalize_feed_value((string) ($meta_key['name'] ?? ''));
+                $value = $this->normalize_feed_value(
+                    (string) get_post_meta($product_id, (string) $meta_key['key'], true)
+                );
+                if ($name === '' || $value === '') {
+                    continue;
+                }
+
+                $rows[] = [
+                    'section' => $this->normalize_feed_value((string) ($meta_key['section'] ?? '')),
+                    'name' => $name,
+                    'value' => $value,
+                ];
+            }
+        }
+
+        return [
+            'rows' => $rows,
+            'source_url' => !empty($stored['source_url'])
+                ? esc_url_raw((string) $stored['source_url'])
+                : esc_url_raw((string) get_post_meta($product_id, self::PRODUCT_META_SPECS_SOURCE, true)),
+            'fetched_at' => $this->normalize_feed_value((string) ($stored['fetched_at'] ?? '')),
+        ];
+    }
+
+    private function format_import_timestamp(string $value): string {
+        $timestamp = strtotime($value);
+        if ($timestamp === false) {
+            return $value;
+        }
+
+        return wp_date(
+            get_option('date_format') . ' ' . get_option('time_format'),
+            $timestamp
+        );
     }
 
     private function normalize_feed_html(string $value): string {
