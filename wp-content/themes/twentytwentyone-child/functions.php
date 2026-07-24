@@ -1127,10 +1127,170 @@ add_action('woocommerce_checkout_create_order_line_item', function($item, $cart_
 function woocommerce_button_proceed_to_checkout() {
     $checkout_url = WC()->cart->get_checkout_url();
     ?>
-    <a href="<?php echo esc_url( $checkout_url ); ?>" class="btn-primary btn-black btn-icon">
+    <a href="<?php echo esc_url( $checkout_url ); ?>" class="btn-green-icon">
         <?php esc_html_e( 'Prejsť do pokladne', 'woocommerce' ); ?>
     </a>
     <?php
+}
+
+/**
+ * Accessory products linked to a cart line item (upsells + cross-sells).
+ *
+ * @param WC_Product $product Cart line product.
+ * @param int        $limit   Max accessories.
+ * @return array<int, array{id:int, name:string, price_html:string, permalink:string, add_url:string, image:string}>
+ */
+function aprop_get_cart_item_accessories( $product, $limit = 12 ) {
+	if ( ! $product instanceof WC_Product || ! function_exists( 'WC' ) || ! WC()->cart ) {
+		return array();
+	}
+
+	$source_id = $product->get_parent_id() ? (int) $product->get_parent_id() : (int) $product->get_id();
+	$source    = $product->get_parent_id() ? wc_get_product( $source_id ) : $product;
+	if ( ! $source instanceof WC_Product ) {
+		return array();
+	}
+
+	$cart_product_ids = array();
+	foreach ( WC()->cart->get_cart() as $cart_item ) {
+		$line_product = isset( $cart_item['data'] ) ? $cart_item['data'] : null;
+		if ( ! $line_product instanceof WC_Product ) {
+			continue;
+		}
+		$cart_product_ids[] = (int) $line_product->get_id();
+		if ( $line_product->get_parent_id() ) {
+			$cart_product_ids[] = (int) $line_product->get_parent_id();
+		}
+	}
+	$cart_product_ids = array_values( array_unique( $cart_product_ids ) );
+
+	$candidate_ids = array_values(
+		array_unique(
+			array_filter(
+				array_map( 'absint', array_merge( $source->get_cross_sell_ids(), $source->get_upsell_ids() ) )
+			)
+		)
+	);
+
+	$accessories = array();
+	foreach ( $candidate_ids as $related_id ) {
+		if ( in_array( $related_id, $cart_product_ids, true ) ) {
+			continue;
+		}
+
+		$related = wc_get_product( $related_id );
+		if ( ! $related instanceof WC_Product || ! $related->is_visible() || ! $related->is_purchasable() || ! $related->is_in_stock() ) {
+			continue;
+		}
+
+		if ( $related->is_type( 'variable' ) || $related->is_type( 'grouped' ) || $related->is_type( 'external' ) ) {
+			continue;
+		}
+
+		$accessories[] = array(
+			'id'         => $related_id,
+			'name'       => $related->get_name(),
+			'price_html' => $related->get_price_html(),
+			'permalink'  => $related->get_permalink(),
+			'add_url'    => add_query_arg( 'add-to-cart', $related_id, wc_get_cart_url() ),
+			'image'      => $related->get_image( 'woocommerce_gallery_thumbnail' ),
+		);
+
+		if ( count( $accessories ) >= $limit ) {
+			break;
+		}
+	}
+
+	return $accessories;
+}
+
+/**
+ * Expandable accessory toggle (compact) under cart item name.
+ *
+ * @param array  $cart_item     Cart item.
+ * @param string $cart_item_key Cart item key.
+ */
+function aprop_render_cart_item_accessory_select( $cart_item, $cart_item_key ) {
+	$product = isset( $cart_item['data'] ) ? $cart_item['data'] : null;
+	if ( ! $product instanceof WC_Product ) {
+		return;
+	}
+
+	$accessories = aprop_get_cart_item_accessories( $product );
+	if ( empty( $accessories ) ) {
+		return;
+	}
+
+	$panel_id = 'aprop-cart-acc-panel-' . sanitize_html_class( $cart_item_key );
+	$count    = count( $accessories );
+	?>
+	<div class="aprop-cart-acc">
+		<button
+			type="button"
+			class="aprop-cart-acc__toggle has-background"
+			aria-expanded="false"
+			aria-controls="<?php echo esc_attr( $panel_id ); ?>"
+			data-aprop-acc-toggle="<?php echo esc_attr( $panel_id ); ?>"
+		>
+			<span class="aprop-cart-acc__toggle-text">
+				<?php
+				printf(
+					/* translators: %d: number of accessories */
+					esc_html( _n( 'Pridať príslušenstvo (%d)', 'Pridať príslušenstvo (%d)', $count, 'aprop' ) ),
+					(int) $count
+				);
+				?>
+			</span>
+			<span class="aprop-cart-acc__toggle-arrow" aria-hidden="true"></span>
+		</button>
+	</div>
+	<?php
+}
+
+/**
+ * Full-width accessory list row under a cart line item.
+ *
+ * @param array  $cart_item     Cart item.
+ * @param string $cart_item_key Cart item key.
+ */
+function aprop_render_cart_item_accessory_row( $cart_item, $cart_item_key ) {
+	$product = isset( $cart_item['data'] ) ? $cart_item['data'] : null;
+	if ( ! $product instanceof WC_Product ) {
+		return;
+	}
+
+	$accessories = aprop_get_cart_item_accessories( $product );
+	if ( empty( $accessories ) ) {
+		return;
+	}
+
+	$panel_id = 'aprop-cart-acc-panel-' . sanitize_html_class( $cart_item_key );
+	?>
+	<tr class="aprop-cart-acc-row" data-aprop-acc-row="<?php echo esc_attr( $panel_id ); ?>" hidden>
+		<td colspan="5" class="aprop-cart-acc-row__cell">
+			<div class="aprop-cart-acc__panel" id="<?php echo esc_attr( $panel_id ); ?>">
+				<ul class="aprop-cart-acc__list">
+					<?php foreach ( $accessories as $accessory ) : ?>
+						<li class="aprop-cart-acc__item">
+							<a class="aprop-cart-acc__thumb" href="<?php echo esc_url( $accessory['permalink'] ); ?>">
+								<?php echo $accessory['image']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+							</a>
+							<div class="aprop-cart-acc__meta">
+								<a class="aprop-cart-acc__name" href="<?php echo esc_url( $accessory['permalink'] ); ?>">
+									<?php echo esc_html( $accessory['name'] ); ?>
+								</a>
+								<span class="aprop-cart-acc__price"><?php echo wp_kses_post( $accessory['price_html'] ); ?></span>
+							</div>
+							<a class="aprop-cart-acc__add" href="<?php echo esc_url( $accessory['add_url'] ); ?>">
+								<?php esc_html_e( 'Pridať', 'aprop' ); ?>
+							</a>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+		</td>
+	</tr>
+	<?php
 }
 
 add_action( 'wp_footer', 'custom_continue_shopping_button_text' );
@@ -1227,6 +1387,67 @@ function custom_translate_checkout_strings( $translated_text, $text, $domain ) {
 
 add_filter( 'gettext', 'custom_translate_order_texts', 20, 3 );
 function custom_translate_order_texts( $translated_text, $text, $domain ) {
+    if ( 'woocommerce' === $domain ) {
+        switch ( $text ) {
+            case '(includes %s)':
+                return '(vrátane %s)';
+            case '(includes %1$s estimated for %2$s)':
+                return '(vrátane %1$s, odhad pre %2$s)';
+            case 'VAT':
+                return 'DPH';
+            case 'Tax':
+                return 'Daň';
+            case '(incl. VAT)':
+                return '(s DPH)';
+            case '(ex. VAT)':
+                return '(bez DPH)';
+            case '(incl. tax)':
+                return '(s daňou)';
+            case '(ex. tax)':
+                return '(bez dane)';
+            case 'Shipping':
+                return 'Doprava';
+            case 'Subtotal':
+                return 'Medzisúčet';
+            case 'Total':
+                return 'Celkom';
+            case 'Coupon "%s" does not exist!':
+                return 'Kupón „%s“ neexistuje!';
+            case 'Coupon does not exist!':
+                return 'Kupón neexistuje!';
+            case 'Coupon is not valid.':
+                return 'Kupón nie je platný.';
+            case 'Coupon code already applied!':
+                return 'Kupón už bol uplatnený!';
+            case 'Coupon usage limit has been reached.':
+                return 'Bol dosiahnutý limit použitia kupónu.';
+            case 'This coupon has expired.':
+                return 'Platnosť tohto kupónu vypršala.';
+            case 'Coupon code applied successfully.':
+                return 'Kupón bol úspešne uplatnený.';
+            case 'Coupon code removed successfully.':
+                return 'Kupón bol úspešne odstránený.';
+            case 'Please enter a coupon code.':
+                return 'Zadajte zľavový kód.';
+            case 'Sorry, this coupon is not applicable to your cart contents.':
+                return 'Tento kupón nie je možné uplatniť na obsah košíka.';
+            case 'Sorry, this coupon is not valid for sale items.':
+                return 'Tento kupón nie je platný pre zľavnené produkty.';
+            case 'The minimum spend for this coupon is %s.':
+                return 'Minimálna suma nákupu pre tento kupón je %s.';
+            case 'The maximum spend for this coupon is %s.':
+                return 'Maximálna suma nákupu pre tento kupón je %s.';
+            case 'Sorry, it seems the coupon "%s" is invalid - it has now been removed from your order.':
+                return 'Kupón „%s“ nie je platný – bol odstránený z objednávky.';
+            case 'Sorry, coupon "%s" has already been applied and cannot be used in conjunction with other coupons.':
+                return 'Kupón „%s“ už bol uplatnený a nie je možné ho kombinovať s inými kupónmi.';
+            case 'Sorry, this coupon is not applicable to the products: %s.':
+                return 'Tento kupón nie je možné uplatniť na produkty: %s.';
+            case 'Sorry, this coupon is not applicable to the categories: %s.':
+                return 'Tento kupón nie je možné uplatniť na kategórie: %s.';
+        }
+    }
+
     switch ( $translated_text ) {
 
         case 'Thank you. Your order has been received.':
