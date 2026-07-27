@@ -66,6 +66,18 @@ body{
   outline-offset: 2px;
 }
 
+.has-background-white .site .woocommerce-tabs .tabs a:focus:not(.wp-block-button__link):not(.wp-block-file__button) {
+  outline: none;
+  outline-offset: 0;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.72) !important;
+  color: #151515 !important;
+}
+
+.has-background-white .site .woocommerce-tabs .tabs .active a:focus:not(.wp-block-button__link):not(.wp-block-file__button) {
+  background: #fff !important;
+}
+
 
 .show-on-mobile{
   @media(min-width: 1100px){

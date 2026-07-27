@@ -1042,10 +1042,40 @@ add_action( 'woocommerce_after_single_product_summary', 'aprop_show_enterra_prod
 
 add_filter( 'woocommerce_product_tabs', 'rename_description_tab', 98 );
 function rename_description_tab( $tabs ) {
-    if ( isset( $tabs['description'] ) ) {
-        $tabs['description']['title'] = 'Čo môžete očakávať';
+    if ( ! isset( $tabs['description'] ) ) {
+        return $tabs;
     }
+
+    $tabs['description']['title'] = aprop_is_drone_product() ? 'Popis' : 'Čo môžete očakávať';
+
     return $tabs;
+}
+
+function aprop_is_drone_product( $product_id = null ) {
+    $product_id = $product_id ? (int) $product_id : (int) get_the_ID();
+
+    if ( ! $product_id || ! function_exists( 'aprop_drone_category_id' ) ) {
+        return false;
+    }
+
+    $drone_category_id = (int) aprop_drone_category_id();
+    $terms = get_the_terms( $product_id, 'product_cat' );
+
+    if ( empty( $terms ) || is_wp_error( $terms ) ) {
+        return false;
+    }
+
+    foreach ( $terms as $term ) {
+        if ( ! $term instanceof WP_Term ) {
+            continue;
+        }
+
+        if ( (int) $term->term_id === $drone_category_id || term_is_ancestor_of( $drone_category_id, $term->term_id, 'product_cat' ) ) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 

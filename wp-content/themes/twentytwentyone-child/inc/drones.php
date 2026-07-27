@@ -62,13 +62,15 @@ function aprop_drone_excluded_category_ids() {
 }
 
 function aprop_default_drone_filter_category_id() {
-    $term = get_term_by( 'slug', 'drony', 'product_cat' );
+    foreach ( array( 'drony', 'dji-drony', 'drony-new', 'polnohospodarske-drony' ) as $slug ) {
+        $term = get_term_by( 'slug', $slug, 'product_cat' );
 
-    if ( ! ( $term instanceof WP_Term ) || aprop_drone_is_excluded_category( $term ) ) {
-        return 0;
+        if ( $term instanceof WP_Term && ! aprop_drone_is_excluded_category( $term ) ) {
+            return (int) $term->term_id;
+        }
     }
 
-    return (int) $term->term_id;
+    return 0;
 }
 
 function aprop_drone_category_tree( $parent_id = null ) {
@@ -367,21 +369,9 @@ function aprop_render_drone_category_tree_options( $category_tree, $current_filt
 }
 
 function aprop_render_drone_filter_category_options( $category_tree, $current_filters ) {
+    // Render full tree including parents (e.g. "Drony"), so default selection can be checked.
     ob_start();
-
-    foreach ( $category_tree as $node ) {
-        if ( empty( $node['term'] ) || ! ( $node['term'] instanceof WP_Term ) ) {
-            continue;
-        }
-
-        if ( ! empty( $node['children'] ) ) {
-            echo aprop_render_drone_category_tree_options( $node['children'], $current_filters );
-            continue;
-        }
-
-        echo aprop_render_drone_category_tree_options( array( $node ), $current_filters );
-    }
-
+    echo aprop_render_drone_category_tree_options( $category_tree, $current_filters );
     return ob_get_clean();
 }
 
@@ -557,7 +547,9 @@ function render_drone_products_shortcode() {
     $sort_options = aprop_drone_sort_options();
     $category_tree = aprop_drone_category_tree();
     $valid_category_ids = aprop_drone_category_ids_from_tree( $category_tree );
-    $default_category_id = ( ! isset( $_GET['drone_category'] ) && is_page( 'drony' ) ) ? aprop_default_drone_filter_category_id() : 0;
+    $default_heading = 'Všetky kategórie';
+    // On first open of /drony (no category filter in URL) preselect "Drony".
+    $default_category_id = ! isset( $_GET['drone_category'] ) ? aprop_default_drone_filter_category_id() : 0;
     $current_filters = array(
         'category'     => isset($_GET['drone_category']) ? absint($_GET['drone_category']) : $default_category_id,
         'display'      => isset($_GET['drone_display']) ? sanitize_key($_GET['drone_display']) : 'all',
@@ -589,6 +581,14 @@ function render_drone_products_shortcode() {
 
     if ( ! array_key_exists($current_filters['sort'], $sort_options) ) {
         $current_filters['sort'] = 'recommended';
+    }
+
+    $heading = $default_heading;
+    if ( ! empty( $current_filters['category'] ) ) {
+        $term = get_term( (int) $current_filters['category'], 'product_cat' );
+        if ( $term instanceof WP_Term && ! is_wp_error( $term ) ) {
+            $heading = (string) $term->name;
+        }
     }
 
     $args = array(
@@ -634,7 +634,7 @@ function render_drone_products_shortcode() {
     ?>
     <section class="drone-products-page shop-page-wrapper alignwide">
         <div class="drone-products-title">
-            <h1>Poľnohospodárske drony</h1>
+            <h1><?php echo esc_html( $heading ); ?></h1>
         </div>
 
         <div class="drone-products-toolbar">
