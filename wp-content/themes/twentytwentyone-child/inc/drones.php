@@ -388,28 +388,6 @@ function aprop_render_drone_filters( $current_filters ) {
 
             <div class="drone-products-filter__group">
                 <h2>Kategória</h2>
-                <div class="drone-products-filter__tree-item drone-products-filter__tree-item--root">
-                    <div class="drone-products-filter__tree-row">
-                        <label class="drone-products-filter__tree-select">
-                            <input
-                                id="drone-category-all"
-                                type="radio"
-                                name="drone_category"
-                                value=""
-                                <?php checked( $current_filters['category'], 0 ); ?>
-                                onchange="this.form.submit()"
-                            />
-                            <span class="drone-products-filter__tree-indicator" aria-hidden="true"></span>
-                            <span class="screen-reader-text">Vybrať všetky kategórie</span>
-                        </label>
-
-                        <label for="drone-category-all" class="drone-products-filter__tree-label drone-products-filter__tree-label--static">Všetky kategórie</label>
-                        <span class="drone-products-filter__tree-count">
-                            <?php echo esc_html( aprop_drone_filter_count( $current_filters, 'category', array( 'category' => '' ) ) ); ?>
-                        </span>
-                    </div>
-                </div>
-
                 <?php echo aprop_render_drone_filter_category_options( $category_tree, $current_filters ); ?>
             </div>
 
