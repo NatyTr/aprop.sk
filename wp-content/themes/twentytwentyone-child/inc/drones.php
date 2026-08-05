@@ -62,6 +62,7 @@ function aprop_drone_excluded_category_ids() {
 }
 
 function aprop_default_drone_filter_category_id() {
+    // Prefer exact "Drony" category on /drony first load.
     foreach ( array( 'drony', 'dji-drony', 'drony-new', 'polnohospodarske-drony' ) as $slug ) {
         $term = get_term_by( 'slug', $slug, 'product_cat' );
 
@@ -71,6 +72,28 @@ function aprop_default_drone_filter_category_id() {
     }
 
     return 0;
+}
+
+function aprop_drone_resolve_category_filter( $valid_category_ids = array() ) {
+    $default_category_id = aprop_default_drone_filter_category_id();
+
+    if ( ! isset( $_GET['drone_category'] ) ) {
+        $category_id = $default_category_id;
+    } else {
+        $category_id = absint( wp_unslash( $_GET['drone_category'] ) );
+        // Empty/invalid query still falls back to default "Drony".
+        if ( ! $category_id ) {
+            $category_id = $default_category_id;
+        }
+    }
+
+    if ( $category_id && $valid_category_ids && ! in_array( $category_id, $valid_category_ids, true ) ) {
+        return $default_category_id && in_array( $default_category_id, $valid_category_ids, true )
+            ? $default_category_id
+            : 0;
+    }
+
+    return $category_id;
 }
 
 function aprop_drone_category_tree( $parent_id = null ) {
@@ -104,6 +127,24 @@ function aprop_drone_category_tree( $parent_id = null ) {
             'children' => aprop_drone_category_tree( $term->term_id ),
         );
     }
+
+    // Keep "Drony" first among siblings so the default selection is easy to spot.
+    usort(
+        $tree,
+        static function ( $a, $b ) {
+            $slug_a = isset( $a['term']->slug ) ? (string) $a['term']->slug : '';
+            $slug_b = isset( $b['term']->slug ) ? (string) $b['term']->slug : '';
+
+            if ( 'drony' === $slug_a && 'drony' !== $slug_b ) {
+                return -1;
+            }
+            if ( 'drony' === $slug_b && 'drony' !== $slug_a ) {
+                return 1;
+            }
+
+            return strcasecmp( (string) $a['term']->name, (string) $b['term']->name );
+        }
+    );
 
     return $tree;
 }
@@ -526,20 +567,14 @@ function render_drone_products_shortcode() {
     $category_tree = aprop_drone_category_tree();
     $valid_category_ids = aprop_drone_category_ids_from_tree( $category_tree );
     $default_heading = 'Všetky kategórie';
-    // On first open of /drony (no category filter in URL) preselect "Drony".
-    $default_category_id = ! isset( $_GET['drone_category'] ) ? aprop_default_drone_filter_category_id() : 0;
     $current_filters = array(
-        'category'     => isset($_GET['drone_category']) ? absint($_GET['drone_category']) : $default_category_id,
+        'category'     => aprop_drone_resolve_category_filter( $valid_category_ids ),
         'display'      => isset($_GET['drone_display']) ? sanitize_key($_GET['drone_display']) : 'all',
         'purpose'      => isset($_GET['drone_purpose']) ? sanitize_key($_GET['drone_purpose']) : '',
         'availability' => isset($_GET['drone_availability']) ? sanitize_key($_GET['drone_availability']) : '',
         'capacity_max' => isset($_GET['drone_capacity_max']) ? absint($_GET['drone_capacity_max']) : 100,
         'sort'         => isset($_GET['drone_sort']) ? sanitize_key($_GET['drone_sort']) : 'recommended',
     );
-
-    if ( $current_filters['category'] && ! in_array( $current_filters['category'], $valid_category_ids, true ) ) {
-        $current_filters['category'] = 0;
-    }
 
     if ( ! array_key_exists($current_filters['display'], $options['display']) ) {
         $current_filters['display'] = 'all';

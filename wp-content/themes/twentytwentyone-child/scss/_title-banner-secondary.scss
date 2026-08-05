@@ -117,6 +117,18 @@
     backdrop-filter: blur(30px);
   }
 
+  .title-banner-secondary__card-track {
+    position: relative;
+  }
+
+  .title-banner-secondary__card-slide {
+    display: none;
+
+    &.is-active {
+      display: block;
+    }
+  }
+
   .title-banner-secondary__card-top {
     display: flex;
     align-items: center;
@@ -144,6 +156,24 @@
       border: 1px solid rgba(0, 0, 0, 0.8);
       border-radius: 1000px;
       position: relative;
+      background: #fff !important;
+      background-color: #fff !important;
+      color: #000;
+      padding: 0;
+      cursor: pointer;
+      box-shadow: none;
+      appearance: none;
+
+      &:hover,
+      &:focus,
+      &:focus-visible {
+        background: #fff !important;
+        background-color: #fff !important;
+        color: #000;
+        border-color: rgba(0, 0, 0, 0.8);
+        outline: none !important;
+        box-shadow: none !important;
+      }
 
       &:before {
         content: "";
@@ -170,11 +200,14 @@
       align-items: center;
       gap: 8px;
 
-      span {
+      button {
         width: 6px;
         height: 6px;
+        padding: 0;
+        border: 0;
         border-radius: 50%;
         background: rgba(0, 0, 0, 0.25);
+        cursor: pointer;
 
         &.is-active {
           width: 18px;
@@ -186,14 +219,37 @@
   }
 
   .title-banner-secondary__card-body {
+    --hero-card-body-bg:
+      radial-gradient(circle at 18% 44%, rgba(214, 178, 165, 0.42), rgba(214, 178, 165, 0) 30%),
+      linear-gradient(180deg, #2B2B2B 0%, #161616 100%);
     position: relative;
+    display: block;
     min-height: fluid(190, 225);
     padding: 16px;
     border-radius: 20px;
     overflow: hidden;
-    background:
-      radial-gradient(circle at 18% 44%, rgba(214, 178, 165, 0.42), rgba(214, 178, 165, 0) 30%),
-      linear-gradient(180deg, #2B2B2B 0%, #161616 100%);
+    text-decoration: none;
+    color: inherit;
+    background: var(--hero-card-body-bg);
+    outline: none;
+    box-shadow: none;
+
+    &:hover,
+    &:focus,
+    &:focus-visible,
+    &:active,
+    &:visited {
+      color: inherit !important;
+      text-decoration: none !important;
+      background: var(--hero-card-body-bg) !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    img {
+      outline: none !important;
+      background: transparent !important;
+    }
   }
 
   .title-banner-secondary__card-copy {
@@ -234,7 +290,7 @@
   .title-banner-secondary__card-image {
     position: absolute;
     right: fluid(-6, 6);
-    top: fluid(10, 10);
+    top: fluid(-40, -30);
     width: fluid(170, 215);
     z-index: 1;
     width: 72%;
@@ -244,23 +300,6 @@
       width: 100%;
       height: auto;
       object-fit: contain;
-    }
-  }
-
-  .title-banner-secondary__card-button {
-    position: absolute;
-    right: 16px;
-    bottom: 16px;
-    z-index: 2;
-    padding: 10px 16px;
-    background: white;
-    border-color: white;
-    color: black;
-
-    &:hover {
-      background: black;
-      border-color: black;
-      color: white;
     }
   }
 
@@ -301,7 +340,7 @@
 
     .title-banner-secondary__card-image {
       width: 185px;
-      top: 18px;
+      top: -28px;
       right: 4px;
     }
   }
@@ -473,20 +512,7 @@
     .title-banner-secondary__card-image {
       width: 60%;
       right: 8px;
-      top: 24px;
-    }
-
-    .title-banner-secondary__card-button {
-      left: auto;
-      right: 20px;
-      bottom: 20px;
-      width: auto;
-      padding: 10px 18px;
-      text-align: center;
-      justify-content: center;
-      background: black;
-      border-color: black;
-      color: white;
+      top: -18px;
     }
   }
 }

@@ -392,6 +392,35 @@ jQuery(document).ready(function ($) {
     });
   });
 
+  // === Secondary hero product slider ===
+  $('[data-hero-product-slider]').each(function () {
+    const $slider = $(this);
+    const $slides = $slider.find('.title-banner-secondary__card-slide');
+    const $dots = $slider.find('.nav-dots button');
+    const total = $slides.length;
+    let index = 0;
 
+    if (total < 2) {
+      return;
+    }
+
+    function goTo(nextIndex) {
+      index = (nextIndex + total) % total;
+      $slides.removeClass('is-active').eq(index).addClass('is-active');
+      $dots.removeClass('is-active').eq(index).addClass('is-active');
+    }
+
+    $slider.find('.nav-arrow.is-left').on('click', function () {
+      goTo(index - 1);
+    });
+
+    $slider.find('.nav-arrow.is-right').on('click', function () {
+      goTo(index + 1);
+    });
+
+    $dots.on('click', function () {
+      goTo(parseInt($(this).attr('data-slide'), 10) || 0);
+    });
+  });
 
 });

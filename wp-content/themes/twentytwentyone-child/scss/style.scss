@@ -30,6 +30,7 @@
 @import 'article-detail';
 @import 'courses-table';
 @import 'search';
+@import '404';
 
 .page .entry-content > .elementor{
   max-width: unset !important;
@@ -55,6 +56,24 @@ body{
   }
 }
 
+.site .button:focus,
+.site .button:focus-visible,
+button:focus,
+button:focus-visible,
+input[type=submit]:focus,
+input[type=submit]:focus-visible,
+input[type=reset]:focus,
+input[type=reset]:focus-visible,
+.wp-block-search .wp-block-search__button:focus,
+.wp-block-search .wp-block-search__button:focus-visible,
+.wp-block-button .wp-block-button__link:focus,
+.wp-block-button .wp-block-button__link:focus-visible,
+.wp-block-file a.wp-block-file__button:focus,
+.wp-block-file a.wp-block-file__button:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+}
+
 .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) img{
   outline: none !important;
 }
@@ -64,6 +83,26 @@ body{
   color: inherit !important;
   outline: 2px solid rgba(21, 21, 21, 0.28);
   outline-offset: 2px;
+}
+
+.has-background-white .site a.title-banner-secondary__card-body:focus:not(.wp-block-button__link):not(.wp-block-file__button),
+.has-background-white .site a.title-banner-secondary__card-body:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button),
+.has-background-white .site a.title-banner-secondary__card-body:active:not(.wp-block-button__link):not(.wp-block-file__button),
+.site a.title-banner-secondary__card-body:focus:not(.wp-block-button__link):not(.wp-block-file__button),
+.site a.title-banner-secondary__card-body:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button),
+.site a.title-banner-secondary__card-body:active:not(.wp-block-button__link):not(.wp-block-file__button) {
+  background:
+    radial-gradient(circle at 18% 44%, rgba(214, 178, 165, 0.42), rgba(214, 178, 165, 0) 30%),
+    linear-gradient(180deg, #2B2B2B 0%, #161616 100%) !important;
+  color: inherit !important;
+  outline: none !important;
+  text-decoration: none !important;
+}
+
+.has-background-white .site a.title-banner-secondary__card-body:focus img,
+.site a.title-banner-secondary__card-body:focus img {
+  outline: none !important;
+  background: transparent !important;
 }
 
 .has-background-white .site .woocommerce-tabs .tabs a:focus:not(.wp-block-button__link):not(.wp-block-file__button) {

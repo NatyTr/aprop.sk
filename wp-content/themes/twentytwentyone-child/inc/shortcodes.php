@@ -419,32 +419,57 @@ function render_secondary_hero_banner_shortcode() {
     $secondary_button_url = get_field( 'secondary_hero_secondary_button_url' );
 
     $product_label = get_field( 'secondary_hero_product_label' );
-    $product_post = get_field( 'secondary_hero_product_post' );
-    $product_button_text = get_field( 'secondary_hero_product_button_text' );
-    $product_button_url = '';
-    $product_title = '';
-    $product_price = '';
-    $product_price_suffix = '';
-    $product_image = null;
+    $product_posts_raw = get_field( 'secondary_hero_product_post' );
+    $product_cards = array();
 
-    if ( $product_post instanceof WP_Post ) {
-        $product_button_url = get_permalink( $product_post );
-        $product_title = get_the_title( $product_post );
-        $product_image_id = get_post_thumbnail_id( $product_post );
+    // ACF multiple post object / IDs → normalize to list of cards
+    $product_items = array();
+    if ( ! empty( $product_posts_raw ) ) {
+        $product_items = is_array( $product_posts_raw ) ? $product_posts_raw : array( $product_posts_raw );
+    }
 
-        if ( $product_image_id ) {
-            $product_image = acf_get_attachment( $product_image_id );
+    foreach ( $product_items as $item ) {
+        $post = null;
+
+        if ( $item instanceof WP_Post ) {
+            $post = $item;
+        } elseif ( is_numeric( $item ) ) {
+            $post = get_post( (int) $item );
+        } elseif ( is_array( $item ) && ! empty( $item['ID'] ) ) {
+            $post = get_post( (int) $item['ID'] );
+        }
+
+        if ( ! $post || $post->post_status !== 'publish' ) {
+            continue;
+        }
+
+        $card = array(
+            'title'        => get_the_title( $post ),
+            'url'          => get_permalink( $post ),
+            'price'        => '',
+            'price_suffix' => '',
+            'image'        => null,
+        );
+
+        $image_id = get_post_thumbnail_id( $post );
+        if ( $image_id ) {
+            $card['image'] = function_exists( 'acf_get_attachment' )
+                ? acf_get_attachment( $image_id )
+                : array(
+                    'url' => wp_get_attachment_image_url( $image_id, 'large' ),
+                    'alt' => get_post_meta( $image_id, '_wp_attachment_image_alt', true ),
+                );
         }
 
         if ( function_exists( 'wc_get_product' ) ) {
-            $product = wc_get_product( $product_post->ID );
-
+            $product = wc_get_product( $post->ID );
             if ( $product ) {
-                $product_price = wc_get_price_to_display( $product );
-                $product_price = number_format_i18n( $product_price, 2 ) . ' €';
-                $product_price_suffix = 's DPH';
+                $card['price'] = number_format_i18n( wc_get_price_to_display( $product ), 2 ) . ' €';
+                $card['price_suffix'] = 's DPH';
             }
         }
+
+        $product_cards[] = $card;
     }
 
     $background_style = sprintf(
@@ -452,7 +477,8 @@ function render_secondary_hero_banner_shortcode() {
         esc_url( $banner_image['url'] )
     );
 
-    $has_product_card = $product_post instanceof WP_Post;
+    $has_product_card = ! empty( $product_cards );
+    $product_count = count( $product_cards );
 
     ob_start();
     ?>
@@ -503,51 +529,59 @@ function render_secondary_hero_banner_shortcode() {
         </div>
 
         <?php if ( $has_product_card ) : ?>
-          <div class="title-banner-secondary__card">
+          <div class="title-banner-secondary__card" data-hero-product-slider>
             <div class="title-banner-secondary__card-top">
               <?php if ( $product_label ) : ?>
                 <span class="title-banner-secondary__card-label"><?php echo esc_html( $product_label ); ?></span>
               <?php endif; ?>
-              <div class="title-banner-secondary__card-nav" aria-hidden="true">
-                <span class="nav-arrow is-left"></span>
-                <span class="nav-dots">
-                  <span></span>
-                  <span class="is-active"></span>
-                  <span></span>
-                </span>
-                <span class="nav-arrow is-right"></span>
-              </div>
-            </div>
 
-            <div class="title-banner-secondary__card-body">
-              <div class="title-banner-secondary__card-copy">
-                <?php if ( $product_title ) : ?>
-                  <h3><?php echo esc_html( $product_title ); ?></h3>
-                <?php endif; ?>
-
-                <?php if ( $product_price || $product_price_suffix ) : ?>
-                  <p class="title-banner-secondary__card-price">
-                    <?php if ( $product_price ) : ?>
-                      <strong><?php echo esc_html( $product_price ); ?></strong>
-                    <?php endif; ?>
-                    <?php if ( $product_price_suffix ) : ?>
-                      <span><?php echo esc_html( $product_price_suffix ); ?></span>
-                    <?php endif; ?>
-                  </p>
-                <?php endif; ?>
-              </div>
-
-              <?php if ( $product_image && ! empty( $product_image['url'] ) ) : ?>
-                <div class="title-banner-secondary__card-image">
-                  <img src="<?php echo esc_url( $product_image['url'] ); ?>" alt="<?php echo esc_attr( $product_image['alt'] ?? $product_title ); ?>">
+              <?php if ( $product_count > 1 ) : ?>
+                <div class="title-banner-secondary__card-nav">
+                  <button type="button" class="nav-arrow is-left" aria-label="Predchádzajúci produkt"></button>
+                  <span class="nav-dots" role="tablist" aria-label="Produkty">
+                    <?php foreach ( $product_cards as $index => $card ) : ?>
+                      <button
+                        type="button"
+                        class="<?php echo $index === 0 ? 'is-active' : ''; ?>"
+                        data-slide="<?php echo (int) $index; ?>"
+                        aria-label="<?php echo esc_attr( sprintf( 'Produkt %d', $index + 1 ) ); ?>"
+                      ></button>
+                    <?php endforeach; ?>
+                  </span>
+                  <button type="button" class="nav-arrow is-right" aria-label="Nasledujúci produkt"></button>
                 </div>
               <?php endif; ?>
+            </div>
 
-              <?php if ( $product_button_text && $product_button_url ) : ?>
-                <a class="btn-primary title-banner-secondary__card-button" href="<?php echo esc_url( $product_button_url ); ?>">
-                  <?php echo esc_html( $product_button_text ); ?>
-                </a>
-              <?php endif; ?>
+            <div class="title-banner-secondary__card-track">
+              <?php foreach ( $product_cards as $index => $card ) : ?>
+                <div class="title-banner-secondary__card-slide<?php echo $index === 0 ? ' is-active' : ''; ?>" data-slide="<?php echo (int) $index; ?>">
+                  <a class="title-banner-secondary__card-body" href="<?php echo esc_url( $card['url'] ); ?>">
+                    <div class="title-banner-secondary__card-copy">
+                      <?php if ( ! empty( $card['title'] ) ) : ?>
+                        <h3><?php echo esc_html( $card['title'] ); ?></h3>
+                      <?php endif; ?>
+
+                      <?php if ( ! empty( $card['price'] ) || ! empty( $card['price_suffix'] ) ) : ?>
+                        <p class="title-banner-secondary__card-price">
+                          <?php if ( ! empty( $card['price'] ) ) : ?>
+                            <strong><?php echo esc_html( $card['price'] ); ?></strong>
+                          <?php endif; ?>
+                          <?php if ( ! empty( $card['price_suffix'] ) ) : ?>
+                            <span><?php echo esc_html( $card['price_suffix'] ); ?></span>
+                          <?php endif; ?>
+                        </p>
+                      <?php endif; ?>
+                    </div>
+
+                    <?php if ( ! empty( $card['image']['url'] ) ) : ?>
+                      <div class="title-banner-secondary__card-image">
+                        <img src="<?php echo esc_url( $card['image']['url'] ); ?>" alt="<?php echo esc_attr( $card['image']['alt'] ?? $card['title'] ); ?>">
+                      </div>
+                    <?php endif; ?>
+                  </a>
+                </div>
+              <?php endforeach; ?>
             </div>
           </div>
         <?php endif; ?>
