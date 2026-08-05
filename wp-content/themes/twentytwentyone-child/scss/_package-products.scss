@@ -17,11 +17,13 @@
   }
   div,
   .p-24{
-    max-width: 680px;
+    max-width: 430px;
     width: 100%;
     margin: 0 auto;
     text-align: center;
     font-weight: 300;
+    font-size: 14px;
+    line-height: 1.4;
   }
   @media(max-width: 767px){
       margin: 0px auto 24px auto;

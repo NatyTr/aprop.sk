@@ -967,7 +967,7 @@ function render_home_courses_slider_shortcode() {
             });
 
             track.slick({
-                slidesToShow: 3.2,
+                slidesToShow: 3.8,
                 slidesToScroll: 1,
                 infinite: false,
                 arrows: true,
@@ -1704,7 +1704,7 @@ function related_products_shortcode() {
             });
 
             track.slick({
-                slidesToShow: 3.2,
+                slidesToShow: 3.8,
                 slidesToScroll: 1,
                 infinite: false,
                 arrows: true,

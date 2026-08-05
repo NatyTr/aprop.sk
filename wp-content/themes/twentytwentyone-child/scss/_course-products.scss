@@ -9,7 +9,7 @@
   min-height: 100%;
   color: $black;
   text-decoration: none;
-  border-radius: 32px;
+  border-radius: 16px;
   background: #fff;
   overflow: hidden;
   box-shadow: 0 18px 44px rgba(21, 21, 21, 0.06);
@@ -20,8 +20,7 @@
     color: $black;
     text-decoration: none;
     transform: translateY(-4px);
-    box-shadow: 0 24px 54px rgba(21, 21, 21, 0.1);
-    background: transparent !important;
+    background: #fff !important;
   }
 }
 
@@ -29,10 +28,13 @@
   position: relative;
   aspect-ratio: 1 / 0.9;
   overflow: hidden;
-  background: #eef1f4;
+  padding: 8px;
+  background: #fff;
 
   img {
     max-width: none !important;
+    border-radius: 12px !important;
+    display: block;
   }
 }
 
@@ -42,6 +44,7 @@
   height: 100% !important;
   object-fit: cover;
   object-position: center center;
+  border-radius: 12px !important;
   transition: transform 0.32s ease;
 }
 
@@ -149,7 +152,16 @@
 }
 
 .home-courses-slider__track {
-  margin: 0 -8px;
+  // left -4px = slide gutters; right cancels section padding to bleed to edge
+  margin: 0 -28px 0 -4px;
+
+  // room for card hover lift so top corners aren't clipped
+  .slick-list {
+    padding-top: 8px;
+    padding-bottom: 12px;
+    margin-top: -8px;
+    margin-bottom: -12px;
+  }
 
   .slick-track {
     display: flex;
@@ -166,7 +178,7 @@
   .course-product-card {
     display: flex !important;
     height: inherit !important;
-    margin: 0 8px;
+    margin: 0 4px;
   }
 }
 
@@ -210,6 +222,10 @@
     padding: 36px 24px 28px;
   }
 
+  .home-courses-slider__track {
+    margin-right: -24px;
+  }
+
   .home-courses-slider__header {
     flex-direction: column;
     align-items: flex-start;
@@ -222,7 +238,12 @@
 
 @media (max-width: 767px) {
   .course-product-card__link {
-    border-radius: 18px;
+    border-radius: 16px;
+  }
+
+  .course-product-card__image,
+  .course-product-card__media img {
+    border-radius: 12px !important;
   }
 
   .course-product-card__content {
@@ -250,6 +271,10 @@
     margin: 40px 0;
     padding: 28px 18px 24px;
     border-radius: 24px;
+  }
+
+  .home-courses-slider__track {
+    margin-right: -18px;
   }
 
   .home-courses-slider__footer {
