@@ -178,6 +178,19 @@
   .modern-agro-slider {
     padding: 28px 24px 24px 24px;
     border-radius: 24px;
+
+    .drone-product-card__image--main {
+      transform: translate(-50%, calc(-50% + 32px));
+    }
+
+    .drone-product-card--has-hover-media {
+      .drone-product-card__link:hover,
+      .drone-product-card__link:focus {
+        .drone-product-card__image--main {
+          transform: translate(-50%, calc(-50% + 32px)) scale(1.03);
+        }
+      }
+    }
   }
 
   .modern-agro-slider__track {
