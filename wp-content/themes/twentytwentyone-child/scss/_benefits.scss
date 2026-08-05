@@ -77,9 +77,7 @@
 
     .benefit-slide {
       position: relative;
-      display: flex !important;
-      flex-direction: column;
-      justify-content: space-between;
+      display: block !important;
       width: min(69vw, 1060px);
       min-height: 520px;
       margin: 0 10px;
@@ -104,13 +102,9 @@
         visibility: visible;
       }
 
-      &-content,
-      &__counter {
+      &-content {
         position: relative;
         z-index: 2;
-      }
-
-      &-content {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -137,10 +131,20 @@
       }
 
       &__counter {
+        // abspos flex child stretches to slide height → pills clip above card; pin size explicitly
         position: absolute;
-        right: clamp(26px, 2.6vw, 40px);
-        bottom: clamp(26px, 2.6vw, 40px);
+        z-index: 3;
+        right: clamp(20px, 2.2vw, 32px);
+        bottom: clamp(20px, 2.2vw, 32px);
+        top: auto !important;
+        left: auto;
+        width: max-content;
+        height: max-content !important;
+        min-height: 0 !important;
+        max-height: none;
+        align-self: flex-start;
         display: flex;
+        align-items: center;
         gap: 8px;
         opacity: 1;
         visibility: visible;
@@ -152,20 +156,22 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 42px;
-        height: 34px;
-        padding: 0 12px;
+        min-width: 36px;
+        height: 28px;
+        padding: 0 10px;
         border-radius: 999px;
-        border: 1px solid rgba(255, 255, 255, 0.54);
-        background: rgba(255, 255, 255, 0.04);
-        color: rgba(255, 255, 255, 0.95);
-        font-size: 16px;
+        border: 1px solid #fff;
+        background: transparent;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 400;
         line-height: 1;
-        letter-spacing: -0.03em;
+        letter-spacing: -0.02em;
       }
 
       &__counter-total {
-        color: rgba(255, 255, 255, 0.56);
+        border-color: rgba(255, 255, 255, 0.42);
+        color: rgba(255, 255, 255, 0.5);
       }
     }
 
@@ -233,15 +239,17 @@
         }
 
         &__counter {
-          right: 20px;
-          bottom: 20px;
+          right: 16px;
+          bottom: 16px;
+          gap: 6px;
         }
 
         &__counter-current,
         &__counter-total {
-          min-width: 38px;
-          height: 32px;
-          font-size: 14px;
+          min-width: 32px;
+          height: 26px;
+          padding: 0 8px;
+          font-size: 12px;
         }
       }
     }

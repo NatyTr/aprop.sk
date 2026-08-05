@@ -1,7 +1,7 @@
 .posts-block {
   background: #171717;
   border-radius: 34px;
-  padding: fluid(28, 48);
+  padding: fluid(28, 48) 0;
   overflow: hidden;
 
   .posts-header {
@@ -179,7 +179,7 @@
   }
 
   @media (max-width: 1099px) {
-    padding: 28px 22px;
+    padding: 28px 0;
     border-radius: 28px;
 
     .posts-header {
@@ -202,7 +202,7 @@
 
   @media (max-width: 767px) {
     border-radius: 24px;
-    padding: 24px 16px;
+    padding: 24px 0;
 
     .posts-header {
       gap: 18px;
