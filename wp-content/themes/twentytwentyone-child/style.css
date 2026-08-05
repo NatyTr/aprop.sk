@@ -5688,8 +5688,7 @@ footer .footer-meta .footer_socials li a:hover {
   text-decoration: none;
   background: rgba(255, 255, 255, 0.72);
 }
-.product.type-product .woocommerce-tabs .tabs li.active a:hover,
-.product.type-product .woocommerce-tabs .tabs li.active a:focus {
+.product.type-product .woocommerce-tabs .tabs li.active a:hover, .product.type-product .woocommerce-tabs .tabs li.active a:focus {
   background: #fff;
 }
 .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel > h2 {
@@ -6300,7 +6299,13 @@ footer .footer-meta .footer_socials li a:hover {
 }
 
 .modern-agro-slider__track {
-  margin: 0 -8px;
+  margin: 0 -28px 0 -8px;
+}
+.modern-agro-slider__track .slick-list {
+  padding-top: 8px;
+  padding-bottom: 20px;
+  margin-top: -8px;
+  margin-bottom: -20px;
 }
 
 .modern-agro-slider__slide {
@@ -6402,6 +6407,9 @@ footer .footer-meta .footer_socials li a:hover {
   .modern-agro-slider {
     padding: 36px 24px 28px;
   }
+  .modern-agro-slider__track {
+    margin-right: -24px;
+  }
   .modern-agro-slider__header {
     flex-direction: column;
     align-items: flex-start;
@@ -6417,6 +6425,9 @@ footer .footer-meta .footer_socials li a:hover {
   .modern-agro-slider {
     padding: 28px 24px 24px 24px;
     border-radius: 24px;
+  }
+  .modern-agro-slider__track {
+    margin-right: -24px;
   }
   .modern-agro-slider__footer {
     flex-direction: column;
@@ -7085,7 +7096,6 @@ footer .footer-meta .footer_socials li a:hover {
 }
 .drone-product-card__link:hover, .drone-product-card__link:focus {
   transform: translateY(-5px);
-  box-shadow: 0 24px 60px rgba(21, 21, 21, 0.1);
   color: #151515;
   text-decoration: none;
   outline: none !important;
