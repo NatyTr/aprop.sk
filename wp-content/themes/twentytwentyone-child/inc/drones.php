@@ -62,16 +62,71 @@ function aprop_drone_excluded_category_ids() {
 }
 
 function aprop_default_drone_filter_category_id() {
-    // Prefer exact "Drony" category on /drony first load.
-    foreach ( array( 'drony', 'dji-drony', 'drony-new', 'polnohospodarske-drony' ) as $slug ) {
-        $term = get_term_by( 'slug', $slug, 'product_cat' );
+    static $default_id = null;
 
-        if ( $term instanceof WP_Term && ! aprop_drone_is_excluded_category( $term ) ) {
-            return (int) $term->term_id;
+    if ( null !== $default_id ) {
+        return $default_id;
+    }
+
+    $root_id = (int) aprop_drone_category_id();
+    $candidates = array();
+
+    // Exact name "Drony" — production slug is not plain "drony".
+    $by_name = get_terms(
+        array(
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => false,
+            'name'       => 'Drony',
+        )
+    );
+
+    if ( ! is_wp_error( $by_name ) ) {
+        foreach ( $by_name as $term ) {
+            if ( $term instanceof WP_Term ) {
+                $candidates[] = $term;
+            }
         }
     }
 
-    return 0;
+    // Slug fallbacks (skip catch-all root like "drony-new" = Všetky kategórie).
+    foreach ( array( 'drony', 'drony-drony-new-2', 'dji-drony', 'polnohospodarske-drony' ) as $slug ) {
+        $term = get_term_by( 'slug', $slug, 'product_cat' );
+
+        if ( $term instanceof WP_Term ) {
+            $candidates[] = $term;
+        }
+    }
+
+    $preferred = null;
+
+    foreach ( $candidates as $term ) {
+        if ( aprop_drone_is_excluded_category( $term ) ) {
+            continue;
+        }
+
+        // Never default to the catch-all parent ("Všetky kategórie").
+        if ( (int) $term->term_id === $root_id ) {
+            continue;
+        }
+
+        $normalized_name = sanitize_title( remove_accents( $term->name ) );
+        if ( 'drony' !== $normalized_name ) {
+            continue;
+        }
+
+        // Prefer direct child of the root category when available.
+        if ( (int) $term->parent === $root_id ) {
+            $default_id = (int) $term->term_id;
+            return $default_id;
+        }
+
+        if ( null === $preferred ) {
+            $preferred = (int) $term->term_id;
+        }
+    }
+
+    $default_id = $preferred ? $preferred : 0;
+    return $default_id;
 }
 
 function aprop_drone_resolve_category_filter( $valid_category_ids = array() ) {
@@ -132,13 +187,13 @@ function aprop_drone_category_tree( $parent_id = null ) {
     usort(
         $tree,
         static function ( $a, $b ) {
-            $slug_a = isset( $a['term']->slug ) ? (string) $a['term']->slug : '';
-            $slug_b = isset( $b['term']->slug ) ? (string) $b['term']->slug : '';
+            $name_a = isset( $a['term']->name ) ? sanitize_title( remove_accents( (string) $a['term']->name ) ) : '';
+            $name_b = isset( $b['term']->name ) ? sanitize_title( remove_accents( (string) $b['term']->name ) ) : '';
 
-            if ( 'drony' === $slug_a && 'drony' !== $slug_b ) {
+            if ( 'drony' === $name_a && 'drony' !== $name_b ) {
                 return -1;
             }
-            if ( 'drony' === $slug_b && 'drony' !== $slug_a ) {
+            if ( 'drony' === $name_b && 'drony' !== $name_a ) {
                 return 1;
             }
 
