@@ -24,21 +24,13 @@ function aprop_rewrite_ithelps_urls( $value ) {
 		return $value;
 	}
 
-	$home = untrailingslashit( home_url() );
+	// Host-only replace also covers Yoast JSON-LD escaped URLs (https:\/\/aprop.ithelps.sk\/...).
+	$host = wp_parse_url( home_url(), PHP_URL_HOST );
+	if ( ! is_string( $host ) || $host === '' ) {
+		return $value;
+	}
 
-	return str_ireplace(
-		array(
-			'https://aprop.ithelps.sk',
-			'http://aprop.ithelps.sk',
-			'//aprop.ithelps.sk',
-		),
-		array(
-			$home,
-			$home,
-			preg_replace( '#^https?:#', '', $home ),
-		),
-		$value
-	);
+	return str_ireplace( 'aprop.ithelps.sk', $host, $value );
 }
 
 add_filter( 'option_footer_image', 'aprop_rewrite_ithelps_urls' );
