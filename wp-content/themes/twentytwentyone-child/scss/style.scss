@@ -173,9 +173,33 @@ body.page-drony{
   background-color: $gray !important;
 }
 
-.sutaz-link {
-  width: 100%;
-  border-top: 1px solid rgba(17, 17, 17, 0.18);
+.page-sutaze .sutaz-link {
+  --sutaz-link-max: 1000px;
+  --sutaz-link-gutter: clamp(24px, 4vw, 50px);
+
+  width: 100% !important;
+  max-width: var(--sutaz-link-max) !important;
+  margin: 0 auto !important;
+  padding: 0 var(--sutaz-link-gutter) !important;
+  box-sizing: border-box;
+  border: 0;
+
+  > .e-con-inner {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .elementor-widget-text-editor {
+    width: 100%;
+    margin: 0;
+  }
+
+  .elementor-widget-container {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 
   p {
     margin: 0;
@@ -188,61 +212,65 @@ body.page-drony{
   a {
     position: relative;
     display: block;
-    width: 100%;
-    padding: 22px 55px 22px 0;
-    color: #111;
-    font-size: 17px;
+    width: 100% !important;
+    max-width: none !important;
+    padding: 20px 56px 20px 24px;
+    color: #151515;
+    font-size: clamp(15px, 14px + 0.25vw, 17px);
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.45;
     text-decoration: none;
-    border-bottom: 1px solid rgba(17, 17, 17, 0.18);
+    background: #f6f6f6;
+    border: 1px solid rgba(17, 17, 17, 0.12);
+    border-radius: 16px;
+    box-sizing: border-box;
     transition:
-      padding-left 0.3s ease,
-      background-color 0.3s ease,
-      color 0.3s ease;
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
 
     &::after {
       content: "↗";
       position: absolute;
       top: 50%;
-      right: 18px;
-      font-size: 20px;
+      right: 22px;
+      font-size: 18px;
       font-weight: 400;
       line-height: 1;
       transform: translateY(-50%);
-      transition: transform 0.3s ease;
+      transition: transform 0.25s ease;
     }
 
-    &:hover {
-      padding-left: 16px;
-      color: #111;
+    &:hover,
+    &:focus-visible {
+      color: #151515;
+      text-decoration: none;
       background: #f4f4f0;
+      border-color: rgba(17, 17, 17, 0.2);
+      box-shadow: 0 8px 24px rgba(17, 17, 17, 0.06);
 
       &::after {
-        transform: translate(4px, -4px);
+        transform: translate(3px, calc(-50% - 3px));
       }
     }
 
     &:visited {
-      color: #111;
+      color: #151515;
     }
 
     &:focus-visible {
-      outline: 2px solid #111;
-      outline-offset: -2px;
+      outline: 2px solid #151515;
+      outline-offset: 2px;
     }
+  }
 
-    @media (max-width: 767px) {
-      padding: 18px 45px 18px 0;
-      font-size: 15px;
-
-      &:hover {
-        padding-left: 10px;
-      }
+  @media (max-width: 767px) {
+    a {
+      padding: 16px 44px 16px 18px;
 
       &::after {
-        right: 12px;
-        font-size: 18px;
+        right: 16px;
+        font-size: 16px;
       }
     }
   }
