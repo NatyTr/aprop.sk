@@ -214,7 +214,7 @@ body.page-drony{
     display: block;
     width: 100% !important;
     max-width: none !important;
-    padding: 20px 56px 20px 24px;
+    padding: 20px 24px;
     color: #151515;
     font-size: clamp(15px, 14px + 0.25vw, 17px);
     font-weight: 500;
@@ -229,18 +229,6 @@ body.page-drony{
       border-color 0.25s ease,
       box-shadow 0.25s ease;
 
-    &::after {
-      content: "↗";
-      position: absolute;
-      top: 50%;
-      right: 22px;
-      font-size: 18px;
-      font-weight: 400;
-      line-height: 1;
-      transform: translateY(-50%);
-      transition: transform 0.25s ease;
-    }
-
     &:hover,
     &:focus-visible {
       color: #151515;
@@ -248,10 +236,6 @@ body.page-drony{
       background: #f4f4f0;
       border-color: rgba(17, 17, 17, 0.2);
       box-shadow: 0 8px 24px rgba(17, 17, 17, 0.06);
-
-      &::after {
-        transform: translate(3px, calc(-50% - 3px));
-      }
     }
 
     &:visited {
@@ -266,12 +250,7 @@ body.page-drony{
 
   @media (max-width: 767px) {
     a {
-      padding: 16px 44px 16px 18px;
-
-      &::after {
-        right: 16px;
-        font-size: 16px;
-      }
+      padding: 16px 18px;
     }
   }
 }
