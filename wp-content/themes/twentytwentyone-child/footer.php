@@ -3,49 +3,6 @@
 </div><!-- #content -->
 
 <?php
-$aprop_newsletter_status = isset( $_GET['newsletter'] ) ? sanitize_key( wp_unslash( $_GET['newsletter'] ) ) : '';
-$aprop_newsletter_messages = array(
-	'ok'      => 'Ďakujeme, e-mail je prihlásený na odber.',
-	'invalid' => 'Zadajte platný e-mail.',
-	'consent' => 'Pre odber treba súhlas so spracovaním osobných údajov.',
-	'error'   => 'Prihlásenie sa nepodarilo. Skúste to znova.',
-);
-?>
-<aside class="aprop-footer-newsletter" aria-label="<?php esc_attr_e( 'Odber noviniek', 'aprop' ); ?>">
-	<div class="aprop-footer-newsletter__inner">
-		<div class="aprop-footer-newsletter__copy">
-			<h2>Novinky e-mailom</h2>
-			<p>Akcie, novinky a tipy priamo do schránky.</p>
-		</div>
-		<form class="aprop-footer-newsletter__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-			<input type="hidden" name="action" value="aprop_footer_newsletter">
-			<input type="hidden" name="redirect_to" value="<?php echo esc_url( home_url( add_query_arg( array() ) ) ); ?>">
-			<?php wp_nonce_field( 'aprop_footer_newsletter' ); ?>
-			<p class="aprop-footer-newsletter__hp" aria-hidden="true">
-				<label>Web<input type="text" name="aprop_website" tabindex="-1" autocomplete="off"></label>
-			</p>
-			<div class="aprop-footer-newsletter__row">
-				<label class="screen-reader-text" for="aprop-footer-email">E-mail</label>
-				<input id="aprop-footer-email" type="email" name="email" required autocomplete="email" placeholder="váš@email.sk">
-				<button type="submit" class="btn-primary btn-black">Odoberať</button>
-			</div>
-			<div class="aprop-footer-newsletter__consent">
-				<input id="aprop-footer-consent" type="checkbox" name="aprop_newsletter" value="1" required>
-				<p class="aprop-footer-newsletter__consent-copy">
-					<label for="aprop-footer-consent">Súhlasím so spracovaním osobných údajov na marketingové účely.</label>
-					<a href="<?php echo esc_url( home_url( '/ochrana-osobnych-udajov/' ) ); ?>">Zásady ochrany osobných údajov</a><abbr class="required" title="povinné">*</abbr>
-				</p>
-			</div>
-			<?php if ( isset( $aprop_newsletter_messages[ $aprop_newsletter_status ] ) ) : ?>
-				<p id="aprop-newsletter-thanks" class="aprop-footer-newsletter__message aprop-footer-newsletter__message--<?php echo esc_attr( $aprop_newsletter_status ); ?>" role="status">
-					<?php echo esc_html( $aprop_newsletter_messages[ $aprop_newsletter_status ] ); ?>
-				</p>
-			<?php endif; ?>
-		</form>
-	</div>
-</aside>
-
-<?php
 // Dáta z vlastnej options stránky (nie ACF)
 $email      = get_option('footer_email');
 $ig         = get_option('footer_ig');

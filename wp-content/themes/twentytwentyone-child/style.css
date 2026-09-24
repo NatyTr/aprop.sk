@@ -4136,193 +4136,6 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   }
 }
 
-.aprop-footer-newsletter {
-  margin: clamp(28px, 12px + 2vw, 56px) 0 clamp(16px, 6px + 1vw, 28px);
-}
-.aprop-footer-newsletter__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: clamp(20px, 8px + 2vw, 48px);
-  background: #F3F3F3;
-  border-radius: clamp(16px, -6.6175195143px + 2.9488291414vw, 50px);
-  padding: clamp(24px, 8px + 2vw, 48px) clamp(20px, 0.0433651344px + 2.6019080659vw, 50px);
-}
-.aprop-footer-newsletter__copy {
-  max-width: 420px;
-}
-.aprop-footer-newsletter__copy h2 {
-  margin: 0 0 6px;
-  font-size: clamp(24px, 8.0346921075px + 2.0815264527vw, 40px);
-  line-height: 1.1;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-}
-.aprop-footer-newsletter__copy p {
-  margin: 0;
-  color: rgba(21, 21, 21, 0.62);
-  font-size: clamp(14px, 10.0086730269px + 0.5203816132vw, 18px);
-  line-height: 1.4;
-}
-.aprop-footer-newsletter__form {
-  flex: 1 1 420px;
-  max-width: 520px;
-  margin: 0;
-}
-.aprop-footer-newsletter__hp {
-  position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-.aprop-footer-newsletter__row {
-  display: flex;
-  gap: 8px;
-}
-.aprop-footer-newsletter__row input[type="email"] {
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 48px;
-  margin: 0;
-  padding: 0 18px;
-  border: 1.5px solid transparent;
-  border-radius: 999px;
-  background: #fff;
-  color: #151515;
-  font-family: inherit;
-  font-size: 15px;
-  box-shadow: none;
-}
-.aprop-footer-newsletter__row input[type="email"]:focus {
-  outline: none;
-  border-color: #76DA43;
-  box-shadow: 0 0 0 3px rgba(118, 218, 67, 0.35);
-}
-.aprop-footer-newsletter__row .btn-primary {
-  flex: 0 0 auto;
-  height: 48px;
-  margin: 0;
-  padding: 0 22px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.aprop-footer-newsletter__consent {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin: 12px 0 0;
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 500;
-}
-.aprop-footer-newsletter__consent-copy {
-  flex: 1;
-  min-width: 0;
-  margin: 0;
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 500;
-}
-.aprop-footer-newsletter__consent-copy label,
-.aprop-footer-newsletter__consent-copy a {
-  display: inline;
-  margin: 0;
-  font-size: inherit;
-  font-weight: inherit;
-  line-height: inherit;
-}
-.aprop-footer-newsletter__consent-copy label {
-  cursor: pointer;
-}
-.aprop-footer-newsletter__consent-copy .required {
-  margin-left: 2px;
-  color: #b42318;
-  text-decoration: none;
-  font-weight: 600;
-}
-.aprop-footer-newsletter__consent input {
-  appearance: none !important;
-  -webkit-appearance: none !important;
-  position: relative !important;
-  flex: 0 0 18px;
-  width: 18px !important;
-  height: 18px !important;
-  min-width: 18px !important;
-  min-height: 18px !important;
-  max-height: 18px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 1.5px solid rgba(21, 21, 21, 0.35) !important;
-  border-radius: 5px !important;
-  background: #fff !important;
-  box-shadow: none !important;
-  cursor: pointer;
-}
-.aprop-footer-newsletter__consent input::before,
-.aprop-footer-newsletter__consent input::after {
-  content: none !important;
-  display: none !important;
-}
-.aprop-footer-newsletter__consent input:focus {
-  outline: none !important;
-  border-color: #76DA43 !important;
-  box-shadow: 0 0 0 3px rgba(118, 218, 67, 0.35) !important;
-}
-.aprop-footer-newsletter__consent input:checked {
-  background-color: #76DA43 !important;
-  border-color: #76DA43 !important;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23151515' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' d='M3.5 8.2l2.8 2.8 6.2-6.2'/%3E%3C/svg%3E") !important;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
-  background-size: 12px 12px !important;
-}
-.aprop-footer-newsletter__consent a {
-  color: #151515;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.aprop-footer-newsletter__message {
-  margin: 10px 0 0;
-  font-size: 13px;
-  line-height: 1.4;
-  font-weight: 500;
-}
-.aprop-footer-newsletter__message--ok {
-  margin-top: 14px;
-  padding: 12px 16px;
-  border-radius: 14px;
-  background: #76DA43;
-  color: #151515;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.35;
-  scroll-margin-top: 24px;
-}
-.aprop-footer-newsletter__message--invalid,
-.aprop-footer-newsletter__message--consent,
-.aprop-footer-newsletter__message--error {
-  color: #9a3412;
-}
-@media (max-width: 767px) {
-  .aprop-footer-newsletter__inner {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .aprop-footer-newsletter__form {
-    flex: 1 1 auto;
-    max-width: none;
-  }
-  .aprop-footer-newsletter__row {
-    flex-direction: column;
-  }
-  .aprop-footer-newsletter__row .btn-primary {
-    width: 100%;
-  }
-}
-
 footer {
   padding-bottom: 0 !important;
   max-width: 1920px !important;
@@ -10262,8 +10075,7 @@ form.checkout.woocommerce-checkout #order_review {
 .woocommerce-checkout-payment .place-order {
   padding-top: 18px !important;
 }
-.woocommerce-checkout-payment .place-order .validate-required label .woocommerce-terms-and-conditions-checkbox-text,
-.woocommerce-checkout-payment .place-order .aprop-newsletter .woocommerce-terms-and-conditions-checkbox-text {
+.woocommerce-checkout-payment .place-order .validate-required label .woocommerce-terms-and-conditions-checkbox-text {
   color: rgba(0, 0, 0, 0.6);
   font-size: 13px;
   line-height: 18px;
@@ -10395,11 +10207,7 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
 }
 
 .woocommerce-terms-and-conditions-wrapper {
-  margin-bottom: 10px;
-}
-.woocommerce-checkout-payment .place-order .aprop-newsletter {
-  margin: 0 0 6px !important;
-  padding: 0 !important;
+  margin-bottom: 18px;
 }
 .woocommerce-terms-and-conditions-wrapper .woocommerce-terms-and-conditions {
   display: none !important;
@@ -10541,8 +10349,7 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
     height: 15px !important;
     background-size: contain;
   }
-  .woocommerce-checkout-payment .validate-required label .woocommerce-terms-and-conditions-checkbox-text,
-  .woocommerce-checkout-payment .aprop-newsletter .woocommerce-terms-and-conditions-checkbox-text {
+  .woocommerce-checkout-payment .validate-required label .woocommerce-terms-and-conditions-checkbox-text {
     font-size: 12px !important;
     line-height: 16px !important;
   }
@@ -10550,7 +10357,7 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
     padding-top: 12px !important;
   }
   .woocommerce-terms-and-conditions-wrapper {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
   .woocommerce-terms-and-conditions {
     max-width: 100% !important;
