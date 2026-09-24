@@ -29,6 +29,7 @@ require_once get_stylesheet_directory() . '/inc/shortcodes.php';
 require_once get_stylesheet_directory() . '/inc/drones.php';
 require_once get_stylesheet_directory() . '/inc/product-card-migration.php';
 require_once get_stylesheet_directory() . '/inc/fix-ithelps-urls.php';
+require_once get_stylesheet_directory() . '/inc/ecomail.php';
 
 
 function my_child_theme_setup() {
