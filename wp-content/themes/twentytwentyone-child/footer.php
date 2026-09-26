@@ -2,6 +2,7 @@
 </div><!-- #primary -->
 </div><!-- #content -->
 
+<?php if ( ! function_exists( 'is_cart' ) || ! is_cart() ) : ?>
 <?php
 $aprop_newsletter_status = isset( $_GET['newsletter'] ) ? sanitize_key( wp_unslash( $_GET['newsletter'] ) ) : '';
 $aprop_newsletter_messages = array(
@@ -44,6 +45,7 @@ $aprop_newsletter_messages = array(
 		</form>
 	</div>
 </aside>
+<?php endif; ?>
 
 <?php
 // Dáta z vlastnej options stránky (nie ACF)

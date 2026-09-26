@@ -58,8 +58,8 @@ function cmplz_gtm4wp_options() {
 		}
 	}
 
-	//handle sharing of data
-	if ( isset( $storedoptions[ GTM4WP_OPTION_INCLUDE_REMARKETING ] ) ) {
+	// GTM4WP 1.18 removed this constant; using it fatals admin on PHP 8.
+	if ( defined( 'GTM4WP_OPTION_INCLUDE_REMARKETING' ) && isset( $storedoptions[ GTM4WP_OPTION_INCLUDE_REMARKETING ] ) ) {
 		if ( cmplz_statistics_no_sharing_allowed()
 		     && $storedoptions[ GTM4WP_OPTION_INCLUDE_REMARKETING ]
 		) {

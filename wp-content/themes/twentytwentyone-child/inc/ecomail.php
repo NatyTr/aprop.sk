@@ -16,7 +16,7 @@ function aprop_checkout_newsletter_is_checked() {
 	}
 
 	if ( empty( $_POST['post_data'] ) || ! is_string( $_POST['post_data'] ) ) {
-		return false;
+		return true;
 	}
 
 	$posted = array();
