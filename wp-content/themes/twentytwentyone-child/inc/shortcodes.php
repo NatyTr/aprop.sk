@@ -448,6 +448,7 @@ function render_secondary_hero_banner_shortcode() {
             'url'          => get_permalink( $post ),
             'price'        => '',
             'price_suffix' => '',
+            'show_cta'     => false,
             'image'        => null,
         );
 
@@ -464,8 +465,15 @@ function render_secondary_hero_banner_shortcode() {
         if ( function_exists( 'wc_get_product' ) ) {
             $product = wc_get_product( $post->ID );
             if ( $product ) {
-                $card['price'] = number_format_i18n( wc_get_price_to_display( $product ), 2 ) . ' €';
-                $card['price_suffix'] = 's DPH';
+                // Empty WooCommerce price = quote product → icon CTA instead of price.
+                // wc_get_price_to_display() casts '' to 0, so check get_price() first.
+                $raw_price = $product->get_price();
+                if ( $raw_price === '' || $raw_price === null ) {
+                    $card['show_cta'] = true;
+                } else {
+                    $card['price'] = number_format_i18n( (float) wc_get_price_to_display( $product ), 2 ) . ' €';
+                    $card['price_suffix'] = 's DPH';
+                }
             }
         }
 
@@ -561,18 +569,20 @@ function render_secondary_hero_banner_shortcode() {
                       <?php if ( ! empty( $card['title'] ) ) : ?>
                         <h3><?php echo esc_html( $card['title'] ); ?></h3>
                       <?php endif; ?>
-
-                      <?php if ( ! empty( $card['price'] ) || ! empty( $card['price_suffix'] ) ) : ?>
-                        <p class="title-banner-secondary__card-price">
-                          <?php if ( ! empty( $card['price'] ) ) : ?>
-                            <strong><?php echo esc_html( $card['price'] ); ?></strong>
-                          <?php endif; ?>
-                          <?php if ( ! empty( $card['price_suffix'] ) ) : ?>
-                            <span><?php echo esc_html( $card['price_suffix'] ); ?></span>
-                          <?php endif; ?>
-                        </p>
-                      <?php endif; ?>
                     </div>
+
+                    <?php if ( ! empty( $card['show_cta'] ) ) : ?>
+                      <span class="btn-green-icon-corner title-banner-secondary__card-cta" aria-hidden="true"></span>
+                    <?php elseif ( ! empty( $card['price'] ) || ! empty( $card['price_suffix'] ) ) : ?>
+                      <p class="title-banner-secondary__card-price">
+                        <?php if ( ! empty( $card['price'] ) ) : ?>
+                          <strong><?php echo esc_html( $card['price'] ); ?></strong>
+                        <?php endif; ?>
+                        <?php if ( ! empty( $card['price_suffix'] ) ) : ?>
+                          <span><?php echo esc_html( $card['price_suffix'] ); ?></span>
+                        <?php endif; ?>
+                      </p>
+                    <?php endif; ?>
 
                     <?php if ( ! empty( $card['image']['url'] ) ) : ?>
                       <div class="title-banner-secondary__card-image">

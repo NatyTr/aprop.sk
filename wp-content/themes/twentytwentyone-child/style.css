@@ -1593,10 +1593,11 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   background: transparent !important;
 }
 .title-banner-secondary .title-banner-secondary__card-copy {
-  z-index: 2;
   max-width: 160px;
 }
 .title-banner-secondary .title-banner-secondary__card-copy h3 {
+  position: relative;
+  z-index: 2;
   color: white;
   font-size: clamp(18px, 14.0086730269px + 0.5203816132vw, 24px);
   line-height: 1.1;
@@ -1609,7 +1610,9 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   flex-wrap: wrap;
   gap: 4px;
   position: absolute;
+  left: 16px;
   bottom: 18px;
+  z-index: 2;
 }
 .title-banner-secondary .title-banner-secondary__card-price strong {
   color: white;
@@ -1621,6 +1624,25 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   color: rgba(255, 255, 255, 0.52);
   font-size: clamp(14px, 11.3391153513px + 0.3469210755vw, 18px);
   line-height: 1.1;
+}
+.title-banner-secondary .title-banner-secondary__card-cta.btn-green-icon-corner {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  pointer-events: none;
+}
+.title-banner-secondary .title-banner-secondary__card-cta.btn-green-icon-corner:before {
+  width: 42px;
+  height: 42px;
+  background-size: 13px 13px;
+}
+.title-banner-secondary .title-banner-secondary__card-body:hover .title-banner-secondary__card-cta.btn-green-icon-corner:before,
+.title-banner-secondary .title-banner-secondary__card-body:focus-visible .title-banner-secondary__card-cta.btn-green-icon-corner:before {
+  transform: rotate(45deg);
 }
 .title-banner-secondary .title-banner-secondary__card-image {
   position: absolute;

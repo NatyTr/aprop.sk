@@ -253,10 +253,11 @@
   }
 
   .title-banner-secondary__card-copy {
-    z-index: 2;
     max-width: 160px;
 
     h3 {
+      position: relative;
+      z-index: 2;
       color: white;
       font-size: fluid(18, 24);
       line-height: 1.1;
@@ -271,7 +272,9 @@
     flex-wrap: wrap;
     gap: 4px;
     position: absolute;
+    left: 16px;
     bottom: 18px;
+    z-index: 2;
 
     strong {
       color: white;
@@ -285,6 +288,30 @@
       font-size: fluid(14, 18);
       line-height: 1.1;
     }
+  }
+
+  // Quote products: pin icon CTA to card bottom-left (positioned against card-body).
+  .title-banner-secondary__card-cta.btn-green-icon-corner {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    pointer-events: none;
+
+    &:before {
+      width: 42px;
+      height: 42px;
+      background-size: 13px 13px;
+    }
+  }
+
+  // CTA has pointer-events:none — rotate on card hover instead.
+  .title-banner-secondary__card-body:hover .title-banner-secondary__card-cta.btn-green-icon-corner:before,
+  .title-banner-secondary__card-body:focus-visible .title-banner-secondary__card-cta.btn-green-icon-corner:before {
+    transform: rotate(45deg);
   }
 
   .title-banner-secondary__card-image {
