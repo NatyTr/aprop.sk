@@ -1901,3 +1901,107 @@ function aprop_benefits_block_acf_fields() {
         )
     );
 }
+
+add_action( 'acf/include_fields', 'aprop_online_tests_promo_acf_fields' );
+
+function aprop_online_tests_promo_acf_fields() {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+        return;
+    }
+
+    acf_add_local_field_group(
+        array(
+            'key' => 'group_aprop_online_tests_promo',
+            'title' => 'Domov - Online testy promo',
+            'fields' => array(
+                array(
+                    'key' => 'field_aprop_online_tests_eyebrow',
+                    'label' => 'Eyebrow',
+                    'name' => 'home_online_tests_eyebrow',
+                    'type' => 'text',
+                    'default_value' => 'ONLINE TESTY PRE PILOTOV DRONOV',
+                ),
+                array(
+                    'key' => 'field_aprop_online_tests_title',
+                    'label' => 'Nadpis',
+                    'name' => 'home_online_tests_title',
+                    'type' => 'text',
+                    'default_value' => 'Na skúšku s väčšou istotou.',
+                ),
+                array(
+                    'key' => 'field_aprop_online_tests_description',
+                    'label' => 'Popis',
+                    'name' => 'home_online_tests_description',
+                    'type' => 'textarea',
+                    'rows' => 3,
+                    'default_value' => 'Precvičte si otázky pre A1/A3, A2 a STS. Sledujte svoje výsledky a pripravujte sa vlastným tempom.',
+                ),
+                array(
+                    'key' => 'field_aprop_online_tests_tags',
+                    'label' => 'Tagy',
+                    'name' => 'home_online_tests_tags',
+                    'type' => 'repeater',
+                    'layout' => 'table',
+                    'button_label' => 'Pridať tag',
+                    'sub_fields' => array(
+                        array(
+                            'key' => 'field_aprop_online_tests_tag_label',
+                            'label' => 'Text',
+                            'name' => 'label',
+                            'type' => 'text',
+                        ),
+                        array(
+                            'key' => 'field_aprop_online_tests_tag_style',
+                            'label' => 'Štýl',
+                            'name' => 'style',
+                            'type' => 'select',
+                            'choices' => array(
+                                'solid' => 'Biely (zvýraznený)',
+                                'outline' => 'Outline',
+                            ),
+                            'default_value' => 'outline',
+                            'ui' => true,
+                        ),
+                    ),
+                ),
+                array(
+                    'key' => 'field_aprop_online_tests_button_text',
+                    'label' => 'Tlačidlo - text',
+                    'name' => 'home_online_tests_button_text',
+                    'type' => 'text',
+                    'default_value' => 'Pozrieť online testy',
+                ),
+                array(
+                    'key' => 'field_aprop_online_tests_button_url',
+                    'label' => 'Tlačidlo - URL',
+                    'name' => 'home_online_tests_button_url',
+                    'type' => 'url',
+                ),
+                array(
+                    'key' => 'field_aprop_online_tests_image',
+                    'label' => 'Obrázok',
+                    'name' => 'home_online_tests_image',
+                    'type' => 'image',
+                    'return_format' => 'array',
+                    'preview_size' => 'medium',
+                    'library' => 'all',
+                ),
+            ),
+            'location' => array(
+                array(
+                    array(
+                        'param' => 'page',
+                        'operator' => '==',
+                        'value' => '3829',
+                    ),
+                ),
+            ),
+            'menu_order' => 35,
+            'position' => 'normal',
+            'style' => 'default',
+            'label_placement' => 'top',
+            'instruction_placement' => 'label',
+            'active' => true,
+        )
+    );
+}
