@@ -17,19 +17,19 @@ footer {
     }
 
     .footer-label {
-      font-size: fluid(12, 24);
+      font-size: fluid(11, 16);
       font-weight: 600;
       line-height: normal;
-      letter-spacing: fluid(-0.24, -0.48);
+      letter-spacing: fluid(-0.22, -0.32);
       color: #00000066;
-      margin-bottom: fluid(8, 26);
+      margin-bottom: fluid(6, 12);
     }
 
     .footer-top {
       width: calc(50% - fluid(7.5, 15));
       display: flex;
       flex-direction: column;
-      row-gap: fluid(15, 30);
+      row-gap: fluid(12, 16);
 
       @media (max-width: 991px) {
         width: 100%;
@@ -37,96 +37,126 @@ footer {
 
       .footer-left {
         display: flex;
+        width: 100%;
+        max-width: 100%;
+
+        .footer-icon,
+        .footer-logo {
+          height: auto;
+          display: block;
+          max-width: none;
+          flex-shrink: 0;
+        }
 
         .footer-icon {
+          flex: 0 0 28%;
           width: 28%;
         }
 
         .footer-logo {
+          flex: 0 0 72%;
           width: 72%;
         }
       }
 
       .footer-right {
-        border-radius: fluid(16, 50);
-        background: $gray-background2;
-        padding: fluid(26, 63) fluid(20, 50);
+        border-radius: fluid(14, 32);
+        background: #fff;
+        border: 1px solid rgba(21, 21, 21, 0.08);
+        padding: fluid(20, 28) fluid(18, 32);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        row-gap: fluid(18, 24);
 
-        .footer-menu-columns {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: fluid(36, 100);
+        .footer-nav {
+          .footer-label {
+            margin-bottom: fluid(12, 18);
+            font-size: fluid(10, 12);
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(21, 21, 21, 0.45);
+          }
 
           .footer-main-menu {
             list-style: none;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            row-gap: fluid(12, 26);
-            width: 50%;
+            margin: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: fluid(16, 32);
+            row-gap: fluid(8, 12);
 
-            .footer-label {
-              margin-bottom: 0;
-            }
+            li a {
+              display: inline-block;
+              text-decoration: none;
+              color: $black;
+              font-size: fluid(13, 17);
+              font-weight: 500;
+              letter-spacing: -0.02em;
+              line-height: 1.3;
+              transition: color 0.2s ease;
 
-            li {
-              a {
+              &:hover {
+                color: $primary;
                 text-decoration: none;
-                font-size: fluid(12, 24);
-                font-weight: 500;
-                letter-spacing: fluid(-0.24, -0.48);
-              }
-
-              &:hover a {
-                text-decoration: underline;
               }
             }
           }
         }
 
-        .footer-columns {
+        .footer-contact-row {
           display: flex;
+          align-items: center;
           justify-content: space-between;
-          position: relative;
+          column-gap: fluid(12, 20);
+          padding-top: fluid(14, 18);
+          border-top: 1px solid rgba(21, 21, 21, 0.08);
 
-          .footer-column {
-            width: 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
+          .footer-contact-email {
+            color: $black;
+            font-size: fluid(13, 17);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            transition: color 0.2s ease;
 
-            a {
-              font-size: fluid(12, 24);
-              font-weight: 500;
-              letter-spacing: fluid(-0.24, -0.48);
+            &:hover {
+              color: $primary;
               text-decoration: none;
-
-              &:hover {
-                text-decoration: underline;
-              }
             }
+          }
 
-            .footer-socials {
-              list-style: none;
-              padding: 0;
-              margin: 0;
+          .footer-socials {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            column-gap: 6px;
+            flex-shrink: 0;
+            height: fluid(28, 36);
+
+            li {
               position: relative;
-              display: flex;
-              column-gap: 4px;
-              justify-content: flex-end;
-              height: fluid(28, 50);
+              flex: 0 0 auto;
+              width: fluid(28, 36);
+              height: 100%;
+              max-height: fluid(28, 36);
 
-              li {
-                position: relative;
-                flex: 0 0 auto;
-                width: fluid(28, 50);
+              a {
+                display: block;
+                width: 100%;
                 height: 100%;
-                max-height: fluid(28, 50);
+                opacity: 0.85;
+                transition: opacity 0.2s ease, transform 0.2s ease;
 
-                a::before {
+                &:hover {
+                  opacity: 1;
+                  transform: translateY(-1px);
+                }
+
+                &::before {
                   content: "";
                   background-image: url('./images/ig.svg');
                   background-size: contain;
@@ -138,15 +168,15 @@ footer {
                   height: 100%;
                 }
 
-                a.fb::before {
+                &.fb::before {
                   background-image: url('./images/fb-real.svg');
                 }
 
-                a.li::before {
+                &.li::before {
                   background-image: url('./images/li-real.svg');
                 }
 
-                a.yt::before {
+                &.yt::before {
                   background-image: url('./images/yt-real.svg');
                 }
               }
@@ -158,17 +188,24 @@ footer {
 
     .footer-bottom {
       width: calc(50% - fluid(7.5, 15));
+      align-self: stretch;
 
       img {
-        border-radius: fluid(17, 50);
+        border-radius: fluid(14, 32);
         width: 100%;
         height: 100%;
         object-fit: cover;
+        display: block;
       }
 
       @media (max-width: 991px) {
         width: 100%;
-        margin-top: fluid(8, 24);
+        margin-top: fluid(8, 16);
+
+        img {
+          height: auto;
+          aspect-ratio: 4 / 3;
+        }
       }
     }
   }

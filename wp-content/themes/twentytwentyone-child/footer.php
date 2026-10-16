@@ -75,43 +75,32 @@ $footer_img = get_option('footer_image'); // URL obrázka
 						$menu_items = wp_get_nav_menu_items( $menu_id );
 
 						if ( $menu_items ) :
-							$half = ceil( count( $menu_items ) / 2 );
-							$chunks = array_chunk( $menu_items, $half );
 							?>
-							<div class="footer-menu-columns">
-								<?php foreach ( $chunks as $index => $chunk ) : ?>
-									<ul class="footer-main-menu">
-										<?php if ( $index === 0 ) : ?>
-											<li><p class="footer-label">Website</p></li>
-										<?php endif; ?>
-										<?php foreach ( $chunk as $item ) : ?>
-											<li><a href="<?php echo esc_url( $item->url ); ?>"><?php echo esc_html( $item->title ); ?></a></li>
-										<?php endforeach; ?>
-									</ul>
-								<?php endforeach; ?>
-							</div>
+							<nav class="footer-nav" aria-label="<?php esc_attr_e( 'Navigácia', 'aprop' ); ?>">
+								<p class="footer-label">Navigácia</p>
+								<ul class="footer-main-menu">
+									<?php foreach ( $menu_items as $item ) : ?>
+										<li><a href="<?php echo esc_url( $item->url ); ?>"><?php echo esc_html( $item->title ); ?></a></li>
+									<?php endforeach; ?>
+								</ul>
+							</nav>
 						<?php endif;
 					}
 					?>
 
-
-
-				<div class="footer-columns">
+				<div class="footer-contact-row">
 					<?php if ( $email ) : ?>
-						<div class="footer-column">
-							<p class="footer-label">Kontakt</p>
-							<a href="mailto:<?php echo esc_attr($email); ?>"><?php echo esc_html($email); ?></a>
-						</div>
+						<a class="footer-contact-email" href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a>
 					<?php endif; ?>
 
-					<div class="footer-column">
+					<?php if ( $ig || $fb || $li || $yt ) : ?>
 						<ul class="footer-socials">
-							<?php if ( $ig ) : ?><li><a class="ig" href="<?php echo esc_url($ig); ?>" target="_blank" rel="noopener"></a></li><?php endif; ?>
-							<?php if ( $fb ) : ?><li><a class="fb" href="<?php echo esc_url($fb); ?>" target="_blank" rel="noopener"></a></li><?php endif; ?>
-							<?php if ( $li ) : ?><li><a class="li" href="<?php echo esc_url($li); ?>" target="_blank" rel="noopener"></a></li><?php endif; ?>
-							<?php if ( $yt ) : ?><li><a class="yt" href="<?php echo esc_url($yt); ?>" target="_blank" rel="noopener"></a></li><?php endif; ?>
+							<?php if ( $ig ) : ?><li><a class="ig" href="<?php echo esc_url( $ig ); ?>" target="_blank" rel="noopener" aria-label="Instagram"></a></li><?php endif; ?>
+							<?php if ( $fb ) : ?><li><a class="fb" href="<?php echo esc_url( $fb ); ?>" target="_blank" rel="noopener" aria-label="Facebook"></a></li><?php endif; ?>
+							<?php if ( $li ) : ?><li><a class="li" href="<?php echo esc_url( $li ); ?>" target="_blank" rel="noopener" aria-label="LinkedIn"></a></li><?php endif; ?>
+							<?php if ( $yt ) : ?><li><a class="yt" href="<?php echo esc_url( $yt ); ?>" target="_blank" rel="noopener" aria-label="YouTube"></a></li><?php endif; ?>
 						</ul>
-					</div>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
