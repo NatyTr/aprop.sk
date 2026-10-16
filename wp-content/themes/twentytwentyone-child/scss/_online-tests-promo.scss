@@ -90,7 +90,9 @@
   }
 
   @media (max-width: 767px) {
+    padding: 0 24px;
     margin-bottom: 24px;
+    box-sizing: border-box;
 
     &__icon {
       width: 52px;

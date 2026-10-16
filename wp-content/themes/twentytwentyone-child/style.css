@@ -3878,7 +3878,9 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 }
 @media (max-width: 767px) {
   .online-tests-promo {
+    padding: 0 24px;
     margin-bottom: 24px;
+    box-sizing: border-box;
   }
   .online-tests-promo__icon {
     width: 52px;
