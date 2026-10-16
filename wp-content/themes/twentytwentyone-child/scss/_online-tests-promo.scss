@@ -1,141 +1,104 @@
 .online-tests-promo {
   width: 100%;
-  margin: 0 0 fluid(28, 48);
+  margin: 0 0 fluid(24, 40);
 
   &__inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    gap: fluid(28, 48);
-    align-items: stretch;
-    background: #151515;
-    border-radius: fluid(28, 40);
-    padding: fluid(28, 40);
-    overflow: hidden;
-  }
-
-  &__content {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 0;
-    padding: fluid(8, 16) 0;
-  }
-
-  &__eyebrow {
-    display: block;
-    margin-bottom: fluid(16, 22);
-    color: #7AD859;
-    font-size: fluid(12, 14);
-    line-height: 1.2;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  &__title {
-    margin: 0 0 fluid(14, 18);
-    color: #fff;
-    font-size: fluid(34, 52);
-    line-height: 1.02;
-    letter-spacing: -0.04em;
-    font-weight: 600;
-  }
-
-  &__description {
-    margin: 0 0 fluid(20, 28);
-    max-width: 34em;
-    color: rgba(255, 255, 255, 0.62);
-    font-size: fluid(15, 18);
-    line-height: 1.45;
-    font-weight: 400;
-  }
-
-  &__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: fluid(24, 32);
-  }
-
-  &__tag {
-    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    min-height: 40px;
-    padding: 10px 18px;
-    border-radius: 999px;
-    font-size: fluid(12, 14);
-    line-height: 1;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    box-sizing: border-box;
-
-    &--solid {
-      background: #E4F4DC;
-      color: #131313;
-    }
-
-    &--outline {
-      background: #252925;
-      color: rgba(255, 255, 255, 0.88);
-      border: 0;
-    }
+    justify-content: space-between;
+    gap: fluid(20, 40);
+    background: #e4f4dc;
+    border-radius: fluid(20, 36);
+    padding: fluid(22, 36) fluid(22, 40);
   }
 
-  &__button {
-    margin-top: 0;
-  }
-
-  &__media {
+  &__main {
+    display: flex;
+    align-items: center;
+    gap: fluid(16, 28);
     min-width: 0;
-    border-radius: fluid(22, 32);
-    overflow: hidden;
-    background: #1d1d1d;
+    flex: 1 1 auto;
+  }
+
+  &__icon {
+    flex: 0 0 auto;
+    width: fluid(56, 88);
+    height: fluid(56, 88);
 
     img {
       display: block;
       width: 100%;
       height: 100%;
-      min-height: fluid(240, 360);
-      object-fit: cover;
+      object-fit: contain;
     }
   }
 
-  @media (max-width: 1099px) {
-    &__inner {
-      grid-template-columns: 1fr;
-      gap: 24px;
-      padding: 24px;
-    }
-
-    &__media img {
-      min-height: 260px;
-    }
+  &__content {
+    min-width: 0;
   }
 
-  @media (max-width: 767px) {
-    margin-bottom: 28px;
+  &__eyebrow {
+    display: block;
+    margin: 0 0 fluid(6, 10);
+    color: rgba(21, 21, 21, 0.55);
+    font-size: fluid(11, 14);
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
 
+  &__title {
+    margin: 0 0 fluid(6, 8);
+    color: $black;
+    font-size: fluid(22, 36);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+  }
+
+  &__description {
+    margin: 0;
+    color: rgba(21, 21, 21, 0.58);
+    font-size: fluid(13, 17);
+    line-height: 1.4;
+    font-weight: 400;
+  }
+
+  &__button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 991px) {
     &__inner {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 20px;
+      padding: 22px 20px;
       border-radius: 24px;
-      padding: 20px;
     }
 
-    &__title {
-      font-size: 32px;
+    &__main {
+      align-items: flex-start;
     }
 
     &__button {
       width: 100%;
       justify-content: space-between;
     }
+  }
 
-    &__media {
-      border-radius: 20px;
+  @media (max-width: 767px) {
+    margin-bottom: 24px;
 
-      img {
-        min-height: 220px;
-      }
+    &__icon {
+      width: 52px;
+      height: 52px;
+    }
+
+    &__title {
+      font-size: 22px;
     }
   }
 }

@@ -1044,117 +1044,91 @@ add_shortcode( 'home_courses_slider', 'render_home_courses_slider_shortcode' );
 
 function aprop_get_online_tests_promo_defaults() {
     return array(
-        'eyebrow' => 'ONLINE TESTY PRE PILOTOV DRONOV',
-        'title' => 'Na skúšku s väčšou istotou.',
-        'description' => 'Precvičte si otázky pre A1/A3, A2 a STS. Sledujte svoje výsledky a pripravujte sa vlastným tempom.',
-        'tags' => array(
-            array(
-                'label' => 'A1/A3 zadarmo',
-                'style' => 'solid',
-            ),
-            array(
-                'label' => 'A2',
-                'style' => 'outline',
-            ),
-            array(
-                'label' => 'STS',
-                'style' => 'outline',
-            ),
-        ),
-        'button_text' => 'Pozrieť online testy',
-        'button_url' => '',
+        'eyebrow'      => '05 · ONLINE TESTY',
+        'title'        => 'Precvičte si otázky pred skúškou',
+        'description'  => 'Online príprava A1/A3, A2 a STS. Vlastným tempom.',
+        'button_text'  => 'Pozrieť testy',
+        'button_url'   => home_url( '/testy/' ),
+        'icon_url'     => get_stylesheet_directory_uri() . '/images/test-preparation.png',
     );
 }
 
 function aprop_get_online_tests_promo_data() {
-    $page_id = get_queried_object_id();
+    $page_id  = aprop_get_homepage_id() ?: get_queried_object_id();
     $defaults = aprop_get_online_tests_promo_defaults();
 
     if ( ! $page_id ) {
         return $defaults;
     }
 
-    $tags_raw = get_field( 'home_online_tests_tags', $page_id );
-    $tags = array();
+    $icon = get_field( 'home_online_tests_icon', $page_id );
+    $icon_url = '';
 
-    if ( is_array( $tags_raw ) ) {
-        foreach ( $tags_raw as $tag ) {
-            $label = isset( $tag['label'] ) ? trim( (string) $tag['label'] ) : '';
-            if ( $label === '' ) {
-                continue;
-            }
-
-            $tags[] = array(
-                'label' => $label,
-                'style' => ( ! empty( $tag['style'] ) && $tag['style'] === 'solid' ) ? 'solid' : 'outline',
-            );
-        }
+    if ( is_array( $icon ) && ! empty( $icon['url'] ) ) {
+        $icon_url = $icon['url'];
+    } elseif ( is_numeric( $icon ) ) {
+        $icon_url = wp_get_attachment_image_url( (int) $icon, 'full' ) ?: '';
+    } elseif ( is_string( $icon ) && $icon !== '' ) {
+        $icon_url = $icon;
     }
 
     return array(
-        'eyebrow' => get_field( 'home_online_tests_eyebrow', $page_id ) ?: $defaults['eyebrow'],
-        'title' => get_field( 'home_online_tests_title', $page_id ) ?: $defaults['title'],
+        'eyebrow'     => get_field( 'home_online_tests_eyebrow', $page_id ) ?: $defaults['eyebrow'],
+        'title'       => get_field( 'home_online_tests_title', $page_id ) ?: $defaults['title'],
         'description' => get_field( 'home_online_tests_description', $page_id ) ?: $defaults['description'],
-        'tags' => ! empty( $tags ) ? $tags : $defaults['tags'],
         'button_text' => get_field( 'home_online_tests_button_text', $page_id ) ?: $defaults['button_text'],
-        'button_url' => get_field( 'home_online_tests_button_url', $page_id ) ?: $defaults['button_url'],
-        'image' => get_field( 'home_online_tests_image', $page_id ),
+        'button_url'  => get_field( 'home_online_tests_button_url', $page_id ) ?: $defaults['button_url'],
+        'icon_url'    => $icon_url ?: $defaults['icon_url'],
     );
 }
 
 function render_home_online_tests_promo_shortcode() {
     $section = aprop_get_online_tests_promo_data();
 
-    if ( empty( $section['title'] ) && empty( $section['image'] ) ) {
+    if ( empty( $section['title'] ) ) {
         return '';
     }
 
     ob_start();
     ?>
     <section class="online-tests-promo">
-      <div class="online-tests-promo__inner">
-        <div class="online-tests-promo__content">
-          <?php if ( ! empty( $section['eyebrow'] ) ) : ?>
-            <span class="online-tests-promo__eyebrow"><?php echo esc_html( $section['eyebrow'] ); ?></span>
-          <?php endif; ?>
+        <div class="online-tests-promo__inner">
+            <div class="online-tests-promo__main">
+                <?php if ( ! empty( $section['icon_url'] ) ) : ?>
+                    <div class="online-tests-promo__icon">
+                        <img
+                            src="<?php echo esc_url( $section['icon_url'] ); ?>"
+                            alt=""
+                            loading="lazy"
+                            width="88"
+                            height="88"
+                        />
+                    </div>
+                <?php endif; ?>
 
-          <?php if ( ! empty( $section['title'] ) ) : ?>
-            <h2 class="online-tests-promo__title"><?php echo esc_html( $section['title'] ); ?></h2>
-          <?php endif; ?>
+                <div class="online-tests-promo__content">
+                    <?php if ( ! empty( $section['eyebrow'] ) ) : ?>
+                        <span class="online-tests-promo__eyebrow"><?php echo esc_html( $section['eyebrow'] ); ?></span>
+                    <?php endif; ?>
 
-          <?php if ( ! empty( $section['description'] ) ) : ?>
-            <p class="online-tests-promo__description"><?php echo esc_html( $section['description'] ); ?></p>
-          <?php endif; ?>
+                    <?php if ( ! empty( $section['title'] ) ) : ?>
+                        <h2 class="online-tests-promo__title"><?php echo esc_html( $section['title'] ); ?></h2>
+                    <?php endif; ?>
 
-          <?php if ( ! empty( $section['tags'] ) ) : ?>
-            <div class="online-tests-promo__tags">
-              <?php foreach ( $section['tags'] as $tag ) : ?>
-                <span class="online-tests-promo__tag online-tests-promo__tag--<?php echo esc_attr( $tag['style'] ); ?>">
-                  <?php echo esc_html( $tag['label'] ); ?>
-                </span>
-              <?php endforeach; ?>
+                    <?php if ( ! empty( $section['description'] ) ) : ?>
+                        <p class="online-tests-promo__description"><?php echo esc_html( $section['description'] ); ?></p>
+                    <?php endif; ?>
+                </div>
             </div>
-          <?php endif; ?>
 
-          <?php if ( ! empty( $section['button_text'] ) && ! empty( $section['button_url'] ) ) : ?>
-            <a class="btn-green-icon online-tests-promo__button" href="<?php echo esc_url( $section['button_url'] ); ?>">
-              <?php echo esc_html( $section['button_text'] ); ?>
-            </a>
-          <?php elseif ( ! empty( $section['button_text'] ) ) : ?>
-            <span class="btn-green-icon online-tests-promo__button"><?php echo esc_html( $section['button_text'] ); ?></span>
-          <?php endif; ?>
+            <?php if ( ! empty( $section['button_text'] ) && ! empty( $section['button_url'] ) ) : ?>
+                <a class="btn-primary btn-black btn-icon online-tests-promo__button" href="<?php echo esc_url( $section['button_url'] ); ?>">
+                    <?php echo esc_html( $section['button_text'] ); ?>
+                </a>
+            <?php elseif ( ! empty( $section['button_text'] ) ) : ?>
+                <span class="btn-primary btn-black btn-icon online-tests-promo__button"><?php echo esc_html( $section['button_text'] ); ?></span>
+            <?php endif; ?>
         </div>
-
-        <?php if ( ! empty( $section['image']['url'] ) ) : ?>
-          <div class="online-tests-promo__media">
-            <img
-              src="<?php echo esc_url( $section['image']['url'] ); ?>"
-              alt="<?php echo esc_attr( $section['image']['alt'] ?? $section['title'] ); ?>"
-              loading="lazy"
-            />
-          </div>
-        <?php endif; ?>
-      </div>
     </section>
     <?php
 
