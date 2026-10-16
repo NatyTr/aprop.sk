@@ -10,10 +10,12 @@ footer {
 
   .footer-container {
     display: flex;
+    align-items: stretch;
     column-gap: fluid(15, 30);
 
     @media (max-width: 991px) {
       flex-direction: column;
+      align-items: stretch;
     }
 
     .footer-label {
@@ -188,23 +190,31 @@ footer {
 
     .footer-bottom {
       width: calc(50% - fluid(7.5, 15));
+      position: relative;
       align-self: stretch;
+      // No in-flow height from the image — stretch to match .footer-top.
+      min-height: 0;
+      overflow: hidden;
+      border-radius: fluid(14, 32);
 
       img {
-        border-radius: fluid(14, 32);
+        position: absolute;
+        inset: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
+        border-radius: inherit;
       }
 
       @media (max-width: 991px) {
         width: 100%;
         margin-top: fluid(8, 16);
+        min-height: 0;
+        aspect-ratio: 4 / 3;
 
         img {
-          height: auto;
-          aspect-ratio: 4 / 3;
+          position: absolute;
         }
       }
     }
