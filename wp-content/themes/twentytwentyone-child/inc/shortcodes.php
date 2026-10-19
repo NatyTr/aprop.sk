@@ -605,6 +605,984 @@ function render_secondary_hero_banner_shortcode() {
 add_shortcode( 'secondary_hero_banner', 'render_secondary_hero_banner_shortcode' );
 
 
+function aprop_get_testy_hero_defaults() {
+    return array(
+        'eyebrow'                => 'APROP / ONLINE TESTY',
+        'title_line_1'           => 'Pripravte sa na skúšku pilota dronu.',
+        'title_line_2'           => '',
+        'description'            => 'Precvičujte otázky pre A1/A3, A2 a STS. Sledujte výsledky a pripravujte sa vlastným tempom.',
+        'primary_button_text'    => 'Vybrať prípravu',
+        'primary_button_url'     => '/testy/',
+        'secondary_button_text'  => 'Vyskúšať A1/A3 zadarmo',
+        'secondary_button_url'   => '/produkt/hobby-kurz-drony/',
+        'stats_label'            => 'Váš najlepší výsledok',
+        'stats_value'            => '93 %',
+        'stats_caption'          => 'A2 · Ukážkové údaje',
+    );
+}
+
+function aprop_get_testy_hero_data() {
+    $page_id  = get_the_ID() ?: 14618;
+    $defaults = aprop_get_testy_hero_defaults();
+
+    $banner_image = get_field( 'testy_hero_banner_image', $page_id );
+    if ( empty( $banner_image ) || empty( $banner_image['url'] ) ) {
+        $banner_image = array(
+            'url' => get_stylesheet_directory_uri() . '/images/testy-hero.jpg',
+            'alt' => 'Online testy – príprava na skúšku pilota dronu',
+        );
+    }
+
+    $value = function ( $key ) use ( $page_id, $defaults ) {
+        $field = get_field( 'testy_hero_' . $key, $page_id );
+        return ( $field !== null && $field !== false && $field !== '' ) ? $field : $defaults[ $key ];
+    };
+
+    return array(
+        'banner_image'           => $banner_image,
+        'eyebrow'                => $value( 'eyebrow' ),
+        'title_line_1'           => $value( 'title_line_1' ),
+        'title_line_2'           => $value( 'title_line_2' ),
+        'description'            => $value( 'description' ),
+        'primary_button_text'    => $value( 'primary_button_text' ),
+        'primary_button_url'     => $value( 'primary_button_url' ),
+        'secondary_button_text'  => $value( 'secondary_button_text' ),
+        'secondary_button_url'   => $value( 'secondary_button_url' ),
+        'stats_label'            => $value( 'stats_label' ),
+        'stats_value'            => $value( 'stats_value' ),
+        'stats_caption'          => $value( 'stats_caption' ),
+    );
+}
+
+function render_testy_hero_banner_shortcode() {
+    $data = aprop_get_testy_hero_data();
+    $banner_image = $data['banner_image'];
+
+    if ( empty( $banner_image['url'] ) ) {
+        return '';
+    }
+
+    $background_style = sprintf(
+        'style="background-image: linear-gradient(90deg, rgba(21,21,21,0.88) 0%%, rgba(21,21,21,0.70) 34%%, rgba(21,21,21,0.18) 68%%, rgba(21,21,21,0.08) 100%%), url(%s);"',
+        esc_url( $banner_image['url'] )
+    );
+
+    $has_stats = $data['stats_label'] || $data['stats_value'] || $data['stats_caption'];
+
+    ob_start();
+    ?>
+    <div class="title-banner title-banner-secondary title-banner-secondary--stats" <?php echo $background_style; ?>>
+      <div class="title-banner-secondary__content">
+        <div class="title-banner-secondary__text">
+          <?php if ( $data['eyebrow'] ) : ?>
+            <div class="title-banner-secondary__eyebrow">
+              <span class="title-banner-secondary__eyebrow-dot"></span>
+              <span><?php echo esc_html( $data['eyebrow'] ); ?></span>
+            </div>
+          <?php endif; ?>
+
+          <?php if ( $data['title_line_1'] || $data['title_line_2'] ) : ?>
+            <h1 class="title-banner-secondary__title">
+              <?php if ( $data['title_line_1'] ) : ?>
+                <span><?php echo esc_html( $data['title_line_1'] ); ?></span>
+              <?php endif; ?>
+              <?php if ( $data['title_line_2'] ) : ?>
+                <span class="is-muted"><?php echo esc_html( $data['title_line_2'] ); ?></span>
+              <?php endif; ?>
+            </h1>
+          <?php endif; ?>
+
+          <?php if ( $data['description'] ) : ?>
+            <p class="title-banner-secondary__description"><?php echo esc_html( $data['description'] ); ?></p>
+          <?php endif; ?>
+
+          <?php if ( ( $data['primary_button_text'] && $data['primary_button_url'] ) || ( $data['secondary_button_text'] && $data['secondary_button_url'] ) ) : ?>
+            <div class="title-banner-secondary__actions">
+              <?php if ( $data['primary_button_text'] && $data['primary_button_url'] ) : ?>
+                <a class="btn-green-icon" href="<?php echo esc_url( $data['primary_button_url'] ); ?>">
+                  <?php echo esc_html( $data['primary_button_text'] ); ?>
+                </a>
+              <?php endif; ?>
+
+              <?php if ( $data['secondary_button_text'] && $data['secondary_button_url'] ) : ?>
+                <a class="btn-white-border-icon" href="<?php echo esc_url( $data['secondary_button_url'] ); ?>">
+                  <?php echo esc_html( $data['secondary_button_text'] ); ?>
+                </a>
+              <?php endif; ?>
+            </div>
+          <?php endif; ?>
+        </div>
+
+        <div class="title-banner-secondary__mobile-image" aria-hidden="true">
+          <img src="<?php echo esc_url( $banner_image['url'] ); ?>" alt="<?php echo esc_attr( $banner_image['alt'] ?? '' ); ?>">
+        </div>
+
+        <?php if ( $has_stats ) : ?>
+          <div class="title-banner-secondary__stats">
+            <?php if ( $data['stats_label'] ) : ?>
+              <span class="title-banner-secondary__stats-label"><?php echo esc_html( $data['stats_label'] ); ?></span>
+            <?php endif; ?>
+            <?php if ( $data['stats_value'] ) : ?>
+              <strong class="title-banner-secondary__stats-value"><?php echo esc_html( $data['stats_value'] ); ?></strong>
+            <?php endif; ?>
+            <?php if ( $data['stats_caption'] ) : ?>
+              <span class="title-banner-secondary__stats-caption"><?php echo esc_html( $data['stats_caption'] ); ?></span>
+            <?php endif; ?>
+          </div>
+        <?php endif; ?>
+      </div>
+    </div>
+    <?php
+
+    return ob_get_clean();
+}
+
+add_shortcode( 'testy_hero_banner', 'render_testy_hero_banner_shortcode' );
+
+
+function aprop_get_testy_process_defaults() {
+    $theme_uri = get_stylesheet_directory_uri() . '/images/';
+
+    return array(
+        'eyebrow' => 'AKO TO PREBIEHA',
+        'title'   => "Od prvého kliknutia\nk lepšej príprave.",
+        'intro'   => 'Jasný postup. Vlastné tempo. Všetko, čo potrebujete na online prípravu, na jednom mieste.',
+        'cards'   => array(
+            array(
+                'variant'     => 'light',
+                'number'      => '01',
+                'icon'        => $theme_uri . 'testy-process-compass.png',
+                'label'       => 'VÝBER PRÍPRAVY',
+                'title'       => 'Nájdite svoj smer.',
+                'description' => 'Začínate, rozširujete si vedomosti alebo sa pripravujete na STS? Vyberte si prípravu podľa svojho cieľa.',
+                'tags'        => array( 'A1/A3', 'A2', 'STS' ),
+                'footer'      => '',
+                'footer_type' => 'tags',
+            ),
+            array(
+                'variant'     => 'green',
+                'number'      => '02',
+                'icon'        => $theme_uri . 'testy-process-key.png',
+                'label'       => 'VÁŠ PRÍSTUP',
+                'title'       => 'Všetko vo vašom účte.',
+                'description' => 'Zaregistrujte sa a otvorte si vybranú prípravu. A1/A3 si môžete najprv vyskúšať úplne zadarmo.',
+                'tags'        => array(),
+                'footer'      => 'Vaša príprava na jednom mieste',
+                'footer_type' => 'pill',
+            ),
+            array(
+                'variant'     => 'dark',
+                'number'      => '03',
+                'icon'        => $theme_uri . 'testy-process-chart.png',
+                'label'       => 'TRÉNING A VÝSLEDKY',
+                'title'       => 'Každý pokus vás posúva.',
+                'description' => 'Precvičujte otázky vlastným tempom. Pozrite si výsledok a sledujte, ako sa vám darí v ďalších pokusoch.',
+                'tags'        => array(),
+                'footer'      => 'Vlastné tempo',
+                'footer_type' => 'bars',
+            ),
+        ),
+    );
+}
+
+function aprop_get_testy_process_data() {
+    $page_id  = get_the_ID() ?: 14618;
+    $defaults = aprop_get_testy_process_defaults();
+    $footer_types = array( 'tags', 'pill', 'bars' );
+
+    $field = function ( $name, $fallback = '' ) use ( $page_id ) {
+        $value = get_field( $name, $page_id );
+        return ( $value !== null && $value !== false && $value !== '' ) ? $value : $fallback;
+    };
+
+    $cards = array();
+    foreach ( $defaults['cards'] as $index => $default_card ) {
+        $n = $index + 1;
+        $icon = get_field( 'testy_process_card_' . $n . '_icon', $page_id );
+        $tags_raw = $field( 'testy_process_card_' . $n . '_tags', implode( ', ', $default_card['tags'] ) );
+        $tags = array_values( array_filter( array_map( 'trim', explode( ',', (string) $tags_raw ) ) ) );
+
+        $cards[] = array(
+            'variant'     => $default_card['variant'],
+            'number'      => $field( 'testy_process_card_' . $n . '_number', $default_card['number'] ),
+            'icon'        => ( ! empty( $icon['url'] ) ) ? $icon['url'] : $default_card['icon'],
+            'label'       => $field( 'testy_process_card_' . $n . '_label', $default_card['label'] ),
+            'title'       => $field( 'testy_process_card_' . $n . '_title', $default_card['title'] ),
+            'description' => $field( 'testy_process_card_' . $n . '_description', $default_card['description'] ),
+            'tags'        => $tags,
+            'footer'      => $field( 'testy_process_card_' . $n . '_footer', $default_card['footer'] ),
+            'footer_type' => $footer_types[ $index ],
+        );
+    }
+
+    return array(
+        'eyebrow' => $field( 'testy_process_eyebrow', $defaults['eyebrow'] ),
+        'title'   => $field( 'testy_process_title', $defaults['title'] ),
+        'intro'   => $field( 'testy_process_intro', $defaults['intro'] ),
+        'cards'   => $cards,
+    );
+}
+
+function render_testy_process_shortcode() {
+    $section = aprop_get_testy_process_data();
+
+    ob_start();
+    ?>
+    <section class="testy-process">
+      <div class="testy-process__header">
+        <div class="testy-process__heading">
+          <?php if ( $section['eyebrow'] ) : ?>
+            <span class="testy-process__eyebrow"><?php echo esc_html( $section['eyebrow'] ); ?></span>
+          <?php endif; ?>
+          <?php if ( $section['title'] ) : ?>
+            <h2 class="testy-process__title"><?php echo nl2br( esc_html( $section['title'] ) ); ?></h2>
+          <?php endif; ?>
+        </div>
+        <?php if ( $section['intro'] ) : ?>
+          <p class="testy-process__intro"><?php echo esc_html( $section['intro'] ); ?></p>
+        <?php endif; ?>
+      </div>
+
+      <div class="testy-process__grid">
+        <?php foreach ( $section['cards'] as $card ) : ?>
+          <article class="testy-process__card testy-process__card--<?php echo esc_attr( $card['variant'] ); ?>">
+            <div class="testy-process__card-top">
+              <span class="testy-process__number"><?php echo esc_html( $card['number'] ); ?></span>
+              <?php if ( ! empty( $card['icon'] ) ) : ?>
+                <span class="testy-process__icon" aria-hidden="true">
+                  <img src="<?php echo esc_url( $card['icon'] ); ?>" alt="">
+                </span>
+              <?php endif; ?>
+            </div>
+
+            <div class="testy-process__card-body">
+              <?php if ( $card['label'] ) : ?>
+                <span class="testy-process__card-label"><?php echo esc_html( $card['label'] ); ?></span>
+              <?php endif; ?>
+              <?php if ( $card['title'] ) : ?>
+                <h3 class="testy-process__card-title"><?php echo esc_html( $card['title'] ); ?></h3>
+              <?php endif; ?>
+              <?php if ( $card['description'] ) : ?>
+                <p class="testy-process__card-text"><?php echo esc_html( $card['description'] ); ?></p>
+              <?php endif; ?>
+
+              <div class="testy-process__card-footer">
+                <?php if ( $card['footer_type'] === 'tags' && ! empty( $card['tags'] ) ) : ?>
+                  <div class="testy-process__tags">
+                    <?php foreach ( $card['tags'] as $tag ) : ?>
+                      <span class="testy-process__tag"><?php echo esc_html( $tag ); ?></span>
+                    <?php endforeach; ?>
+                  </div>
+                <?php elseif ( $card['footer_type'] === 'pill' && $card['footer'] ) : ?>
+                  <div class="testy-process__pill">
+                    <img
+                      class="testy-process__pill-check"
+                      src="<?php echo esc_url( get_stylesheet_directory_uri() . '/images/testy-process-check.svg' ); ?>"
+                      alt=""
+                      aria-hidden="true"
+                    >
+                    <span><?php echo esc_html( $card['footer'] ); ?></span>
+                  </div>
+                <?php elseif ( $card['footer_type'] === 'bars' && $card['footer'] ) : ?>
+                  <div class="testy-process__bars">
+                    <img
+                      class="testy-process__bars-chart"
+                      src="<?php echo esc_url( get_stylesheet_directory_uri() . '/images/testy-process-progress.svg' ); ?>"
+                      alt=""
+                      aria-hidden="true"
+                    >
+                    <span class="testy-process__bars-label"><?php echo esc_html( $card['footer'] ); ?></span>
+                  </div>
+                <?php endif; ?>
+              </div>
+            </div>
+          </article>
+        <?php endforeach; ?>
+      </div>
+    </section>
+    <?php
+
+    return ob_get_clean();
+}
+
+add_shortcode( 'testy_process', 'render_testy_process_shortcode' );
+
+
+function aprop_get_testy_try_defaults() {
+    return array(
+        'eyebrow'      => 'A1/A3 ZADARMO',
+        'title'        => "Najprv si prípravu\nvyskúšajte.",
+        'description'  => 'Zaregistrujte sa a začnite s A1/A3 zadarmo. Precvičte si otázky a pozrite si svoje výsledky.',
+        'button_text'  => 'Vyskúšať A1/A3 zadarmo',
+        'button_url'   => '/moj-ucet/',
+        'note'         => 'Príprava A1/A3 · Po registrácii',
+        'image_badge'  => 'OD TEÓRIE K PRAXI',
+        'image'        => get_stylesheet_directory_uri() . '/images/testy-try-drone.jpg',
+    );
+}
+
+function aprop_get_testy_try_data() {
+    $page_id  = get_the_ID() ?: 14618;
+    $defaults = aprop_get_testy_try_defaults();
+
+    $field = function ( $name, $fallback = '' ) use ( $page_id ) {
+        $value = get_field( $name, $page_id );
+        return ( $value !== null && $value !== false && $value !== '' ) ? $value : $fallback;
+    };
+
+    $image = get_field( 'testy_try_image', $page_id );
+    $image_url = ( ! empty( $image['url'] ) ) ? $image['url'] : $defaults['image'];
+    $image_alt = ( ! empty( $image['alt'] ) ) ? $image['alt'] : 'Dron – online príprava A1/A3';
+
+    return array(
+        'eyebrow'      => $field( 'testy_try_eyebrow', $defaults['eyebrow'] ),
+        'title'        => $field( 'testy_try_title', $defaults['title'] ),
+        'description'  => $field( 'testy_try_description', $defaults['description'] ),
+        'button_text'  => $field( 'testy_try_button_text', $defaults['button_text'] ),
+        'button_url'   => $field( 'testy_try_button_url', $defaults['button_url'] ),
+        'note'         => $field( 'testy_try_note', $defaults['note'] ),
+        'image_badge'  => $field( 'testy_try_image_badge', $defaults['image_badge'] ),
+        'image_url'    => $image_url,
+        'image_alt'    => $image_alt,
+    );
+}
+
+function render_testy_try_shortcode() {
+    $data = aprop_get_testy_try_data();
+
+    ob_start();
+    ?>
+    <section class="testy-try">
+      <div class="testy-try__inner">
+        <div class="testy-try__content">
+          <?php if ( $data['eyebrow'] ) : ?>
+            <span class="testy-try__eyebrow">
+              <span class="testy-try__eyebrow-dot" aria-hidden="true"></span>
+              <?php echo esc_html( $data['eyebrow'] ); ?>
+            </span>
+          <?php endif; ?>
+
+          <?php if ( $data['title'] ) : ?>
+            <h2 class="testy-try__title"><?php echo nl2br( esc_html( $data['title'] ) ); ?></h2>
+          <?php endif; ?>
+
+          <?php if ( $data['description'] ) : ?>
+            <p class="testy-try__description"><?php echo esc_html( $data['description'] ); ?></p>
+          <?php endif; ?>
+
+          <?php if ( $data['button_text'] && $data['button_url'] ) : ?>
+            <a class="btn-green-icon testy-try__button" href="<?php echo esc_url( $data['button_url'] ); ?>">
+              <?php echo esc_html( $data['button_text'] ); ?>
+            </a>
+          <?php endif; ?>
+
+          <?php if ( $data['note'] ) : ?>
+            <p class="testy-try__note"><?php echo esc_html( $data['note'] ); ?></p>
+          <?php endif; ?>
+        </div>
+
+        <?php if ( $data['image_url'] ) : ?>
+          <div class="testy-try__media">
+            <img src="<?php echo esc_url( $data['image_url'] ); ?>" alt="<?php echo esc_attr( $data['image_alt'] ); ?>">
+            <?php if ( $data['image_badge'] ) : ?>
+              <span class="testy-try__image-badge">
+                <span class="testy-try__eyebrow-dot" aria-hidden="true"></span>
+                <?php echo esc_html( $data['image_badge'] ); ?>
+              </span>
+            <?php endif; ?>
+          </div>
+        <?php endif; ?>
+      </div>
+    </section>
+    <?php
+
+    return ob_get_clean();
+}
+
+add_shortcode( 'testy_try', 'render_testy_try_shortcode' );
+
+
+function aprop_get_testy_overview_defaults() {
+    return array(
+        'eyebrow'     => 'VAŠA ONLINE PRÍPRAVA',
+        'title'       => "Každý pokus.\nLepší prehľad.",
+        'description' => 'Otázky, výsledky aj história prípravy. Všetko na jednom mieste.',
+        'disclaimer'  => 'Náhľady rozhrania a výsledky sú ilustračné.',
+        'cards'       => array(
+            array(
+                'variant'     => 'light',
+                'mockup'      => 'quiz',
+                'number'      => '01',
+                'title'       => 'Precvičujte otázky',
+                'description' => 'Prehľadné testovanie vás prevedie prípravou krok za krokom.',
+            ),
+            array(
+                'variant'     => 'dark',
+                'mockup'      => 'result',
+                'number'      => '02',
+                'title'       => 'Pozrite si výsledok',
+                'description' => 'Po dokončení testu uvidíte, ako sa vám darilo.',
+            ),
+            array(
+                'variant'     => 'light',
+                'mockup'      => 'history',
+                'number'      => '03',
+                'title'       => 'Sledujte svoj pokrok',
+                'description' => 'Vráťte sa k výsledkom a porovnajte svoje pokusy.',
+            ),
+        ),
+    );
+}
+
+function aprop_get_testy_overview_data() {
+    $page_id  = get_the_ID() ?: 14618;
+    $defaults = aprop_get_testy_overview_defaults();
+
+    $field = function ( $name, $fallback = '' ) use ( $page_id ) {
+        $value = get_field( $name, $page_id );
+        return ( $value !== null && $value !== false && $value !== '' ) ? $value : $fallback;
+    };
+
+    $cards = array();
+    foreach ( $defaults['cards'] as $index => $default_card ) {
+        $n = $index + 1;
+        $cards[] = array(
+            'variant'     => $default_card['variant'],
+            'mockup'      => $default_card['mockup'],
+            'number'      => $field( 'testy_overview_card_' . $n . '_number', $default_card['number'] ),
+            'title'       => $field( 'testy_overview_card_' . $n . '_title', $default_card['title'] ),
+            'description' => $field( 'testy_overview_card_' . $n . '_description', $default_card['description'] ),
+        );
+    }
+
+    return array(
+        'eyebrow'     => $field( 'testy_overview_eyebrow', $defaults['eyebrow'] ),
+        'title'       => $field( 'testy_overview_title', $defaults['title'] ),
+        'description' => $field( 'testy_overview_description', $defaults['description'] ),
+        'disclaimer'  => $field( 'testy_overview_disclaimer', $defaults['disclaimer'] ),
+        'cards'       => $cards,
+    );
+}
+
+function aprop_render_testy_overview_mockup( $type ) {
+    if ( 'quiz' === $type ) {
+        ?>
+        <div class="testy-overview__preview-panel">
+          <span class="testy-overview__quiz-meta">Otázka 1 z 30</span>
+          <p class="testy-overview__quiz-question">Ako teplota ovplyvňuje výkonnosť dronu?</p>
+          <div class="testy-overview__quiz-options">
+            <div class="testy-overview__quiz-option"><strong>A</strong><span>Nezmení sa</span></div>
+            <div class="testy-overview__quiz-option"><strong>B</strong><span>Zvýši sa</span></div>
+            <div class="testy-overview__quiz-option is-active"><strong>C</strong><span>Zníži sa</span></div>
+          </div>
+        </div>
+        <?php
+        return;
+    }
+
+    if ( 'result' === $type ) {
+        ?>
+        <div class="testy-overview__preview-panel">
+          <span class="testy-overview__result-label">Váš najlepší výsledok</span>
+          <strong class="testy-overview__result-value">93 %</strong>
+          <div class="testy-overview__result-rows">
+            <div class="testy-overview__result-row">
+              <span class="testy-overview__result-row-label">Posledný pokus</span>
+              <span class="testy-overview__result-row-pct">93 %</span>
+              <div class="testy-overview__result-bar"><span class="testy-overview__result-bar-fill" style="width:93%"></span></div>
+            </div>
+            <div class="testy-overview__result-row">
+              <span class="testy-overview__result-row-label">Predchádzajúci pokus</span>
+              <span class="testy-overview__result-row-pct">83 %</span>
+              <div class="testy-overview__result-bar"><span class="testy-overview__result-bar-fill" style="width:83%"></span></div>
+            </div>
+          </div>
+          <span class="testy-overview__sample">Ukážkové údaje</span>
+        </div>
+        <?php
+        return;
+    }
+
+    ?>
+    <div class="testy-overview__preview-panel">
+      <h4 class="testy-overview__history-title">História testov</h4>
+      <div class="testy-overview__history-list">
+        <div class="testy-overview__history-item">
+          <div class="testy-overview__history-copy">
+            <span class="testy-overview__history-name">A2 · Tréningový test</span>
+            <span class="testy-overview__history-when">Dnes</span>
+          </div>
+          <span class="testy-overview__history-pct is-best">93 %</span>
+        </div>
+        <div class="testy-overview__history-item">
+          <div class="testy-overview__history-copy">
+            <span class="testy-overview__history-name">A2 · Tréningový test</span>
+            <span class="testy-overview__history-when">Včera</span>
+          </div>
+          <span class="testy-overview__history-pct">83 %</span>
+        </div>
+        <div class="testy-overview__history-item">
+          <div class="testy-overview__history-copy">
+            <span class="testy-overview__history-name">A2 · Tréningový test</span>
+            <span class="testy-overview__history-when">Pred 3 dňami</span>
+          </div>
+          <span class="testy-overview__history-pct">70 %</span>
+        </div>
+      </div>
+      <span class="testy-overview__sample">Ukážkové údaje</span>
+    </div>
+    <?php
+}
+
+function render_testy_overview_shortcode() {
+    $section = aprop_get_testy_overview_data();
+
+    ob_start();
+    ?>
+    <section class="testy-overview">
+      <div class="testy-overview__header">
+        <?php if ( $section['eyebrow'] ) : ?>
+          <span class="label testy-overview__eyebrow"><?php echo esc_html( $section['eyebrow'] ); ?></span>
+        <?php endif; ?>
+        <?php if ( $section['title'] ) : ?>
+          <h2 class="testy-overview__title"><?php echo nl2br( esc_html( $section['title'] ) ); ?></h2>
+        <?php endif; ?>
+        <?php if ( $section['description'] ) : ?>
+          <p class="testy-overview__description"><?php echo esc_html( $section['description'] ); ?></p>
+        <?php endif; ?>
+      </div>
+
+      <div class="testy-overview__grid">
+        <?php foreach ( $section['cards'] as $card ) : ?>
+          <article class="testy-overview__card testy-overview__card--<?php echo esc_attr( $card['variant'] ); ?>">
+            <div class="testy-overview__preview">
+              <?php aprop_render_testy_overview_mockup( $card['mockup'] ); ?>
+            </div>
+            <div class="testy-overview__body">
+              <?php if ( $card['number'] ) : ?>
+                <span class="testy-overview__number"><?php echo esc_html( $card['number'] ); ?></span>
+              <?php endif; ?>
+              <?php if ( $card['title'] ) : ?>
+                <h3 class="testy-overview__card-title"><?php echo esc_html( $card['title'] ); ?></h3>
+              <?php endif; ?>
+              <?php if ( $card['description'] ) : ?>
+                <p class="testy-overview__card-text"><?php echo esc_html( $card['description'] ); ?></p>
+              <?php endif; ?>
+            </div>
+          </article>
+        <?php endforeach; ?>
+      </div>
+
+      <?php if ( $section['disclaimer'] ) : ?>
+        <p class="testy-overview__disclaimer"><?php echo esc_html( $section['disclaimer'] ); ?></p>
+      <?php endif; ?>
+    </section>
+    <?php
+
+    return ob_get_clean();
+}
+
+add_shortcode( 'testy_overview', 'render_testy_overview_shortcode' );
+
+
+function aprop_get_testy_faq_defaults() {
+    return array(
+        'eyebrow'     => 'DOBRÉ VEDIEŤ',
+        'title'       => "Ešte predtým,\nnež začnete.",
+        'description' => 'Odpovede na otázky o prístupe a online príprave.',
+        'items'       => array(
+            array(
+                'question' => 'Čo si môžem vyskúšať zadarmo?',
+                'answer'   => 'Po registrácii získate prístup k príprave A1/A3. Môžete si vyskúšať testovanie a pozrieť svoje výsledky.',
+            ),
+            array(
+                'question' => 'Kedy získam platený prístup?',
+                'answer'   => 'Prihlasovacie údaje k testom posielame do 24 hodín od prijatia úhrady.',
+            ),
+            array(
+                'question' => 'Ako dlho platí zakúpený prístup?',
+                'answer'   => 'Prístup k plateným testom A2 alebo STS je na 1 mesiac. Pri zakúpení balíka testov A2 + STS, máte prístup až na 3 mesiace.',
+            ),
+            array(
+                'question' => 'Získam absolvovaním testov osvedčenie?',
+                'answer'   => 'Nie. Naše testy slúžia iba na prípravu na skúšky na Dopravnom úrade, ktorý Vám po ich úspešnom zvládnutí vydá platné osvedčenie pilota na diaľku.',
+            ),
+            array(
+                'question' => '',
+                'answer'   => '',
+            ),
+            array(
+                'question' => 'Potrebujem aj výklad. Čo si mám vybrať?',
+                'answer'   => 'V prípade potreby výkladu odporúčame zakúpiť jeden z našich kurzov, kde okrem prístupu k samotným testom, dostanete kvalitné online školenie od nášho certifikovaného inštruktora a zároveň aj prístup k študijným materiálom a aktuálnej mape zemepisných oblastí UAS.',
+            ),
+        ),
+    );
+}
+
+function aprop_get_testy_faq_data() {
+    $page_id  = get_the_ID() ?: 14618;
+    $defaults = aprop_get_testy_faq_defaults();
+
+    $field = function ( $name, $fallback = '' ) use ( $page_id ) {
+        $value = get_field( $name, $page_id );
+        return ( $value !== null && $value !== false && $value !== '' ) ? $value : $fallback;
+    };
+
+    $items = array();
+    foreach ( $defaults['items'] as $index => $default_item ) {
+        $n = $index + 1;
+        $question = $field( 'testy_faq_q_' . $n, $default_item['question'] );
+        $answer   = $field( 'testy_faq_a_' . $n, $default_item['answer'] );
+        if ( ! $question || ! $answer ) {
+            continue;
+        }
+        $items[] = array(
+            'question' => $question,
+            'answer'   => $answer,
+        );
+    }
+
+    return array(
+        'eyebrow'     => $field( 'testy_faq_eyebrow', $defaults['eyebrow'] ),
+        'title'       => $field( 'testy_faq_title', $defaults['title'] ),
+        'description' => $field( 'testy_faq_description', $defaults['description'] ),
+        'items'       => $items,
+    );
+}
+
+function render_testy_faq_shortcode() {
+    $section = aprop_get_testy_faq_data();
+    if ( empty( $section['items'] ) ) {
+        return '';
+    }
+
+    ob_start();
+    ?>
+    <section class="testy-faq">
+      <div class="testy-faq__inner">
+        <div class="testy-faq__intro">
+          <?php if ( $section['eyebrow'] ) : ?>
+            <span class="testy-faq__eyebrow">
+              <span class="testy-faq__eyebrow-dot" aria-hidden="true"></span>
+              <?php echo esc_html( $section['eyebrow'] ); ?>
+            </span>
+          <?php endif; ?>
+          <?php if ( $section['title'] ) : ?>
+            <h2 class="testy-faq__title"><?php echo nl2br( esc_html( $section['title'] ), false ); ?></h2>
+          <?php endif; ?>
+          <?php if ( $section['description'] ) : ?>
+            <p class="testy-faq__description"><?php echo esc_html( $section['description'] ); ?></p>
+          <?php endif; ?>
+        </div>
+
+        <div class="testy-faq__list">
+          <?php foreach ( $section['items'] as $index => $item ) : ?>
+            <div class="faq-item<?php echo 0 === $index ? ' open' : ''; ?>">
+              <button class="faq-question" type="button">
+                <span class="faq-question-text"><?php echo esc_html( $item['question'] ); ?></span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </button>
+              <div class="faq-answer"<?php echo 0 === $index ? ' style="display:block"' : ''; ?>>
+                <p><?php echo esc_html( $item['answer'] ); ?></p>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </section>
+    <?php
+
+    return ob_get_clean();
+}
+
+add_shortcode( 'testy_faq', 'render_testy_faq_shortcode' );
+
+
+function aprop_get_testy_packages_defaults() {
+    return array(
+        'eyebrow'             => 'VYBERTE SI PRÍPRAVU',
+        'title'               => "Vaša skúška.\nVáš ďalší krok.",
+        'description'         => 'Začínate? Spoznajte základy s A1/A3. Máte konkrétny cieľ? Vyberte A2 alebo STS. Viac príprav nájdete v balíkoch nižšie.',
+        'bundles_title'       => 'Chcete toho zvládnuť viac?',
+        'bundles_description' => 'Spojte prípravy do jedného prístupu a ušetrite čas aj peniaze.',
+    );
+}
+
+function aprop_get_testy_packages_data() {
+    $page_id  = get_the_ID() ?: 14618;
+    $defaults = aprop_get_testy_packages_defaults();
+
+    $field = function ( $name, $fallback = '' ) use ( $page_id ) {
+        $value = get_field( $name, $page_id );
+        return ( $value !== null && $value !== false && $value !== '' ) ? $value : $fallback;
+    };
+
+    return array(
+        'eyebrow'             => $field( 'testy_packages_eyebrow', $defaults['eyebrow'] ),
+        'title'               => $field( 'testy_packages_title', $defaults['title'] ),
+        'description'         => $field( 'testy_packages_description', $defaults['description'] ),
+        'bundles_title'       => $field( 'testy_packages_bundles_title', $defaults['bundles_title'] ),
+        'bundles_description' => $field( 'testy_packages_bundles_description', $defaults['bundles_description'] ),
+    );
+}
+
+function aprop_format_testy_package_price( $price ) {
+    $price    = (float) $price;
+    $decimals = ( abs( $price - round( $price ) ) < 0.001 ) ? 0 : 2;
+    return number_format_i18n( $price, $decimals ) . ' €';
+}
+
+function aprop_render_testy_package_price( $item ) {
+    if ( $item['is_free'] || $item['price_label'] ) {
+        $label = $item['price_label'] ? $item['price_label'] : 'Zadarmo';
+        echo '<span class="testy-packages__price-value">' . esc_html( $label ) . '</span>';
+    } else {
+        echo '<span class="testy-packages__price-value">' . esc_html( aprop_format_testy_package_price( $item['price'] ) ) . '</span>';
+    }
+    if ( $item['price_note'] ) {
+        echo '<span class="testy-packages__price-note">' . esc_html( $item['price_note'] ) . '</span>';
+    }
+}
+
+function aprop_render_testy_package_button( $item, $extra_class = '' ) {
+    $btn_class = 'green' === $item['button_style'] ? 'btn-green-icon' : 'btn-black-icon';
+    $classes   = trim( $btn_class . ' testy-packages__btn ajax_add_to_cart add_to_cart_button ' . $extra_class );
+    ?>
+    <a
+      href="<?php echo esc_url( $item['add_to_cart_url'] ); ?>"
+      class="<?php echo esc_attr( $classes ); ?>"
+      data-quantity="1"
+      data-product_id="<?php echo esc_attr( $item['id'] ); ?>"
+      data-product_sku="<?php echo esc_attr( $item['sku'] ); ?>"
+      aria-label="<?php echo esc_attr( $item['button_text'] ); ?>"
+      rel="nofollow"
+    ><?php echo esc_html( $item['button_text'] ); ?></a>
+    <?php
+}
+
+function aprop_render_testy_package_card_standard( $item ) {
+    ?>
+    <article class="testy-packages__card testy-packages__card--standard">
+      <?php if ( $item['badge'] ) : ?>
+        <span class="testy-packages__badge testy-packages__badge--<?php echo esc_attr( $item['badge_style'] ); ?>">
+          <?php echo esc_html( $item['badge'] ); ?>
+        </span>
+      <?php endif; ?>
+
+      <h3 class="testy-packages__card-title"><?php echo esc_html( $item['name'] ); ?></h3>
+
+      <?php if ( $item['description'] ) : ?>
+        <p class="testy-packages__card-desc"><?php echo esc_html( $item['description'] ); ?></p>
+      <?php endif; ?>
+
+      <?php if ( ! empty( $item['stats'] ) ) : ?>
+        <div class="testy-packages__stats">
+          <?php foreach ( $item['stats'] as $stat ) : ?>
+            <div class="testy-packages__stat">
+              <strong><?php echo esc_html( $stat['value'] ); ?></strong>
+              <?php if ( ! empty( $stat['label'] ) ) : ?>
+                <span><?php echo esc_html( $stat['label'] ); ?></span>
+              <?php endif; ?>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+
+      <?php if ( ! empty( $item['features'] ) ) : ?>
+        <div class="testy-packages__features">
+          <?php if ( $item['features_title'] ) : ?>
+            <p class="testy-packages__features-title"><?php echo esc_html( $item['features_title'] ); ?></p>
+          <?php endif; ?>
+          <ul>
+            <?php foreach ( $item['features'] as $feature ) : ?>
+              <li><?php echo esc_html( $feature ); ?></li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+      <?php endif; ?>
+
+      <div class="testy-packages__footer">
+        <div class="testy-packages__price">
+          <?php aprop_render_testy_package_price( $item ); ?>
+        </div>
+        <?php aprop_render_testy_package_button( $item ); ?>
+      </div>
+    </article>
+    <?php
+}
+
+function aprop_render_testy_package_card_bundle( $item ) {
+    ?>
+    <article class="testy-packages__card testy-packages__card--bundle">
+      <?php if ( $item['badge'] ) : ?>
+        <span class="testy-packages__badge testy-packages__badge--<?php echo esc_attr( $item['badge_style'] ); ?>">
+          <?php echo esc_html( $item['badge'] ); ?>
+        </span>
+      <?php endif; ?>
+
+      <h3 class="testy-packages__card-title"><?php echo esc_html( $item['name'] ); ?></h3>
+
+      <?php if ( $item['description'] ) : ?>
+        <p class="testy-packages__card-desc"><?php echo esc_html( $item['description'] ); ?></p>
+      <?php endif; ?>
+
+      <?php if ( ! empty( $item['stats'] ) ) : ?>
+        <div class="testy-packages__pills">
+          <?php foreach ( $item['stats'] as $stat ) : ?>
+            <span class="testy-packages__pill">
+              <?php echo esc_html( trim( $stat['value'] . ' ' . ( isset( $stat['label'] ) ? $stat['label'] : '' ) ) ); ?>
+            </span>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+
+      <div class="testy-packages__footer">
+        <div class="testy-packages__price">
+          <?php aprop_render_testy_package_price( $item ); ?>
+        </div>
+        <?php aprop_render_testy_package_button( $item ); ?>
+      </div>
+    </article>
+    <?php
+}
+
+function aprop_render_testy_package_card_complete( $item ) {
+    $theme_uri = get_stylesheet_directory_uri();
+    ?>
+    <article class="testy-packages__card testy-packages__card--complete">
+      <div class="testy-packages__complete-main">
+        <?php if ( $item['badge'] ) : ?>
+          <span class="testy-packages__badge testy-packages__badge--<?php echo esc_attr( $item['badge_style'] ); ?>">
+            <?php echo esc_html( $item['badge'] ); ?>
+          </span>
+        <?php endif; ?>
+
+        <h3 class="testy-packages__card-title"><?php echo esc_html( $item['name'] ); ?></h3>
+
+        <?php if ( $item['description'] ) : ?>
+          <p class="testy-packages__card-desc"><?php echo esc_html( $item['description'] ); ?></p>
+        <?php endif; ?>
+
+        <?php if ( ! empty( $item['includes'] ) ) : ?>
+          <div class="testy-packages__includes">
+            <?php foreach ( $item['includes'] as $include ) : ?>
+              <span class="testy-packages__include"><?php echo esc_html( $include ); ?></span>
+            <?php endforeach; ?>
+          </div>
+        <?php endif; ?>
+
+        <?php if ( ! empty( $item['features'] ) ) : ?>
+          <ul class="testy-packages__features testy-packages__features--light">
+            <?php foreach ( $item['features'] as $feature ) : ?>
+              <li><?php echo esc_html( $feature ); ?></li>
+            <?php endforeach; ?>
+          </ul>
+        <?php endif; ?>
+      </div>
+
+      <div class="testy-packages__complete-cta">
+        <img class="testy-packages__stack-icon" src="<?php echo esc_url( $theme_uri . '/images/testy-stack.svg' ); ?>" alt="" width="40" height="40" aria-hidden="true">
+        <?php if ( ! empty( $item['access_title'] ) || ! empty( $item['access_subtitle'] ) || ! empty( $item['access_label'] ) ) : ?>
+          <p class="testy-packages__access">
+            <?php if ( ! empty( $item['access_title'] ) ) : ?>
+              <strong><?php echo esc_html( $item['access_title'] ); ?></strong>
+              <?php if ( ! empty( $item['access_subtitle'] ) ) : ?>
+                <span><?php echo esc_html( $item['access_subtitle'] ); ?></span>
+              <?php endif; ?>
+            <?php else : ?>
+              <?php echo esc_html( $item['access_label'] ); ?>
+            <?php endif; ?>
+          </p>
+        <?php endif; ?>
+        <div class="testy-packages__price testy-packages__price--large">
+          <span class="testy-packages__price-value"><?php echo esc_html( aprop_format_testy_package_price( $item['price'] ) ); ?></span>
+        </div>
+        <?php if ( $item['price_note'] ) : ?>
+          <span class="testy-packages__price-note testy-packages__price-note--cta"><?php echo esc_html( $item['price_note'] ); ?></span>
+        <?php endif; ?>
+        <?php aprop_render_testy_package_button( $item ); ?>
+      </div>
+    </article>
+    <?php
+}
+
+function render_testy_packages_shortcode() {
+    if ( function_exists( 'aprop_install_testy_products' ) ) {
+        aprop_install_testy_products();
+    }
+
+    $section  = aprop_get_testy_packages_data();
+    $products = function_exists( 'aprop_get_testy_products' ) ? aprop_get_testy_products() : array();
+
+    if ( empty( $products ) ) {
+        return '';
+    }
+
+    $standard = array();
+    $bundle   = null;
+    $complete = null;
+
+    foreach ( $products as $item ) {
+        if ( 'complete' === $item['layout'] ) {
+            $complete = $item;
+        } elseif ( 'bundle' === $item['layout'] ) {
+            $bundle = $item;
+        } else {
+            $standard[] = $item;
+        }
+    }
+
+    ob_start();
+    ?>
+    <section class="testy-packages">
+      <div class="testy-packages__inner">
+        <div class="testy-packages__header">
+          <?php if ( $section['eyebrow'] ) : ?>
+            <span class="testy-packages__eyebrow"><?php echo esc_html( $section['eyebrow'] ); ?></span>
+          <?php endif; ?>
+          <?php if ( $section['title'] ) : ?>
+            <h2 class="testy-packages__title"><?php echo nl2br( esc_html( $section['title'] ), false ); ?></h2>
+          <?php endif; ?>
+          <?php if ( $section['description'] ) : ?>
+            <p class="testy-packages__description"><?php echo esc_html( $section['description'] ); ?></p>
+          <?php endif; ?>
+        </div>
+
+        <?php if ( $standard ) : ?>
+          <div class="testy-packages__grid testy-packages__grid--standard">
+            <?php foreach ( $standard as $item ) : ?>
+              <?php aprop_render_testy_package_card_standard( $item ); ?>
+            <?php endforeach; ?>
+          </div>
+        <?php endif; ?>
+
+        <?php if ( $bundle || $complete ) : ?>
+          <?php if ( $section['bundles_title'] ) : ?>
+            <div class="testy-packages__bundles-intro">
+              <h3 class="testy-packages__bundles-title"><?php echo esc_html( $section['bundles_title'] ); ?></h3>
+            </div>
+          <?php endif; ?>
+
+          <div class="testy-packages__grid testy-packages__grid--bundles">
+            <?php
+            if ( $bundle ) {
+                aprop_render_testy_package_card_bundle( $bundle );
+            }
+            if ( $complete ) {
+                aprop_render_testy_package_card_complete( $complete );
+            }
+            ?>
+          </div>
+        <?php endif; ?>
+      </div>
+    </section>
+    <?php
+
+    return ob_get_clean();
+}
+
+add_shortcode( 'testy_packages', 'render_testy_packages_shortcode' );
+
 
 //about us + pillars
 function render_piliere_slider_shortcode() {
@@ -745,7 +1723,7 @@ function render_all_products_shortcode() {
             array(
                 'taxonomy' => 'product_cat',
                 'field'    => 'slug',
-                'terms'    => array('package', 'polnohospodarske-drony'), // <- kategórie, ktoré nechceme v pôvodnom výpise
+                'terms'    => array('package', 'polnohospodarske-drony', 'testy-pripravy'), // <- kategórie, ktoré nechceme v pôvodnom výpise
                 'operator' => 'NOT IN',
             ),
         ),

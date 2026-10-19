@@ -12,11 +12,13 @@ function aprop_drone_excluded_category_identifiers() {
             'baliceky',
             'uncategorized',
             'nezaradene',
+            'testy-pripravy',
         ),
         'names' => array(
             'balicek',
             'baliceky',
             'nezaradene',
+            'testy-pripravy',
         ),
     );
 }
