@@ -146,7 +146,8 @@
 
   &__card-title {
     margin: 0 0 fluid(10, 14);
-    color: inherit;
+    // Explicit — not inherit (Elementor text widget on /testy/ sets gray).
+    color: #151515;
     font-size: fluid(36, 52);
     line-height: 1;
     letter-spacing: -0.03em;

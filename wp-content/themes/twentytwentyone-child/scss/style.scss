@@ -43,18 +43,25 @@
   max-width: unset !important;
 }
 
-// Shortcodes mimo Elementor (napr. /testy) – theme default content width je ~610px
-.entry-content > .title-banner,
-.entry-content > .testy-process,
-.entry-content > .testy-try,
-.entry-content > .testy-overview,
-.entry-content > .testy-faq,
-.entry-content > .testy-packages {
+// /testy shortcodes — must work inside Elementor widgets too (not only as
+// direct .entry-content > children). Centered breakout relative to viewport/#page.
+.entry-content .title-banner,
+.entry-content .testy-process,
+.entry-content .testy-try,
+.entry-content .testy-overview,
+.entry-content .testy-faq,
+.entry-content .testy-packages {
   max-width: 1890px !important;
-  width: calc(100vw - 30px);
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  box-sizing: border-box;
+}
+
+// Full #page width (try / packages grey band)
+.entry-content .testy-try,
+.entry-content .testy-packages {
+  width: min(1890px, calc(100vw - 30px));
 
   @media (max-width: 767px) {
     width: 100%;
@@ -63,26 +70,19 @@
   }
 }
 
-// Ako Elementor boxed (/balicky .e-con pad 50px): content = #page − 100px
-.entry-content > .testy-process,
-.entry-content > .testy-overview,
-.entry-content > .testy-faq {
-  width: calc(100% - 100px);
-  left: auto;
-  transform: none;
+// #page − 100px (50px inset each side), same as Elementor boxed /balicky
+.entry-content .testy-process,
+.entry-content .testy-overview,
+.entry-content .testy-faq {
+  width: min(1790px, calc(100vw - 130px));
 
   @media (max-width: 767px) {
-    // Elementor mobile pad 24px
     width: calc(100% - 48px);
+    left: auto;
+    transform: none;
+    margin-left: auto;
+    margin-right: auto;
   }
-}
-
-// Ako Elementor full-width boxed (0 side pad) — šírka #page, napr. modern-agro-slider
-.entry-content > .testy-try,
-.entry-content > .testy-packages {
-  width: 100%;
-  left: auto;
-  transform: none;
 }
 
 .site-content .entry-content{

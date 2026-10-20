@@ -5043,7 +5043,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 }
 .testy-packages__card-title {
   margin: 0 0 clamp(10px, 7.3391153513px + 0.3469210755vw, 14px);
-  color: inherit;
+  color: #151515;
   font-size: clamp(36px, 25.356461405px + 1.3876843018vw, 52px);
   line-height: 1;
   letter-spacing: -0.03em;
@@ -13780,51 +13780,47 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   max-width: unset !important;
 }
 
-.entry-content > .title-banner,
-.entry-content > .testy-process,
-.entry-content > .testy-try,
-.entry-content > .testy-overview,
-.entry-content > .testy-faq,
-.entry-content > .testy-packages {
+.entry-content .title-banner,
+.entry-content .testy-process,
+.entry-content .testy-try,
+.entry-content .testy-overview,
+.entry-content .testy-faq,
+.entry-content .testy-packages {
   max-width: 1890px !important;
-  width: calc(100vw - 30px);
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  box-sizing: border-box;
+}
+
+.entry-content .testy-try,
+.entry-content .testy-packages {
+  width: min(1890px, 100vw - 30px);
 }
 @media (max-width: 767px) {
-  .entry-content > .title-banner,
-  .entry-content > .testy-process,
-  .entry-content > .testy-try,
-  .entry-content > .testy-overview,
-  .entry-content > .testy-faq,
-  .entry-content > .testy-packages {
+  .entry-content .testy-try,
+  .entry-content .testy-packages {
     width: 100%;
     left: auto;
     transform: none;
   }
 }
 
-.entry-content > .testy-process,
-.entry-content > .testy-overview,
-.entry-content > .testy-faq {
-  width: calc(100% - 100px);
-  left: auto;
-  transform: none;
+.entry-content .testy-process,
+.entry-content .testy-overview,
+.entry-content .testy-faq {
+  width: min(1790px, 100vw - 130px);
 }
 @media (max-width: 767px) {
-  .entry-content > .testy-process,
-  .entry-content > .testy-overview,
-  .entry-content > .testy-faq {
+  .entry-content .testy-process,
+  .entry-content .testy-overview,
+  .entry-content .testy-faq {
     width: calc(100% - 48px);
+    left: auto;
+    transform: none;
+    margin-left: auto;
+    margin-right: auto;
   }
-}
-
-.entry-content > .testy-try,
-.entry-content > .testy-packages {
-  width: 100%;
-  left: auto;
-  transform: none;
 }
 
 .site-content .entry-content {
