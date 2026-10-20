@@ -3,6 +3,7 @@
   max-width: 1890px;
   margin: fluid(56, 96) auto;
   padding: 0;
+  scroll-margin-top: 100px; // sticky header offset for #testy-packages
 
   &__inner {
     // Ako .testy-try__inner: šedé pozadie = #page, obsah cez 50px pad

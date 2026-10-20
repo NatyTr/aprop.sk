@@ -71,7 +71,7 @@ function aprop_get_testy_acf_field_group() {
                 'label' => 'Primárne tlačidlo - URL',
                 'name' => 'testy_hero_primary_button_url',
                 'type' => 'url',
-                'default_value' => '/testy/',
+                'default_value' => '#testy-packages',
             ),
             array(
                 'key' => 'field_aprop_testy_hero_secondary_button_text',

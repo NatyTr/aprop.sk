@@ -1,708 +1,708 @@
 {
-    "key": "group_aprop_testy_page",
-    "title": "Testy — obsah stránky",
-    "fields": [
-        {
-            "key": "field_aprop_testy_tab_hero",
-            "label": "Hero banner",
-            "type": "tab",
-            "placement": "top"
-        },
-        {
-            "key": "field_aprop_testy_hero_banner_image",
-            "label": "Hlavný obrázok",
-            "name": "testy_hero_banner_image",
-            "type": "image",
-            "return_format": "array",
-            "preview_size": "medium",
-            "library": "all"
-        },
-        {
-            "key": "field_aprop_testy_hero_eyebrow",
-            "label": "Eyebrow",
-            "name": "testy_hero_eyebrow",
-            "type": "text",
-            "default_value": "APROP \/ ONLINE TESTY"
-        },
-        {
-            "key": "field_aprop_testy_hero_title_line_1",
-            "label": "Nadpis - 1. riadok",
-            "name": "testy_hero_title_line_1",
-            "type": "text",
-            "default_value": "Pripravte sa na skúšku pilota dronu."
-        },
-        {
-            "key": "field_aprop_testy_hero_title_line_2",
-            "label": "Nadpis - 2. riadok",
-            "name": "testy_hero_title_line_2",
-            "type": "text"
-        },
-        {
-            "key": "field_aprop_testy_hero_description",
-            "label": "Popis",
-            "name": "testy_hero_description",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "Precvičujte otázky pre A1\/A3, A2 a STS. Sledujte výsledky a pripravujte sa vlastným tempom."
-        },
-        {
-            "key": "field_aprop_testy_hero_primary_button_text",
-            "label": "Primárne tlačidlo - text",
-            "name": "testy_hero_primary_button_text",
-            "type": "text",
-            "default_value": "Vybrať prípravu"
-        },
-        {
-            "key": "field_aprop_testy_hero_primary_button_url",
-            "label": "Primárne tlačidlo - URL",
-            "name": "testy_hero_primary_button_url",
-            "type": "url",
-            "default_value": "\/testy\/"
-        },
-        {
-            "key": "field_aprop_testy_hero_secondary_button_text",
-            "label": "Sekundárne tlačidlo - text",
-            "name": "testy_hero_secondary_button_text",
-            "type": "text",
-            "default_value": "Vyskúšať A1\/A3 zadarmo"
-        },
-        {
-            "key": "field_aprop_testy_hero_secondary_button_url",
-            "label": "Sekundárne tlačidlo - URL",
-            "name": "testy_hero_secondary_button_url",
-            "type": "url",
-            "default_value": "\/produkt\/hobby-kurz-drony\/"
-        },
-        {
-            "key": "field_aprop_testy_hero_stats_label",
-            "label": "Zelený box - horný text",
-            "name": "testy_hero_stats_label",
-            "type": "text",
-            "default_value": "Váš najlepší výsledok"
-        },
-        {
-            "key": "field_aprop_testy_hero_stats_value",
-            "label": "Zelený box - hodnota",
-            "name": "testy_hero_stats_value",
-            "type": "text",
-            "default_value": "93 %"
-        },
-        {
-            "key": "field_aprop_testy_hero_stats_caption",
-            "label": "Zelený box - dolný text",
-            "name": "testy_hero_stats_caption",
-            "type": "text",
-            "default_value": "A2 · Ukážkové údaje"
-        },
-        {
-            "key": "field_aprop_testy_tab_process",
-            "label": "Ako to prebieha",
-            "type": "tab",
-            "placement": "top"
-        },
-        {
-            "key": "field_aprop_testy_process_header_tab",
-            "label": "Hlavička",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_process_eyebrow",
-            "label": "Eyebrow",
-            "name": "testy_process_eyebrow",
-            "type": "text",
-            "default_value": "AKO TO PREBIEHA"
-        },
-        {
-            "key": "field_aprop_testy_process_title",
-            "label": "Nadpis",
-            "name": "testy_process_title",
-            "type": "textarea",
-            "rows": 2,
-            "default_value": "Od prvého kliknutia\nk lepšej príprave."
-        },
-        {
-            "key": "field_aprop_testy_process_intro",
-            "label": "Úvodný text",
-            "name": "testy_process_intro",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "Jasný postup. Vlastné tempo. Všetko, čo potrebujete na online prípravu, na jednom mieste."
-        },
-        {
-            "key": "field_aprop_testy_process_card_1_tab",
-            "label": "Karta 1",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_process_card_1_number",
-            "label": "Číslo",
-            "name": "testy_process_card_1_number",
-            "type": "text",
-            "default_value": "01"
-        },
-        {
-            "key": "field_aprop_testy_process_card_1_icon",
-            "label": "Ikona",
-            "name": "testy_process_card_1_icon",
-            "type": "image",
-            "return_format": "array",
-            "preview_size": "thumbnail",
-            "library": "all",
-            "instructions": "Ak nevyplníš, použije sa predvolená ikona z theme."
-        },
-        {
-            "key": "field_aprop_testy_process_card_1_label",
-            "label": "Label",
-            "name": "testy_process_card_1_label",
-            "type": "text",
-            "default_value": "VÝBER PRÍPRAVY"
-        },
-        {
-            "key": "field_aprop_testy_process_card_1_title",
-            "label": "Nadpis",
-            "name": "testy_process_card_1_title",
-            "type": "text",
-            "default_value": "Nájdite svoj smer."
-        },
-        {
-            "key": "field_aprop_testy_process_card_1_description",
-            "label": "Popis",
-            "name": "testy_process_card_1_description",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "Začínate, rozširujete si vedomosti alebo sa pripravujete na STS? Vyberte si prípravu podľa svojho cieľa."
-        },
-        {
-            "key": "field_aprop_testy_process_card_1_tags",
-            "label": "Tagy (oddelené čiarkou)",
-            "name": "testy_process_card_1_tags",
-            "type": "text",
-            "default_value": "A1\/A3, A2, STS"
-        },
-        {
-            "key": "field_aprop_testy_process_card_2_tab",
-            "label": "Karta 2",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_process_card_2_number",
-            "label": "Číslo",
-            "name": "testy_process_card_2_number",
-            "type": "text",
-            "default_value": "02"
-        },
-        {
-            "key": "field_aprop_testy_process_card_2_icon",
-            "label": "Ikona",
-            "name": "testy_process_card_2_icon",
-            "type": "image",
-            "return_format": "array",
-            "preview_size": "thumbnail",
-            "library": "all",
-            "instructions": "Ak nevyplníš, použije sa predvolená ikona z theme."
-        },
-        {
-            "key": "field_aprop_testy_process_card_2_label",
-            "label": "Label",
-            "name": "testy_process_card_2_label",
-            "type": "text",
-            "default_value": "VÁŠ PRÍSTUP"
-        },
-        {
-            "key": "field_aprop_testy_process_card_2_title",
-            "label": "Nadpis",
-            "name": "testy_process_card_2_title",
-            "type": "text",
-            "default_value": "Všetko vo vašom účte."
-        },
-        {
-            "key": "field_aprop_testy_process_card_2_description",
-            "label": "Popis",
-            "name": "testy_process_card_2_description",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "Zaregistrujte sa a otvorte si vybranú prípravu. A1\/A3 si môžete najprv vyskúšať úplne zadarmo."
-        },
-        {
-            "key": "field_aprop_testy_process_card_2_footer",
-            "label": "Dolný text",
-            "name": "testy_process_card_2_footer",
-            "type": "text",
-            "default_value": "Vaša príprava na jednom mieste"
-        },
-        {
-            "key": "field_aprop_testy_process_card_3_tab",
-            "label": "Karta 3",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_process_card_3_number",
-            "label": "Číslo",
-            "name": "testy_process_card_3_number",
-            "type": "text",
-            "default_value": "03"
-        },
-        {
-            "key": "field_aprop_testy_process_card_3_icon",
-            "label": "Ikona",
-            "name": "testy_process_card_3_icon",
-            "type": "image",
-            "return_format": "array",
-            "preview_size": "thumbnail",
-            "library": "all",
-            "instructions": "Ak nevyplníš, použije sa predvolená ikona z theme."
-        },
-        {
-            "key": "field_aprop_testy_process_card_3_label",
-            "label": "Label",
-            "name": "testy_process_card_3_label",
-            "type": "text",
-            "default_value": "TRÉNING A VÝSLEDKY"
-        },
-        {
-            "key": "field_aprop_testy_process_card_3_title",
-            "label": "Nadpis",
-            "name": "testy_process_card_3_title",
-            "type": "text",
-            "default_value": "Každý pokus vás posúva."
-        },
-        {
-            "key": "field_aprop_testy_process_card_3_description",
-            "label": "Popis",
-            "name": "testy_process_card_3_description",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "Precvičujte otázky vlastným tempom. Pozrite si výsledok a sledujte, ako sa vám darí v ďalších pokusoch."
-        },
-        {
-            "key": "field_aprop_testy_process_card_3_footer",
-            "label": "Dolný text",
-            "name": "testy_process_card_3_footer",
-            "type": "text",
-            "default_value": "Vlastné tempo"
-        },
-        {
-            "key": "field_aprop_testy_tab_try",
-            "label": "Vyskúšať zadarmo",
-            "type": "tab",
-            "placement": "top"
-        },
-        {
-            "key": "field_aprop_testy_try_eyebrow",
-            "label": "Eyebrow",
-            "name": "testy_try_eyebrow",
-            "type": "text",
-            "default_value": "A1\/A3 ZADARMO"
-        },
-        {
-            "key": "field_aprop_testy_try_title",
-            "label": "Nadpis",
-            "name": "testy_try_title",
-            "type": "textarea",
-            "rows": 2,
-            "default_value": "Najprv si prípravu\nvyskúšajte."
-        },
-        {
-            "key": "field_aprop_testy_try_description",
-            "label": "Popis",
-            "name": "testy_try_description",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "Zaregistrujte sa a začnite s A1\/A3 zadarmo. Precvičte si otázky a pozrite si svoje výsledky."
-        },
-        {
-            "key": "field_aprop_testy_try_button_text",
-            "label": "Tlačidlo - text",
-            "name": "testy_try_button_text",
-            "type": "text",
-            "default_value": "Vyskúšať A1\/A3 zadarmo"
-        },
-        {
-            "key": "field_aprop_testy_try_button_url",
-            "label": "Tlačidlo - URL",
-            "name": "testy_try_button_url",
-            "type": "url",
-            "default_value": "\/moj-ucet\/"
-        },
-        {
-            "key": "field_aprop_testy_try_note",
-            "label": "Poznámka pod tlačidlom",
-            "name": "testy_try_note",
-            "type": "text",
-            "default_value": "Príprava A1\/A3 · Po registrácii"
-        },
-        {
-            "key": "field_aprop_testy_try_image",
-            "label": "Obrázok",
-            "name": "testy_try_image",
-            "type": "image",
-            "return_format": "array",
-            "preview_size": "medium",
-            "library": "all",
-            "instructions": "Ak nevyplníš, použije sa predvolený obrázok z theme."
-        },
-        {
-            "key": "field_aprop_testy_try_image_badge",
-            "label": "Badge na obrázku (mobile)",
-            "name": "testy_try_image_badge",
-            "type": "text",
-            "default_value": "OD TEÓRIE K PRAXI"
-        },
-        {
-            "key": "field_aprop_testy_tab_overview",
-            "label": "Vaša online príprava",
-            "type": "tab",
-            "placement": "top"
-        },
-        {
-            "key": "field_aprop_testy_overview_header_tab",
-            "label": "Hlavička",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_overview_eyebrow",
-            "label": "Eyebrow",
-            "name": "testy_overview_eyebrow",
-            "type": "text",
-            "default_value": "VAŠA ONLINE PRÍPRAVA"
-        },
-        {
-            "key": "field_aprop_testy_overview_title",
-            "label": "Nadpis",
-            "name": "testy_overview_title",
-            "type": "textarea",
-            "rows": 2,
-            "default_value": "Každý pokus.\nLepší prehľad."
-        },
-        {
-            "key": "field_aprop_testy_overview_description",
-            "label": "Popis",
-            "name": "testy_overview_description",
-            "type": "textarea",
-            "rows": 2,
-            "default_value": "Otázky, výsledky aj história prípravy. Všetko na jednom mieste."
-        },
-        {
-            "key": "field_aprop_testy_overview_disclaimer",
-            "label": "Disclaimer",
-            "name": "testy_overview_disclaimer",
-            "type": "text",
-            "default_value": "Náhľady rozhrania a výsledky sú ilustračné."
-        },
-        {
-            "key": "field_aprop_testy_overview_card_1_tab",
-            "label": "Karta 1",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_overview_card_1_number",
-            "label": "Číslo",
-            "name": "testy_overview_card_1_number",
-            "type": "text",
-            "default_value": "01"
-        },
-        {
-            "key": "field_aprop_testy_overview_card_1_title",
-            "label": "Nadpis",
-            "name": "testy_overview_card_1_title",
-            "type": "text",
-            "default_value": "Precvičujte otázky"
-        },
-        {
-            "key": "field_aprop_testy_overview_card_1_description",
-            "label": "Popis",
-            "name": "testy_overview_card_1_description",
-            "type": "textarea",
-            "rows": 2,
-            "default_value": "Prehľadné testovanie vás prevedie prípravou krok za krokom."
-        },
-        {
-            "key": "field_aprop_testy_overview_card_2_tab",
-            "label": "Karta 2",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_overview_card_2_number",
-            "label": "Číslo",
-            "name": "testy_overview_card_2_number",
-            "type": "text",
-            "default_value": "02"
-        },
-        {
-            "key": "field_aprop_testy_overview_card_2_title",
-            "label": "Nadpis",
-            "name": "testy_overview_card_2_title",
-            "type": "text",
-            "default_value": "Pozrite si výsledok"
-        },
-        {
-            "key": "field_aprop_testy_overview_card_2_description",
-            "label": "Popis",
-            "name": "testy_overview_card_2_description",
-            "type": "textarea",
-            "rows": 2,
-            "default_value": "Po dokončení testu uvidíte, ako sa vám darilo."
-        },
-        {
-            "key": "field_aprop_testy_overview_card_3_tab",
-            "label": "Karta 3",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_overview_card_3_number",
-            "label": "Číslo",
-            "name": "testy_overview_card_3_number",
-            "type": "text",
-            "default_value": "03"
-        },
-        {
-            "key": "field_aprop_testy_overview_card_3_title",
-            "label": "Nadpis",
-            "name": "testy_overview_card_3_title",
-            "type": "text",
-            "default_value": "Sledujte svoj pokrok"
-        },
-        {
-            "key": "field_aprop_testy_overview_card_3_description",
-            "label": "Popis",
-            "name": "testy_overview_card_3_description",
-            "type": "textarea",
-            "rows": 2,
-            "default_value": "Vráťte sa k výsledkom a porovnajte svoje pokusy."
-        },
-        {
-            "key": "field_aprop_testy_tab_faq",
-            "label": "FAQ",
-            "type": "tab",
-            "placement": "top"
-        },
-        {
-            "key": "field_aprop_testy_faq_header_tab",
-            "label": "Hlavička",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_faq_eyebrow",
-            "label": "Eyebrow",
-            "name": "testy_faq_eyebrow",
-            "type": "text",
-            "default_value": "DOBRÉ VEDIEŤ"
-        },
-        {
-            "key": "field_aprop_testy_faq_title",
-            "label": "Nadpis",
-            "name": "testy_faq_title",
-            "type": "text",
-            "default_value": "Ešte predtým,\nnež začnete."
-        },
-        {
-            "key": "field_aprop_testy_faq_description",
-            "label": "Popis",
-            "name": "testy_faq_description",
-            "type": "textarea",
-            "rows": 2,
-            "default_value": "Odpovede na otázky o prístupe a online príprave."
-        },
-        {
-            "key": "field_aprop_testy_faq_item_1_tab",
-            "label": "Otázka 1",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_faq_q_1",
-            "label": "Otázka",
-            "name": "testy_faq_q_1",
-            "type": "text",
-            "default_value": "Čo si môžem vyskúšať zadarmo?"
-        },
-        {
-            "key": "field_aprop_testy_faq_a_1",
-            "label": "Odpoveď",
-            "name": "testy_faq_a_1",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "Po registrácii získate prístup k príprave A1\/A3. Môžete si vyskúšať testovanie a pozrieť svoje výsledky."
-        },
-        {
-            "key": "field_aprop_testy_faq_item_2_tab",
-            "label": "Otázka 2",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_faq_q_2",
-            "label": "Otázka",
-            "name": "testy_faq_q_2",
-            "type": "text",
-            "default_value": "Kedy získam platený prístup?"
-        },
-        {
-            "key": "field_aprop_testy_faq_a_2",
-            "label": "Odpoveď",
-            "name": "testy_faq_a_2",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "Prihlasovacie údaje k testom posielame do 24 hodín od prijatia úhrady."
-        },
-        {
-            "key": "field_aprop_testy_faq_item_3_tab",
-            "label": "Otázka 3",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_faq_q_3",
-            "label": "Otázka",
-            "name": "testy_faq_q_3",
-            "type": "text",
-            "default_value": "Ako dlho platí zakúpený prístup?"
-        },
-        {
-            "key": "field_aprop_testy_faq_a_3",
-            "label": "Odpoveď",
-            "name": "testy_faq_a_3",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "Prístup k plateným testom A2 alebo STS je na 1 mesiac. Pri zakúpení balíka testov A2 + STS, máte prístup až na 3 mesiace."
-        },
-        {
-            "key": "field_aprop_testy_faq_item_4_tab",
-            "label": "Otázka 4",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_faq_q_4",
-            "label": "Otázka",
-            "name": "testy_faq_q_4",
-            "type": "text",
-            "default_value": "Získam absolvovaním testov osvedčenie?"
-        },
-        {
-            "key": "field_aprop_testy_faq_a_4",
-            "label": "Odpoveď",
-            "name": "testy_faq_a_4",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "Nie. Naše testy slúžia iba na prípravu na skúšky na Dopravnom úrade, ktorý Vám po ich úspešnom zvládnutí vydá platné osvedčenie pilota na diaľku."
-        },
-        {
-            "key": "field_aprop_testy_faq_item_5_tab",
-            "label": "Otázka 5",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_faq_q_5",
-            "label": "Otázka",
-            "name": "testy_faq_q_5",
-            "type": "text",
-            "default_value": ""
-        },
-        {
-            "key": "field_aprop_testy_faq_a_5",
-            "label": "Odpoveď",
-            "name": "testy_faq_a_5",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": ""
-        },
-        {
-            "key": "field_aprop_testy_faq_item_6_tab",
-            "label": "Otázka 6",
-            "type": "tab",
-            "placement": "left"
-        },
-        {
-            "key": "field_aprop_testy_faq_q_6",
-            "label": "Otázka",
-            "name": "testy_faq_q_6",
-            "type": "text",
-            "default_value": "Potrebujem aj výklad. Čo si mám vybrať?"
-        },
-        {
-            "key": "field_aprop_testy_faq_a_6",
-            "label": "Odpoveď",
-            "name": "testy_faq_a_6",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "V prípade potreby výkladu odporúčame zakúpiť jeden z našich kurzov, kde okrem prístupu k samotným testom, dostanete kvalitné online školenie od nášho certifikovaného inštruktora a zároveň aj prístup k študijným materiálom a aktuálnej mape zemepisných oblastí UAS."
-        },
-        {
-            "key": "field_aprop_testy_tab_packages",
-            "label": "Balíčky príprav",
-            "type": "tab",
-            "placement": "top"
-        },
-        {
-            "key": "field_aprop_testy_packages_eyebrow",
-            "label": "Eyebrow",
-            "name": "testy_packages_eyebrow",
-            "type": "text",
-            "default_value": "VYBERTE SI PRÍPRAVU"
-        },
-        {
-            "key": "field_aprop_testy_packages_title",
-            "label": "Nadpis",
-            "name": "testy_packages_title",
-            "type": "textarea",
-            "rows": 2,
-            "default_value": "Vaša skúška.\nVáš ďalší krok."
-        },
-        {
-            "key": "field_aprop_testy_packages_description",
-            "label": "Popis",
-            "name": "testy_packages_description",
-            "type": "textarea",
-            "rows": 3,
-            "default_value": "Začínate? Spoznajte základy s A1\/A3. Máte konkrétny cieľ? Vyberte A2 alebo STS. Viac príprav nájdete v balíkoch nižšie."
-        },
-        {
-            "key": "field_aprop_testy_packages_bundles_title",
-            "label": "Nadpis balíkov",
-            "name": "testy_packages_bundles_title",
-            "type": "text",
-            "default_value": "Chcete toho zvládnuť viac?"
-        },
-        {
-            "key": "field_aprop_testy_packages_bundles_description",
-            "label": "Popis balíkov",
-            "name": "testy_packages_bundles_description",
-            "type": "textarea",
-            "rows": 2,
-            "default_value": "Spojte prípravy do jedného prístupu a ušetrite čas aj peniaze."
-        }
-    ],
-    "location": [
-        [
-            {
-                "param": "page",
-                "operator": "==",
-                "value": "14618"
-            }
-        ]
-    ],
-    "menu_order": 0,
-    "position": "normal",
-    "style": "default",
-    "label_placement": "top",
-    "instruction_placement": "label",
-    "hide_on_screen": [],
-    "active": true,
-    "description": "",
-    "show_in_rest": false,
-    "display_title": "",
-    "allow_ai_access": false,
-    "ai_description": "",
-    "modified": 1792431265
+  "key": "group_aprop_testy_page",
+  "title": "Testy — obsah stránky",
+  "fields": [
+    {
+      "key": "field_aprop_testy_tab_hero",
+      "label": "Hero banner",
+      "type": "tab",
+      "placement": "top"
+    },
+    {
+      "key": "field_aprop_testy_hero_banner_image",
+      "label": "Hlavný obrázok",
+      "name": "testy_hero_banner_image",
+      "type": "image",
+      "return_format": "array",
+      "preview_size": "medium",
+      "library": "all"
+    },
+    {
+      "key": "field_aprop_testy_hero_eyebrow",
+      "label": "Eyebrow",
+      "name": "testy_hero_eyebrow",
+      "type": "text",
+      "default_value": "APROP / ONLINE TESTY"
+    },
+    {
+      "key": "field_aprop_testy_hero_title_line_1",
+      "label": "Nadpis - 1. riadok",
+      "name": "testy_hero_title_line_1",
+      "type": "text",
+      "default_value": "Pripravte sa na skúšku pilota dronu."
+    },
+    {
+      "key": "field_aprop_testy_hero_title_line_2",
+      "label": "Nadpis - 2. riadok",
+      "name": "testy_hero_title_line_2",
+      "type": "text"
+    },
+    {
+      "key": "field_aprop_testy_hero_description",
+      "label": "Popis",
+      "name": "testy_hero_description",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "Precvičujte otázky pre A1/A3, A2 a STS. Sledujte výsledky a pripravujte sa vlastným tempom."
+    },
+    {
+      "key": "field_aprop_testy_hero_primary_button_text",
+      "label": "Primárne tlačidlo - text",
+      "name": "testy_hero_primary_button_text",
+      "type": "text",
+      "default_value": "Vybrať prípravu"
+    },
+    {
+      "key": "field_aprop_testy_hero_primary_button_url",
+      "label": "Primárne tlačidlo - URL",
+      "name": "testy_hero_primary_button_url",
+      "type": "url",
+      "default_value": "#testy-packages"
+    },
+    {
+      "key": "field_aprop_testy_hero_secondary_button_text",
+      "label": "Sekundárne tlačidlo - text",
+      "name": "testy_hero_secondary_button_text",
+      "type": "text",
+      "default_value": "Vyskúšať A1/A3 zadarmo"
+    },
+    {
+      "key": "field_aprop_testy_hero_secondary_button_url",
+      "label": "Sekundárne tlačidlo - URL",
+      "name": "testy_hero_secondary_button_url",
+      "type": "url",
+      "default_value": "/produkt/hobby-kurz-drony/"
+    },
+    {
+      "key": "field_aprop_testy_hero_stats_label",
+      "label": "Zelený box - horný text",
+      "name": "testy_hero_stats_label",
+      "type": "text",
+      "default_value": "Váš najlepší výsledok"
+    },
+    {
+      "key": "field_aprop_testy_hero_stats_value",
+      "label": "Zelený box - hodnota",
+      "name": "testy_hero_stats_value",
+      "type": "text",
+      "default_value": "93 %"
+    },
+    {
+      "key": "field_aprop_testy_hero_stats_caption",
+      "label": "Zelený box - dolný text",
+      "name": "testy_hero_stats_caption",
+      "type": "text",
+      "default_value": "A2 · Ukážkové údaje"
+    },
+    {
+      "key": "field_aprop_testy_tab_process",
+      "label": "Ako to prebieha",
+      "type": "tab",
+      "placement": "top"
+    },
+    {
+      "key": "field_aprop_testy_process_header_tab",
+      "label": "Hlavička",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_process_eyebrow",
+      "label": "Eyebrow",
+      "name": "testy_process_eyebrow",
+      "type": "text",
+      "default_value": "AKO TO PREBIEHA"
+    },
+    {
+      "key": "field_aprop_testy_process_title",
+      "label": "Nadpis",
+      "name": "testy_process_title",
+      "type": "textarea",
+      "rows": 2,
+      "default_value": "Od prvého kliknutia\nk lepšej príprave."
+    },
+    {
+      "key": "field_aprop_testy_process_intro",
+      "label": "Úvodný text",
+      "name": "testy_process_intro",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "Jasný postup. Vlastné tempo. Všetko, čo potrebujete na online prípravu, na jednom mieste."
+    },
+    {
+      "key": "field_aprop_testy_process_card_1_tab",
+      "label": "Karta 1",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_process_card_1_number",
+      "label": "Číslo",
+      "name": "testy_process_card_1_number",
+      "type": "text",
+      "default_value": "01"
+    },
+    {
+      "key": "field_aprop_testy_process_card_1_icon",
+      "label": "Ikona",
+      "name": "testy_process_card_1_icon",
+      "type": "image",
+      "return_format": "array",
+      "preview_size": "thumbnail",
+      "library": "all",
+      "instructions": "Ak nevyplníš, použije sa predvolená ikona z theme."
+    },
+    {
+      "key": "field_aprop_testy_process_card_1_label",
+      "label": "Label",
+      "name": "testy_process_card_1_label",
+      "type": "text",
+      "default_value": "VÝBER PRÍPRAVY"
+    },
+    {
+      "key": "field_aprop_testy_process_card_1_title",
+      "label": "Nadpis",
+      "name": "testy_process_card_1_title",
+      "type": "text",
+      "default_value": "Nájdite svoj smer."
+    },
+    {
+      "key": "field_aprop_testy_process_card_1_description",
+      "label": "Popis",
+      "name": "testy_process_card_1_description",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "Začínate, rozširujete si vedomosti alebo sa pripravujete na STS? Vyberte si prípravu podľa svojho cieľa."
+    },
+    {
+      "key": "field_aprop_testy_process_card_1_tags",
+      "label": "Tagy (oddelené čiarkou)",
+      "name": "testy_process_card_1_tags",
+      "type": "text",
+      "default_value": "A1/A3, A2, STS"
+    },
+    {
+      "key": "field_aprop_testy_process_card_2_tab",
+      "label": "Karta 2",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_process_card_2_number",
+      "label": "Číslo",
+      "name": "testy_process_card_2_number",
+      "type": "text",
+      "default_value": "02"
+    },
+    {
+      "key": "field_aprop_testy_process_card_2_icon",
+      "label": "Ikona",
+      "name": "testy_process_card_2_icon",
+      "type": "image",
+      "return_format": "array",
+      "preview_size": "thumbnail",
+      "library": "all",
+      "instructions": "Ak nevyplníš, použije sa predvolená ikona z theme."
+    },
+    {
+      "key": "field_aprop_testy_process_card_2_label",
+      "label": "Label",
+      "name": "testy_process_card_2_label",
+      "type": "text",
+      "default_value": "VÁŠ PRÍSTUP"
+    },
+    {
+      "key": "field_aprop_testy_process_card_2_title",
+      "label": "Nadpis",
+      "name": "testy_process_card_2_title",
+      "type": "text",
+      "default_value": "Všetko vo vašom účte."
+    },
+    {
+      "key": "field_aprop_testy_process_card_2_description",
+      "label": "Popis",
+      "name": "testy_process_card_2_description",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "Zaregistrujte sa a otvorte si vybranú prípravu. A1/A3 si môžete najprv vyskúšať úplne zadarmo."
+    },
+    {
+      "key": "field_aprop_testy_process_card_2_footer",
+      "label": "Dolný text",
+      "name": "testy_process_card_2_footer",
+      "type": "text",
+      "default_value": "Vaša príprava na jednom mieste"
+    },
+    {
+      "key": "field_aprop_testy_process_card_3_tab",
+      "label": "Karta 3",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_process_card_3_number",
+      "label": "Číslo",
+      "name": "testy_process_card_3_number",
+      "type": "text",
+      "default_value": "03"
+    },
+    {
+      "key": "field_aprop_testy_process_card_3_icon",
+      "label": "Ikona",
+      "name": "testy_process_card_3_icon",
+      "type": "image",
+      "return_format": "array",
+      "preview_size": "thumbnail",
+      "library": "all",
+      "instructions": "Ak nevyplníš, použije sa predvolená ikona z theme."
+    },
+    {
+      "key": "field_aprop_testy_process_card_3_label",
+      "label": "Label",
+      "name": "testy_process_card_3_label",
+      "type": "text",
+      "default_value": "TRÉNING A VÝSLEDKY"
+    },
+    {
+      "key": "field_aprop_testy_process_card_3_title",
+      "label": "Nadpis",
+      "name": "testy_process_card_3_title",
+      "type": "text",
+      "default_value": "Každý pokus vás posúva."
+    },
+    {
+      "key": "field_aprop_testy_process_card_3_description",
+      "label": "Popis",
+      "name": "testy_process_card_3_description",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "Precvičujte otázky vlastným tempom. Pozrite si výsledok a sledujte, ako sa vám darí v ďalších pokusoch."
+    },
+    {
+      "key": "field_aprop_testy_process_card_3_footer",
+      "label": "Dolný text",
+      "name": "testy_process_card_3_footer",
+      "type": "text",
+      "default_value": "Vlastné tempo"
+    },
+    {
+      "key": "field_aprop_testy_tab_try",
+      "label": "Vyskúšať zadarmo",
+      "type": "tab",
+      "placement": "top"
+    },
+    {
+      "key": "field_aprop_testy_try_eyebrow",
+      "label": "Eyebrow",
+      "name": "testy_try_eyebrow",
+      "type": "text",
+      "default_value": "A1/A3 ZADARMO"
+    },
+    {
+      "key": "field_aprop_testy_try_title",
+      "label": "Nadpis",
+      "name": "testy_try_title",
+      "type": "textarea",
+      "rows": 2,
+      "default_value": "Najprv si prípravu\nvyskúšajte."
+    },
+    {
+      "key": "field_aprop_testy_try_description",
+      "label": "Popis",
+      "name": "testy_try_description",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "Zaregistrujte sa a začnite s A1/A3 zadarmo. Precvičte si otázky a pozrite si svoje výsledky."
+    },
+    {
+      "key": "field_aprop_testy_try_button_text",
+      "label": "Tlačidlo - text",
+      "name": "testy_try_button_text",
+      "type": "text",
+      "default_value": "Vyskúšať A1/A3 zadarmo"
+    },
+    {
+      "key": "field_aprop_testy_try_button_url",
+      "label": "Tlačidlo - URL",
+      "name": "testy_try_button_url",
+      "type": "url",
+      "default_value": "/moj-ucet/"
+    },
+    {
+      "key": "field_aprop_testy_try_note",
+      "label": "Poznámka pod tlačidlom",
+      "name": "testy_try_note",
+      "type": "text",
+      "default_value": "Príprava A1/A3 · Po registrácii"
+    },
+    {
+      "key": "field_aprop_testy_try_image",
+      "label": "Obrázok",
+      "name": "testy_try_image",
+      "type": "image",
+      "return_format": "array",
+      "preview_size": "medium",
+      "library": "all",
+      "instructions": "Ak nevyplníš, použije sa predvolený obrázok z theme."
+    },
+    {
+      "key": "field_aprop_testy_try_image_badge",
+      "label": "Badge na obrázku (mobile)",
+      "name": "testy_try_image_badge",
+      "type": "text",
+      "default_value": "OD TEÓRIE K PRAXI"
+    },
+    {
+      "key": "field_aprop_testy_tab_overview",
+      "label": "Vaša online príprava",
+      "type": "tab",
+      "placement": "top"
+    },
+    {
+      "key": "field_aprop_testy_overview_header_tab",
+      "label": "Hlavička",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_overview_eyebrow",
+      "label": "Eyebrow",
+      "name": "testy_overview_eyebrow",
+      "type": "text",
+      "default_value": "VAŠA ONLINE PRÍPRAVA"
+    },
+    {
+      "key": "field_aprop_testy_overview_title",
+      "label": "Nadpis",
+      "name": "testy_overview_title",
+      "type": "textarea",
+      "rows": 2,
+      "default_value": "Každý pokus.\nLepší prehľad."
+    },
+    {
+      "key": "field_aprop_testy_overview_description",
+      "label": "Popis",
+      "name": "testy_overview_description",
+      "type": "textarea",
+      "rows": 2,
+      "default_value": "Otázky, výsledky aj história prípravy. Všetko na jednom mieste."
+    },
+    {
+      "key": "field_aprop_testy_overview_disclaimer",
+      "label": "Disclaimer",
+      "name": "testy_overview_disclaimer",
+      "type": "text",
+      "default_value": "Náhľady rozhrania a výsledky sú ilustračné."
+    },
+    {
+      "key": "field_aprop_testy_overview_card_1_tab",
+      "label": "Karta 1",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_overview_card_1_number",
+      "label": "Číslo",
+      "name": "testy_overview_card_1_number",
+      "type": "text",
+      "default_value": "01"
+    },
+    {
+      "key": "field_aprop_testy_overview_card_1_title",
+      "label": "Nadpis",
+      "name": "testy_overview_card_1_title",
+      "type": "text",
+      "default_value": "Precvičujte otázky"
+    },
+    {
+      "key": "field_aprop_testy_overview_card_1_description",
+      "label": "Popis",
+      "name": "testy_overview_card_1_description",
+      "type": "textarea",
+      "rows": 2,
+      "default_value": "Prehľadné testovanie vás prevedie prípravou krok za krokom."
+    },
+    {
+      "key": "field_aprop_testy_overview_card_2_tab",
+      "label": "Karta 2",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_overview_card_2_number",
+      "label": "Číslo",
+      "name": "testy_overview_card_2_number",
+      "type": "text",
+      "default_value": "02"
+    },
+    {
+      "key": "field_aprop_testy_overview_card_2_title",
+      "label": "Nadpis",
+      "name": "testy_overview_card_2_title",
+      "type": "text",
+      "default_value": "Pozrite si výsledok"
+    },
+    {
+      "key": "field_aprop_testy_overview_card_2_description",
+      "label": "Popis",
+      "name": "testy_overview_card_2_description",
+      "type": "textarea",
+      "rows": 2,
+      "default_value": "Po dokončení testu uvidíte, ako sa vám darilo."
+    },
+    {
+      "key": "field_aprop_testy_overview_card_3_tab",
+      "label": "Karta 3",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_overview_card_3_number",
+      "label": "Číslo",
+      "name": "testy_overview_card_3_number",
+      "type": "text",
+      "default_value": "03"
+    },
+    {
+      "key": "field_aprop_testy_overview_card_3_title",
+      "label": "Nadpis",
+      "name": "testy_overview_card_3_title",
+      "type": "text",
+      "default_value": "Sledujte svoj pokrok"
+    },
+    {
+      "key": "field_aprop_testy_overview_card_3_description",
+      "label": "Popis",
+      "name": "testy_overview_card_3_description",
+      "type": "textarea",
+      "rows": 2,
+      "default_value": "Vráťte sa k výsledkom a porovnajte svoje pokusy."
+    },
+    {
+      "key": "field_aprop_testy_tab_faq",
+      "label": "FAQ",
+      "type": "tab",
+      "placement": "top"
+    },
+    {
+      "key": "field_aprop_testy_faq_header_tab",
+      "label": "Hlavička",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_faq_eyebrow",
+      "label": "Eyebrow",
+      "name": "testy_faq_eyebrow",
+      "type": "text",
+      "default_value": "DOBRÉ VEDIEŤ"
+    },
+    {
+      "key": "field_aprop_testy_faq_title",
+      "label": "Nadpis",
+      "name": "testy_faq_title",
+      "type": "text",
+      "default_value": "Ešte predtým,\nnež začnete."
+    },
+    {
+      "key": "field_aprop_testy_faq_description",
+      "label": "Popis",
+      "name": "testy_faq_description",
+      "type": "textarea",
+      "rows": 2,
+      "default_value": "Odpovede na otázky o prístupe a online príprave."
+    },
+    {
+      "key": "field_aprop_testy_faq_item_1_tab",
+      "label": "Otázka 1",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_faq_q_1",
+      "label": "Otázka",
+      "name": "testy_faq_q_1",
+      "type": "text",
+      "default_value": "Čo si môžem vyskúšať zadarmo?"
+    },
+    {
+      "key": "field_aprop_testy_faq_a_1",
+      "label": "Odpoveď",
+      "name": "testy_faq_a_1",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "Po registrácii získate prístup k príprave A1/A3. Môžete si vyskúšať testovanie a pozrieť svoje výsledky."
+    },
+    {
+      "key": "field_aprop_testy_faq_item_2_tab",
+      "label": "Otázka 2",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_faq_q_2",
+      "label": "Otázka",
+      "name": "testy_faq_q_2",
+      "type": "text",
+      "default_value": "Kedy získam platený prístup?"
+    },
+    {
+      "key": "field_aprop_testy_faq_a_2",
+      "label": "Odpoveď",
+      "name": "testy_faq_a_2",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "Prihlasovacie údaje k testom posielame do 24 hodín od prijatia úhrady."
+    },
+    {
+      "key": "field_aprop_testy_faq_item_3_tab",
+      "label": "Otázka 3",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_faq_q_3",
+      "label": "Otázka",
+      "name": "testy_faq_q_3",
+      "type": "text",
+      "default_value": "Ako dlho platí zakúpený prístup?"
+    },
+    {
+      "key": "field_aprop_testy_faq_a_3",
+      "label": "Odpoveď",
+      "name": "testy_faq_a_3",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "Prístup k plateným testom A2 alebo STS je na 1 mesiac. Pri zakúpení balíka testov A2 + STS, máte prístup až na 3 mesiace."
+    },
+    {
+      "key": "field_aprop_testy_faq_item_4_tab",
+      "label": "Otázka 4",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_faq_q_4",
+      "label": "Otázka",
+      "name": "testy_faq_q_4",
+      "type": "text",
+      "default_value": "Získam absolvovaním testov osvedčenie?"
+    },
+    {
+      "key": "field_aprop_testy_faq_a_4",
+      "label": "Odpoveď",
+      "name": "testy_faq_a_4",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "Nie. Naše testy slúžia iba na prípravu na skúšky na Dopravnom úrade, ktorý Vám po ich úspešnom zvládnutí vydá platné osvedčenie pilota na diaľku."
+    },
+    {
+      "key": "field_aprop_testy_faq_item_5_tab",
+      "label": "Otázka 5",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_faq_q_5",
+      "label": "Otázka",
+      "name": "testy_faq_q_5",
+      "type": "text",
+      "default_value": ""
+    },
+    {
+      "key": "field_aprop_testy_faq_a_5",
+      "label": "Odpoveď",
+      "name": "testy_faq_a_5",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": ""
+    },
+    {
+      "key": "field_aprop_testy_faq_item_6_tab",
+      "label": "Otázka 6",
+      "type": "tab",
+      "placement": "left"
+    },
+    {
+      "key": "field_aprop_testy_faq_q_6",
+      "label": "Otázka",
+      "name": "testy_faq_q_6",
+      "type": "text",
+      "default_value": "Potrebujem aj výklad. Čo si mám vybrať?"
+    },
+    {
+      "key": "field_aprop_testy_faq_a_6",
+      "label": "Odpoveď",
+      "name": "testy_faq_a_6",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "V prípade potreby výkladu odporúčame zakúpiť jeden z našich kurzov, kde okrem prístupu k samotným testom, dostanete kvalitné online školenie od nášho certifikovaného inštruktora a zároveň aj prístup k študijným materiálom a aktuálnej mape zemepisných oblastí UAS."
+    },
+    {
+      "key": "field_aprop_testy_tab_packages",
+      "label": "Balíčky príprav",
+      "type": "tab",
+      "placement": "top"
+    },
+    {
+      "key": "field_aprop_testy_packages_eyebrow",
+      "label": "Eyebrow",
+      "name": "testy_packages_eyebrow",
+      "type": "text",
+      "default_value": "VYBERTE SI PRÍPRAVU"
+    },
+    {
+      "key": "field_aprop_testy_packages_title",
+      "label": "Nadpis",
+      "name": "testy_packages_title",
+      "type": "textarea",
+      "rows": 2,
+      "default_value": "Vaša skúška.\nVáš ďalší krok."
+    },
+    {
+      "key": "field_aprop_testy_packages_description",
+      "label": "Popis",
+      "name": "testy_packages_description",
+      "type": "textarea",
+      "rows": 3,
+      "default_value": "Začínate? Spoznajte základy s A1/A3. Máte konkrétny cieľ? Vyberte A2 alebo STS. Viac príprav nájdete v balíkoch nižšie."
+    },
+    {
+      "key": "field_aprop_testy_packages_bundles_title",
+      "label": "Nadpis balíkov",
+      "name": "testy_packages_bundles_title",
+      "type": "text",
+      "default_value": "Chcete toho zvládnuť viac?"
+    },
+    {
+      "key": "field_aprop_testy_packages_bundles_description",
+      "label": "Popis balíkov",
+      "name": "testy_packages_bundles_description",
+      "type": "textarea",
+      "rows": 2,
+      "default_value": "Spojte prípravy do jedného prístupu a ušetrite čas aj peniaze."
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "page",
+        "operator": "==",
+        "value": "14618"
+      }
+    ]
+  ],
+  "menu_order": 0,
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "hide_on_screen": [],
+  "active": true,
+  "description": "",
+  "show_in_rest": false,
+  "display_title": "",
+  "allow_ai_access": false,
+  "ai_description": "",
+  "modified": 1792431265
 }

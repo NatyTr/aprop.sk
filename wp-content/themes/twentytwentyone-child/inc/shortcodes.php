@@ -612,7 +612,7 @@ function aprop_get_testy_hero_defaults() {
         'title_line_2'           => '',
         'description'            => 'Precvičujte otázky pre A1/A3, A2 a STS. Sledujte výsledky a pripravujte sa vlastným tempom.',
         'primary_button_text'    => 'Vybrať prípravu',
-        'primary_button_url'     => '/testy/',
+        'primary_button_url'     => '#testy-packages',
         'secondary_button_text'  => 'Vyskúšať A1/A3 zadarmo',
         'secondary_button_url'   => '/produkt/hobby-kurz-drony/',
         'stats_label'            => 'Váš najlepší výsledok',
@@ -638,6 +638,12 @@ function aprop_get_testy_hero_data() {
         return ( $field !== null && $field !== false && $field !== '' ) ? $field : $defaults[ $key ];
     };
 
+    $primary_url = $value( 'primary_button_url' );
+    // Old default / ACF value pointed at /testy/ itself — scroll to packages instead.
+    if ( aprop_testy_hero_url_is_packages_self_link( $primary_url ) ) {
+        $primary_url = '#testy-packages';
+    }
+
     return array(
         'banner_image'           => $banner_image,
         'eyebrow'                => $value( 'eyebrow' ),
@@ -645,13 +651,47 @@ function aprop_get_testy_hero_data() {
         'title_line_2'           => $value( 'title_line_2' ),
         'description'            => $value( 'description' ),
         'primary_button_text'    => $value( 'primary_button_text' ),
-        'primary_button_url'     => $value( 'primary_button_url' ),
+        'primary_button_url'     => $primary_url,
         'secondary_button_text'  => $value( 'secondary_button_text' ),
         'secondary_button_url'   => $value( 'secondary_button_url' ),
         'stats_label'            => $value( 'stats_label' ),
         'stats_value'            => $value( 'stats_value' ),
         'stats_caption'          => $value( 'stats_caption' ),
     );
+}
+
+/**
+ * True when hero primary CTA would just reload /testy/ instead of scrolling to packages.
+ */
+function aprop_testy_hero_url_is_packages_self_link( $url ) {
+    if ( ! is_string( $url ) || '' === $url ) {
+        return true;
+    }
+
+    if ( '#testy-packages' === $url || 'testy-packages' === ltrim( $url, '#' ) ) {
+        return false;
+    }
+
+    $path = wp_parse_url( $url, PHP_URL_PATH );
+    $path = is_string( $path ) ? untrailingslashit( $path ) : '';
+    $fragment = wp_parse_url( $url, PHP_URL_FRAGMENT );
+
+    if ( is_string( $fragment ) && '' !== $fragment && 'testy-packages' !== $fragment ) {
+        return false;
+    }
+
+    return '' === $path
+        || '/testy' === $path
+        || (bool) preg_match( '#/testy$#', $path );
+}
+
+/** esc_url() drops bare hash links — keep #anchors intact. */
+function aprop_esc_href( $url ) {
+    if ( is_string( $url ) && isset( $url[0] ) && '#' === $url[0] ) {
+        return esc_attr( $url );
+    }
+
+    return esc_url( $url );
 }
 
 function render_testy_hero_banner_shortcode() {
@@ -699,13 +739,13 @@ function render_testy_hero_banner_shortcode() {
           <?php if ( ( $data['primary_button_text'] && $data['primary_button_url'] ) || ( $data['secondary_button_text'] && $data['secondary_button_url'] ) ) : ?>
             <div class="title-banner-secondary__actions">
               <?php if ( $data['primary_button_text'] && $data['primary_button_url'] ) : ?>
-                <a class="btn-green-icon" href="<?php echo esc_url( $data['primary_button_url'] ); ?>">
+                <a class="btn-green-icon" href="<?php echo aprop_esc_href( $data['primary_button_url'] ); ?>">
                   <?php echo esc_html( $data['primary_button_text'] ); ?>
                 </a>
               <?php endif; ?>
 
               <?php if ( $data['secondary_button_text'] && $data['secondary_button_url'] ) : ?>
-                <a class="btn-white-border-icon" href="<?php echo esc_url( $data['secondary_button_url'] ); ?>">
+                <a class="btn-white-border-icon" href="<?php echo aprop_esc_href( $data['secondary_button_url'] ); ?>">
                   <?php echo esc_html( $data['secondary_button_text'] ); ?>
                 </a>
               <?php endif; ?>
@@ -724,8 +764,7 @@ function render_testy_hero_banner_shortcode() {
             <?php endif; ?>
             <?php if ( $data['stats_value'] ) : ?>
               <strong class="title-banner-secondary__stats-value"><?php echo esc_html( $data['stats_value'] ); ?></strong>
-            <?php endif; ?>
-            <?php if ( $data['stats_caption'] ) : ?>
+            <?php endif; ?>            <?php if ( $data['stats_caption'] ) : ?>
               <span class="title-banner-secondary__stats-caption"><?php echo esc_html( $data['stats_caption'] ); ?></span>
             <?php endif; ?>
           </div>
@@ -1534,7 +1573,7 @@ function render_testy_packages_shortcode() {
 
     ob_start();
     ?>
-    <section class="testy-packages">
+    <section class="testy-packages" id="testy-packages">
       <div class="testy-packages__inner">
         <div class="testy-packages__header">
           <?php if ( $section['eyebrow'] ) : ?>
