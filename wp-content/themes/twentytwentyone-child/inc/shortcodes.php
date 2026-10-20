@@ -1385,7 +1385,23 @@ function aprop_render_testy_package_price( $item ) {
 
 function aprop_render_testy_package_button( $item, $extra_class = '' ) {
     $btn_class = 'green' === $item['button_style'] ? 'btn-green-icon' : 'btn-black-icon';
-    $classes   = trim( $btn_class . ' testy-packages__btn ajax_add_to_cart add_to_cart_button ' . $extra_class );
+    $is_free   = ! empty( $item['is_free'] ) || ! empty( $item['button_url'] );
+
+    // Free A1/A3 (and any package with button_url) → custom link, no Woo add-to-cart.
+    if ( $is_free ) {
+        $href    = ! empty( $item['button_url'] ) ? $item['button_url'] : 'https://testy.aprop.sk';
+        $classes = trim( $btn_class . ' testy-packages__btn ' . $extra_class );
+        ?>
+        <a
+          href="<?php echo aprop_esc_href( $href ); ?>"
+          class="<?php echo esc_attr( $classes ); ?>"
+          aria-label="<?php echo esc_attr( $item['button_text'] ); ?>"
+        ><?php echo esc_html( $item['button_text'] ); ?></a>
+        <?php
+        return;
+    }
+
+    $classes = trim( $btn_class . ' testy-packages__btn ajax_add_to_cart add_to_cart_button ' . $extra_class );
     ?>
     <a
       href="<?php echo esc_url( $item['add_to_cart_url'] ); ?>"

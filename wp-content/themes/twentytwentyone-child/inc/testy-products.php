@@ -41,6 +41,8 @@ function aprop_get_testy_product_definitions() {
             'price_note'        => 'Po registrácii',
             'button_text'       => 'Začať s A1/A3 zadarmo',
             'button_style'      => 'green',
+            // Free CTA — no add-to-cart.
+            'button_url'        => 'https://testy.aprop.sk',
         ),
         'testy-a2' => array(
             'name'              => 'A2',
@@ -168,6 +170,7 @@ function aprop_sync_testy_product_card_meta( $product_id, $definition ) {
         '_testy_price_note'     => $definition['price_note'],
         '_testy_button_text'    => $definition['button_text'],
         '_testy_button_style'    => $definition['button_style'],
+        '_testy_button_url'      => isset( $definition['button_url'] ) ? $definition['button_url'] : '',
         '_testy_access_label'    => isset( $definition['access_label'] ) ? $definition['access_label'] : '',
         '_testy_access_title'    => isset( $definition['access_title'] ) ? $definition['access_title'] : '',
         '_testy_access_subtitle' => isset( $definition['access_subtitle'] ) ? $definition['access_subtitle'] : '',
@@ -277,7 +280,11 @@ function aprop_get_testy_products() {
             'name'           => $product->get_name(),
             'price'          => $product->get_price(),
             'price_html'     => $product->get_price_html(),
-            'add_to_cart_url'=> add_query_arg( 'add-to-cart', $product_id, home_url( '/testy/' ) ),
+            'add_to_cart_url'=> add_query_arg(
+                'add-to-cart',
+                $product_id,
+                function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/kosik/' )
+            ),
             'layout'         => get_post_meta( $product_id, '_testy_layout', true ) ?: $definition['layout'],
             'badge'          => get_post_meta( $product_id, '_testy_badge', true ) ?: $definition['badge'],
             'badge_style'    => get_post_meta( $product_id, '_testy_badge_style', true ) ?: $definition['badge_style'],
@@ -289,6 +296,7 @@ function aprop_get_testy_products() {
             'price_note'     => get_post_meta( $product_id, '_testy_price_note', true ) ?: $definition['price_note'],
             'button_text'    => get_post_meta( $product_id, '_testy_button_text', true ) ?: $definition['button_text'],
             'button_style'   => get_post_meta( $product_id, '_testy_button_style', true ) ?: $definition['button_style'],
+            'button_url'     => get_post_meta( $product_id, '_testy_button_url', true ) ?: ( isset( $definition['button_url'] ) ? $definition['button_url'] : '' ),
             'access_label'    => get_post_meta( $product_id, '_testy_access_label', true ) ?: ( isset( $definition['access_label'] ) ? $definition['access_label'] : '' ),
             'access_title'    => get_post_meta( $product_id, '_testy_access_title', true ) ?: ( isset( $definition['access_title'] ) ? $definition['access_title'] : '' ),
             'access_subtitle' => get_post_meta( $product_id, '_testy_access_subtitle', true ) ?: ( isset( $definition['access_subtitle'] ) ? $definition['access_subtitle'] : '' ),
