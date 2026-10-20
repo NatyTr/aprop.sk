@@ -1401,14 +1401,14 @@ function aprop_render_testy_package_button( $item, $extra_class = '' ) {
         return;
     }
 
-    $classes = trim( $btn_class . ' testy-packages__btn ajax_add_to_cart add_to_cart_button ' . $extra_class );
+    // No ajax_add_to_cart — AJAX errors redirect to the product page, which
+    // then 301s back to /testy/ and looks like a reload. Full navigation to
+    // /kosik/?add-to-cart=ID adds the product and lands on the cart.
+    $classes = trim( $btn_class . ' testy-packages__btn ' . $extra_class );
     ?>
     <a
       href="<?php echo esc_url( $item['add_to_cart_url'] ); ?>"
       class="<?php echo esc_attr( $classes ); ?>"
-      data-quantity="1"
-      data-product_id="<?php echo esc_attr( $item['id'] ); ?>"
-      data-product_sku="<?php echo esc_attr( $item['sku'] ); ?>"
       aria-label="<?php echo esc_attr( $item['button_text'] ); ?>"
       rel="nofollow"
     ><?php echo esc_html( $item['button_text'] ); ?></a>

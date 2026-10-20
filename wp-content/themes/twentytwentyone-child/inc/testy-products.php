@@ -383,6 +383,20 @@ function aprop_redirect_testy_product_detail() {
 }
 
 /**
+ * If anything still AJAX-adds a testy product and fails (e.g. already in cart),
+ * send the user to the cart instead of the product page → /testy/ loop.
+ */
+add_filter( 'woocommerce_cart_redirect_after_error', 'aprop_testy_cart_redirect_after_error', 10, 2 );
+
+function aprop_testy_cart_redirect_after_error( $url, $product_id ) {
+    if ( ! aprop_is_testy_product( $product_id ) ) {
+        return $url;
+    }
+
+    return function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/kosik/' );
+}
+
+/**
  * Hide from XML sitemaps.
  */
 add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', 'aprop_exclude_testy_products_from_sitemap' );
