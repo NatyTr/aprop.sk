@@ -41,8 +41,6 @@ function aprop_get_testy_product_definitions() {
             'price_note'        => 'Po registrácii',
             'button_text'       => 'Začať s A1/A3 zadarmo',
             'button_style'      => 'green',
-            // Free CTA — no add-to-cart.
-            'button_url'        => 'https://testy.aprop.sk',
         ),
         'testy-a2' => array(
             'name'              => 'A2',
@@ -182,6 +180,80 @@ function aprop_sync_testy_product_card_meta( $product_id, $definition ) {
     }
 }
 
+function aprop_get_testy_product_image_path( $sku ) {
+    $path = get_stylesheet_directory() . '/images/testy-products/' . $sku . '.jpg';
+    return file_exists( $path ) ? $path : '';
+}
+
+/**
+ * Set WooCommerce featured image from theme file images/testy-products/{sku}.jpg.
+ */
+function aprop_ensure_testy_product_image( $product_id, $sku ) {
+    $product_id = (int) $product_id;
+    if ( ! $product_id || ! $sku ) {
+        return;
+    }
+
+    $path = aprop_get_testy_product_image_path( $sku );
+    if ( ! $path ) {
+        return;
+    }
+
+    // Keep any existing featured image (e.g. manually uploaded on production).
+    if ( (int) get_post_thumbnail_id( $product_id ) ) {
+        return;
+    }
+
+    $existing = get_posts(
+        array(
+            'post_type'      => 'attachment',
+            'post_status'    => 'inherit',
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
+            'meta_key'       => '_aprop_testy_sku',
+            'meta_value'     => $sku,
+        )
+    );
+    if ( $existing ) {
+        set_post_thumbnail( $product_id, (int) $existing[0] );
+        return;
+    }
+
+    if ( ! function_exists( 'media_handle_sideload' ) ) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+    }
+
+    $tmp = wp_tempnam( basename( $path ) );
+    if ( ! $tmp || ! copy( $path, $tmp ) ) {
+        return;
+    }
+
+    $file_array = array(
+        'name'     => $sku . '.jpg',
+        'tmp_name' => $tmp,
+    );
+
+    $attach_id = media_handle_sideload( $file_array, $product_id, $sku );
+    if ( is_wp_error( $attach_id ) ) {
+        @unlink( $tmp );
+        return;
+    }
+
+    update_post_meta( $attach_id, '_aprop_testy_sku', $sku );
+    set_post_thumbnail( $product_id, $attach_id );
+}
+
+function aprop_sync_all_testy_product_images() {
+    foreach ( array_keys( aprop_get_testy_product_definitions() ) as $sku ) {
+        $product_id = wc_get_product_id_by_sku( $sku );
+        if ( $product_id ) {
+            aprop_ensure_testy_product_image( $product_id, $sku );
+        }
+    }
+}
+
 function aprop_install_testy_products() {
     if ( ! class_exists( 'WC_Product_Simple' ) ) {
         return;
@@ -205,6 +277,7 @@ function aprop_install_testy_products() {
                 $product->save();
                 aprop_sync_testy_product_card_meta( $existing_id, $definition );
                 wp_set_object_terms( $existing_id, array( $term_id ), 'product_cat', false );
+                aprop_ensure_testy_product_image( $existing_id, $sku );
             }
             continue;
         }
@@ -227,6 +300,7 @@ function aprop_install_testy_products() {
 
         if ( $product_id ) {
             aprop_sync_testy_product_card_meta( $product_id, $definition );
+            aprop_ensure_testy_product_image( $product_id, $sku );
         }
     }
 
@@ -250,6 +324,7 @@ function aprop_maybe_install_testy_products() {
             }
         }
         if ( ! $missing ) {
+            aprop_sync_all_testy_product_images();
             return;
         }
     }
@@ -411,4 +486,50 @@ function aprop_exclude_testy_products_from_sitemap( $ids ) {
         }
     }
     return array_unique( array_map( 'intval', $ids ) );
+}
+
+/**
+ * Whether an order contains at least one testy product.
+ *
+ * @param WC_Order|null $order Order.
+ * @return bool
+ */
+function aprop_order_has_testy_product( $order ) {
+    if ( ! $order || ! is_a( $order, 'WC_Order' ) ) {
+        return false;
+    }
+
+    foreach ( $order->get_items() as $item ) {
+        $product_id = (int) $item->get_product_id();
+        if ( $product_id && aprop_is_testy_product( $product_id ) ) {
+            return true;
+        }
+
+        $product = $item->get_product();
+        if ( $product && strpos( (string) $product->get_sku(), 'testy-' ) === 0 ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Customer email notice for testy orders (login credentials within 24h).
+ */
+add_action( 'woocommerce_email_before_order_table', 'aprop_testy_email_login_notice', 15, 4 );
+
+function aprop_testy_email_login_notice( $order, $sent_to_admin, $plain_text, $email = null ) {
+    if ( $sent_to_admin || ! aprop_order_has_testy_product( $order ) ) {
+        return;
+    }
+
+    $message = 'E-mail s prihlasovacími údajmi obdržíte najneskôr do 24 hodín od prijatia platby.';
+
+    if ( $plain_text ) {
+        echo "\n" . $message . "\n\n";
+        return;
+    }
+
+    echo '<p><strong>' . esc_html( $message ) . '</strong></p>';
 }
