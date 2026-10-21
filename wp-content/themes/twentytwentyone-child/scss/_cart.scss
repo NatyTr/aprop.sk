@@ -86,7 +86,7 @@
         tr.woocommerce-cart-form__cart-item {
           td {
             border: none;
-            vertical-align: top;
+            vertical-align: middle;
             padding-top: 20px;
             padding-bottom: 20px;
 
@@ -143,7 +143,7 @@
               text-align: right;
               padding-left: 12px;
               white-space: nowrap;
-              vertical-align: top;
+              vertical-align: middle;
 
               .amount,
               .woocommerce-Price-amount,
@@ -160,7 +160,7 @@
               text-align: center;
               padding-left: 8px;
               padding-right: 8px;
-              vertical-align: top;
+              vertical-align: middle;
 
               .quantity {
                 display: inline-flex;
@@ -253,7 +253,7 @@
               text-align: right;
               padding-left: 12px;
               white-space: nowrap;
-              vertical-align: top;
+              vertical-align: middle;
 
               .aprop-cart-line-total {
                 display: inline-flex;
@@ -331,7 +331,13 @@
             .coupon {
               display: flex;
               flex-wrap: wrap;
+              align-items: center;
               margin-bottom: 8px;
+
+              label {
+                margin: 0;
+                line-height: 1;
+              }
 
               h3 {
                 width: 100% !important;

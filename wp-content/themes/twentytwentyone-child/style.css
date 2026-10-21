@@ -9454,7 +9454,7 @@ footer .footer-meta .footer_socials li a:hover {
 .woocommerce .woocommerce-cart-form table.shop_table tbody tr.woocommerce-cart-form__cart-item td,
 .woocommerce .woocommerce-cart-form table.woocommerce-cart-form__contents tbody tr.woocommerce-cart-form__cart-item td {
   border: none;
-  vertical-align: top;
+  vertical-align: middle;
   padding-top: 20px;
   padding-bottom: 20px;
 }
@@ -9510,7 +9510,7 @@ footer .footer-meta .footer_socials li a:hover {
   text-align: right;
   padding-left: 12px;
   white-space: nowrap;
-  vertical-align: top;
+  vertical-align: middle;
 }
 .woocommerce .woocommerce-cart-form table.shop_table tbody tr.woocommerce-cart-form__cart-item td.product-price .amount,
 .woocommerce .woocommerce-cart-form table.shop_table tbody tr.woocommerce-cart-form__cart-item td.product-price .woocommerce-Price-amount,
@@ -9530,7 +9530,7 @@ footer .footer-meta .footer_socials li a:hover {
   text-align: center;
   padding-left: 8px;
   padding-right: 8px;
-  vertical-align: top;
+  vertical-align: middle;
 }
 .woocommerce .woocommerce-cart-form table.shop_table tbody tr.woocommerce-cart-form__cart-item td.product-quantity .quantity,
 .woocommerce .woocommerce-cart-form table.woocommerce-cart-form__contents tbody tr.woocommerce-cart-form__cart-item td.product-quantity .quantity {
@@ -9623,7 +9623,7 @@ footer .footer-meta .footer_socials li a:hover {
   text-align: right;
   padding-left: 12px;
   white-space: nowrap;
-  vertical-align: top;
+  vertical-align: middle;
 }
 .woocommerce .woocommerce-cart-form table.shop_table tbody tr.woocommerce-cart-form__cart-item td.product-subtotal .aprop-cart-line-total,
 .woocommerce .woocommerce-cart-form table.woocommerce-cart-form__contents tbody tr.woocommerce-cart-form__cart-item td.product-subtotal .aprop-cart-line-total {
@@ -9703,7 +9703,13 @@ footer .footer-meta .footer_socials li a:hover {
 .woocommerce .woocommerce-cart-form table.woocommerce-cart-form__contents tbody tr.aprop-cart__actions-row td.actions .coupon {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   margin-bottom: 8px;
+}
+.woocommerce .woocommerce-cart-form table.shop_table tbody tr.aprop-cart__actions-row td.actions .coupon label,
+.woocommerce .woocommerce-cart-form table.woocommerce-cart-form__contents tbody tr.aprop-cart__actions-row td.actions .coupon label {
+  margin: 0;
+  line-height: 1;
 }
 .woocommerce .woocommerce-cart-form table.shop_table tbody tr.aprop-cart__actions-row td.actions .coupon h3,
 .woocommerce .woocommerce-cart-form table.woocommerce-cart-form__contents tbody tr.aprop-cart__actions-row td.actions .coupon h3 {
