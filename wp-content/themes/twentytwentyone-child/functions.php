@@ -1501,6 +1501,36 @@ function custom_translate_order_texts( $translated_text, $text, $domain ) {
                 return 'Tento kupón nie je možné uplatniť na produkty: %s.';
             case 'Sorry, this coupon is not applicable to the categories: %s.':
                 return 'Tento kupón nie je možné uplatniť na kategórie: %s.';
+
+            // Customer order emails (forced SK — language pack often not applied when sending).
+            case 'Hi %s,':
+                return 'Ahoj %s,';
+            case 'Hi,':
+                return 'Ahoj,';
+            case 'Thank you for your order':
+                return 'Ďakujeme za vašu objednávku';
+            case 'Your {site_title} order has been received!':
+                return 'Vaša objednávka z {site_title} bola prijatá!';
+            case 'Just to let you know &mdash; we\'ve received your order #%s, and it is now being processed:':
+                return 'Informujeme vás, že sme prijali vašu objednávku č. %s a práve ju spracúvame:';
+            case 'Just to let you know &mdash; we’ve received your order, and it is now being processed.':
+                return 'Informujeme vás, že sme prijali vašu objednávku a práve ju spracúvame.';
+            case 'Here’s a reminder of what you’ve ordered:':
+                return 'Pre pripomenutie, čo ste si objednali:';
+            case 'Thanks for your order. It’s on-hold until we confirm that payment has been received.':
+                return 'Ďakujeme za objednávku. Je pozastavená, kým nepotvrdíme prijatie platby.';
+            case 'We’ve received your order and it’s currently on hold until we can confirm your payment has been processed.':
+                return 'Objednávku sme prijali a je pozastavená, kým nepotvrdíme spracovanie platby.';
+            case 'Quantity':
+                return 'Množstvo';
+            case 'Price':
+                return 'Cena';
+            case 'Thanks for using {site_url}!':
+                return 'Ďakujeme, že nakupujete na {site_url}!';
+            case 'We look forward to fulfilling your order soon.':
+                return 'Ďakujeme za objednávku. Čoskoro sa vám ozveme s ďalšími informáciami.';
+            case 'Thanks again! If you need any help with your order, please contact us at {store_email}.':
+                return 'Ďakujeme! Ak potrebujete pomôcť s objednávkou, napíšte nám na {store_email}.';
         }
     }
 
@@ -1588,6 +1618,42 @@ function custom_translate_order_texts( $translated_text, $text, $domain ) {
     }
 
     return $translated_text;
+}
+
+/**
+ * Map English Woo email option values (subject/heading/additional content)
+ * saved in admin — those bypass gettext.
+ */
+function aprop_sk_wc_email_option_map() {
+    return array(
+        'Thank you for your order'                                      => 'Ďakujeme za vašu objednávku',
+        'Your {site_title} order has been received!'                    => 'Vaša objednávka z {site_title} bola prijatá!',
+        'Your order from {site_title} is on hold'                       => 'Vaša objednávka z {site_title} je pozastavená',
+        'Your order is on hold'                                         => 'Vaša objednávka je pozastavená',
+        'Thanks for using {site_url}!'                                  => 'Ďakujeme, že nakupujete na {site_url}!',
+        'We look forward to fulfilling your order soon.'                => 'Ďakujeme za objednávku. Čoskoro sa vám ozveme s ďalšími informáciami.',
+        'Thanks again! If you need any help with your order, please contact us at {store_email}.' => 'Ďakujeme! Ak potrebujete pomôcť s objednávkou, napíšte nám na {store_email}.',
+    );
+}
+
+function aprop_sk_wc_email_map_string( $value ) {
+    $map = aprop_sk_wc_email_option_map();
+    return isset( $map[ $value ] ) ? $map[ $value ] : $value;
+}
+
+foreach (
+    array(
+        'customer_processing_order',
+        'customer_on_hold_order',
+        'customer_completed_order',
+        'customer_refunded_order',
+        'customer_invoice',
+        'customer_note',
+    ) as $aprop_email_id
+) {
+    add_filter( 'woocommerce_email_subject_' . $aprop_email_id, 'aprop_sk_wc_email_map_string', 20 );
+    add_filter( 'woocommerce_email_heading_' . $aprop_email_id, 'aprop_sk_wc_email_map_string', 20 );
+    add_filter( 'woocommerce_email_additional_content_' . $aprop_email_id, 'aprop_sk_wc_email_map_string', 20 );
 }
 
 
