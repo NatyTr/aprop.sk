@@ -1,9 +1,21 @@
 .title-banner-secondary {
-  aspect-ratio: 1888 / 950;
+  // Same viewport-fit height as .title-banner; drop its huge padding so content
+  // can sit in the lower area without Safari clipping the bottom.
+  --title-banner-h: min(
+    950px,
+    calc(min(100vw - 30px, 1890px) * 950 / 1888),
+    calc(100dvh - 20px)
+  );
+  aspect-ratio: unset;
+  height: var(--title-banner-h) !important;
+  max-height: calc(100dvh - 20px);
+  min-height: 0;
+  padding: 0 !important;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   overflow: hidden;
+  box-sizing: border-box;
 
   &:before {
     content: "";
@@ -21,7 +33,9 @@
     align-items: flex-end;
     gap: fluid(24, 42);
     height: 100%;
-    padding-top: fluid(230, 360);
+    min-height: 0;
+    box-sizing: border-box;
+    padding: clamp(96px, 14vh, 200px) fluid(24, 40) clamp(20px, 3.5vh, 48px);
   }
 
   .title-banner-secondary__text {
@@ -330,11 +344,28 @@
     }
   }
 
-  @media (max-width: 1399px) {
+  // Shorter laptop screens — tighten vertical rhythm so nothing clips.
+  @media (max-height: 900px) and (min-width: 768px) {
     .title-banner-secondary__content {
-      padding-top: fluid(180, 240);
+      padding-top: clamp(88px, 12vh, 140px);
+      padding-bottom: 20px;
+      gap: 16px;
     }
 
+    .title-banner-secondary__eyebrow {
+      margin-bottom: 14px;
+    }
+
+    .title-banner-secondary__title {
+      margin-bottom: 14px;
+    }
+
+    .title-banner-secondary__description {
+      margin-bottom: 14px;
+    }
+  }
+
+  @media (max-width: 1399px) {
     .title-banner-secondary__card {
       max-width: 400px;
     }
@@ -342,13 +373,16 @@
 
   @media (max-width: 1099px) {
     aspect-ratio: unset;
+    height: auto !important;
+    max-height: none;
     min-height: unset;
 
     .title-banner-secondary__content {
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      padding-top: 180px;
+      height: auto;
+      padding: 180px fluid(24, 40) 24px;
       gap: 24px;
     }
 
@@ -374,6 +408,8 @@
 
   @media (max-width: 767px) {
     aspect-ratio: unset;
+    height: auto !important;
+    max-height: none;
     border-radius: 0;
     width: 100vw;
     max-width: 100vw;

@@ -1519,12 +1519,29 @@ function custom_translate_order_texts( $translated_text, $text, $domain ) {
                 return 'Pre pripomenutie, čo ste si objednali:';
             case 'Thanks for your order. It’s on-hold until we confirm that payment has been received.':
                 return 'Ďakujeme za objednávku. Je pozastavená, kým nepotvrdíme prijatie platby.';
+            // Older WooCommerce combined on-hold copy (still used on some installs).
+            case 'Thanks for your order. It’s on-hold until we confirm that payment has been received. In the meantime, here’s a reminder of what you ordered:':
+                return 'Ďakujeme za objednávku. Je pozastavená, kým nepotvrdíme prijatie platby. Zatiaľ vám pripomíname, čo ste si objednali:';
+            case 'Thanks for your order. It\'s on-hold until we confirm that payment has been received. In the meantime, here\'s a reminder of what you ordered:':
+                return 'Ďakujeme za objednávku. Je pozastavená, kým nepotvrdíme prijatie platby. Zatiaľ vám pripomíname, čo ste si objednali:';
             case 'We’ve received your order and it’s currently on hold until we can confirm your payment has been processed.':
                 return 'Objednávku sme prijali a je pozastavená, kým nepotvrdíme spracovanie platby.';
             case 'Quantity':
                 return 'Množstvo';
             case 'Price':
                 return 'Cena';
+            case 'Bank':
+                return 'Banka';
+            case 'Bank name':
+                return 'Názov banky';
+            case 'Account number':
+                return 'Číslo účtu';
+            case 'Sort code':
+                return 'Kód banky';
+            case '[Order #%s]':
+                return '[Objednávka č. %s]';
+            case 'Order #%s':
+                return 'Objednávka č. %s';
             case 'Thanks for using {site_url}!':
                 return 'Ďakujeme, že nakupujete na {site_url}!';
             case 'We look forward to fulfilling your order soon.':

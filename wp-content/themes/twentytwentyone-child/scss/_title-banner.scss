@@ -1,5 +1,14 @@
 .title-banner {
-  aspect-ratio: 1888 / 1055;
+  // Fit in the viewport (never taller than the screen), keep design ratio as a cap.
+  --title-banner-h: min(
+    1055px,
+    calc(min(100vw - 30px, 1890px) * 1055 / 1888),
+    calc(100dvh - 20px)
+  );
+  aspect-ratio: unset;
+  height: var(--title-banner-h);
+  max-height: calc(100dvh - 20px);
+  min-height: 0;
   padding: fluid(33, 166) fluid(24, 40) fluid(24, 60);
   border-radius: 24px;
   max-width: 1890px;
@@ -7,15 +16,21 @@
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 
   @media(max-width: 1600px) {
-    aspect-ratio: 1888 / 950;
+    --title-banner-h: min(
+      950px,
+      calc(min(100vw - 30px, 1890px) * 950 / 1888),
+      calc(100dvh - 20px)
+    );
   }
 
 
   @media(max-width: 767px) {
-    aspect-ratio: 374 / 684;
+    --title-banner-h: min(684px, calc(100vw * 684 / 374), calc(100dvh - 12px));
+    height: var(--title-banner-h);
     width: 100vw;
     position: relative;
     left: 50%;
