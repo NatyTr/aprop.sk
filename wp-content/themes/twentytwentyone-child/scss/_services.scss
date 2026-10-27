@@ -24,15 +24,15 @@
         display: none;
         img{
           display: block;
-          width: auto !important;
-          height: 100% !important;
+          width: clamp(180px, 18vw, 240px) !important;
+          height: 120px !important;
           border-radius: 16px;
-          aspect-ratio: 345/141;
+          aspect-ratio: auto;
           position: absolute;
-          max-height: 90%;
-          object-fit: cover;
-          top: 5%;
+          top: 50%;
           right: 0px;
+          transform: translateY(-50%);
+          object-fit: contain;
         }
       }
       &:hover{
@@ -43,8 +43,12 @@
           display: block;
         }
       }
-      &:focus{
+      &:focus,
+      &:focus-visible,
+      &:active{
         background: transparent !important;
+        outline: none !important;
+        box-shadow: none !important;
       }
     }
   }
@@ -52,12 +56,6 @@
     .sluzby-wrapper{
       .sluzba-item{
         padding: 30px 0px;
-        .sluzba-image{
-          aspect-ratio: 345/141;
-          img{
-            aspect-ratio: 345/141;
-          }
-        }
       }
     }
   }
@@ -84,6 +82,10 @@
           position: unset;
           img{
             position: unset;
+            width: 100% !important;
+            max-width: 100%;
+            height: auto !important;
+            transform: none;
           }
         }
       }

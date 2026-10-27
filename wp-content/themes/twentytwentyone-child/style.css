@@ -6570,15 +6570,15 @@ footer .footer-meta .footer_socials li a:hover {
 }
 .sluzby-section .sluzby-wrapper .sluzba-item .sluzba-image img {
   display: block;
-  width: auto !important;
-  height: 100% !important;
+  width: clamp(180px, 18vw, 240px) !important;
+  height: 120px !important;
   border-radius: 16px;
-  aspect-ratio: 345/141;
+  aspect-ratio: auto;
   position: absolute;
-  max-height: 90%;
-  object-fit: cover;
-  top: 5%;
+  top: 50%;
   right: 0px;
+  transform: translateY(-50%);
+  object-fit: contain;
 }
 .sluzby-section .sluzby-wrapper .sluzba-item:hover h3 {
   color: #76DA43;
@@ -6586,18 +6586,14 @@ footer .footer-meta .footer_socials li a:hover {
 .sluzby-section .sluzby-wrapper .sluzba-item:hover .sluzba-image {
   display: block;
 }
-.sluzby-section .sluzby-wrapper .sluzba-item:focus {
+.sluzby-section .sluzby-wrapper .sluzba-item:focus, .sluzby-section .sluzby-wrapper .sluzba-item:focus-visible, .sluzby-section .sluzby-wrapper .sluzba-item:active {
   background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 @media (max-width: 1700px) {
   .sluzby-section .sluzby-wrapper .sluzba-item {
     padding: 30px 0px;
-  }
-  .sluzby-section .sluzby-wrapper .sluzba-item .sluzba-image {
-    aspect-ratio: 345/141;
-  }
-  .sluzby-section .sluzby-wrapper .sluzba-item .sluzba-image img {
-    aspect-ratio: 345/141;
   }
 }
 @media (max-width: 1299px) {
@@ -6622,6 +6618,10 @@ footer .footer-meta .footer_socials li a:hover {
   }
   .sluzby-section .sluzby-wrapper .sluzba-item .sluzba-image img {
     position: unset;
+    width: 100% !important;
+    max-width: 100%;
+    height: auto !important;
+    transform: none;
   }
 }
 
