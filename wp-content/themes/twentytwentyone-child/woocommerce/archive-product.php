@@ -15,6 +15,9 @@ if ( is_product_category() && function_exists( 'aprop_drone_category_id' ) ) {
 }
 
 $archive_heading = $is_drone_category_listing ? 'Poľnohospodárske drony' : 'Kurzy a služby';
+$is_course_listing = ! $is_drone_category_listing
+    && function_exists( 'aprop_is_sluzby_shop_page' )
+    && aprop_is_sluzby_shop_page();
 ?>
 
 <div class="shop-page-wrapper" style="display: flex; gap: 30px; align-items: flex-start;">
@@ -23,9 +26,12 @@ $archive_heading = $is_drone_category_listing ? 'Poľnohospodárske drony' : 'Ku
 		<!-- Sidebar s titulkom -->
     <aside class="shop-sidebar" style="width: 25%;">
             <h1 class="show-on-mobile"><?php echo esc_html( $archive_heading ); ?></h1>
-          <div class="sidebar-section" id="sidebar-section">
+          <div class="sidebar-section<?php echo $is_course_listing ? ' sidebar-section--courses' : ''; ?>" id="sidebar-section">
               <div class="sidebar-toggle" id="toggle-filter">Filtruj podľa</div>
               <div class="sidebar-content" id="sidebar-filter">
+                  <?php if ( $is_course_listing && function_exists( 'aprop_render_course_filter' ) ) : ?>
+                      <?php echo aprop_render_course_filter(); ?>
+                  <?php else : ?>
                   <form method="get" class="custom-ordering-form">
                       <?php
                       // Možnosti zoradenia – vlastné zoradenie ako pole (poradie si môžeš upraviť)
@@ -62,6 +68,7 @@ $archive_heading = $is_drone_category_listing ? 'Poľnohospodárske drony' : 'Ku
                       }
                       ?>
                   </form>
+                  <?php endif; ?>
               </div>
           </div>
       </aside>

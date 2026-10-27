@@ -6780,6 +6780,22 @@ footer .footer-meta .footer_socials li a:hover {
   box-shadow: 0 20px 50px rgba(21, 21, 21, 0.05);
   overflow: hidden;
 }
+.shop-page-wrapper .shop-sidebar .sidebar-section.sidebar-section--courses {
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+.shop-page-wrapper .shop-sidebar .sidebar-section.sidebar-section--courses .sidebar-toggle {
+  margin-bottom: 12px;
+  border: 1px solid rgba(21, 21, 21, 0.07);
+  border-bottom: 1px solid rgba(21, 21, 21, 0.07);
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(21, 21, 21, 0.06);
+}
+.shop-page-wrapper .shop-sidebar .sidebar-section.sidebar-section--courses .sidebar-content {
+  padding: 0;
+}
 .shop-page-wrapper .shop-sidebar .sidebar-section .sidebar-toggle {
   letter-spacing: -0.02em;
   font-size: 16px;
@@ -8202,6 +8218,160 @@ footer .footer-meta .footer_socials li a:hover {
   }
 }
 
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary {
+  font-size: 16px;
+  line-height: 1.55;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary h1 {
+  font-size: 42px;
+  line-height: 48px;
+  margin-bottom: 20px;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .woocommerce-product-details__short-description {
+  font-size: 16px;
+  line-height: 1.55;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .woocommerce-product-details__short-description p {
+  font-size: 16px;
+  line-height: 1.55;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .price {
+  margin-bottom: 22px;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .stock {
+  margin-bottom: 16px;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .cart .single_add_to_cart_button {
+  margin-bottom: 28px;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .woocommerce-product-details__short-description {
+  margin-bottom: 24px;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs {
+  max-width: 100%;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description {
+  font-size: 16px;
+  line-height: 1.6;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description ul li:before {
+  top: calc((1.6em - 5px) / 2);
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description p,
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description li {
+  font-size: 16px;
+  line-height: 1.6;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .tabs {
+  display: block;
+  width: auto;
+  max-width: none;
+  margin: 0 0 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .tabs li {
+  display: block;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .tabs li a {
+  display: block;
+  padding: 0;
+  border: 0 !important;
+  border-radius: 0;
+  background: none !important;
+  box-shadow: none !important;
+  color: #151515;
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  pointer-events: none;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs {
+  margin-top: 16px;
+  padding: 24px 28px;
+  border: 1px solid rgba(21, 21, 21, 0.08);
+  border-radius: 24px;
+  background: #f7f8f4;
+  row-gap: 0;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item {
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(21, 21, 21, 0.1);
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item:first-child {
+  padding-top: 0;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item h4 {
+  margin: 0;
+  padding: 4px 36px 4px 0;
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item .faq-answer {
+  margin-top: 14px;
+  margin-bottom: 0;
+  padding-right: 28px;
+  font-size: 16px;
+  line-height: 1.55;
+}
+@media (max-width: 767px) {
+  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs {
+    margin-top: 28px;
+    padding: 20px 18px 18px;
+    border-radius: 20px;
+  }
+  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item {
+    padding: 16px 0;
+  }
+  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item h4 {
+    font-size: 17px;
+    line-height: 23px;
+  }
+  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item .faq-answer {
+    padding-right: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+}
+@media (max-width: 767px) {
+  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary h1 {
+    margin-bottom: 20px;
+  }
+  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .price {
+    margin-bottom: 20px;
+  }
+  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .stock {
+    margin-bottom: 18px;
+  }
+  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .cart .single_add_to_cart_button {
+    margin-bottom: 28px;
+  }
+  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .woocommerce-product-details__short-description {
+    margin-bottom: 28px;
+  }
+  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .tabs li a {
+    font-size: 22px;
+    line-height: 28px;
+  }
+}
+@media (max-width: 767px) {
+  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary h1 {
+    font-size: 24px;
+    line-height: 24px;
+  }
+}
+
 .modern-agro-tabs {
   margin: 0px 0px 72px 0;
   padding: 0 24px;
@@ -8624,6 +8794,10 @@ footer .footer-meta .footer_socials li a:hover {
 .drone-products-filter__form {
   display: flex;
   flex-direction: column;
+}
+
+.drone-products-filter__subform {
+  margin: 0;
 }
 
 .drone-products-filter__group {
@@ -12568,6 +12742,208 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
     grid-template-columns: 1fr;
   }
 }
+.blog {
+  /* Blog category filter removed. */
+  /*
+  .hero-filter {
+    top: 10px;
+    position: relative;
+    width: calc(100vw - 20px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: $primary;
+    padding: 128px 0 186px 0;
+    max-width: none !important;
+    border-radius: 32px;
+    text-align: center;
+    @media(max-width: 991px){
+      padding: 80px 0 100px 0;
+    }
+    @media(max-width: 767px){
+      width: 100%;
+      transform: unset;
+      left: unset;
+      margin: unset;
+      max-width: 100%;
+      border-radius: 18px;
+      padding: 80px 0 80px 0;
+    }
+    &.filter-open{
+      background-image: url('./images/aprop-icon-logo.svg');
+      background-repeat: no-repeat;
+      background-size: 600px auto;
+      background-position: right 140px top 120px;
+
+    }
+    .filter-toggle{
+      button{
+        padding: 0px;
+        background: transparent !important;
+        &:focus{
+          outline: none !important;
+        }
+        span{
+          font-size: 40px;
+          line-height: normal;
+          letter-spacing: -0.8px;
+          color: rgba(255, 255, 255, 0.50);
+          font-weight: 600;
+          &.selected-category{
+            color: white;
+            position: relative;
+            padding-right: 30px;
+            &:before{
+              content: "";
+              background-image: url('./images/down-white-aprop.svg');
+              width: 24px;
+              height: 12px;
+              position: absolute;
+              right: 0px;
+              top: calc(50% - 6px);
+              background-repeat: no-repeat;
+              background-size: contain;
+            }
+          }
+        }
+      }
+      @media(max-width: 1600px){
+        button{
+          span{
+            font-size: 32px;
+          }
+        }
+      }
+      @media(max-width: 991px){
+        button{
+          span{
+            font-size: 24px;
+          }
+        }
+      }
+    }
+    .filter-box{
+      width: fit-content;
+      display: flex;
+      padding-left: 10%;
+      column-gap: 30px;
+      position: relative;
+      padding-top: 50px;
+      .filter-title{
+        font-size: 32px;
+        line-height: normal;
+        letter-spacing: -0.8px;
+        color: rgba(255, 255, 255, 0.50);
+        font-weight: 600;
+      }
+      .filter-options{
+        display: flex;
+        flex-direction: column;
+        row-gap: 25px;
+        a,
+        button{
+          color: white;
+          background: transparent;
+          border: none;
+          text-align: left;
+          padding: 0px;
+          font-size: 32px;
+          font-weight: 600;
+          line-height: 96.37%;
+          letter-spacing: -0.8px;
+          &:hover{
+            text-decoration: underline;
+          }
+          &:focus{
+            outline: none !important;
+            background: transparent !important;
+            text-decoration: none;
+          }
+        }
+      }
+      @media(max-width: 1600px){
+        .filter-title{
+          font-size: 32px;
+        }
+        .filter-options{
+          row-gap: 20px;
+          a,
+          button{
+            font-size: 32px;
+          }
+        }
+      }
+      @media(max-width: 991px){
+        padding-top: 20px;
+        .filter-title{
+          font-size: 24px;
+        }
+        .filter-options{
+          row-gap: 15px;
+          a,
+          button{
+            font-size: 24px;
+          }
+        }
+      }
+      @media(max-width: 991px){
+        column-gap: 15px;
+        padding-top: 20px;
+        .filter-title{
+          font-size: 18px;
+        }
+        .filter-options{
+          row-gap: 10px;
+          a,
+          button{
+            font-size: 18px;
+          }
+        }
+      }
+    }
+    .close-filter{
+      display: none;
+      font-size: 20px;
+      line-height: 20px;
+      padding: 0px;
+      background: transparent !important;
+      font-weight: 600px;
+      position: absolute;
+      top: 126px;
+      right: 20px;
+      border: none;
+      &:focus{
+        outline: none !important;
+        border: none;
+        color: white;
+      }
+      &:hover{
+        border: none;
+        color: white;
+        padding: none;
+      }
+      span{
+        position: relative;
+        font-size: 24px;
+        margin-left: 15px;
+        &:before{
+          content: "";
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background-color: #FFFFFF1A;
+          position: absolute;
+          z-index: -1;
+          top: 0px;
+          left: -6px;
+        }
+      }
+      @media(max-width: 991px){
+        top: 20px;
+      }
+    }
+  }
+  */
+}
 .blog .hero-filter {
   top: 10px;
   position: relative;
@@ -12578,7 +12954,6 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   padding: 128px 0 186px 0;
   max-width: none !important;
   border-radius: 32px;
-  text-align: center;
 }
 @media (max-width: 991px) {
   .blog .hero-filter {
@@ -12594,180 +12969,6 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
     max-width: 100%;
     border-radius: 18px;
     padding: 80px 0 80px 0;
-  }
-}
-.blog .hero-filter.filter-open {
-  background-image: url("./images/aprop-icon-logo.svg");
-  background-repeat: no-repeat;
-  background-size: 600px auto;
-  background-position: right 140px top 120px;
-}
-.blog .hero-filter .filter-toggle button {
-  padding: 0px;
-  background: transparent !important;
-}
-.blog .hero-filter .filter-toggle button:focus {
-  outline: none !important;
-}
-.blog .hero-filter .filter-toggle button span {
-  font-size: 40px;
-  line-height: normal;
-  letter-spacing: -0.8px;
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 600;
-}
-.blog .hero-filter .filter-toggle button span.selected-category {
-  color: white;
-  position: relative;
-  padding-right: 30px;
-}
-.blog .hero-filter .filter-toggle button span.selected-category:before {
-  content: "";
-  background-image: url("./images/down-white-aprop.svg");
-  width: 24px;
-  height: 12px;
-  position: absolute;
-  right: 0px;
-  top: calc(50% - 6px);
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-@media (max-width: 1600px) {
-  .blog .hero-filter .filter-toggle button span {
-    font-size: 32px;
-  }
-}
-@media (max-width: 991px) {
-  .blog .hero-filter .filter-toggle button span {
-    font-size: 24px;
-  }
-}
-.blog .hero-filter .filter-box {
-  width: fit-content;
-  display: flex;
-  padding-left: 10%;
-  column-gap: 30px;
-  position: relative;
-  padding-top: 50px;
-}
-.blog .hero-filter .filter-box .filter-title {
-  font-size: 32px;
-  line-height: normal;
-  letter-spacing: -0.8px;
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 600;
-}
-.blog .hero-filter .filter-box .filter-options {
-  display: flex;
-  flex-direction: column;
-  row-gap: 25px;
-}
-.blog .hero-filter .filter-box .filter-options a,
-.blog .hero-filter .filter-box .filter-options button {
-  color: white;
-  background: transparent;
-  border: none;
-  text-align: left;
-  padding: 0px;
-  font-size: 32px;
-  font-weight: 600;
-  line-height: 96.37%;
-  letter-spacing: -0.8px;
-}
-.blog .hero-filter .filter-box .filter-options a:hover,
-.blog .hero-filter .filter-box .filter-options button:hover {
-  text-decoration: underline;
-}
-.blog .hero-filter .filter-box .filter-options a:focus,
-.blog .hero-filter .filter-box .filter-options button:focus {
-  outline: none !important;
-  background: transparent !important;
-  text-decoration: none;
-}
-@media (max-width: 1600px) {
-  .blog .hero-filter .filter-box .filter-title {
-    font-size: 32px;
-  }
-  .blog .hero-filter .filter-box .filter-options {
-    row-gap: 20px;
-  }
-  .blog .hero-filter .filter-box .filter-options a,
-  .blog .hero-filter .filter-box .filter-options button {
-    font-size: 32px;
-  }
-}
-@media (max-width: 991px) {
-  .blog .hero-filter .filter-box {
-    padding-top: 20px;
-  }
-  .blog .hero-filter .filter-box .filter-title {
-    font-size: 24px;
-  }
-  .blog .hero-filter .filter-box .filter-options {
-    row-gap: 15px;
-  }
-  .blog .hero-filter .filter-box .filter-options a,
-  .blog .hero-filter .filter-box .filter-options button {
-    font-size: 24px;
-  }
-}
-@media (max-width: 991px) {
-  .blog .hero-filter .filter-box {
-    column-gap: 15px;
-    padding-top: 20px;
-  }
-  .blog .hero-filter .filter-box .filter-title {
-    font-size: 18px;
-  }
-  .blog .hero-filter .filter-box .filter-options {
-    row-gap: 10px;
-  }
-  .blog .hero-filter .filter-box .filter-options a,
-  .blog .hero-filter .filter-box .filter-options button {
-    font-size: 18px;
-  }
-}
-.blog .hero-filter .close-filter {
-  display: none;
-  font-size: 20px;
-  line-height: 20px;
-  padding: 0px;
-  background: transparent !important;
-  font-weight: 600px;
-  position: absolute;
-  top: 126px;
-  right: 20px;
-  border: none;
-}
-.blog .hero-filter .close-filter:focus {
-  outline: none !important;
-  border: none;
-  color: white;
-}
-.blog .hero-filter .close-filter:hover {
-  border: none;
-  color: white;
-  padding: none;
-}
-.blog .hero-filter .close-filter span {
-  position: relative;
-  font-size: 24px;
-  margin-left: 15px;
-}
-.blog .hero-filter .close-filter span:before {
-  content: "";
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.1019607843);
-  position: absolute;
-  z-index: -1;
-  top: 0px;
-  left: -6px;
-}
-@media (max-width: 991px) {
-  .blog .hero-filter .close-filter {
-    top: 20px;
   }
 }
 .blog .blog-posts {
@@ -12787,12 +12988,12 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
 }
 .blog .blog-posts #post-results .post-grid {
   display: flex;
-  column-gap: 40px;
-  row-gap: 40px;
+  column-gap: 24px;
+  row-gap: 24px;
   flex-wrap: wrap;
 }
 .blog .blog-posts #post-results .post-grid .post-card {
-  width: calc(50% - 20px);
+  width: calc((100% - 48px) / 3);
 }
 .blog .blog-posts #post-results .post-grid .post-card a {
   display: block;
@@ -12832,7 +13033,7 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   margin: auto 0px;
 }
 .blog .blog-posts #post-results .post-grid .post-card .post-title a {
-  font-size: 48px;
+  font-size: 36px;
   font-style: normal;
   font-weight: 600;
   line-height: 102.208%; /* 49.06px */
@@ -12869,7 +13070,7 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
     margin-bottom: 15px;
   }
   .blog .blog-posts #post-results .post-grid .post-card .post-title a {
-    font-size: 34px;
+    font-size: 28px;
     margin-bottom: 15px;
   }
   .blog .blog-posts #post-results .post-grid .post-card .post-excerpt {
@@ -12897,56 +13098,16 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
     font-size: 14px;
   }
   .blog .blog-posts #post-results .post-grid .post-card .post-title a {
-    font-size: 26px;
+    font-size: 24px;
   }
 }
 @media (max-width: 575px) {
   .blog .blog-posts #post-results .post-grid .post-card {
     width: 100%;
   }
-}
-
-.blog-filter {
-  position: relative;
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.filter-toggle button {
-  background: transparent;
-  border: none;
-  font-weight: bold;
-  font-size: 1.25rem;
-  cursor: pointer;
-  color: #fff;
-}
-
-.filter-box {
-  position: relative;
-  z-index: 10;
-}
-
-.filter-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-.filter-options {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.filter-option {
-  text-decoration: none;
-  color: #000;
-  font-size: 1.1rem;
-  font-weight: 500;
-}
-
-.filter-option.selected {
-  font-weight: bold;
+  .blog .blog-posts #post-results .post-grid .post-card .post-title a {
+    font-size: 22px;
+  }
 }
 
 .single-post a {

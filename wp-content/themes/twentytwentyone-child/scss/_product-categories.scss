@@ -35,6 +35,26 @@
       background: #fff;
       box-shadow: 0 20px 50px rgba(21, 21, 21, 0.05);
       overflow: hidden;
+
+      &.sidebar-section--courses{
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
+
+        .sidebar-toggle{
+          margin-bottom: 12px;
+          border: 1px solid rgba(21, 21, 21, 0.07);
+          border-bottom: 1px solid rgba(21, 21, 21, 0.07);
+          border-radius: 26px;
+          background: #fff;
+          box-shadow: 0 10px 24px rgba(21, 21, 21, 0.06);
+        }
+
+        .sidebar-content{
+          padding: 0;
+        }
+      }
+
       .sidebar-toggle{
         letter-spacing: -0.02em;
         font-size: 16px;

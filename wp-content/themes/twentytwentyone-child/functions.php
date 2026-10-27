@@ -27,6 +27,7 @@ add_action('wp_enqueue_scripts', 'my_child_theme_enqueue_assets');
 
 require_once get_stylesheet_directory() . '/inc/shortcodes.php';
 require_once get_stylesheet_directory() . '/inc/drones.php';
+require_once get_stylesheet_directory() . '/inc/courses.php';
 require_once get_stylesheet_directory() . '/inc/testy-products.php';
 require_once get_stylesheet_directory() . '/inc/testy-acf-field-groups.php';
 require_once get_stylesheet_directory() . '/inc/product-card-migration.php';
