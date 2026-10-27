@@ -125,21 +125,6 @@ add_action( 'pre_get_posts', 'aprop_filter_courses_shop_query', 20 );
 function aprop_render_course_filter() {
     $terms = aprop_course_category_terms();
     $selected_id = aprop_course_selected_category_id();
-    $orderby_options = array(
-        'title'         => 'Abecedne, A-Z',
-        'title-desc'    => 'Abecedne, Z-A',
-        'menu_order'    => 'Odporúčané',
-        'popularity'    => 'Najlepšie predávané',
-        'price'         => 'Cena, od najnižšej',
-        'price-desc'    => 'Cena, od najvyššej',
-        'date'          => 'Dátum pridania, najnovšie',
-        'date-asc'      => 'Dátum pridania, najstaršie',
-    );
-    $current_orderby = isset( $_GET['orderby'] ) ? sanitize_key( wp_unslash( $_GET['orderby'] ) ) : 'menu_order';
-
-    if ( ! array_key_exists( $current_orderby, $orderby_options ) ) {
-        $current_orderby = 'menu_order';
-    }
 
     $shop_url = function_exists( 'wc_get_page_permalink' )
         ? wc_get_page_permalink( 'shop' )
@@ -148,55 +133,30 @@ function aprop_render_course_filter() {
     ob_start();
     ?>
     <aside id="course-products-filter" class="drone-products-filter" aria-label="Filter kurzov">
-        <div class="drone-products-filter__form">
+        <form method="get" class="drone-products-filter__form">
             <?php if ( ! empty( $terms ) ) : ?>
-                <form method="get" class="drone-products-filter__subform">
-                    <input type="hidden" name="orderby" value="<?php echo esc_attr( $current_orderby ); ?>" />
-                    <div class="drone-products-filter__group">
-                        <h2>Kategória</h2>
-
-                        <?php foreach ( $terms as $term ) : ?>
-                            <?php $count = aprop_course_category_count( $term->term_id ); ?>
-                            <label class="drone-products-filter__option">
-                                <input
-                                    type="radio"
-                                    name="course_category"
-                                    value="<?php echo esc_attr( $term->term_id ); ?>"
-                                    <?php checked( $selected_id, (int) $term->term_id ); ?>
-                                    onchange="this.form.submit()"
-                                />
-                                <span class="drone-products-filter__option-label"><?php echo esc_html( $term->name ); ?></span>
-                                <span class="drone-products-filter__count"><?php echo esc_html( $count ); ?></span>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
-                </form>
-            <?php endif; ?>
-
-            <form method="get" class="drone-products-filter__subform">
-                <?php if ( $selected_id ) : ?>
-                    <input type="hidden" name="course_category" value="<?php echo esc_attr( $selected_id ); ?>" />
-                <?php endif; ?>
                 <div class="drone-products-filter__group">
-                    <h2>Zoradiť podľa</h2>
+                    <h2>Kategória</h2>
 
-                    <?php foreach ( $orderby_options as $value => $label ) : ?>
+                    <?php foreach ( $terms as $term ) : ?>
+                        <?php $count = aprop_course_category_count( $term->term_id ); ?>
                         <label class="drone-products-filter__option">
                             <input
                                 type="radio"
-                                name="orderby"
-                                value="<?php echo esc_attr( $value ); ?>"
-                                <?php checked( $current_orderby, $value ); ?>
+                                name="course_category"
+                                value="<?php echo esc_attr( $term->term_id ); ?>"
+                                <?php checked( $selected_id, (int) $term->term_id ); ?>
                                 onchange="this.form.submit()"
                             />
-                            <span class="drone-products-filter__option-label"><?php echo esc_html( $label ); ?></span>
+                            <span class="drone-products-filter__option-label"><?php echo esc_html( $term->name ); ?></span>
+                            <span class="drone-products-filter__count"><?php echo esc_html( $count ); ?></span>
                         </label>
                     <?php endforeach; ?>
                 </div>
-            </form>
+            <?php endif; ?>
 
             <a href="<?php echo esc_url( $shop_url ); ?>" class="drone-products-filter__reset">Zrušiť všetky filtre</a>
-        </div>
+        </form>
     </aside>
     <?php
 

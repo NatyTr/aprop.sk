@@ -354,44 +354,6 @@ jQuery(document).ready(function ($) {
     ]
   });
 
-  // blog filter
-  $('#open-filter').on('click', function() {
-    $('#filter-box').slideDown();
-    $('.close-filter').fadeIn();
-    $('.filter-toggle').fadeOut();
-    $('.hero-filter').addClass('filter-open'); // ✅ pridáme classu
-  });
-
-  $('#close-filter').on('click', function() {
-    $('#filter-box').slideUp();
-    $('.close-filter').fadeOut();
-    $('.filter-toggle').fadeIn();
-    $('.hero-filter').removeClass('filter-open'); // ✅ odstránime classu
-  });
-
-  $('.filter-option').on('click', function(e) {
-    e.preventDefault();
-    var catSlug = $(this).data('category');
-    var catName = $(this).text().trim();
-
-    $.ajax({
-      url: ajaxurl,
-      type: 'POST',
-      data: {
-        action: 'filter_blog_posts',
-        category: catSlug
-      },
-      success: function(response) {
-        $('#post-results').html(response);
-        $('#filter-box').slideUp();
-        $('.close-filter').fadeOut();
-        $('.filter-toggle').fadeIn();
-        $('.selected-category').text(catName);
-        $('.hero-filter').removeClass('filter-open'); // ✅ zatvorenie resetuje stav
-      }
-    });
-  });
-
   // === Secondary hero product slider ===
   $('[data-hero-product-slider]').each(function () {
     const $slider = $(this);

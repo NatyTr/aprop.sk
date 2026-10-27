@@ -2722,7 +2722,7 @@ function render_didnt_find_banner_shortcode() {
 				</p>
 			<?php endif; ?>
 
-			<a href="/sluzby" class="btn-primary btn-black btn-icon">
+			<a href="/balicky/" class="btn-primary btn-black btn-icon">
 				Pozrieť balíčky
 			</a>
 		</div>

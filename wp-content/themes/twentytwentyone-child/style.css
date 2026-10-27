@@ -6232,13 +6232,13 @@ footer .footer-meta .footer_socials li a:hover {
 }
 .collaboration-container .collaboration-intro {
   width: 45%;
-  padding-right: 60px;
+  padding-right: 40px;
 }
 .collaboration-container .collaboration-intro .label {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 .collaboration-container .collaboration-intro h2 {
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 @media (max-width: 991px) {
   .collaboration-container .collaboration-intro {
@@ -6259,42 +6259,42 @@ footer .footer-meta .footer_socials li a:hover {
 }
 .collaboration-container .collaboration-faqs .faq-item {
   border-top: 1px solid rgba(0, 0, 0, 0.1490196078);
-  padding: 40px 0px;
+  padding: 24px 0px;
 }
 @media (max-width: 1299px) {
   .collaboration-container .collaboration-faqs .faq-item {
-    padding: 25px 0px;
+    padding: 18px 0px;
   }
 }
 @media (max-width: 991px) {
   .collaboration-container .collaboration-faqs .faq-item {
-    padding: 15px 0px;
+    padding: 12px 0px;
   }
 }
 .collaboration-container .collaboration-faqs .faq-item .faq-question {
   border: 0px;
   background: transparent;
   color: black;
-  font-size: 44px;
-  line-height: 42px;
+  font-size: 32px;
+  line-height: 34px;
   font-weight: 500;
   padding: 0px;
-  padding-right: 80px;
+  padding-right: 60px;
   position: relative;
   width: 100%;
   text-align: left;
   position: relative;
-  padding-left: 65px;
+  padding-left: 52px;
 }
 .collaboration-container .collaboration-faqs .faq-item .faq-question span {
   color: black;
   color: rgba(0, 0, 0, 0.5019607843);
-  font-size: 32px;
+  font-size: 22px;
   line-height: normal;
   font-weight: 400;
   position: absolute;
   left: 0px;
-  top: calc(50% - 15px);
+  top: calc(50% - 11px);
 }
 .collaboration-container .collaboration-faqs .faq-item .faq-question:focus {
   outline: none;
@@ -6302,29 +6302,29 @@ footer .footer-meta .footer_socials li a:hover {
 .collaboration-container .collaboration-faqs .faq-item .faq-question:before {
   content: "";
   background-image: url("./images/circle-arrow.svg");
-  width: 70px;
-  height: 70px;
+  width: 54px;
+  height: 54px;
   position: absolute;
   background-repeat: no-repeat;
   background-size: contain;
   right: 0px;
-  top: calc(50% - 35px);
+  top: calc(50% - 27px);
 }
 @media (max-width: 1299px) {
   .collaboration-container .collaboration-faqs .faq-item .faq-question {
-    font-size: 35px;
-    line-height: 37px;
+    font-size: 28px;
+    line-height: 30px;
   }
   .collaboration-container .collaboration-faqs .faq-item .faq-question:before {
-    width: 44px;
-    height: 44px;
-    top: calc(50% - 22px);
+    width: 40px;
+    height: 40px;
+    top: calc(50% - 20px);
   }
 }
 @media (max-width: 991px) {
   .collaboration-container .collaboration-faqs .faq-item .faq-question {
-    font-size: 24px;
-    line-height: 28px;
+    font-size: 22px;
+    line-height: 26px;
   }
 }
 @media (max-width: 767px) {
@@ -6346,9 +6346,9 @@ footer .footer-meta .footer_socials li a:hover {
 }
 .collaboration-container .collaboration-faqs .faq-item .faq-answer {
   justify-content: space-between;
-  column-gap: 40px;
-  margin-top: 24px;
-  padding-left: 65px;
+  column-gap: 24px;
+  margin-top: 16px;
+  padding-left: 52px;
 }
 .collaboration-container .collaboration-faqs .faq-item .faq-answer--info {
   max-width: 453px;
@@ -6356,7 +6356,7 @@ footer .footer-meta .footer_socials li a:hover {
 }
 .collaboration-container .collaboration-faqs .faq-item .faq-answer--info p {
   color: rgba(0, 0, 0, 0.6);
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 .collaboration-container .collaboration-faqs .faq-item .faq-answer--info .btn-primary {
   border: 1px solid black;
@@ -6368,8 +6368,8 @@ footer .footer-meta .footer_socials li a:hover {
   border-radius: 32px;
   aspect-ratio: 1/1;
   object-fit: cover;
-  max-width: 270px;
-  max-height: 270px;
+  max-width: 220px;
+  max-height: 220px;
   width: 100%;
   height: auto;
 }
@@ -8794,10 +8794,6 @@ footer .footer-meta .footer_socials li a:hover {
 .drone-products-filter__form {
   display: flex;
   flex-direction: column;
-}
-
-.drone-products-filter__subform {
-  margin: 0;
 }
 
 .drone-products-filter__group {
