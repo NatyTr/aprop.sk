@@ -1,11 +1,33 @@
 <?php
 
 function aprop_course_category_slugs() {
+    // Legacy fallback when parent Kurzy is not synced yet.
     return array(
         'legislativne-kurzy',
         'profesionalne-kurzy',
         'darcekove-poukazky',
     );
+}
+
+function aprop_kurzy_parent_term() {
+    static $term = null;
+
+    if ( null !== $term ) {
+        return $term instanceof WP_Term ? $term : null;
+    }
+
+    $term = get_term_by( 'slug', 'kurzy', 'product_cat' );
+
+    if ( ! $term instanceof WP_Term ) {
+        $term = get_term_by( 'name', 'Kurzy', 'product_cat' );
+    }
+
+    if ( ! $term instanceof WP_Term ) {
+        $term = false;
+        return null;
+    }
+
+    return $term;
 }
 
 function aprop_course_category_terms() {
@@ -16,6 +38,31 @@ function aprop_course_category_terms() {
     }
 
     $terms = array();
+    $parent = aprop_kurzy_parent_term();
+
+    if ( $parent instanceof WP_Term ) {
+        $children = get_terms(
+            array(
+                'taxonomy'   => 'product_cat',
+                'parent'     => (int) $parent->term_id,
+                'hide_empty' => false,
+                'orderby'    => 'name',
+                'order'      => 'ASC',
+            )
+        );
+
+        if ( ! is_wp_error( $children ) ) {
+            foreach ( $children as $child ) {
+                if ( $child instanceof WP_Term ) {
+                    $terms[] = $child;
+                }
+            }
+        }
+
+        return $terms;
+    }
+
+    // Fallback: hardcoded child slugs until Kurzy exists locally.
     $found_terms = get_terms(
         array(
             'taxonomy'   => 'product_cat',
@@ -30,9 +77,9 @@ function aprop_course_category_terms() {
     }
 
     $terms_by_slug = array();
-    foreach ( $found_terms as $term ) {
-        if ( $term instanceof WP_Term ) {
-            $terms_by_slug[ $term->slug ] = $term;
+    foreach ( $found_terms as $found_term ) {
+        if ( $found_term instanceof WP_Term ) {
+            $terms_by_slug[ $found_term->slug ] = $found_term;
         }
     }
 
@@ -121,34 +168,53 @@ function aprop_course_selected_category_id() {
     return in_array( $selected_id, aprop_course_category_ids(), true ) ? $selected_id : 0;
 }
 
+/**
+ * Shop /sluzby listing: all products in Kurzy (incl. children).
+ * Optional sidebar filter narrows to one Kurzy child category.
+ */
 function aprop_course_tax_query( $selected_id = 0 ) {
+    $parent = aprop_kurzy_parent_term();
+
+    if ( $selected_id && in_array( $selected_id, aprop_course_category_ids(), true ) ) {
+        return array(
+            array(
+                'taxonomy'         => 'product_cat',
+                'field'            => 'term_id',
+                'terms'            => array( $selected_id ),
+                'operator'         => 'IN',
+                'include_children' => true,
+            ),
+        );
+    }
+
+    if ( $parent instanceof WP_Term ) {
+        return array(
+            array(
+                'taxonomy'         => 'product_cat',
+                'field'            => 'term_id',
+                'terms'            => array( (int) $parent->term_id ),
+                'operator'         => 'IN',
+                'include_children' => true,
+            ),
+        );
+    }
+
+    // Fallback until parent Kurzy is synced.
     $category_ids = aprop_course_category_ids();
 
     if ( empty( $category_ids ) ) {
         return array();
     }
 
-    $tax_query = array(
+    return array(
         array(
             'taxonomy'         => 'product_cat',
             'field'            => 'term_id',
             'terms'            => $category_ids,
             'operator'         => 'IN',
-            'include_children' => false,
+            'include_children' => true,
         ),
     );
-
-    if ( $selected_id && in_array( $selected_id, $category_ids, true ) ) {
-        $tax_query[] = array(
-            'taxonomy'         => 'product_cat',
-            'field'            => 'term_id',
-            'terms'            => array( $selected_id ),
-            'operator'         => 'IN',
-            'include_children' => false,
-        );
-    }
-
-    return $tax_query;
 }
 
 function aprop_course_category_count( $category_id ) {
