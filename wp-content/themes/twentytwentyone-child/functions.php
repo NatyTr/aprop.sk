@@ -935,7 +935,7 @@ function insert_note_and_slider_after_product() {
 		echo do_shortcode('[product_note]');
     echo do_shortcode('[kurz_instructions]');
 		echo do_shortcode('[related_products_shortcode]');
-    echo do_shortcode('[didnt_find_banner]');
+    // echo do_shortcode('[didnt_find_banner]'); // disabled site-wide
 	}
 }
 add_action( 'woocommerce_after_single_product_summary', 'insert_note_and_slider_after_product', 25 );

@@ -2719,6 +2719,10 @@ add_shortcode('kontakt_blok', 'kontakt_shortcode');
 
 
 function render_didnt_find_banner_shortcode() {
+	// Temporarily disabled site-wide (Elementor + PHP inserts).
+	return '';
+
+	/*
 	$label  = get_option('banner_label');
 	$title  = get_option('banner_title');
 	$text   = get_option('banner_text');
@@ -2760,6 +2764,7 @@ function render_didnt_find_banner_shortcode() {
 
 	<?php
 	return ob_get_clean();
+	*/
 }
 add_shortcode('didnt_find_banner', 'render_didnt_find_banner_shortcode');
 

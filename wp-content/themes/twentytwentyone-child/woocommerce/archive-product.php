@@ -200,8 +200,8 @@ $is_course_listing = ! $is_drone_category_listing
 </div>
 
 <?php
-// Zobrazí banner "Nenašli ste?"
-echo do_shortcode('[didnt_find_banner]');
+// Banner "Nenašli ste?" — disabled site-wide
+// echo do_shortcode('[didnt_find_banner]');
 ?>
 
 
