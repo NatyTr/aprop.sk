@@ -123,15 +123,25 @@ input[type=reset]:focus-visible,
   outline-offset: 0 !important;
 }
 
-.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) img{
+// Kill Twenty Twenty-One / child focus rings on links (gray border on click).
+// Do not force color:inherit — that turns dark-header white links black and they vanish on click.
+.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
+.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
+.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
+.has-background-white .site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
+.is-dark-theme .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link) {
+  background: transparent !important;
   outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
 }
 
-.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) {
+.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) img,
+.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button) img {
+  outline: none !important;
+  box-shadow: none !important;
   background: transparent !important;
-  color: inherit !important;
-  outline: 2px solid rgba(21, 21, 21, 0.28);
-  outline-offset: 2px;
 }
 
 .has-background-white .site a.title-banner-secondary__card-body:focus:not(.wp-block-button__link):not(.wp-block-file__button),

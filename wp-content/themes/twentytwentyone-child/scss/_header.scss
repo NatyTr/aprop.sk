@@ -109,6 +109,11 @@ header{
               background: white;
               a{
                 color: black;
+                &:focus,
+                &:focus-visible,
+                &:active{
+                  color: black !important;
+                }
               }
             }
             a{
@@ -120,14 +125,22 @@ header{
               padding: 14px 36px;
               letter-spacing: -0.36px;
               display: block;
-              &:focus{
+              &:focus,
+              &:focus-visible,
+              &:active{
                 background-color: transparent !important;
+                color: white !important;
               }
             }
             &:hover{
               background-color: white;
               a{
                 color: $black;
+                &:focus,
+                &:focus-visible,
+                &:active{
+                  color: $black !important;
+                }
               }
             }
           }
@@ -183,12 +196,20 @@ header{
           display: flex;
           align-items: center;
           justify-content: center;
-          &:focus{
+          &:focus,
+          &:focus-visible,
+          &:active{
             background: transparent !important;
+            color: white !important;
           }
           &:hover{
             background: white;
             color: $black;
+            &:focus,
+            &:focus-visible,
+            &:active{
+              color: $black !important;
+            }
           }
         }
         @media(max-width: 1700px){

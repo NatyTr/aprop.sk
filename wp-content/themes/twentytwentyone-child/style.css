@@ -656,6 +656,9 @@ header .container .header-container .header-menu .menu li.current_page_item {
 header .container .header-container .header-menu .menu li.current_page_item a {
   color: black;
 }
+header .container .header-container .header-menu .menu li.current_page_item a:focus, header .container .header-container .header-menu .menu li.current_page_item a:focus-visible, header .container .header-container .header-menu .menu li.current_page_item a:active {
+  color: black !important;
+}
 header .container .header-container .header-menu .menu li a {
   color: white;
   text-decoration: none;
@@ -666,14 +669,18 @@ header .container .header-container .header-menu .menu li a {
   letter-spacing: -0.36px;
   display: block;
 }
-header .container .header-container .header-menu .menu li a:focus {
+header .container .header-container .header-menu .menu li a:focus, header .container .header-container .header-menu .menu li a:focus-visible, header .container .header-container .header-menu .menu li a:active {
   background-color: transparent !important;
+  color: white !important;
 }
 header .container .header-container .header-menu .menu li:hover {
   background-color: white;
 }
 header .container .header-container .header-menu .menu li:hover a {
   color: #151515;
+}
+header .container .header-container .header-menu .menu li:hover a:focus, header .container .header-container .header-menu .menu li:hover a:focus-visible, header .container .header-container .header-menu .menu li:hover a:active {
+  color: #151515 !important;
 }
 @media (max-width: 1700px) {
   header .container .header-container .header-menu .menu li a {
@@ -721,12 +728,16 @@ header .container .header-container .header-tools .header-pill-link {
   align-items: center;
   justify-content: center;
 }
-header .container .header-container .header-tools .header-pill-link:focus {
+header .container .header-container .header-tools .header-pill-link:focus, header .container .header-container .header-tools .header-pill-link:focus-visible, header .container .header-container .header-tools .header-pill-link:active {
   background: transparent !important;
+  color: white !important;
 }
 header .container .header-container .header-tools .header-pill-link:hover {
   background: white;
   color: #151515;
+}
+header .container .header-container .header-tools .header-pill-link:hover:focus, header .container .header-container .header-tools .header-pill-link:hover:focus-visible, header .container .header-container .header-tools .header-pill-link:hover:active {
+  color: #151515 !important;
 }
 @media (max-width: 1700px) {
   header .container .header-container .header-tools .header-pill-link {
@@ -14163,15 +14174,23 @@ input[type=reset]:focus-visible,
   outline-offset: 0 !important;
 }
 
-.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) img {
+.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
+.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
+.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
+.has-background-white .site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
+.is-dark-theme .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link) {
+  background: transparent !important;
   outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
 }
 
-.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) {
+.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button) img,
+.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button) img {
+  outline: none !important;
+  box-shadow: none !important;
   background: transparent !important;
-  color: inherit !important;
-  outline: 2px solid rgba(21, 21, 21, 0.28);
-  outline-offset: 2px;
 }
 
 .has-background-white .site a.title-banner-secondary__card-body:focus:not(.wp-block-button__link):not(.wp-block-file__button),
