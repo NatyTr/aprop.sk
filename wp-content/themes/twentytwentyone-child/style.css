@@ -6216,10 +6216,6 @@ footer .footer-meta .footer_socials li a:hover {
   display: none;
 }
 
-.faq-item.open .faq-answer {
-  display: flex;
-}
-
 .collaboration-container {
   display: flex;
   justify-content: space-between;
@@ -6362,16 +6358,17 @@ footer .footer-meta .footer_socials li a:hover {
   border: 1px solid black;
 }
 .collaboration-container .collaboration-faqs .faq-item .faq-answer .faq-image {
+  flex: 0 0 auto;
+  width: 220px;
+  height: 220px;
   border-radius: 32px;
 }
 .collaboration-container .collaboration-faqs .faq-item .faq-answer .faq-image img {
   border-radius: 32px;
   aspect-ratio: 1/1;
   object-fit: cover;
-  max-width: 220px;
-  max-height: 220px;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
 @media (max-width: 767px) {
   .collaboration-container .collaboration-faqs .faq-item .faq-answer {
@@ -6384,8 +6381,12 @@ footer .footer-meta .footer_socials li a:hover {
   .collaboration-container .collaboration-faqs .faq-item .faq-answer--info p {
     margin-bottom: 24px;
   }
+  .collaboration-container .collaboration-faqs .faq-item .faq-answer .faq-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+  }
   .collaboration-container .collaboration-faqs .faq-item .faq-answer .faq-image img {
-    max-width: unset;
     border-radius: 18px;
   }
 }
@@ -6393,7 +6394,7 @@ footer .footer-meta .footer_socials li a:hover {
   content: none;
 }
 .collaboration-container .collaboration-faqs .faq-item.open .faq-answer {
-  display: flex !important;
+  display: flex;
 }
 @media (max-width: 767px) {
   .collaboration-container .collaboration-faqs .faq-item {
@@ -13399,13 +13400,18 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   display: flex;
   flex-wrap: wrap;
   column-gap: 8px;
+  font-family: "General Sans", sans-serif;
+  color: #131313;
 }
 .which-package .which-package-title {
   width: 100%;
+  font-family: "General Sans", sans-serif;
   font-size: 40px;
   line-height: 40px;
   margin-bottom: 48px;
   text-align: center;
+  color: #131313;
+  font-weight: 500;
 }
 .which-package .package {
   width: calc(33.3333333333% - 6px);
@@ -13420,30 +13426,75 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   width: 100%;
   object-fit: contain;
 }
+.which-package .package h2,
+.which-package .package h3,
+.which-package .package h4,
+.which-package .package .package-title,
+.which-package .package .package-subtitle,
+.which-package .package .package-subtitle-2 {
+  font-family: "General Sans", sans-serif;
+  color: #131313;
+}
 .which-package .package h2 {
   font-size: 40px;
   line-height: 50px;
   margin-bottom: 19px;
   padding-right: 20px;
+  font-weight: 500;
 }
-.which-package .package h3 {
+.which-package .package h3,
+.which-package .package .package-title {
   font-size: 24px;
   line-height: 30px;
-  margin-bottom: 25px;
+  margin-bottom: 18px;
   letter-spacing: -1px;
   padding-right: 20px;
+  font-weight: 600;
+  color: #131313;
+}
+.which-package .package h4,
+.which-package .package .package-subtitle,
+.which-package .package .package-subtitle-2 {
+  font-size: 16px;
+  line-height: 22px;
+  margin: 0 0 12px;
+  padding-right: 20px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: #131313;
+}
+.which-package .package .package-subtitle-2 {
+  margin-top: 22px;
 }
 .which-package .package .package-text,
 .which-package .package .package-text-2 {
   padding-right: 30px;
+  font-family: "General Sans", sans-serif;
+  color: #131313;
+}
+.which-package .package .package-text p,
+.which-package .package .package-text li,
+.which-package .package .package-text strong,
+.which-package .package .package-text b,
+.which-package .package .package-text-2 p,
+.which-package .package .package-text-2 li,
+.which-package .package .package-text-2 strong,
+.which-package .package .package-text-2 b {
+  font-family: "General Sans", sans-serif;
+  color: #131313;
 }
 .which-package .package .package-text p,
 .which-package .package .package-text-2 p {
-  opacity: 0.8;
-  font-size: 18px;
-  line-height: 20px;
+  font-size: 15px;
+  line-height: 22px;
   margin-bottom: 10px;
-  font-weight: 300;
+  font-weight: 400;
+}
+.which-package .package .package-text strong,
+.which-package .package .package-text b,
+.which-package .package .package-text-2 strong,
+.which-package .package .package-text-2 b {
+  font-weight: 600;
 }
 .which-package .package .package-text ul,
 .which-package .package .package-text-2 ul {
@@ -13451,10 +13502,9 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
 }
 .which-package .package .package-text ul li,
 .which-package .package .package-text-2 ul li {
-  opacity: 0.8;
-  font-size: 18px;
-  line-height: 20px;
-  font-weight: 300;
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 400;
   margin-bottom: 5px;
 }
 @media (max-width: 767px) {
@@ -13472,6 +13522,17 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   }
   .which-package .package .package-image {
     border-radius: 18px;
+  }
+  .which-package .package .package-text,
+  .which-package .package .package-text-2 {
+    padding-right: 0;
+  }
+  .which-package .package .package-text p,
+  .which-package .package .package-text ul li,
+  .which-package .package .package-text-2 p,
+  .which-package .package .package-text-2 ul li {
+    font-size: 14px;
+    line-height: 21px;
   }
 }
 

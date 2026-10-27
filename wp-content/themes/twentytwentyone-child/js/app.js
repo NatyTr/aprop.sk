@@ -314,24 +314,47 @@ jQuery(document).ready(function ($) {
 
 
 
-  // Otvoriť prvý FAQ po načítaní
-  const $firstItem = $('.faq-item').first();
-  $firstItem.addClass('open');
-  $firstItem.find('.faq-answer').show(); // show namiesto slideDown pri načítaní
-
-  // Toggle funkcia
-  $('.faq-question').on('click', function () {
+  // Collaboration steps: instant tab switch (no slide) — parallel slideUp/Down made the block jump/flicker
+  $('.collaboration-faqs').on('click', '.faq-question', function (e) {
+    e.preventDefault();
     const $item = $(this).closest('.faq-item');
-    const $answer = $item.find('.faq-answer');
+    const $group = $(this).closest('.collaboration-faqs');
 
     if ($item.hasClass('open')) {
-      $answer.stop(true, true).slideUp();
-      $item.removeClass('open');
-    } else {
-      $('.faq-item.open').removeClass('open').find('.faq-answer').stop(true, true).slideUp();
-      $answer.stop(true, true).slideDown();
-      $item.addClass('open');
+      return;
     }
+
+    $group.find('.faq-answer').removeAttr('style');
+    $group.find('.faq-item.open').removeClass('open');
+    $item.addClass('open');
+  });
+
+  // Other FAQ accordions keep slide toggle; skip collaboration (handled above)
+  $('.faq-question').on('click', function () {
+    if ($(this).closest('.collaboration-faqs').length) {
+      return;
+    }
+
+    const $item = $(this).closest('.faq-item');
+    const $answer = $item.children('.faq-answer');
+    const $group = $item.parent();
+
+    if ($item.hasClass('open')) {
+      $answer.stop(true, true).slideUp(220, function () {
+        $item.removeClass('open');
+      });
+      return;
+    }
+
+    $group.children('.faq-item.open').each(function () {
+      const $openItem = $(this);
+      $openItem.children('.faq-answer').stop(true, true).slideUp(220, function () {
+        $openItem.removeClass('open');
+      });
+    });
+
+    $item.addClass('open');
+    $answer.stop(true, true).slideDown(220);
   });
 
 

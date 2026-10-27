@@ -2558,7 +2558,7 @@ function custom_collaboration_shortcode() {
       		<button class="faq-question" type="button">
       			<span class="faq-number"><?php echo $number; ?>.</span> <?php echo esc_html($question); ?>
       		</button>
-      		<div class="faq-answer">
+      		<div class="faq-answer"<?php echo $is_first ? ' style="display:flex"' : ''; ?>>
       			<div class="faq-answer--info">
       				<?php echo wpautop( wp_kses_post($answer) ); ?>
       				<?php if ( !empty($button) ) : ?>
