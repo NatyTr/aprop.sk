@@ -2635,27 +2635,55 @@ add_shortcode('dron_industries', 'dron_industries_shortcode');
 function sluzby_shortcode() {
     ob_start();
 
-    $args = array(
-        'post_type'      => 'sluzby',
-        'posts_per_page' => -1,
-        'post_status'    => 'publish',
-    );
+    $services_term = get_term_by( 'slug', 'sluzby', 'product_cat' );
 
-    $sluzby_query = new WP_Query($args);
+    if ( ! $services_term instanceof WP_Term ) {
+        $services_term = get_term_by( 'name', 'Služby', 'product_cat' );
+    }
 
-    if ($sluzby_query->have_posts()) : ?>
+    $is_product_listing = $services_term instanceof WP_Term;
+    $args = $is_product_listing
+        ? array(
+            'post_type'      => 'product',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'orderby'        => 'menu_order title',
+            'order'          => 'ASC',
+            'tax_query'      => array(
+                array(
+                    'taxonomy'         => 'product_cat',
+                    'field'            => 'term_id',
+                    'terms'            => array( (int) $services_term->term_id ),
+                    'include_children' => true,
+                ),
+            ),
+        )
+        : array(
+            // Local fallback until the production Služby category is synced.
+            'post_type'      => 'sluzby',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+        );
+
+    $sluzby_query = new WP_Query( $args );
+
+    if ( $sluzby_query->have_posts() ) : ?>
         <div class="sluzby-section">
             <span class="btn-primary label">Naše služby</span>
             <div class="sluzby-wrapper">
-                <?php while ($sluzby_query->have_posts()) : $sluzby_query->the_post(); ?>
-                    <div class="sluzba-item">
+                <?php while ( $sluzby_query->have_posts() ) : $sluzby_query->the_post(); ?>
+                    <?php if ( $is_product_listing ) : ?>
+                        <a class="sluzba-item" href="<?php echo esc_url( get_permalink() ); ?>">
+                    <?php else : ?>
+                        <div class="sluzba-item">
+                    <?php endif; ?>
                         <?php if (has_post_thumbnail()) : ?>
                             <div class="sluzba-image">
                                 <?php the_post_thumbnail(); ?>
                             </div>
                         <?php endif; ?>
                         <h3 class="sluzba-title"><?php the_title(); ?></h3>
-                    </div>
+                    <?php echo $is_product_listing ? '</a>' : '</div>'; ?>
                 <?php endwhile; ?>
             </div>
         </div>

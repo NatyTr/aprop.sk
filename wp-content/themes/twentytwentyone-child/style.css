@@ -6548,6 +6548,9 @@ footer .footer-meta .footer_socials li a:hover {
   margin-bottom: 8px;
 }
 .sluzby-section .sluzby-wrapper .sluzba-item {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
   padding: 56px 0px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1490196078);
   display: flex;
@@ -8218,53 +8221,70 @@ footer .footer-meta .footer_socials li a:hover {
   }
 }
 
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary {
   font-size: 16px;
   line-height: 1.55;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary h1 {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary h1 {
   font-size: 42px;
   line-height: 48px;
   margin-bottom: 20px;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .woocommerce-product-details__short-description {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .woocommerce-product-details__short-description {
   font-size: 16px;
   line-height: 1.55;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .woocommerce-product-details__short-description p {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .woocommerce-product-details__short-description p {
   font-size: 16px;
   line-height: 1.55;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .price {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .price {
   margin-bottom: 22px;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .stock {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .stock {
   margin-bottom: 16px;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .cart .single_add_to_cart_button {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .cart .single_add_to_cart_button {
   margin-bottom: 28px;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .woocommerce-product-details__short-description {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .woocommerce-product-details__short-description {
   margin-bottom: 24px;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs {
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs {
   max-width: 100%;
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description {
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description {
   font-size: 16px;
   line-height: 1.6;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description ul li:before {
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description img {
+  width: auto;
+  max-width: 653px;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description a.btn-primary.btn-black.btn-icon {
+  display: inline-block;
+  color: #fff;
+  text-decoration: none;
+}
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description a.btn-primary.btn-black.btn-icon:hover,
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description a.btn-primary.btn-black.btn-icon:focus {
+  color: #151515;
+  text-decoration: none;
+}
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description ul li:before {
   top: calc((1.6em - 5px) / 2);
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description p,
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description li {
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description p,
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs .woocommerce-Tabs-panel--description li {
   font-size: 16px;
   line-height: 1.6;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .tabs {
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs .tabs {
   display: block;
   width: auto;
   max-width: none;
@@ -8274,10 +8294,10 @@ footer .footer-meta .footer_socials li a:hover {
   border-radius: 0;
   background: transparent;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .tabs li {
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs .tabs li {
   display: block;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .woocommerce-tabs .tabs li a {
+.single-product.aprop-course-product .product.type-product .woocommerce-tabs .tabs li a {
   display: block;
   padding: 0;
   border: 0 !important;
@@ -8291,7 +8311,7 @@ footer .footer-meta .footer_socials li a:hover {
   letter-spacing: -0.01em;
   pointer-events: none;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .product-faqs {
   margin-top: 16px;
   padding: 24px 28px;
   border: 1px solid rgba(21, 21, 21, 0.08);
@@ -8299,18 +8319,18 @@ footer .footer-meta .footer_socials li a:hover {
   background: #f7f8f4;
   row-gap: 0;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .product-faqs .faq-item {
   padding: 20px 0;
   border-bottom: 1px solid rgba(21, 21, 21, 0.1);
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item:first-child {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .product-faqs .faq-item:first-child {
   padding-top: 0;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item:last-child {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .product-faqs .faq-item:last-child {
   padding-bottom: 0;
   border-bottom: 0;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item h4 {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .product-faqs .faq-item h4 {
   margin: 0;
   padding: 4px 36px 4px 0;
   font-size: 20px;
@@ -8318,7 +8338,7 @@ footer .footer-meta .footer_socials li a:hover {
   font-weight: 600;
   cursor: pointer;
 }
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item .faq-answer {
+.single-product.aprop-course-product .product.type-product .summary.entry-summary .product-faqs .faq-item .faq-answer {
   margin-top: 14px;
   margin-bottom: 0;
   padding-right: 28px;
@@ -8326,47 +8346,47 @@ footer .footer-meta .footer_socials li a:hover {
   line-height: 1.55;
 }
 @media (max-width: 767px) {
-  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs {
+  .single-product.aprop-course-product .product.type-product .summary.entry-summary .product-faqs {
     margin-top: 28px;
     padding: 20px 18px 18px;
     border-radius: 20px;
   }
-  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item {
+  .single-product.aprop-course-product .product.type-product .summary.entry-summary .product-faqs .faq-item {
     padding: 16px 0;
   }
-  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item h4 {
+  .single-product.aprop-course-product .product.type-product .summary.entry-summary .product-faqs .faq-item h4 {
     font-size: 17px;
     line-height: 23px;
   }
-  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .product-faqs .faq-item .faq-answer {
+  .single-product.aprop-course-product .product.type-product .summary.entry-summary .product-faqs .faq-item .faq-answer {
     padding-right: 0;
     font-size: 15px;
     line-height: 1.5;
   }
 }
 @media (max-width: 767px) {
-  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary h1 {
+  .single-product.aprop-course-product .product.type-product .summary.entry-summary h1 {
     margin-bottom: 20px;
   }
-  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .price {
+  .single-product.aprop-course-product .product.type-product .summary.entry-summary .price {
     margin-bottom: 20px;
   }
-  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .stock {
+  .single-product.aprop-course-product .product.type-product .summary.entry-summary .stock {
     margin-bottom: 18px;
   }
-  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .cart .single_add_to_cart_button {
+  .single-product.aprop-course-product .product.type-product .summary.entry-summary .cart .single_add_to_cart_button {
     margin-bottom: 28px;
   }
-  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .woocommerce-product-details__short-description {
+  .single-product.aprop-course-product .product.type-product .summary.entry-summary .woocommerce-product-details__short-description {
     margin-bottom: 28px;
   }
-  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary .tabs li a {
+  .single-product.aprop-course-product .product.type-product .summary.entry-summary .tabs li a {
     font-size: 22px;
     line-height: 28px;
   }
 }
 @media (max-width: 767px) {
-  .single-product.page-prakticky-kurz-pre-lietanie-s-dronom .product.type-product .summary.entry-summary h1 {
+  .single-product.aprop-course-product .product.type-product .summary.entry-summary h1 {
     font-size: 24px;
     line-height: 24px;
   }

@@ -52,6 +52,67 @@ function aprop_course_category_ids() {
     );
 }
 
+/**
+ * Returns whether a product is a course product.
+ *
+ * Course detail styling is based on the shared Kurzy category on production.
+ * Drone products are explicitly excluded so their product detail layout and
+ * specifications keep their existing design.
+ */
+function aprop_is_course_product( $product_id = null ) {
+    $product_id = $product_id ? (int) $product_id : (int) get_the_ID();
+
+    if ( ! $product_id ) {
+        return false;
+    }
+
+    if ( function_exists( 'aprop_is_drone_product' ) && aprop_is_drone_product( $product_id ) ) {
+        return false;
+    }
+
+    $course_term = get_term_by( 'slug', 'kurzy', 'product_cat' );
+
+    if ( $course_term instanceof WP_Term ) {
+        $terms = get_the_terms( $product_id, 'product_cat' );
+
+        if ( empty( $terms ) || is_wp_error( $terms ) ) {
+            return false;
+        }
+
+        foreach ( $terms as $term ) {
+            if ( ! $term instanceof WP_Term ) {
+                continue;
+            }
+
+            if (
+                (int) $term->term_id === (int) $course_term->term_id
+                || term_is_ancestor_of( $course_term->term_id, $term->term_id, 'product_cat' )
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // The local database does not contain the production Kurzy category yet.
+    // Keep the local course detail preview usable until categories are synced.
+    return in_array(
+        $product_id,
+        array( 3299, 5449, 7614, 10687, 10718 ),
+        true
+    );
+}
+
+function aprop_add_course_product_body_class( $classes ) {
+    if ( is_singular( 'product' ) && aprop_is_course_product() ) {
+        $classes[] = 'aprop-course-product';
+    }
+
+    return $classes;
+}
+add_filter( 'body_class', 'aprop_add_course_product_body_class' );
+
 function aprop_course_selected_category_id() {
     $selected_id = isset( $_GET['course_category'] )
         ? absint( wp_unslash( $_GET['course_category'] ) )

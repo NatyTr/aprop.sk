@@ -1171,9 +1171,9 @@
   }
 }
 
-// Rozšírenie obsahovej sekcie iba pre detail praktického kurzu.
+// Spoločný layout pre kurzové produktové detaily.
 // Dronové produktové detaily a ich špecifikácie zostávajú nedotknuté.
-.single-product.page-prakticky-kurz-pre-lietanie-s-dronom{
+.single-product.aprop-course-product{
   .product.type-product{
     .summary.entry-summary{
       font-size: 16px;
@@ -1222,6 +1222,26 @@
       .woocommerce-Tabs-panel--description{
         font-size: 16px;
         line-height: 1.6;
+
+        img{
+          width: auto;
+          max-width: 653px;
+          height: auto;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        a.btn-primary.btn-black.btn-icon{
+          display: inline-block;
+          color: #fff;
+          text-decoration: none;
+        }
+
+        a.btn-primary.btn-black.btn-icon:hover,
+        a.btn-primary.btn-black.btn-icon:focus{
+          color: $black;
+          text-decoration: none;
+        }
 
         ul li:before{
           top: calc((1.6em - 5px) / 2);
