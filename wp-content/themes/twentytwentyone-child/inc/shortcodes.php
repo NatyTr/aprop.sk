@@ -1772,10 +1772,50 @@ function render_all_products_shortcode() {
 }
 add_shortcode('all_products', 'render_all_products_shortcode');
 
-function render_all_products_excluding_drones_shortcode() {
+/**
+ * Products in Kurzy (incl. children), excluding Služby (incl. its children).
+ * Falls back to "everything except drones" when Kurzy is not synced yet.
+ */
+function aprop_kurzy_products_tax_query() {
+    $kurzy_term = get_term_by( 'slug', 'kurzy', 'product_cat' );
+    if ( ! $kurzy_term instanceof WP_Term ) {
+        $kurzy_term = get_term_by( 'name', 'Kurzy', 'product_cat' );
+    }
+
+    $sluzby_term = get_term_by( 'slug', 'sluzby', 'product_cat' );
+    if ( ! $sluzby_term instanceof WP_Term ) {
+        $sluzby_term = get_term_by( 'name', 'Služby', 'product_cat' );
+    }
+
+    if ( $kurzy_term instanceof WP_Term ) {
+        $tax_query = array(
+            'relation' => 'AND',
+            array(
+                'taxonomy'         => 'product_cat',
+                'field'            => 'term_id',
+                'terms'            => array( (int) $kurzy_term->term_id ),
+                'operator'         => 'IN',
+                'include_children' => true,
+            ),
+        );
+
+        if ( $sluzby_term instanceof WP_Term ) {
+            $tax_query[] = array(
+                'taxonomy'         => 'product_cat',
+                'field'            => 'term_id',
+                'terms'            => array( (int) $sluzby_term->term_id ),
+                'operator'         => 'NOT IN',
+                'include_children' => true,
+            );
+        }
+
+        return $tax_query;
+    }
+
+    // Local fallback until the production Kurzy category is synced.
     $drone_tax_query = array(
-        'taxonomy' => 'product_cat',
-        'operator' => 'NOT IN',
+        'taxonomy'         => 'product_cat',
+        'operator'         => 'NOT IN',
         'include_children' => true,
     );
 
@@ -1787,44 +1827,29 @@ function render_all_products_excluding_drones_shortcode() {
         $drone_tax_query['terms'] = array( 'polnohospodarske-drony' );
     }
 
+    return array( $drone_tax_query );
+}
+
+function aprop_render_kurzy_products( $with_wrapper = true ) {
     $args = array(
         'post_type'      => 'product',
         'posts_per_page' => -1,
         'post_status'    => 'publish',
-        'tax_query'      => array(
-            $drone_tax_query,
-        ),
+        'orderby'        => 'menu_order title',
+        'order'          => 'ASC',
+        'tax_query'      => aprop_kurzy_products_tax_query(),
     );
 
-    return aprop_render_product_cards_query( $args );
+    return aprop_render_product_cards_query( $args, $with_wrapper );
+}
+
+function render_all_products_excluding_drones_shortcode() {
+    return aprop_render_kurzy_products( true );
 }
 add_shortcode('all_products_excluding_drones', 'render_all_products_excluding_drones_shortcode');
 
 function aprop_render_all_products_excluding_drones_items() {
-    $drone_tax_query = array(
-        'taxonomy' => 'product_cat',
-        'operator' => 'NOT IN',
-        'include_children' => true,
-    );
-
-    if ( function_exists( 'aprop_drone_category_id' ) ) {
-        $drone_tax_query['field'] = 'term_id';
-        $drone_tax_query['terms'] = array( aprop_drone_category_id() );
-    } else {
-        $drone_tax_query['field'] = 'slug';
-        $drone_tax_query['terms'] = array( 'polnohospodarske-drony' );
-    }
-
-    $args = array(
-        'post_type'      => 'product',
-        'posts_per_page' => -1,
-        'post_status'    => 'publish',
-        'tax_query'      => array(
-            $drone_tax_query,
-        ),
-    );
-
-    return aprop_render_product_cards_query( $args, false );
+    return aprop_render_kurzy_products( false );
 }
 
 //block with products
@@ -1835,27 +1860,6 @@ function render_kurzy_blok_shortcode() {
     $courses_label = get_field('courses-label', $home_id);
     $courses_title = get_field('courses-title', $home_id);
     $courses_text  = get_field('courses-text', $home_id);
-
-    // filter pre [all_products]
-    $exclude_drony_new = function ($query) {
-        if (is_admin() || !$query->is_main_query() && empty($query->query_vars['post_type'])) {
-            // necháme pokračovať, ale neblokujeme custom query úplne
-        }
-
-        $tax_query = (array) $query->get('tax_query');
-
-        $tax_query[] = [
-            'taxonomy'         => 'product_cat',
-            'field'            => 'slug',
-            'terms'            => ['drony-new'],
-            'operator'         => 'NOT IN',
-            'include_children' => true, // vylúči aj produkty v child kategóriách
-        ];
-
-        $query->set('tax_query', $tax_query);
-    };
-
-    add_action('pre_get_posts', $exclude_drony_new);
 
     ob_start();
     ?>
@@ -1881,7 +1885,7 @@ function render_kurzy_blok_shortcode() {
         </div>
 
         <div class="courses-product-list">
-            <?php echo do_shortcode('[all_products_excluding_drones]'); ?>
+            <?php echo aprop_render_kurzy_products(); ?>
         </div>
 
         <?php if ($courses_text): ?>
@@ -1896,8 +1900,6 @@ function render_kurzy_blok_shortcode() {
         <?php endif; ?>
     </div>
     <?php
-
-    remove_action('pre_get_posts', $exclude_drony_new);
 
     return ob_get_clean();
 }
