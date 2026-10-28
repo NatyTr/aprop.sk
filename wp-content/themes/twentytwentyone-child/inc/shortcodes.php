@@ -2155,6 +2155,151 @@ function render_home_online_tests_promo_shortcode() {
 }
 add_shortcode( 'home_online_tests_promo', 'render_home_online_tests_promo_shortcode' );
 
+function aprop_get_online_tests_banner_defaults() {
+    return array(
+        'eyebrow'     => 'ONLINE TESTY PRE PILOTOV DRONOV',
+        'title'       => 'Na skúšku s väčšou istotou.',
+        'description' => 'Precvičte si otázky pre A1/A3, A2 a STS. Sledujte svoje výsledky a pripravujte sa vlastným tempom.',
+        'tags'        => array(
+            array(
+                'label' => 'A1/A3 zadarmo',
+                'style' => 'solid',
+            ),
+            array(
+                'label' => 'A2',
+                'style' => 'outline',
+            ),
+            array(
+                'label' => 'STS',
+                'style' => 'outline',
+            ),
+        ),
+        'button_text' => 'Pozrieť online testy',
+        'button_url'  => home_url( '/testy/' ),
+        'image'       => null,
+    );
+}
+
+function aprop_get_online_tests_banner_default_image() {
+    $attachment_id = 14604; // Online tests promo drone
+    $url           = wp_get_attachment_image_url( $attachment_id, 'large' );
+
+    if ( ! $url ) {
+        $fallback = get_stylesheet_directory_uri() . '/images/testy-hero.jpg';
+        return array(
+            'url' => $fallback,
+            'alt' => 'Online testy pre pilotov dronov',
+        );
+    }
+
+    return array(
+        'url' => $url,
+        'alt' => get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ?: 'Online testy pre pilotov dronov',
+    );
+}
+
+function aprop_get_online_tests_banner_data() {
+    $page_id  = aprop_get_homepage_id() ?: get_queried_object_id();
+    $defaults = aprop_get_online_tests_banner_defaults();
+
+    if ( ! $page_id ) {
+        $defaults['image'] = aprop_get_online_tests_banner_default_image();
+        return $defaults;
+    }
+
+    $tags_raw = get_field( 'home_online_tests_banner_tags', $page_id );
+    $tags     = array();
+
+    if ( is_array( $tags_raw ) ) {
+        foreach ( $tags_raw as $tag ) {
+            $label = isset( $tag['label'] ) ? trim( (string) $tag['label'] ) : '';
+            if ( $label === '' ) {
+                continue;
+            }
+
+            $tags[] = array(
+                'label' => $label,
+                'style' => ( ! empty( $tag['style'] ) && $tag['style'] === 'solid' ) ? 'solid' : 'outline',
+            );
+        }
+    }
+
+    $image = get_field( 'home_online_tests_banner_image', $page_id );
+    if ( empty( $image['url'] ) ) {
+        $image = aprop_get_online_tests_banner_default_image();
+    }
+
+    return array(
+        'eyebrow'     => get_field( 'home_online_tests_banner_eyebrow', $page_id ) ?: $defaults['eyebrow'],
+        'title'       => get_field( 'home_online_tests_banner_title', $page_id ) ?: $defaults['title'],
+        'description' => get_field( 'home_online_tests_banner_description', $page_id ) ?: $defaults['description'],
+        'tags'        => ! empty( $tags ) ? $tags : $defaults['tags'],
+        'button_text' => get_field( 'home_online_tests_banner_button_text', $page_id ) ?: $defaults['button_text'],
+        'button_url'  => get_field( 'home_online_tests_banner_button_url', $page_id ) ?: $defaults['button_url'],
+        'image'       => $image,
+    );
+}
+
+function render_home_online_tests_banner_shortcode() {
+    $section = aprop_get_online_tests_banner_data();
+
+    if ( empty( $section['title'] ) && empty( $section['image']['url'] ) ) {
+        return '';
+    }
+
+    ob_start();
+    ?>
+    <section class="online-tests-banner">
+        <div class="online-tests-banner__inner">
+            <div class="online-tests-banner__content">
+                <?php if ( ! empty( $section['eyebrow'] ) ) : ?>
+                    <span class="online-tests-banner__eyebrow"><?php echo esc_html( $section['eyebrow'] ); ?></span>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $section['title'] ) ) : ?>
+                    <h2 class="online-tests-banner__title"><?php echo esc_html( $section['title'] ); ?></h2>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $section['description'] ) ) : ?>
+                    <p class="online-tests-banner__description"><?php echo esc_html( $section['description'] ); ?></p>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $section['tags'] ) ) : ?>
+                    <div class="online-tests-banner__tags">
+                        <?php foreach ( $section['tags'] as $tag ) : ?>
+                            <span class="online-tests-banner__tag online-tests-banner__tag--<?php echo esc_attr( $tag['style'] ); ?>">
+                                <?php echo esc_html( $tag['label'] ); ?>
+                            </span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $section['button_text'] ) && ! empty( $section['button_url'] ) ) : ?>
+                    <a class="btn-green-icon online-tests-banner__button" href="<?php echo esc_url( $section['button_url'] ); ?>">
+                        <?php echo esc_html( $section['button_text'] ); ?>
+                    </a>
+                <?php elseif ( ! empty( $section['button_text'] ) ) : ?>
+                    <span class="btn-green-icon online-tests-banner__button"><?php echo esc_html( $section['button_text'] ); ?></span>
+                <?php endif; ?>
+            </div>
+
+            <?php if ( ! empty( $section['image']['url'] ) ) : ?>
+                <div class="online-tests-banner__media">
+                    <img
+                        src="<?php echo esc_url( $section['image']['url'] ); ?>"
+                        alt="<?php echo esc_attr( $section['image']['alt'] ?? $section['title'] ); ?>"
+                        loading="lazy"
+                    />
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+    <?php
+
+    return ob_get_clean();
+}
+add_shortcode( 'home_online_tests_banner', 'render_home_online_tests_banner_shortcode' );
+
   //Ako to funguje? How it works
   function render_benefity_slider_shortcode() {
       $page_id = get_queried_object_id();

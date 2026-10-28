@@ -2000,3 +2000,52 @@ function aprop_online_tests_promo_acf_fields() {
         )
     );
 }
+
+/**
+ * Persist "Domov - Online testy banner" into DB so it appears under
+ * Custom Fields and can be exported/imported via ACF Tools.
+ */
+function aprop_get_online_tests_banner_field_group_definition() {
+    $json = get_stylesheet_directory() . '/acf-json/group_aprop_online_tests_banner.json';
+    if ( ! file_exists( $json ) ) {
+        return null;
+    }
+
+    $data = json_decode( file_get_contents( $json ), true );
+    return is_array( $data ) ? $data : null;
+}
+
+function aprop_persist_online_tests_banner_acf_to_db() {
+    if ( ! function_exists( 'acf_import_field_group' ) ) {
+        return;
+    }
+
+    if ( get_option( 'aprop_online_tests_banner_acf_persisted' ) ) {
+        return;
+    }
+
+    $field_group = aprop_get_online_tests_banner_field_group_definition();
+    if ( ! $field_group || empty( $field_group['key'] ) ) {
+        return;
+    }
+
+    $existing = get_posts(
+        array(
+            'post_type'      => 'acf-field-group',
+            'name'           => $field_group['key'],
+            'post_status'    => array( 'publish', 'acf-disabled', 'draft', 'private' ),
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
+        )
+    );
+
+    if ( empty( $existing ) ) {
+        $imported = acf_import_field_group( $field_group );
+        if ( $imported && function_exists( 'acf_write_json_field_group' ) ) {
+            acf_write_json_field_group( $imported );
+        }
+    }
+
+    update_option( 'aprop_online_tests_banner_acf_persisted', time(), false );
+}
+add_action( 'acf/init', 'aprop_persist_online_tests_banner_acf_to_db', 25 );

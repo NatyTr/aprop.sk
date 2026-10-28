@@ -12,6 +12,7 @@
 @import 'partners';
 @import 'why-aprop';
 @import 'online-tests-promo';
+@import 'online-tests-banner';
 @import 'testy-process';
 @import 'testy-try';
 @import 'testy-overview';
@@ -124,12 +125,12 @@ input[type=reset]:focus-visible,
 }
 
 // Kill Twenty Twenty-One / child focus rings on links (gray border on click).
-// Do not force color:inherit — that turns dark-header white links black and they vanish on click.
-.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
-.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
-.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
-.has-background-white .site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
-.is-dark-theme .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link) {
+// Skip CTA buttons — they keep their own hover/focus styles.
+.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
+.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
+.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
+.has-background-white .site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
+.is-dark-theme .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon) {
   background: transparent !important;
   outline: none !important;
   outline-offset: 0 !important;

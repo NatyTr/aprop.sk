@@ -68,6 +68,14 @@
   &__button {
     flex: 0 0 auto;
     white-space: nowrap;
+
+    &:focus,
+    &:focus-visible,
+    &:active {
+      outline: none !important;
+      box-shadow: none !important;
+      text-decoration: none !important;
+    }
   }
 
   @media (max-width: 991px) {

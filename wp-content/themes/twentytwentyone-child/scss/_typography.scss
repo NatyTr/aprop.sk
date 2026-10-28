@@ -155,11 +155,15 @@ body {
   border-color: black;
   color: white;
 
-  &:hover {
-    background-color: white;
+  &:hover,
+  &:focus,
+  &:focus-visible {
+    background-color: white !important;
     border-color: black !important;
-    border-color: white;
-    color: black;
+    color: black !important;
+    outline: none !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
   }
 }
 
@@ -222,12 +226,15 @@ body {
     &:before {
       background-image: url('./images/arrow-black.svg');
     }
-    &:hover {
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      &:before {
+        transform: rotate(45deg);
+        background-image: url('./images/arrow-white.svg');
+      }
       &:after {
         background-color: black;
-      }
-      &:before {
-        background-image: url('./images/arrow-white.svg');
       }
     }
   }

@@ -132,11 +132,13 @@ body .p-24 {
   border-color: black;
   color: white;
 }
-.btn-black:hover {
-  background-color: white;
+.btn-black:hover, .btn-black:focus, .btn-black:focus-visible {
+  background-color: white !important;
   border-color: black !important;
-  border-color: white;
-  color: black;
+  color: black !important;
+  outline: none !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
 }
 
 .btn-icon {
@@ -187,11 +189,12 @@ body .p-24 {
 .btn-icon.btn-black:before {
   background-image: url("./images/arrow-black.svg");
 }
-.btn-icon.btn-black:hover:after {
-  background-color: black;
-}
-.btn-icon.btn-black:hover:before {
+.btn-icon.btn-black:hover:before, .btn-icon.btn-black:focus:before, .btn-icon.btn-black:focus-visible:before {
+  transform: rotate(45deg);
   background-image: url("./images/arrow-white.svg");
+}
+.btn-icon.btn-black:hover:after, .btn-icon.btn-black:focus:after, .btn-icon.btn-black:focus-visible:after {
+  background-color: black;
 }
 @media (max-width: 767px) {
   .btn-icon:before {
@@ -3958,6 +3961,11 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   flex: 0 0 auto;
   white-space: nowrap;
 }
+.online-tests-promo__button:focus, .online-tests-promo__button:focus-visible, .online-tests-promo__button:active {
+  outline: none !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
 @media (max-width: 991px) {
   .online-tests-promo__inner {
     flex-direction: column;
@@ -3986,6 +3994,137 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   }
   .online-tests-promo__title {
     font-size: 22px;
+  }
+}
+
+.online-tests-banner {
+  width: 100%;
+  margin: 0 0 clamp(28px, 14.6955767563px + 1.7346053773vw, 48px);
+}
+.online-tests-banner__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(28px, 14.6955767563px + 1.7346053773vw, 48px);
+  align-items: stretch;
+  background: #151515;
+  border-radius: clamp(28px, 20.0173460538px + 1.0407632264vw, 40px);
+  padding: clamp(28px, 20.0173460538px + 1.0407632264vw, 40px);
+  overflow: hidden;
+}
+.online-tests-banner__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: clamp(8px, 2.6782307025px + 0.6938421509vw, 16px) 0;
+}
+.online-tests-banner__eyebrow {
+  display: block;
+  margin-bottom: clamp(16px, 12.0086730269px + 0.5203816132vw, 22px);
+  color: #7AD859;
+  font-size: clamp(12px, 10.6695576756px + 0.1734605377vw, 14px);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.online-tests-banner__title {
+  margin: 0 0 clamp(14px, 11.3391153513px + 0.3469210755vw, 18px);
+  color: #fff;
+  font-size: clamp(34px, 22.0260190807px + 1.5611448395vw, 52px);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+}
+.online-tests-banner__description {
+  margin: 0 0 clamp(20px, 14.6782307025px + 0.6938421509vw, 28px);
+  max-width: 34em;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: clamp(15px, 13.0043365134px + 0.2601908066vw, 18px);
+  line-height: 1.45;
+  font-weight: 400;
+}
+.online-tests-banner__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: clamp(24px, 18.6782307025px + 0.6938421509vw, 32px);
+}
+.online-tests-banner__tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: clamp(12px, 10.6695576756px + 0.1734605377vw, 14px);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  box-sizing: border-box;
+}
+.online-tests-banner__tag--solid {
+  background: #E4F4DC;
+  color: #131313;
+}
+.online-tests-banner__tag--outline {
+  background: #252925;
+  color: rgba(255, 255, 255, 0.88);
+  border: 0;
+}
+.online-tests-banner__button {
+  margin-top: 0;
+}
+.online-tests-banner__button:focus, .online-tests-banner__button:focus-visible, .online-tests-banner__button:active {
+  outline: none !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
+.online-tests-banner__media {
+  min-width: 0;
+  border-radius: clamp(22px, 15.3477883781px + 0.8673026886vw, 32px);
+  overflow: hidden;
+  background: #1d1d1d;
+}
+.online-tests-banner__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: clamp(240px, 160.1734605377px + 10.4076322637vw, 360px);
+  object-fit: cover;
+}
+@media (max-width: 1099px) {
+  .online-tests-banner__inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+  }
+  .online-tests-banner__media img {
+    min-height: 260px;
+  }
+}
+@media (max-width: 767px) {
+  .online-tests-banner {
+    margin-bottom: 28px;
+    padding: 0 24px;
+    box-sizing: border-box;
+  }
+  .online-tests-banner__inner {
+    border-radius: 24px;
+    padding: 20px;
+  }
+  .online-tests-banner__title {
+    font-size: 32px;
+  }
+  .online-tests-banner__button {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .online-tests-banner__media {
+    border-radius: 20px;
+  }
+  .online-tests-banner__media img {
+    min-height: 220px;
   }
 }
 
@@ -14174,11 +14313,11 @@ input[type=reset]:focus-visible,
   outline-offset: 0 !important;
 }
 
-.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
-.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
-.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
-.has-background-white .site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link),
-.is-dark-theme .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link) {
+.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
+.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
+.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
+.has-background-white .site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
+.is-dark-theme .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon) {
   background: transparent !important;
   outline: none !important;
   outline-offset: 0 !important;
