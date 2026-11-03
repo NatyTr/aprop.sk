@@ -4889,7 +4889,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 .testy-faq {
   width: 100%;
   max-width: 1890px;
-  margin: clamp(56px, 29.3911535126px + 3.4692107546vw, 96px) auto clamp(56px, 29.3911535126px + 3.4692107546vw, 96px);
+  margin: clamp(56px, 29.3911535126px + 3.4692107546vw, 96px) auto 0;
   padding: 0;
 }
 .testy-faq__inner {
