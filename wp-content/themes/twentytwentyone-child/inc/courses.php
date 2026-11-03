@@ -1,8 +1,9 @@
 <?php
 
 function aprop_course_category_slugs() {
-    // Legacy fallback when parent Kurzy is not synced yet.
+    // Preferovane poradie filtra na /sluzby (platí aj ked parent Kurzy existuje).
     return array(
+        'sluzby',
         'legislativne-kurzy',
         'profesionalne-kurzy',
         'darcekove-poukazky',
@@ -28,6 +29,28 @@ function aprop_kurzy_parent_term() {
     }
 
     return $term;
+}
+
+function aprop_sort_course_category_terms( $terms ) {
+    $order = array_flip( aprop_course_category_slugs() );
+    $sorted = array();
+    $rest = array();
+
+    foreach ( (array) $terms as $term ) {
+        if ( ! $term instanceof WP_Term ) {
+            continue;
+        }
+
+        if ( isset( $order[ $term->slug ] ) ) {
+            $sorted[ $order[ $term->slug ] ] = $term;
+        } else {
+            $rest[] = $term;
+        }
+    }
+
+    ksort( $sorted, SORT_NUMERIC );
+
+    return array_merge( array_values( $sorted ), $rest );
 }
 
 function aprop_course_category_terms() {
@@ -59,6 +82,22 @@ function aprop_course_category_terms() {
             }
         }
 
+        // Ak je Služby sibling (nie child Kurzy), doplň ju do filtra.
+        $sluzby = get_term_by( 'slug', 'sluzby', 'product_cat' );
+        if ( $sluzby instanceof WP_Term ) {
+            $already = false;
+            foreach ( $terms as $term ) {
+                if ( (int) $term->term_id === (int) $sluzby->term_id ) {
+                    $already = true;
+                    break;
+                }
+            }
+            if ( ! $already ) {
+                $terms[] = $sluzby;
+            }
+        }
+
+        $terms = aprop_sort_course_category_terms( $terms );
         return $terms;
     }
 

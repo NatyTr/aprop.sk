@@ -3801,7 +3801,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
   position: relative;
   width: 100vw;
   margin: 0 calc(50% - 50vw);
-  padding: 40px 0 72px;
+  padding: 40px 0;
   overflow: hidden;
 }
 .why-aprop-block__inner {
@@ -3836,7 +3836,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 }
 @media (max-width: 1199px) {
   .why-aprop-block {
-    padding: 24px 0 56px;
+    padding: 32px 0;
   }
   .why-aprop-block__inner {
     padding: 0 20px;
@@ -3853,7 +3853,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 }
 @media (max-width: 767px) {
   .why-aprop-block {
-    padding: 12px 0 56px;
+    padding: 24px 0;
   }
   .why-aprop-block__inner {
     padding: 0 16px;
@@ -3883,7 +3883,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 }
 @media (max-width: 575px) {
   .why-aprop-block {
-    padding: 10px 0 48px;
+    padding: 20px 0;
   }
   .why-aprop-block__inner {
     padding: 0 20px;

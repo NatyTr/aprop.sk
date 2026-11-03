@@ -216,28 +216,14 @@ function render_why_aprop_block_shortcode() {
     $text = get_field( 'why_aprop_text', $page_id );
     $button_text = get_field( 'why_aprop_button_text', $page_id );
     $button_url = get_field( 'why_aprop_button_url', $page_id );
-    $image_left = get_field( 'why_aprop_image_left', $page_id );
-    $image_right = get_field( 'why_aprop_image_right', $page_id );
 
-    if ( empty( $title ) && empty( $text ) && empty( $image_left ) && empty( $image_right ) ) {
+    if ( empty( $title ) && empty( $text ) ) {
         return '';
     }
 
     ob_start();
     ?>
     <section class="why-aprop-block">
-        <?php if ( ! empty( $image_left['url'] ) ) : ?>
-            <div class="why-aprop-block__deco why-aprop-block__deco--left" aria-hidden="true">
-                <img src="<?php echo esc_url( $image_left['url'] ); ?>" alt="" loading="lazy" />
-            </div>
-        <?php endif; ?>
-
-        <?php if ( ! empty( $image_right['url'] ) ) : ?>
-            <div class="why-aprop-block__deco why-aprop-block__deco--right" aria-hidden="true">
-                <img src="<?php echo esc_url( $image_right['url'] ); ?>" alt="" loading="lazy" />
-            </div>
-        <?php endif; ?>
-
         <div class="why-aprop-block__inner">
             <div class="why-aprop-block__content">
                 <?php if ( ! empty( $label ) ) : ?>
