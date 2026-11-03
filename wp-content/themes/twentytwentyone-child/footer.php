@@ -48,89 +48,73 @@ $aprop_newsletter_messages = array(
 <?php endif; ?>
 
 <?php
-// Dáta z vlastnej options stránky (nie ACF)
-$email      = get_option('footer_email');
-$ig         = get_option('footer_ig');
-$fb         = get_option('footer_fb');
-$li         = get_option('footer_li');
-$yt         = get_option('footer_yt');
-$footer_img = get_option('footer_image'); // URL obrázka
+$email = get_option( 'footer_email' );
+$ig    = get_option( 'footer_ig' );
+$fb    = get_option( 'footer_fb' );
+$li    = get_option( 'footer_li' );
+$yt    = get_option( 'footer_yt' );
 ?>
 
 <footer id="colophon" class="site-footer">
 	<div class="footer-container">
-		<div class="footer-top">
-			<div class="footer-left">
-				<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/icon-green.svg" alt="Icon" class="footer-icon" />
+		<div class="footer-main">
+			<a class="footer-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/images/logo-aprop-white.png' ); ?>" alt="Aprop" class="footer-logo" width="200" height="52" />
+			</a>
 
-				<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/logo-green.svg" alt="Icon" class="footer-logo" />
-			</div>
-
-			<div class="footer-right">
-				<?php
-					$locations = get_nav_menu_locations();
-
-					if ( isset( $locations['footer_main'] ) ) {
-						$menu_id = $locations['footer_main'];
-						$menu_items = wp_get_nav_menu_items( $menu_id );
-
-						if ( $menu_items ) :
-							?>
-							<nav class="footer-nav" aria-label="<?php esc_attr_e( 'Navigácia', 'aprop' ); ?>">
-								<p class="footer-label">Navigácia</p>
-								<ul class="footer-main-menu">
-									<?php foreach ( $menu_items as $item ) : ?>
-										<li><a href="<?php echo esc_url( $item->url ); ?>"><?php echo esc_html( $item->title ); ?></a></li>
-									<?php endforeach; ?>
-								</ul>
-							</nav>
-						<?php endif;
-					}
+			<?php
+			$locations = get_nav_menu_locations();
+			if ( isset( $locations['footer_main'] ) ) {
+				$menu_items = wp_get_nav_menu_items( $locations['footer_main'] );
+				if ( $menu_items ) :
 					?>
-
-				<div class="footer-contact-row">
-					<?php if ( $email ) : ?>
-						<a class="footer-contact-email" href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a>
-					<?php endif; ?>
-
-					<?php if ( $ig || $fb || $li || $yt ) : ?>
-						<ul class="footer-socials">
-							<?php if ( $ig ) : ?><li><a class="ig" href="<?php echo esc_url( $ig ); ?>" target="_blank" rel="noopener" aria-label="Instagram"></a></li><?php endif; ?>
-							<?php if ( $fb ) : ?><li><a class="fb" href="<?php echo esc_url( $fb ); ?>" target="_blank" rel="noopener" aria-label="Facebook"></a></li><?php endif; ?>
-							<?php if ( $li ) : ?><li><a class="li" href="<?php echo esc_url( $li ); ?>" target="_blank" rel="noopener" aria-label="LinkedIn"></a></li><?php endif; ?>
-							<?php if ( $yt ) : ?><li><a class="yt" href="<?php echo esc_url( $yt ); ?>" target="_blank" rel="noopener" aria-label="YouTube"></a></li><?php endif; ?>
+					<nav class="footer-nav" aria-label="<?php esc_attr_e( 'Navigácia', 'aprop' ); ?>">
+						<ul class="footer-main-menu">
+							<?php foreach ( $menu_items as $item ) : ?>
+								<li><a href="<?php echo esc_url( $item->url ); ?>"><?php echo esc_html( $item->title ); ?></a></li>
+							<?php endforeach; ?>
 						</ul>
-					<?php endif; ?>
-				</div>
+					</nav>
+					<?php
+				endif;
+			}
+			?>
+
+			<div class="footer-aside">
+				<?php if ( $email ) : ?>
+					<a class="footer-contact-email" href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a>
+				<?php endif; ?>
+
+				<?php if ( $ig || $fb || $li || $yt ) : ?>
+					<ul class="footer-socials">
+						<?php if ( $ig ) : ?><li><a class="ig" href="<?php echo esc_url( $ig ); ?>" target="_blank" rel="noopener" aria-label="Instagram"></a></li><?php endif; ?>
+						<?php if ( $fb ) : ?><li><a class="fb" href="<?php echo esc_url( $fb ); ?>" target="_blank" rel="noopener" aria-label="Facebook"></a></li><?php endif; ?>
+						<?php if ( $li ) : ?><li><a class="li" href="<?php echo esc_url( $li ); ?>" target="_blank" rel="noopener" aria-label="LinkedIn"></a></li><?php endif; ?>
+						<?php if ( $yt ) : ?><li><a class="yt" href="<?php echo esc_url( $yt ); ?>" target="_blank" rel="noopener" aria-label="YouTube"></a></li><?php endif; ?>
+					</ul>
+				<?php endif; ?>
 			</div>
 		</div>
 
-		<div class="footer-bottom">
-			<?php if ( $footer_img ) : ?>
-				<img src="<?php echo esc_url($footer_img); ?>" alt="Footer Image" class="footer-bottom-image" />
-			<?php endif; ?>
+		<div class="footer-meta">
+			<p class="footer-meta__copy">&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Aprop</p>
+
+			<nav class="footer-meta__legal" aria-label="<?php esc_attr_e( 'Právne informácie', 'aprop' ); ?>">
+				<?php
+				wp_nav_menu(
+					array(
+						'theme_location' => 'footer_socials',
+						'menu_class'     => 'footer_socials',
+						'container'      => false,
+						'fallback_cb'    => false,
+					)
+				);
+				?>
+			</nav>
+
+			<p class="footer-meta__credit">Website by <a href="https://pangan.sk" target="_blank" rel="noopener">Pangan</a></p>
 		</div>
-	</div><!-- .footer-container -->
-	<div class="footer-meta">
-	<div class="footer-meta-left">
-		<p>© 2025 Aprop</p>
 	</div>
-
-	<div class="footer-meta-center">
-		<p>Website by <a href="https://pangan.sk" target="_blank" rel="noopener">Pangan</a></p>
-	</div>
-
-	<div class="footer-meta-right">
-		<?php
-		wp_nav_menu( array(
-			'theme_location' => 'footer_socials',
-			'menu_class'     => 'footer_socials',
-			'container'      => false,
-		) );
-		?>
-	</div>
-</div>
-
 </footer><!-- #colophon -->
 
 <?php wp_footer(); ?>

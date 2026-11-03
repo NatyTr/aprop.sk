@@ -1,14 +1,19 @@
 .aprop-footer-newsletter {
-  margin: fluid(28, 56) 0 fluid(16, 28);
+  margin: fluid(48, 96) 0;
+  padding: 0;
 
   &__inner {
+    width: 100%;
+    max-width: 1890px;
+    margin: 0 auto;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: fluid(20, 48);
     background: #f3f3f3;
     border-radius: fluid(16, 50);
-    padding: fluid(24, 48) fluid(20, 50);
+    padding: fluid(24, 48) 32px;
 
     @media (max-width: 767px) {
       flex-direction: column;
