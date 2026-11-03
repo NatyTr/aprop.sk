@@ -2440,8 +2440,14 @@ function render_package_products_shortcode() {
                 $first_tag = $tags && !is_wp_error($tags) ? $tags[0]->name : null;
 
                 $special_background = get_field('special_background');
+                if ( is_array( $special_background ) ) {
+                    $special_background = $special_background['hex'] ?? $special_background['color'] ?? '';
+                }
+                $special_background = is_string( $special_background ) ? trim( $special_background ) : '';
                 $special_class = $special_background ? ' special-color' : '';
-                $background_style = $special_background ? 'style="background-color:' . esc_attr($special_background) . ';"' : '';
+                $background_style = $special_background
+                    ? 'style="background-color:' . esc_attr( $special_background ) . ';background-image:none;"'
+                    : '';
                 $permalink = get_permalink();
             ?>
             <div class="package-product<?php echo esc_attr($special_class); ?>" <?php echo $background_style; ?>>
