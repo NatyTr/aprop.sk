@@ -14205,6 +14205,7 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
 
 .site-content .entry-content {
   margin-top: 13px;
+  margin-bottom: 0;
 }
 @media (max-width: 1099px) {
   .site-content .entry-content {
