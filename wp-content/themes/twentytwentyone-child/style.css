@@ -5070,7 +5070,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 }
 @media (max-width: 767px) {
   .testy-faq {
-    margin: 40px auto 48px;
+    margin: 40px auto 0;
   }
   .testy-faq__title {
     font-size: 28px;
@@ -14195,11 +14195,24 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   .entry-content .testy-process,
   .entry-content .testy-overview,
   .entry-content .testy-faq {
-    width: calc(100% - 48px);
+    width: 100%;
+    max-width: 100% !important;
     left: auto;
     transform: none;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 767px) {
+  .page-testy .elementor > .e-con-boxed.e-parent {
+    --padding-left: 0px;
+    --padding-right: 0px;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 }
 
@@ -14246,11 +14259,11 @@ input[type=reset]:focus-visible,
   outline-offset: 0 !important;
 }
 
-.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
-.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
-.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
-.has-background-white .site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
-.is-dark-theme .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon) {
+.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon):not(.title-banner-secondary__card-body),
+.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon):not(.title-banner-secondary__card-body),
+.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon):not(.title-banner-secondary__card-body),
+.has-background-white .site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon):not(.title-banner-secondary__card-body),
+.is-dark-theme .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon):not(.title-banner-secondary__card-body) {
   background: transparent !important;
   outline: none !important;
   outline-offset: 0 !important;

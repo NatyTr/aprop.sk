@@ -78,11 +78,29 @@
   width: min(1790px, calc(100vw - 130px));
 
   @media (max-width: 767px) {
-    width: calc(100% - 48px);
+    // Full mobile width; gutters come from section padding (not Elementor 50px + 48px).
+    width: 100%;
+    max-width: 100% !important;
     left: auto;
     transform: none;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 24px;
+    padding-right: 24px;
+    box-sizing: border-box;
+  }
+}
+
+// Elementor boxed parent keeps desktop 50px side padding on mobile → content
+// looks shifted/narrow (~290px in a 390px viewport). Neutralize on /testy/.
+.page-testy {
+  @media (max-width: 767px) {
+    .elementor > .e-con-boxed.e-parent {
+      --padding-left: 0px;
+      --padding-right: 0px;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
   }
 }
 
@@ -127,11 +145,11 @@ input[type=reset]:focus-visible,
 
 // Kill Twenty Twenty-One / child focus rings on links (gray border on click).
 // Skip CTA buttons — they keep their own hover/focus styles.
-.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
-.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
-.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
-.has-background-white .site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon),
-.is-dark-theme .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon) {
+.site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon):not(.title-banner-secondary__card-body),
+.site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon):not(.title-banner-secondary__card-body),
+.has-background-white .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon):not(.title-banner-secondary__card-body),
+.has-background-white .site a:focus-visible:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon):not(.title-banner-secondary__card-body),
+.is-dark-theme .site a:focus:not(.wp-block-button__link):not(.wp-block-file__button):not(.skip-link):not(.btn-primary):not(.btn-black-icon):not(.title-banner-secondary__card-body) {
   background: transparent !important;
   outline: none !important;
   outline-offset: 0 !important;
