@@ -3203,7 +3203,7 @@ function shortcode_courses_table($atts) {
         'advanced' => 'Advanced',
         'pro'      => 'Pro',
         'termo'    => 'Termo',
-        'sts'      => 'STS',
+        'sts'      => 'STS Komplet',
     );
 
     // Začiatok tabuľky
