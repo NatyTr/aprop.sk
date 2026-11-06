@@ -111,6 +111,7 @@
   display: flex;
   flex-wrap: wrap;
   column-gap: 8px;
+  row-gap: 32px;
   font-family: 'General Sans', sans-serif;
   color: #131313;
 
@@ -124,6 +125,16 @@
     color: #131313;
     font-weight: 500;
   }
+
+  // 3 on the first row, last 2 stretch across the second row.
+  &--count-5 {
+    @media (min-width: 768px) {
+      > .package:nth-last-child(-n + 2) {
+        width: calc(50% - 4px);
+      }
+    }
+  }
+
   .package{
     width: calc((100% / 3) - 6px);
     .package-image{

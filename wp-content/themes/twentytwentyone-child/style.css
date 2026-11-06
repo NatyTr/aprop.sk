@@ -13568,6 +13568,7 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   display: flex;
   flex-wrap: wrap;
   column-gap: 8px;
+  row-gap: 32px;
   font-family: "General Sans", sans-serif;
   color: #131313;
 }
@@ -13580,6 +13581,11 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   text-align: center;
   color: #131313;
   font-weight: 500;
+}
+@media (min-width: 768px) {
+  .which-package--count-5 > .package:nth-last-child(-n+2) {
+    width: calc(50% - 4px);
+  }
 }
 .which-package .package {
   width: calc(33.3333333333% - 6px);

@@ -3245,14 +3245,11 @@ function shortcode_which_package($atts) {
     // 1) Hlavný titulok
     $main_title = get_field('package_main_title', $post_id);
 
-    $html = '<div class="which-package">';
+    // 2) Jednotlivé balíčky (package_1 … package_5)
+    $packages_html = '';
+    $package_count = 0;
 
-    if ($main_title) {
-        $html .= '<h2 class="which-package-title">' . esc_html($main_title) . '</h2>';
-    }
-
-    // 2) Jednotlivé balíčky
-    for ($i = 1; $i <= 3; $i++) {
+    for ($i = 1; $i <= 5; $i++) {
         $prefix    = "package_$i";
         $image_id  = get_field($prefix . '_image',     $post_id);
         $title     = get_field($prefix . '_title',     $post_id);
@@ -3266,42 +3263,51 @@ function shortcode_which_package($atts) {
             continue;
         }
 
-        $html .= '<div class="package">';
+        $package_count++;
+        $packages_html .= '<div class="package">';
 
         // Obrázok cez ID
         if ($image_id) {
             $img_url = wp_get_attachment_image_url($image_id, 'full');
             $img_alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
             if ($img_url) {
-                $html .= '<div class="package-image">';
-                $html .= '<img src="' . esc_url($img_url) . '" alt="' . esc_attr($img_alt) . '">';
-                $html .= '</div>';
+                $packages_html .= '<div class="package-image">';
+                $packages_html .= '<img src="' . esc_url($img_url) . '" alt="' . esc_attr($img_alt) . '">';
+                $packages_html .= '</div>';
             }
         }
 
         if ($title) {
-            $html .= '<h3 class="package-title">' . esc_html($title) . '</h3>';
+            $packages_html .= '<h3 class="package-title">' . esc_html($title) . '</h3>';
         }
 
         if ($subtitle) {
-            $html .= '<h4 class="package-subtitle">' . esc_html($subtitle) . '</h4>';
+            $packages_html .= '<h4 class="package-subtitle">' . esc_html($subtitle) . '</h4>';
         }
 
         if ($text) {
-            $html .= '<div class="package-text">' . apply_filters('the_content', $text) . '</div>';
+            $packages_html .= '<div class="package-text">' . apply_filters('the_content', $text) . '</div>';
         }
 
         if ($subtitle2) {
-            $html .= '<h4 class="package-subtitle-2">' . esc_html($subtitle2) . '</h4>';
+            $packages_html .= '<h4 class="package-subtitle-2">' . esc_html($subtitle2) . '</h4>';
         }
 
         if ($text2) {
-            $html .= '<div class="package-text-2">' . apply_filters('the_content', $text2) . '</div>';
+            $packages_html .= '<div class="package-text-2">' . apply_filters('the_content', $text2) . '</div>';
         }
 
-        $html .= '</div>'; // .package
+        $packages_html .= '</div>'; // .package
     }
 
+    $count_class = $package_count ? ' which-package--count-' . $package_count : '';
+    $html = '<div class="which-package' . esc_attr( $count_class ) . '">';
+
+    if ($main_title) {
+        $html .= '<h2 class="which-package-title">' . esc_html($main_title) . '</h2>';
+    }
+
+    $html .= $packages_html;
     $html .= '</div>'; // .which-package
 
     return $html;
