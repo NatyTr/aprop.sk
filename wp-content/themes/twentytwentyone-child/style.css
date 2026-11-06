@@ -13595,10 +13595,15 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   margin-bottom: 30px;
   background: white;
   border-radius: 32px;
+  overflow: hidden;
+  position: relative;
 }
 .which-package .package .package-image img {
+  display: block;
   width: 100%;
+  height: 100%;
   object-fit: contain;
+  object-position: center;
 }
 .which-package .package h2,
 .which-package .package h3,
