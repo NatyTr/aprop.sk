@@ -64,6 +64,15 @@
     row-gap: 12px;
   }
 
+  // 3 on the first row, last 2 stretch to a full-width second row.
+  &--count-5 {
+    @media (min-width: 1025px) {
+      > .package-product:nth-last-child(-n + 2) {
+        width: calc(50% - 5px);
+      }
+    }
+  }
+
   .package-product {
     width: calc((100% / 3) - 7px);
     border-radius: 20px;
@@ -269,6 +278,64 @@
 
           &:before {
             background-image: url('./images/arrow-black.svg');
+          }
+        }
+      }
+
+      // Pure white ACF special_background (#fff) → black type + dark CTA.
+      &.special-color--light {
+        color: #151515;
+
+        .package-product__top {
+          .btn-primary,
+          .package-product__tag {
+            background: transparent;
+            border-color: rgba(21, 21, 21, 0.42);
+            color: #151515;
+
+            &:hover,
+            &:focus {
+              background: transparent !important;
+              border-color: rgba(21, 21, 21, 0.7);
+              color: #151515;
+            }
+          }
+
+          .package-product__purpose {
+            color: #151515;
+          }
+        }
+
+        .package-product__content {
+          h3,
+          p,
+          span,
+          a {
+            color: #151515;
+          }
+        }
+
+        .package-product__bottom {
+          h3,
+          a,
+          span {
+            color: #151515;
+          }
+
+          h3 span {
+            color: rgba(21, 21, 21, 0.6);
+          }
+
+          .btn-circle-icon-black {
+            background-color: #151515;
+
+            &:before {
+              background-image: url('./images/arrow-white.svg');
+            }
+
+            &:focus {
+              background-color: #151515 !important;
+            }
           }
         }
       }

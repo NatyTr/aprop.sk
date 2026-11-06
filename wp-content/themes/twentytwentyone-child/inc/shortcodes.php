@@ -2375,6 +2375,30 @@ add_shortcode( 'home_online_tests_banner', 'render_home_online_tests_banner_shor
 add_shortcode('benefity_slider', 'render_benefity_slider_shortcode');
 
 
+/**
+ * Pure white check for package card text contrast.
+ * Only #fff / #ffffff (and white keyword) get dark typography.
+ */
+function aprop_is_light_hex_color( $color ) {
+    if ( ! is_string( $color ) || $color === '' ) {
+        return false;
+    }
+
+    $normalized = strtolower( preg_replace( '/\s+/', '', trim( $color ) ) );
+    if ( $normalized === 'white' || $normalized === 'rgb(255,255,255)' || $normalized === 'rgba(255,255,255,1)' ) {
+        return true;
+    }
+
+    $hex = ltrim( $normalized, '#' );
+    if ( strlen( $hex ) === 3 && ctype_xdigit( $hex ) ) {
+        $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+    }
+    if ( strlen( $hex ) !== 6 || ! ctype_xdigit( $hex ) ) {
+        return false;
+    }
+
+    return strtolower( $hex ) === 'ffffff';}
+
 function render_package_products_shortcode() {
     // Získame ACF polia z aktuálnej stránky
     $page_id = get_queried_object_id();
@@ -2421,7 +2445,8 @@ function render_package_products_shortcode() {
         <?php endif; ?>
     </div>
 
-    <div class="package-products">
+    <?php $package_count = (int) $query->post_count; ?>
+    <div class="package-products<?php echo $package_count ? ' package-products--count-' . $package_count : ''; ?>">
         <?php while ($query->have_posts()) : $query->the_post(); ?>
             <?php
                 global $product;
@@ -2444,7 +2469,13 @@ function render_package_products_shortcode() {
                     $special_background = $special_background['hex'] ?? $special_background['color'] ?? '';
                 }
                 $special_background = is_string( $special_background ) ? trim( $special_background ) : '';
-                $special_class = $special_background ? ' special-color' : '';
+                $special_class = '';
+                if ( $special_background ) {
+                    $special_class = ' special-color';
+                    if ( aprop_is_light_hex_color( $special_background ) ) {
+                        $special_class .= ' special-color--light';
+                    }
+                }
                 $background_style = $special_background
                     ? 'style="background-color:' . esc_attr( $special_background ) . ';background-image:none;"'
                     : '';
