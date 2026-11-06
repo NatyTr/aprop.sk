@@ -3708,6 +3708,7 @@ header .container .header-container .header-tools .header-search-form.is-open .h
 }
 .package-products .package-product.special-color.special-color--light {
   color: #151515;
+  box-shadow: 0 4px 24px rgba(21, 21, 21, 0.08);
 }
 .package-products .package-product.special-color.special-color--light .package-product__top .btn-primary,
 .package-products .package-product.special-color.special-color--light .package-product__top .package-product__tag {

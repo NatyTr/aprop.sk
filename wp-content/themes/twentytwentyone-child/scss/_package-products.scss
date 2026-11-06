@@ -285,6 +285,7 @@
       // Pure white ACF special_background (#fff) → black type + dark CTA.
       &.special-color--light {
         color: #151515;
+        box-shadow: 0 4px 24px rgba(21, 21, 21, 0.08);
 
         .package-product__top {
           .btn-primary,
