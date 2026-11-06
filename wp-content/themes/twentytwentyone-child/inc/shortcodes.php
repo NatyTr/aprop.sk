@@ -3197,26 +3197,37 @@ function shortcode_courses_table($atts) {
     $yes_icon = get_stylesheet_directory_uri() . '/images/aprop-yes.svg';
     $no_icon  = get_stylesheet_directory_uri() . '/images/aprop-close.svg';
 
+    // ACF true/false per package column (field names under each course_N group).
+    $columns = array(
+        'starter'  => 'Starter',
+        'advanced' => 'Advanced',
+        'pro'      => 'Pro',
+        'termo'    => 'Termo',
+        'sts'      => 'STS',
+    );
+
     // Začiatok tabuľky
-    $html = '<table border="1" cellpadding="5" cellspacing="0" class="courses-table">';
-    $html .= '<thead><tr><th></th><th>Starter</th><th>Advanced</th><th>Pro</th></tr></thead>';
+    $html = '<table border="1" cellpadding="5" cellspacing="0" class="courses-table courses-table--packages-5">';
+    $html .= '<thead><tr><th></th>';
+    foreach ( $columns as $label ) {
+        $html .= '<th>' . esc_html( $label ) . '</th>';
+    }
+    $html .= '</tr></thead>';
     $html .= '<tbody>';
 
     for ($i = 1; $i <= 10; $i++) {
         $prefix = "course_$i";
 
         $course_name = get_field($prefix . '_course_name', $post_id);
-        $starter     = get_field($prefix . '_starter', $post_id);
-        $advanced    = get_field($prefix . '_advanced', $post_id);
-        $pro         = get_field($prefix . '_pro', $post_id);
 
         if (!$course_name) continue;
 
         $html .= '<tr>';
         $html .= '<td>' . esc_html($course_name) . '</td>';
-        $html .= '<td><img src="' . ($starter ? $yes_icon : $no_icon) . '" alt="Starter" /></td>';
-        $html .= '<td><img src="' . ($advanced ? $yes_icon : $no_icon) . '" alt="Advanced" /></td>';
-        $html .= '<td><img src="' . ($pro ? $yes_icon : $no_icon) . '" alt="Pro" /></td>';
+        foreach ( $columns as $key => $label ) {
+            $included = (bool) get_field( $prefix . '_' . $key, $post_id );
+            $html .= '<td><img src="' . esc_url( $included ? $yes_icon : $no_icon ) . '" alt="' . esc_attr( $label ) . '" /></td>';
+        }
         $html .= '</tr>';
     }
 

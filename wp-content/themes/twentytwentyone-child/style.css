@@ -13486,12 +13486,21 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
 
 .courses-table {
   border: none;
+  width: 100%;
+  table-layout: fixed;
 }
 .courses-table thead tr th {
   border: none;
   font-size: 24px;
   line-height: 22px;
   font-weight: 700;
+}
+.courses-table thead tr th:first-child {
+  width: 34%;
+  text-align: left;
+}
+.courses-table thead tr th:not(:first-child) {
+  width: auto;
 }
 .courses-table tbody tr td {
   border: none;
@@ -13504,6 +13513,30 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   line-height: 22px;
   text-align: left;
   font-weight: 700;
+  width: 34%;
+  padding-right: 16px;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+.courses-table--packages-5 thead tr th:first-child,
+.courses-table--packages-5 tbody tr td:nth-of-type(1) {
+  width: 28%;
+}
+.courses-table--packages-5 thead tr th:not(:first-child),
+.courses-table--packages-5 tbody tr td:not(:nth-of-type(1)) {
+  width: 14.4%;
+}
+.courses-table--packages-5 thead tr th,
+.courses-table--packages-5 tbody tr td:nth-of-type(1) {
+  font-size: 20px;
+  line-height: 22px;
+}
+@media (max-width: 1100px) {
+  .courses-table--packages-5 thead tr th,
+  .courses-table--packages-5 tbody tr td:nth-of-type(1) {
+    font-size: 16px;
+    line-height: 18px;
+  }
 }
 @media (max-width: 767px) {
   .courses-table thead tr th {
@@ -13523,6 +13556,11 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   .courses-table tbody tr td:nth-of-type(1) {
     font-size: 14px;
     line-height: 16px;
+  }
+  .courses-table--packages-5 thead tr th,
+  .courses-table--packages-5 tbody tr td:nth-of-type(1) {
+    font-size: 12px;
+    line-height: 14px;
   }
 }
 
