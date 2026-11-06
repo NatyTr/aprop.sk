@@ -126,12 +126,10 @@
     font-weight: 500;
   }
 
-  // 3 on the first row, last 2 stretch across the second row.
+  // Keep all cards at 1/3 width; center the leftover pair on the second row.
   &--count-5 {
     @media (min-width: 768px) {
-      > .package:nth-last-child(-n + 2) {
-        width: calc(50% - 4px);
-      }
+      justify-content: center;
     }
   }
 

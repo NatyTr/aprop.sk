@@ -13583,8 +13583,8 @@ form.checkout.woocommerce-checkout .woocommerce-terms-and-conditions-wrapper .fo
   font-weight: 500;
 }
 @media (min-width: 768px) {
-  .which-package--count-5 > .package:nth-last-child(-n+2) {
-    width: calc(50% - 4px);
+  .which-package--count-5 {
+    justify-content: center;
   }
 }
 .which-package .package {
