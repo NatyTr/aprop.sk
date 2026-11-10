@@ -1078,11 +1078,14 @@ header .container .header-container .header-tools .header-search-form.is-open .h
     width: 100%;
     max-width: 100%;
     min-height: 100vh;
+    min-height: 100dvh;
     height: 100vh;
-    padding: 28px 16px 40px;
+    height: 100dvh;
+    padding: 28px 16px calc(24px + env(safe-area-inset-bottom, 0px));
     color: white;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
   }
   header .container .header-container .header-menu .mobile-menu-header {
     display: flex;
@@ -1145,7 +1148,8 @@ header .container .header-container .header-tools .header-search-form.is-open .h
     flex-direction: column;
     gap: 12px;
     margin-top: auto;
-    padding-top: 80px;
+    padding-top: 32px;
+    padding-bottom: 8px;
   }
   header .container .header-container .header-menu .mobile-menu-legal a {
     color: white;
