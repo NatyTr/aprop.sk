@@ -57,30 +57,22 @@
 
 						<div class="mobile-menu-sections">
 							<div class="mobile-menu-section">
-								<p class="mobile-menu-label">Nakupovať</p>
+								<p class="mobile-menu-label">Menu</p>
 								<div class="mobile-menu-links">
-									<a href="/drony">Drony</a>
-									<a href="/sluzby">Kurzy</a>
-									<a href="/balicky">Balíčky kurzov</a>
-								</div>
-							</div>
-
-							<div class="mobile-menu-section">
-								<p class="mobile-menu-label">Navigácia</p>
-								<div class="mobile-menu-links">
-									<a href="/">Domov</a>
-									<a href="/pre-firmy">Pre firmy</a>
-									<a href="/o-nas">O nás</a>
-									<a href="/blog">Blog</a>
-									<a href="/kontakt">Kontakt</a>
+									<a href="<?php echo esc_url( home_url( '/sluzby/' ) ); ?>">Kurzy a služby</a>
+									<a href="<?php echo esc_url( home_url( '/balicky/' ) ); ?>">Balíčky</a>
+									<a href="<?php echo esc_url( home_url( '/testy/' ) ); ?>">Testy</a>
+									<a href="<?php echo esc_url( home_url( '/pre-firmy/' ) ); ?>">Pre firmy</a>
+									<a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">Blog</a>
+									<a href="<?php echo esc_url( home_url( '/kontakt/' ) ); ?>">Kontakt</a>
 								</div>
 							</div>
 						</div>
 
 						<div class="mobile-menu-legal">
-							<a href="/obchodne-podmienky">VOP</a>
-							<a href="/cookies">Cookies</a>
-							<a href="/gdpr">GDPR</a>
+							<a href="<?php echo esc_url( home_url( '/obchodne-podmienky/' ) ); ?>">VOP</a>
+							<a href="<?php echo esc_url( home_url( '/cookies/' ) ); ?>">Cookies</a>
+							<a href="<?php echo esc_url( home_url( '/ochrana-osobnych-udajov/' ) ); ?>">GDPR</a>
 						</div>
 					</div>
 				</nav>

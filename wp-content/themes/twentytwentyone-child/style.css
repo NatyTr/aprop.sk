@@ -1106,6 +1106,8 @@ header .container .header-container .header-tools .header-search-form.is-open .h
     font-size: 12px;
     line-height: 1;
     font-weight: 400;
+    align-self: flex-start;
+    margin-top: -2px;
   }
   header .container .header-container .header-menu .mobile-menu-sections {
     display: flex;
